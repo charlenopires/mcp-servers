@@ -70,12 +70,21 @@ Documentação completa está disponível no diretório `/docs`:
   - [Guia de Lançamento](docs/guides/launch_guide.md)
   - [Guia de Integração](docs/guides/integration_guide.md)
   - [Melhores Práticas MCP](docs/guides/mcp_best_practices.md)
+  - [Estratégias de Prompts](docs/guides/prompt_strategies.md)
+  - [Migração Tailwind v4.1](docs/guides/tailwind_migration_guide.md)
 - **Arquitetura**:
   - [Visão Geral da Arquitetura](docs/architecture.md)
   - [Perguntas Frequentes (FAQ)](docs/faq.md)
+- **API de Referência**:
+  - [API do Analisador MCP](docs/api/mcp_server_api.md)
+  - [API do Servidor de Prompts](docs/api/prompt_server_api.md)
+  - [API do Servidor Tailwind](docs/api/tailwind_server_api.md)
+  - [API de Migração Tailwind](docs/api/tailwind_migration_api.md)
 - **Exemplos**:
   - [Exemplo Integrado](docs/examples/integrated_example.py)
   - [Exemplo do Analisador MCP](docs/examples/mcp_analyzer_example.py)
+  - [Exemplos de Engenharia de Prompts](docs/examples/prompt_engineering_examples.py)
+  - [Componentes Tailwind v4.1](docs/examples/tailwind_components.md)
 
 ## 🛠️ Instalação
 
@@ -94,9 +103,11 @@ cd mcp-servers
 # Instalar dependências
 pip install -r requirements.txt
 
-# Ou usando uv
+# Ou usando uv (recomendado)
 uv pip install -r requirements.txt
 ```
+
+Para instruções de instalação detalhadas, consulte o [Guia de Instalação](docs/guides/installation_guide.md).
 
 ## 🚀 Uso
 
@@ -130,6 +141,8 @@ Interface colorida com seleção interativa e controle em tempo real.
 # Digite os números dos servidores (ex: 1 3) ou "all" para todos
 ```
 
+Para instruções detalhadas sobre execução e monitoramento, consulte o [Guia de Lançamento](docs/guides/launch_guide.md).
+
 ### Exemplo de Uso em Python
 
 ```python
@@ -140,17 +153,21 @@ analisador = AnalisadorPromptMCP()
 
 # Analisar um prompt
 resultado = analisador.analisar_prompt(
-    "Crie um servidor MCP com ferramentas para otimização de prompts,
-     incluindo tratamento de erros e validação de entradas."
+    "Crie um servidor MCP com ferramentas para otimização de prompts, "
+    "incluindo tratamento de erros e validação de entradas."
 )
 
 # Exibir resultado
-print(f"Pontuação: {resultado.pontuacao}/10")
-print(f"Pontos fortes: {resultado.pontos_fortes}")
-print(f"Sugestões: {resultado.sugestoes}")
+print(f"Pontuação: {resultado['pontuacao']}/10")
+print(f"Pontos fortes: {resultado['pontos_fortes']}")
+print(f"Sugestões: {resultado['sugestoes']}")
 ```
 
-Para exemplos mais detalhados, consulte `exemplo_uso.py`.
+Para exemplos mais avançados, consulte:
+
+- [Exemplo Integrado](docs/examples/integrated_example.py) - Fluxo completo usando os três servidores
+- [Exemplo do Analisador MCP](docs/examples/mcp_analyzer_example.py) - Uso avançado do analisador
+- [Exemplos de Engenharia de Prompts](docs/examples/prompt_engineering_examples.py) - Técnicas de otimização
 
 ## 🧪 Testes
 
@@ -164,9 +181,18 @@ pytest ./tests
 python run_tests.py
 ```
 
+O projeto inclui testes para cada servidor:
+
+- `test_mcp_server.py` - Testes do Analisador de Prompts MCP
+- `test_prompt_server.py` - Testes do Servidor de Engenharia de Prompts
+- `test_tailwind_server.py` - Testes do Servidor Tailwind CSS
+- `test_mcpprompt_server.py` - Testes do Servidor Experimental
+
+Para mais detalhes sobre a execução de testes, consulte o [Guia de Instalação](docs/guides/installation_guide.md#testes-e-validação).
+
 ## 📁 Estrutura do Projeto
 
-```
+```text
 /mcp-servers/
 ├── 🖥️ servers/
 │   ├── mcp_server.py           # Analisador de Prompts MCP
@@ -181,17 +207,21 @@ python run_tests.py
 │   ├── test_tailwind_server.py # Teste do servidor Tailwind
 │   └── test_mcpprompt_server.py # Teste do servidor experimental
 │
-├── 📜 run_servers.sh           # Launcher interativo completo
-├── 📜 start_servers.sh         # Inicializador simples
-├── 📜 run_tests.py             # Executor de testes
+├── � docs/                    # Documentação completa
+│   ├── api/                    # Referências de API
+│   ├── guides/                 # Guias e tutoriais
+│   ├── examples/               # Exemplos de código
+│   ├── servers/                # Documentação dos servidores
+│   └── assets/                 # Imagens e recursos
 │
-├── 📚 MCP_ANALYZER_README.md   # Documentação do analisador
-├── 📚 LAUNCHER_README.md       # Documentação dos launchers
-├── 📚 PROJETO_ESTRUTURA.md     # Estrutura completa do projeto
+├── �📜 run_servers.sh           # Launcher interativo completo
+├── 📜 start_servers.sh         # Inicializador rápido
+├── 📜 run_tests.py             # Executor de testes
 │
 ├── 📋 requirements.txt         # Dependências Python
 ├── 📋 pyproject.toml           # Configuração do projeto
-├── 📋 exemplo_uso.py           # Exemplo de uso dos servidores
+├── 📋 uv.lock                  # Lock de dependências uv
+├── 📋 CONTRIBUTING.md          # Guia de contribuição
 └── 📋 README.md                # Este arquivo
 ```
 
@@ -223,6 +253,8 @@ O Analisador de Prompts MCP avalia prompts em 10 critérios, cada um contribuind
 | Convenções MCP        | Alinhamento com padrões MCP        | 7%   |
 | Testes                | Cobertura de testes robusta        | 5%   |
 
+Para detalhes sobre cada critério e exemplos de avaliação, consulte o [Guia de Melhores Práticas MCP](docs/guides/mcp_best_practices.md) e a [Documentação do Analisador](docs/servers/mcp_server.md).
+
 ## 🧰 Scripts e Ferramentas
 
 ### Script de Execução Completo (`run_servers.sh`)
@@ -243,7 +275,7 @@ Versão simplificada para inicialização rápida:
 - Execução paralela automática
 - Tratamento de sinais para parada limpa
 
-Para documentação completa sobre os scripts, consulte `LAUNCHER_README.md`.
+Para documentação completa sobre os scripts, consulte o [Guia de Lançamento](docs/guides/launch_guide.md).
 
 ## 📈 Roadmap
 
@@ -253,6 +285,10 @@ Para documentação completa sobre os scripts, consulte `LAUNCHER_README.md`.
 - [ ] Criar API REST para acesso remoto aos servidores
 - [ ] Desenvolver interface web para visualização de resultados
 - [ ] Adicionar benchmark comparativo entre estratégias de prompts
+- [ ] Implementar suporte a Tailwind v4.2 (próxima versão)
+- [ ] Adicionar integração com frameworks populares (React, Vue, etc.)
+
+Para sugerir novos recursos ou colaborar em itens do roadmap, abra uma issue no GitHub.
 
 ## 🤝 Contribuição
 
@@ -264,7 +300,7 @@ Contribuições são bem-vindas! Para contribuir:
 4. Push para a branch (`git push origin feature/nova-ferramenta`)
 5. Abra um Pull Request
 
-Consulte `CONTRIBUTING.md` para mais detalhes sobre o processo de contribuição.
+Consulte [CONTRIBUTING.md](CONTRIBUTING.md) para mais detalhes sobre o processo de contribuição e padrões de código.
 
 ## 📜 Licença
 
@@ -273,9 +309,26 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo `LICENSE` para
 ## 🙏 Agradecimentos
 
 - [FastMCP](https://github.com/fastmcp/fastmcp) - Framework para desenvolvimento de servidores MCP
-- [Pydantic](https://docs.pydantic.dev/) - Validação de dados
-- [uv](https://github.com/astral-sh/uv) - Gerenciador de pacotes Python
+- [Pydantic](https://docs.pydantic.dev/) - Validação de dados e esquemas
+- [uv](https://github.com/astral-sh/uv) - Gerenciador de pacotes Python rápido
+- [Typer](https://typer.tiangolo.com/) - Construção de CLIs em Python
+- [Rich](https://rich.readthedocs.io/) - Formatação rica de texto em terminal
+- [Pytest](https://docs.pytest.org/) - Framework de testes
+
+## 📌 Citação
+
+Para citar este projeto em trabalhos acadêmicos:
+
+```bibtex
+@software{mcp_servers,
+  author = {{MCP Servers Contributors}},
+  title = {MCP Servers: Conjunto de Servidores MCP em Português},
+  url = {https://github.com/user/mcp-servers},
+  year = {2025},
+  month = {5}
+}
+```
 
 ---
 
-Desenvolvido com ❤️ por [Seu Nome/Equipe]
+Desenvolvido com ❤️ pela Comunidade MCP Brasil
