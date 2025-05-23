@@ -9,7 +9,7 @@ from typing import Dict, Any, List
 import json
 
 # Inicializa o servidor MCP
-mcp = FastMCP("tailwind-v4-assistant")
+mcp = FastMCP("Assistente para Prompts no Contexto do TailwindCSS v4.1")
 
 # Base de conhecimento sobre Tailwind CSS v4.1
 TAILWIND_V4_CONTEXT = {

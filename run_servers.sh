@@ -18,8 +18,8 @@ BASE_DIR="/Users/fazapp/projects/mcp-servers/servers"
 # Array de servidores disponíveis
 declare -a SERVERS=(
     "mcp_server.py:Analisador de Prompts MCP"
-    "prompt_server.py:Servidor de Engenharia de Prompts"
-    "tailwind_server.py:Servidor Tailwind CSS v4.1"
+    "prompt_server.py:Assistente de Melhores Práticas de Engenharia de Prompts"
+    "tailwind_server.py:Assistente para Prompts no Contexto do TailwindCSS v4.1"
 )
 
 # Array para armazenar PIDs dos processos
@@ -31,7 +31,7 @@ show_banner() {
     echo -e "${CYAN}"
     echo "╔══════════════════════════════════════════════════════════════╗"
     echo "║                    🚀 LAUNCHER MCP SERVERS                   ║"
-    echo "║              Execução Paralela de Servidores MCP            ║"
+    echo "║              Execução Paralela de Servidores MCP             ║"
     echo "╚══════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
 }
