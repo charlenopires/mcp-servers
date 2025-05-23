@@ -20,7 +20,6 @@ declare -a SERVERS=(
     "mcp_server.py:Analisador de Prompts MCP"
     "prompt_server.py:Servidor de Engenharia de Prompts"
     "tailwind_server.py:Servidor Tailwind CSS v4.1"
-    "mcpprompt_server.py:Servidor MCP Prompt (experimental)"
 )
 
 # Array para armazenar PIDs dos processos
