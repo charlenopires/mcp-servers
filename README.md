@@ -60,6 +60,23 @@ Fornece contexto e suporte para desenvolvimento com Tailwind CSS v4.1.
 
 Versão experimental para criação de prompts MCP (em desenvolvimento).
 
+## 📚 Documentação
+
+Documentação completa está disponível no diretório `/docs`:
+
+- [Índice da Documentação](docs/index.md)
+- **Guias**:
+  - [Guia de Instalação](docs/guides/installation_guide.md)
+  - [Guia de Lançamento](docs/guides/launch_guide.md)
+  - [Guia de Integração](docs/guides/integration_guide.md)
+  - [Melhores Práticas MCP](docs/guides/mcp_best_practices.md)
+- **Arquitetura**:
+  - [Visão Geral da Arquitetura](docs/architecture.md)
+  - [Perguntas Frequentes (FAQ)](docs/faq.md)
+- **Exemplos**:
+  - [Exemplo Integrado](docs/examples/integrated_example.py)
+  - [Exemplo do Analisador MCP](docs/examples/mcp_analyzer_example.py)
+
 ## 🛠️ Instalação
 
 ### Pré-requisitos
