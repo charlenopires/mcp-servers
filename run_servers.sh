@@ -21,6 +21,7 @@ declare -a SERVERS=(
     "prompt_server.py:Assistente de Melhores Práticas de Engenharia de Prompts"
     "tailwind_server.py:Assistente para Prompts no Contexto do TailwindCSS v4.1"
     "react_server.py:Assistente para Prompts no Contexto do ReactJS"
+    "typescript_server.py:Assistente para Prompts no Contexto do TypeScript"
 )
 
 # Array para armazenar PIDs dos processos
