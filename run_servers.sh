@@ -20,6 +20,7 @@ declare -a SERVERS=(
     "mcp_server.py:Analisador de Prompts MCP"
     "prompt_server.py:Assistente de Melhores Práticas de Engenharia de Prompts"
     "tailwind_server.py:Assistente para Prompts no Contexto do TailwindCSS v4.1"
+    "react_server.py:Assistente para Prompts no Contexto do ReactJS"
 )
 
 # Array para armazenar PIDs dos processos
