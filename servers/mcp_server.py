@@ -6,7 +6,7 @@ para criação de servidores MCP baseados nas melhores práticas da documentaç�
 """
 
 import logging
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, TypedDict
 from fastmcp import FastMCP
 from pydantic import BaseModel, Field
 import re
@@ -32,6 +32,17 @@ class AnalisePrompt(BaseModel):
         description="Alinhamento com melhores práticas MCP")
     elementos_ausentes: List[str] = Field(
         description="Elementos importantes ausentes do prompt")
+
+
+class RelatorioValidacao(TypedDict):
+    """Estrutura tipada para relatório de validação"""
+    pontuacao_geral: int
+    validacao_aprovada: bool
+    cobertura_requisitos: Dict[str, bool]
+    requisitos_ausentes: List[str]
+    recomendacoes: List[str]
+    problemas_criticos: List[str]
+    avisos: List[str]
 
 
 class AnalisadorPromptMCP:
@@ -89,7 +100,6 @@ class AnalisadorPromptMCP:
         pontos_fortes = []
         pontos_fracos = []
         recomendacoes = []
-        alinhamento_melhores_praticas = {}
         elementos_ausentes = []
 
         # Verificar padrões positivos
@@ -110,9 +120,10 @@ class AnalisadorPromptMCP:
         pontuacao -= correspondencias_negativas * 1.5
 
         # Analisar contra melhores práticas
+        # Analisar contra melhores práticas
+        alinhamento_melhores_praticas: Dict[str, bool] = {}
         self._analisar_melhores_praticas(prompt_minusculo, alinhamento_melhores_praticas,
                                          pontos_fortes, pontos_fracos, elementos_ausentes)
-
         # Gerar recomendações
         recomendacoes = self._gerar_recomendacoes(
             prompt_minusculo, elementos_ausentes)
@@ -386,7 +397,7 @@ def sugerir_melhorias_prompt(prompt_original: str) -> Dict[str, Any]:
 
 
 @mcp.tool()
-def validar_requisitos_mcp(requisitos: str) -> Dict[str, Any]:
+def validar_requisitos_mcp(requisitos: str) -> RelatorioValidacao:
     """
     Validar requisitos de servidor MCP contra lista de verificação de melhores práticas.
 
@@ -394,13 +405,13 @@ def validar_requisitos_mcp(requisitos: str) -> Dict[str, Any]:
         requisitos: A especificação de requisitos para validar
 
     Returns:
-        Dict contendo resultados de validação e requisitos ausentes
+        RelatorioValidacao contendo resultados de validação e requisitos ausentes
     """
     try:
         analise = analisador.analisar_prompt(requisitos)
 
         # Criar relatório detalhado de validação
-        relatorio_validacao = {
+        relatorio_validacao: RelatorioValidacao = {
             "pontuacao_geral": analise.pontuacao,
             "validacao_aprovada": analise.pontuacao >= 7,
             "cobertura_requisitos": analise.alinhamento_melhores_praticas,

@@ -2,9 +2,17 @@
 
 ## 📚 Bem-vindo à Documentação dos MCP Servers
 
-Esta é a documentação completa do projeto MCP Servers, uma coleção de servidores especializados baseados no protocolo MCP (Model Context Protocol) que fornecem ferramentas para análise e otimização de prompts em português.
+Esta é a documentação completa do projeto MCP Servers v2.0, uma coleção modernizada de servidores especializados baseados no protocolo MCP (Model Context Protocol) que fornecem ferramentas para análise e otimização de prompts em português.
 
 ![Banner MCP Servers](./assets/documentation_banner.png)
+
+## 🚀 Novidades da Versão 2.0
+
+- **Gerenciamento Centralizado**: Novo launcher principal (`main.py`) para gerenciar todos os servidores
+- **Sistema de Build Moderno**: Migração completa para `uv` com `pyproject.toml`
+- **Arquitetura Async**: Suporte nativo a operações assíncronas
+- **Testes Modernizados**: Framework de testes com pytest e cobertura
+- **Scripts Simplificados**: Interface unificada para execução de servidores
 
 ## 🧭 Navegação Rápida
 
@@ -44,6 +52,11 @@ Esta é a documentação completa do projeto MCP Servers, uma coleção de servi
 
 ## 🚀 Início Rápido
 
+### Pré-requisitos
+
+- Python 3.12+
+- uv (gerenciador de pacotes)
+
 ### Instalação
 
 ```bash
@@ -51,11 +64,11 @@ Esta é a documentação completa do projeto MCP Servers, uma coleção de servi
 git clone https://github.com/user/mcp-servers.git
 cd mcp-servers
 
-# Instalar dependências
-pip install -r requirements.txt
+# Instalar uv (se ainda não instalado)
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Ou usando uv
-uv pip install -r requirements.txt
+# Instalar dependências
+uv sync
 ```
 
 ### Executar Servidores
@@ -64,11 +77,26 @@ uv pip install -r requirements.txt
 # Executar todos os servidores com interface interativa
 ./run_servers.sh
 
-# Ou individualmente
-uv run --directory ./servers mcp_server.py
-uv run --directory ./servers prompt_server.py
-uv run --directory ./servers tailwind_server.py
+# Ou usar o launcher principal
+python main.py all
+
+# Executar servidores individualmente
+python main.py mcp
+python main.py prompt
+python main.py tailwind
 ```
+
+### Executar Testes
+
+```bash
+# Executar todos os testes
+python run_tests.py
+
+# Ou usar pytest diretamente
+uv run python -m pytest tests/ -v
+```
+
+````
 
 ## 📊 Visão Geral dos Servidores
 
@@ -132,7 +160,7 @@ python run_tests.py
 
 # Ou testes específicos
 python -m pytest tests/test_mcp_server.py
-```
+````
 
 ## 📦 Estrutura da Documentação
 

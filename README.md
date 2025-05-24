@@ -1,12 +1,33 @@
-# 🚀 MCP Servers - Conjunto de Servidores MCP em Português
+# 🚀 MCP Servers v2.0 - Conjunto de Servidores MCP em Português
 
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
-[![FastMCP](https://img.shields.io/badge/FastMCP-0.6.0%2B-green)](https://python.langchain.com/)
+[![Python](https://img.shields.io/badge/Python-3.12%2B-blue)](https://www.python.org/)
+[![FastMCP](https://img.shields.io/badge/FastMCP-2.4.0%2B-green)](https://python.langchain.com/)
 [![Licença](https://img.shields.io/badge/Licença-MIT-orange)](LICENSE)
+[![Testes](https://img.shields.io/badge/Testes-Pytest-green)](https://pytest.org/)
 
-Plataforma de servidores MCP (Model Context Protocol) em português para processamento especializado de prompts, incluindo análise de prompts MCP, engenharia de prompts e suporte para Tailwind CSS v4.1.
+Plataforma modernizada de servidores MCP (Model Context Protocol) em português para processamento especializado de prompts, incluindo análise de prompts MCP, engenharia de prompts e suporte para Tailwind CSS v4.1.
 
 ![Banner MCP Servers](https://github.com/user/mcp-servers/raw/main/docs/banner.png)
+
+## 🌟 Novidades da Versão 2.0
+
+### 🚀 Gerenciamento Centralizado
+
+- **Launcher Principal**: `main.py` unifica a execução de todos os servidores
+- **Interface Simplificada**: Scripts `run_servers.sh` e `run_tests.py` modernizados
+- **Execução Assíncrona**: Suporte nativo a operações assíncronas
+
+### 🛠️ Sistema de Build Moderno
+
+- **uv Package Manager**: Migração completa do pip para uv
+- **pyproject.toml**: Configuração centralizada do projeto
+- **Build System**: Hatchling como backend de build
+
+### 🧪 Framework de Testes Modernizado
+
+- **Pytest**: Framework de testes profissional
+- **Cobertura de Código**: Relatórios de cobertura integrados
+- **Testes Paralelos**: Execução otimizada de testes
 
 ## 🌟 Visão Geral
 
@@ -90,7 +111,7 @@ Documentação completa está disponível no diretório `/docs`:
 
 ### Pré-requisitos
 
-- Python 3.8+
+- Python 3.12+
 - uv (Universal Python Package Manager)
 
 ### Configuração Rápida
@@ -100,50 +121,96 @@ Documentação completa está disponível no diretório `/docs`:
 git clone https://github.com/user/mcp-servers.git
 cd mcp-servers
 
+# Instalar uv (se ainda não instalado)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # Instalar dependências
-pip install -r requirements.txt
+uv sync
 
-# Ou usando uv (recomendado)
-uv pip install -r requirements.txt
+# Verificar instalação
+python main.py --help
 ```
 
-Para instruções de instalação detalhadas, consulte o [Guia de Instalação](docs/guides/installation_guide.md).
+## 🚀 Uso Rápido
 
-## 🚀 Uso
+### Launcher Principal
 
-### Executar Servidores Individualmente
+O novo launcher centralizado permite executar todos os servidores de forma unificada:
 
 ```bash
-# Analisador de Prompts MCP
-uv run --directory ./servers mcp_server.py
+# Executar servidor específico
+python main.py mcp          # Analisador de prompts MCP
+python main.py prompt       # Servidor de engenharia de prompts
+python main.py tailwind     # Servidor Tailwind CSS
 
-# Servidor de Engenharia de Prompts
-uv run --directory ./servers prompt_server.py
+# Executar todos os servidores (modo desenvolvimento)
+python main.py all
 
-# Servidor Tailwind CSS v4.1
-uv run --directory ./servers tailwind_server.py
+# Ajuda completa
+python main.py --help
 ```
 
-### Executar Múltiplos Servidores (Modo Interativo)
-
-Utilizando o script launcher interativo:
+### Scripts de Execução
 
 ```bash
+# Interface interativa (recomendado)
 ./run_servers.sh
+
+# Execução direta com menu
+bash run_servers.sh menu
+
+# Executar servidor específico
+bash run_servers.sh mcp
 ```
 
-Interface colorida com seleção interativa e controle em tempo real.
-
-### Modo Rápido (Inicialização Simplificada)
+### Executar Testes
 
 ```bash
-./start_servers.sh
-# Digite os números dos servidores (ex: 1 3) ou "all" para todos
+# Todos os testes
+python run_tests.py
+
+# Teste específico
+python run_tests.py mcp_server
+
+# Usando pytest diretamente
+uv run python -m pytest tests/ -v
 ```
 
-Para instruções detalhadas sobre execução e monitoramento, consulte o [Guia de Lançamento](docs/guides/launch_guide.md).
+## 📋 Exemplos de Uso
 
-### Exemplo de Uso em Python
+### Análise de Prompt MCP
+
+```python
+# Usando o launcher principal
+import subprocess
+
+# Iniciar o servidor MCP
+process = subprocess.Popen(['python', 'main.py', 'mcp'])
+
+# Ou usar diretamente a biblioteca
+from servers.mcp_server import AnalisadorPromptMCP
+
+analisador = AnalisadorPromptMCP()
+resultado = analisador.analisar_prompt(
+    "Criar um servidor MCP para análise de código Python"
+)
+
+print(f"Pontuação: {resultado.pontuacao}/10")
+print(f"Recomendações: {resultado.recomendacoes}")
+```
+
+### Execução de Múltiplos Servidores
+
+```bash
+# Interface interativa completa
+./run_servers.sh
+
+# Executar todos os servidores em desenvolvimento
+python main.py all --dev
+
+# Executar servidores específicos
+python main.py mcp prompt tailwind
+```
 
 ```python
 from servers.mcp_server import AnalisadorPromptMCP
@@ -153,121 +220,110 @@ analisador = AnalisadorPromptMCP()
 
 # Analisar um prompt
 resultado = analisador.analisar_prompt(
-    "Crie um servidor MCP com ferramentas para otimização de prompts, "
-    "incluindo tratamento de erros e validação de entradas."
-)
-
-# Exibir resultado
-print(f"Pontuação: {resultado['pontuacao']}/10")
-print(f"Pontos fortes: {resultado['pontos_fortes']}")
-print(f"Sugestões: {resultado['sugestoes']}")
+python main.py mcp prompt tailwind
 ```
-
-Para exemplos mais avançados, consulte:
-
-- [Exemplo Integrado](docs/examples/integrated_example.py) - Fluxo completo usando os três servidores
-- [Exemplo do Analisador MCP](docs/examples/mcp_analyzer_example.py) - Uso avançado do analisador
-- [Exemplos de Engenharia de Prompts](docs/examples/prompt_engineering_examples.py) - Técnicas de otimização
 
 ## 🧪 Testes
 
-Execute todos os testes com:
+O projeto v2.0 inclui um sistema de testes modernizado com pytest:
 
 ```bash
-# Usando pytest diretamente
-pytest ./tests
-
-# Ou usando o script de testes
+# Executar todos os testes
 python run_tests.py
+
+# Testes específicos
+python run_tests.py mcp_server
+python run_tests.py prompt_server
+
+# Usando pytest diretamente
+uv run python -m pytest tests/ -v
+
+# Com cobertura (se disponível)
+uv run python -m pytest tests/ --cov=servers --cov-report=term-missing
 ```
 
-O projeto inclui testes para cada servidor:
+### Testes Incluídos
 
-- `test_mcp_server.py` - Testes do Analisador de Prompts MCP
-- `test_prompt_server.py` - Testes do Servidor de Engenharia de Prompts
-- `test_tailwind_server.py` - Testes do Servidor Tailwind CSS
-- `test_mcpprompt_server.py` - Testes do Servidor Experimental
+- ✅ `test_mcp_server.py` - Analisador de Prompts MCP
+- ✅ `test_prompt_server.py` - Servidor de Engenharia de Prompts
+- ✅ `test_tailwind_server.py` - Servidor Tailwind CSS
 
-Para mais detalhes sobre a execução de testes, consulte o [Guia de Instalação](docs/guides/installation_guide.md#testes-e-validação).
-
-## 📁 Estrutura do Projeto
+## 📁 Estrutura do Projeto v2.0
 
 ```text
-/mcp-servers/
-├── 🖥️ servers/
-│   ├── mcp_server.py           # Analisador de Prompts MCP
-│   ├── prompt_server.py        # Servidor de Engenharia de Prompts
-│   ├── tailwind_server.py      # Servidor Tailwind CSS v4.1
-│   └── mcpprompt_server.py     # Servidor MCP Prompt (experimental)
+mcp-servers/
+├── 🚀 main.py                  # Launcher principal
+├── 🔧 pyproject.toml           # Configuração do projeto (uv)
+├── 🧪 run_tests.py             # Runner de testes modernizado
+├── 📜 run_servers.sh           # Script de execução simplificado
+├── � README.md                # Este arquivo
 │
-├── 🧪 tests/
-│   ├── __init__.py             # Módulo de testes
-│   ├── test_mcp_server.py      # Teste do analisador
-│   ├── test_prompt_server.py   # Teste do servidor de prompts
-│   ├── test_tailwind_server.py # Teste do servidor Tailwind
-│   └── test_mcpprompt_server.py # Teste do servidor experimental
+├── 🖥️ servers/                 # Servidores MCP
+│   ├── mcp_server.py           # Analisador de prompts MCP
+│   ├── prompt_server.py        # Engenharia de prompts
+│   ├── tailwind_server.py      # Suporte Tailwind CSS v4.1
+│   ├── fastmcp_server.py       # Servidor FastMCP
+│   ├── react_server.py         # Servidor React
+│   └── typescript_server.py    # Servidor TypeScript
 │
-├── � docs/                    # Documentação completa
-│   ├── api/                    # Referências de API
-│   ├── guides/                 # Guias e tutoriais
-│   ├── examples/               # Exemplos de código
-│   ├── servers/                # Documentação dos servidores
-│   └── assets/                 # Imagens e recursos
+├── 🧪 tests/                   # Testes com pytest
+│   ├── test_mcp_server.py      # Testes do analisador MCP
+│   ├── test_prompt_server.py   # Testes do servidor de prompts
+│   └── test_tailwind_server.py # Testes do servidor Tailwind
 │
-├── �📜 run_servers.sh           # Launcher interativo completo
-├── 📜 start_servers.sh         # Inicializador rápido
-├── 📜 run_tests.py             # Executor de testes
-│
-├── 📋 requirements.txt         # Dependências Python
-├── 📋 pyproject.toml           # Configuração do projeto
-├── 📋 uv.lock                  # Lock de dependências uv
-├── 📋 CONTRIBUTING.md          # Guia de contribuição
-└── 📋 README.md                # Este arquivo
+└── 📚 docs/                    # Documentação completa
+    ├── guides/                 # Guias de uso
+    ├── api/                    # Referências de API
+    ├── examples/               # Exemplos práticos
+    └── servers/                # Docs dos servidores
+```
+
+├── �📜 run_servers.sh # Launcher interativo completo
+├── 📜 start_servers.sh # Inicializador rápido
+├── 📜 run_tests.py # Executor de testes
+
 ```
 
 ## 🌐 Protocolo MCP (Model Context Protocol)
 
 O MCP é um protocolo que permite estender modelos de linguagem com ferramentas personalizadas. Cada servidor neste projeto implementa ferramentas MCP específicas para diferentes domínios de processamento de prompts.
 
-### Princípios de Design MCP
+### Princípios de Design MCP v2.0
 
 1. **Design Focado**: Cada ferramenta realiza uma função específica e bem definida
-2. **Tratamento Abrangente de Erros**: Validação robusta de entradas e saídas
-3. **Documentação Clara**: Cada ferramenta tem documentação detalhada
-4. **Entradas/Saídas Estruturadas**: Uso de Pydantic para validação de esquema
+2. **Arquitetura Assíncrona**: Suporte nativo a operações assíncronas
+3. **Tratamento Robusto de Erros**: Validação robusta de entradas e saídas
+4. **Documentação Clara**: Cada ferramenta tem documentação detalhada
+5. **Entradas/Saídas Estruturadas**: Uso de Pydantic para validação de esquema
 
-## 📊 Benchmarks e Pontuação
+## 📊 Sistema de Pontuação
 
-O Analisador de Prompts MCP avalia prompts em 10 critérios, cada um contribuindo para uma pontuação total (1-10):
+O Analisador de Prompts MCP avalia prompts em critérios específicos (pontuação 1-10):
 
-| Critério              | Descrição                          | Peso |
-| --------------------- | ---------------------------------- | ---- |
-| Propósito Claro       | Objetivo específico do servidor    | 15%  |
-| Design de Ferramentas | Ferramentas focadas e bem nomeadas | 15%  |
-| Tratamento de Erros   | Validação e tratamento de exceções | 12%  |
-| Documentação          | Descrição clara das ferramentas    | 10%  |
-| Segurança             | Práticas recomendadas de segurança | 10%  |
-| Esquema de Dados      | Estruturas de dados bem definidas  | 10%  |
-| Eficiência            | Otimizações e desempenho           | 8%   |
-| Extensibilidade       | Facilidade de extensão             | 8%   |
-| Convenções MCP        | Alinhamento com padrões MCP        | 7%   |
-| Testes                | Cobertura de testes robusta        | 5%   |
+| Critério                     | Descrição                                  | Importância |
+| ---------------------------- | ------------------------------------------ | ----------- |
+| 🎯 Propósito Claro           | Objetivo específico e bem definido         | Alta        |
+| 🛠️ Design de Ferramentas     | Ferramentas focadas e bem nomeadas        | Alta        |
+| ⚠️ Tratamento de Erros       | Validação e tratamento de exceções        | Alta        |
+| 📝 Documentação              | Descrição clara das ferramentas           | Média       |
+| 🔒 Segurança                 | Práticas recomendadas de segurança        | Média       |
+| 📋 Esquema de Dados          | Estruturas de dados bem definidas         | Média       |
+| ⚡ Performance               | Considerações de otimização               | Baixa       |
+| 🔧 Protocolo de Transporte   | Especificação clara do protocolo          | Baixa       |
 
-Para detalhes sobre cada critério e exemplos de avaliação, consulte o [Guia de Melhores Práticas MCP](docs/guides/mcp_best_practices.md) e a [Documentação do Analisador](docs/servers/mcp_server.md).
+## 🧰 Ferramentas de Desenvolvimento
 
-## 🧰 Scripts e Ferramentas
+### Sistema de Build Moderno
 
-### Script de Execução Completo (`run_servers.sh`)
+- **uv**: Gerenciador de pacotes ultrarrápido
+- **pyproject.toml**: Configuração centralizada
+- **Hatchling**: Backend de build moderno
 
-Launcher interativo com:
+### Scripts de Automação
 
-- Interface colorida e visual
-- Menu de controle em tempo real
-- Monitoramento de status
-- Reinicialização individual ou em lote
-- Parada gracosa de servidores
-
-### Inicializador Rápido (`start_servers.sh`)
+- 🚀 `main.py` - Launcher centralizado para todos os servidores
+- 🔧 `run_servers.sh` - Interface interativa simplificada
+- 🧪 `run_tests.py` - Runner de testes modernizado
 
 Versão simplificada para inicialização rápida:
 
@@ -296,11 +352,35 @@ Contribuições são bem-vindas! Para contribuir:
 
 1. Faça um fork do projeto
 2. Crie uma branch para sua feature (`git checkout -b feature/nova-ferramenta`)
+## 📚 Documentação
+
+Documentação completa está disponível no diretório `/docs`:
+
+- [📖 Índice da Documentação](docs/index.md)
+- **📘 Guias**:
+  - [Guia de Instalação](docs/guides/installation_guide.md)
+  - [Guia de Lançamento](docs/guides/launch_guide.md)
+  - [Guia de Integração](docs/guides/integration_guide.md)
+  - [Melhores Práticas MCP](docs/guides/mcp_best_practices.md)
+  - [Estratégias de Prompts](docs/guides/prompt_strategies.md)
+  - [Migração Tailwind v4.1](docs/guides/tailwind_migration_guide.md)
+- **🏗️ Arquitetura**:
+  - [Visão Geral da Arquitetura](docs/architecture.md)
+  - [Perguntas Frequentes (FAQ)](docs/faq.md)
+- **📝 API de Referência**:
+  - [API do Analisador MCP](docs/api/mcp_server_api.md)
+  - [API do Servidor de Prompts](docs/api/prompt_server_api.md)
+  - [API do Servidor Tailwind](docs/api/tailwind_server_api.md)
+
+## 🤝 Contribuição
+
+Contribuições são bem-vindas! Para contribuir:
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-ferramenta`)
 3. Commit suas mudanças (`git commit -m 'Adiciona nova ferramenta de análise'`)
 4. Push para a branch (`git push origin feature/nova-ferramenta`)
 5. Abra um Pull Request
-
-Consulte [CONTRIBUTING.md](CONTRIBUTING.md) para mais detalhes sobre o processo de contribuição e padrões de código.
 
 ## 📜 Licença
 
@@ -310,25 +390,24 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo `LICENSE` para
 
 - [FastMCP](https://github.com/fastmcp/fastmcp) - Framework para desenvolvimento de servidores MCP
 - [Pydantic](https://docs.pydantic.dev/) - Validação de dados e esquemas
-- [uv](https://github.com/astral-sh/uv) - Gerenciador de pacotes Python rápido
-- [Typer](https://typer.tiangolo.com/) - Construção de CLIs em Python
-- [Rich](https://rich.readthedocs.io/) - Formatação rica de texto em terminal
-- [Pytest](https://docs.pytest.org/) - Framework de testes
+- [uv](https://github.com/astral-sh/uv) - Gerenciador de pacotes Python ultrarrápido
+- [Pytest](https://docs.pytest.org/) - Framework de testes moderno
 
-## 📌 Citação
+## 📌 Informações do Projeto
 
-Para citar este projeto em trabalhos acadêmicos:
-
-```bibtex
-@software{mcp_servers,
-  author = {{MCP Servers Contributors}},
-  title = {MCP Servers: Conjunto de Servidores MCP em Português},
-  url = {https://github.com/user/mcp-servers},
-  year = {2025},
-  month = {5}
-}
-```
+**Versão**: 2.0
+**Python**: 3.12+
+**Tipo**: Servidores MCP
+**Status**: Produção
 
 ---
 
-Desenvolvido com ❤️ pela Comunidade MCP Brasil
+<div align="center">
+
+**🚀 MCP Servers v2.0**
+*Desenvolvido com ❤️ pela Comunidade MCP Brasil*
+
+[![⭐ Star no GitHub](https://img.shields.io/github/stars/user/mcp-servers?style=social)](https://github.com/user/mcp-servers)
+
+</div>
+```
