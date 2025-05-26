@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run MCP Integration Demo",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"docs/examples/complete_integration_demo.py"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}

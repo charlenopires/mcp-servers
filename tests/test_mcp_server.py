@@ -223,7 +223,9 @@ def main():
 
         # Verificar se está na faixa esperada
         min_esp, max_esp = caso_teste['faixa_pontuacao_esperada']
-        if min_esp <= analise.pontuacao <= max_esp:
+        pontuacao = int(analise.pontuacao) if isinstance(
+            analise.pontuacao, str) else analise.pontuacao
+        if min_esp <= pontuacao <= max_esp:
             print("✅ PASSOU")
         else:
             print("❌ FALHOU")

@@ -108,8 +108,9 @@ class ServerManager:
         print("=" * 50)
 
         for server_id, config in SERVERS_CONFIG.items():
+            module_path = str(config.get('module', ''))
             server_file = self.project_root / \
-                f"{config['module'].replace('.', '/')}.py"
+                f"{module_path.replace('.', '/')}.py"
             status = "✅ Disponível" if server_file.exists() else "❌ Não encontrado"
             print(f"  {server_id:12} - {config['name']}")
             print(f"  {'':12}   {config['description']}")
@@ -123,13 +124,15 @@ class ServerManager:
             return False
 
         config = SERVERS_CONFIG[server_id]
+        module_path = str(config.get('module', ''))
         server_file = self.project_root / \
-            f"{config['module'].replace('.', '/')}.py"
+            f"{module_path.replace('.', '/')}.py"
 
         if not server_file.exists():
             logger.error(f"Arquivo do servidor não encontrado: {server_file}")
             return False
 
+        return True
         return True
 
     async def start_server(self, server_id: str, args: argparse.Namespace) -> bool:
@@ -145,7 +148,7 @@ class ServerManager:
 
             # Comando para executar o servidor
             cmd = [
-                sys.executable, "-m", module_path
+                str(sys.executable), "-m", str(module_path)
             ]
 
             # Adicionar argumentos específicos se fornecidos
@@ -155,12 +158,12 @@ class ServerManager:
             # Definir variáveis de ambiente
             env = os.environ.copy()
             env['MCP_SERVER_PORT'] = str(config['port'])
-            env['MCP_SERVER_PROTOCOL'] = config['protocol']
+            env['MCP_SERVER_PROTOCOL'] = str(config['protocol'])
 
             # Executar o servidor
             process = subprocess.Popen(
                 cmd,
-                cwd=self.project_root,
+                cwd=str(self.project_root),
                 env=env,
                 stdout=subprocess.PIPE if args.quiet else None,
                 stderr=subprocess.PIPE if args.quiet else None

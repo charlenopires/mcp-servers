@@ -9,22 +9,22 @@ import asyncio
 
 # Tentar importar o servidor de prompts
 try:
-    from servers.prompt_server import PromptServer
+    from servers.prompt_server import PromptEngineer
     PROMPT_SERVER_AVAILABLE = True
 except ImportError:
     PROMPT_SERVER_AVAILABLE = False
-    PromptServer = None
+    PromptEngineer = None
 
 
 class TestPromptServer:
-    """Testes para o PromptServer"""
+    """Testes para o PromptEngineer"""
 
     def setup_method(self):
         """Setup para cada teste"""
         if not PROMPT_SERVER_AVAILABLE:
-            pytest.skip("PromptServer não disponível")
+            pytest.skip("PromptEngineer não disponível")
 
-        self.server = PromptServer()
+        self.server = PromptEngineer()
 
     def test_prompt_server_initialization(self):
         """Testa a inicialização do servidor de prompts"""
@@ -57,11 +57,11 @@ class TestPromptServer:
 
 @pytest.mark.skipif(not PROMPT_SERVER_AVAILABLE, reason="PromptServer não disponível")
 class TestPromptServerIntegration:
-    """Testes de integração para o PromptServer"""
+    """Testes de integração para o PromptEngineer"""
 
     def setup_method(self):
         """Setup para testes de integração"""
-        self.server = PromptServer()
+        self.server = PromptEngineer()
 
     def test_server_configuration(self):
         """Testa configuração do servidor"""

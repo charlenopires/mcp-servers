@@ -35,6 +35,7 @@ Esta é a documentação completa do projeto MCP Servers v2.0, uma coleção mod
 - [Analisador de Prompts MCP](servers/mcp_server.md)
 - [Servidor de Engenharia de Prompts](servers/prompt_server.md)
 - [Servidor Tailwind CSS v4.1](servers/tailwind_server.md)
+- [FastMCP Server](servers/fastmcp_server.md)
 
 ### 📝 Referências de API
 
@@ -42,6 +43,7 @@ Esta é a documentação completa do projeto MCP Servers v2.0, uma coleção mod
 - [API do Servidor de Engenharia de Prompts](api/prompt_server_api.md)
 - [API do Servidor Tailwind CSS v4.1](api/tailwind_server_api.md)
 - [API de Migração Tailwind](api/tailwind_migration_api.md)
+- [API do FastMCP Server](api/fastmcp_server_api.md)
 
 ### 📋 Exemplos
 
@@ -84,6 +86,7 @@ python main.py all
 python main.py mcp
 python main.py prompt
 python main.py tailwind
+python main.py fastmcp
 ```
 
 ### Executar Testes
@@ -164,6 +167,8 @@ python -m pytest tests/test_mcp_server.py
 
 ## 📦 Estrutura da Documentação
 
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 ```text
 /docs/
 ├── index.md                    # Esta página
