@@ -11,6 +11,33 @@
 			"group": "build",
 			"isBackground": false,
 			"problemMatcher": []
+		},
+		{
+			"label": "Run React Optimizer Server",
+			"type": "shell",
+			"command": "uv",
+			"args": [
+				"run",
+				"python",
+				"-m",
+				"servers.react_optimizer_server"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run React Optimizer Examples",
+			"type": "shell",
+			"command": "uv",
+			"args": [
+				"run",
+				"python",
+				"docs/examples/react_optimizer_examples.py"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
 		}
 	]
 }

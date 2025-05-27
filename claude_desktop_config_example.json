@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "mcp-analysis": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "servers.mcp_server"],
+      "cwd": "/Users/fazapp/projects/mcp-servers"
+    },
+    "prompt-engineering": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "servers.prompt_server"],
+      "cwd": "/Users/fazapp/projects/mcp-servers"
+    },
+    "tailwind-css": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "servers.tailwind_server"],
+      "cwd": "/Users/fazapp/projects/mcp-servers"
+    },
+    "fastmcp": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "servers.fastmcp_server"],
+      "cwd": "/Users/fazapp/projects/mcp-servers"
+    },
+    "react-components": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "servers.react_server"],
+      "cwd": "/Users/fazapp/projects/mcp-servers"
+    },
+    "typescript-analysis": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "servers.typescript_server"],
+      "cwd": "/Users/fazapp/projects/mcp-servers"
+    },
+    "react-optimizer": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "servers.react_optimizer_server"],
+      "cwd": "/Users/fazapp/projects/mcp-servers"
+    }
+  }
+}

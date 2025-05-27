@@ -78,6 +78,42 @@ Fornece contexto e suporte para desenvolvimento com Tailwind CSS v4.1.
 - `otimizar_classes_tailwind` - Otimiza uso de classes
 - `gerar_componentes_tailwind` - Cria componentes seguindo boas práticas
 
+### 4. ✅ React Optimizer Server (`react_optimizer_server.py`) - **FUNCIONAL** 🆕
+
+Servidor unificado para análise/otimização de código React existente e otimização de prompts para geração de código React moderno seguindo tendências UI/UX 2025.
+
+**Principais Funcionalidades:**
+
+- 🔍 **Análise de Código**: Avalia componentes React existentes com scoring e recomendações
+- ⚡ **Otimização Automática**: Aplica tendências 2025 automaticamente (glassmorphism, dark mode, micro-animações)
+- 📝 **Análise de Prompts**: Avalia qualidade de prompts para geração de código React
+- 🚀 **Otimização de Prompts**: Transforma prompts básicos em versões estruturadas para AI tools
+
+**Ferramentas:**
+
+- `analyze_react_code` - Análise de código React existente
+- `optimize_react_code` - Otimização automática com tendências 2025
+- `analyze_react_prompt` - Análise de qualidade de prompts
+- `optimize_react_prompt` - Otimização de prompts para AI tools (v0.dev, Cursor, etc.)
+- `generate_react_workflow` - Geração de workflows de desenvolvimento
+- `get_react_best_practices` - Melhores práticas React 2025
+- `validate_react_integration` - Validação de integração de componentes
+
+**Tendências UI/UX 2025 Suportadas:**
+
+- 🪟 Glassmorphism e efeitos de vidro
+- 🌙 Dark mode como padrão primário
+- ✨ Micro-animações e interações
+- 🎨 Typography bold e maximalista
+- 🔗 Elementos 3D interativos
+- ♿ Acessibilidade WCAG 2.1 AA
+
+**Integração com AI Tools:**
+
+- v0.dev (Vercel), Cursor AI, GitHub Copilot, Visual Copilot
+
+📚 **Documentação**: `docs/servers/react_optimizer_server.md` | **Exemplos**: `docs/examples/react_optimizer_examples.py`
+
 ### 4. ✅ FastMCP Server (`fastmcp_server.py`) - **FUNCIONAL**
 
 Servidor otimizado usando FastMCP para análise de prompts MCP com funcionalidades avançadas de análise e geração de templates.
@@ -189,6 +225,7 @@ O launcher centralizado permite executar todos os servidores de forma unificada:
 python main.py mcp          # Analisador de prompts MCP
 python main.py prompt       # Servidor de engenharia de prompts
 python main.py tailwind     # Servidor Tailwind CSS
+python main.py react_optimizer  # Servidor React Optimizer (NOVO!)
 
 # Executar todos os servidores (modo desenvolvimento)
 python main.py all

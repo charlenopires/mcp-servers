@@ -58,6 +58,7 @@ show_help() {
     echo -e "  ${GREEN}fastmcp${NC}        - Executa o servidor FastMCP"
     echo -e "  ${GREEN}react${NC}          - Executa o servidor React"
     echo -e "  ${GREEN}typescript${NC}     - Executa o servidor TypeScript"
+    echo -e "  ${GREEN}react_optimizer${NC} - Executa o servidor React Optimizer"
     echo ""
     echo -e "${YELLOW}Opções:${NC}"
     echo -e "  ${GREEN}--dev${NC}          - Modo desenvolvimento (mais logs)"
@@ -103,7 +104,7 @@ main() {
             echo ""
             uv run python main.py list
             ;;
-        "all"|"mcp"|"prompt"|"tailwind"|"fastmcp"|"react"|"typescript")
+        "all"|"mcp"|"prompt"|"tailwind"|"fastmcp"|"react"|"typescript"|"react_optimizer")
             echo -e "${GREEN}🚀 Iniciando servidor(es)...${NC}"
             echo ""
             

@@ -21,6 +21,7 @@ Uso:
     - fastmcp: Servidor FastMCP
     - react: Servidor React
     - typescript: Servidor TypeScript
+    - react_optimizer: Servidor React Optimizer (análise + otimização)
     - all: Executar todos os servidores (modo desenvolvimento)
     
 Exemplos:
@@ -90,6 +91,13 @@ SERVERS_CONFIG = {
         "description": "Servidor para análise TypeScript",
         "module": "servers.typescript_server",
         "port": 3005,
+        "protocol": "stdio"
+    },
+    "react_optimizer": {
+        "name": "React Optimizer Server",
+        "description": "Servidor para análise e otimização de código React + prompts",
+        "module": "servers.react_optimizer_server",
+        "port": 3006,
         "protocol": "stdio"
     }
 }
