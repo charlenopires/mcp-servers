@@ -114,7 +114,51 @@ Servidor unificado para análise/otimização de código React existente e otimi
 
 📚 **Documentação**: `docs/servers/react_optimizer_server.md` | **Exemplos**: `docs/examples/react_optimizer_examples.py`
 
-### 4. ✅ FastMCP Server (`fastmcp_server.py`) - **FUNCIONAL**
+### 5. ✅ shadcn/ui Advanced Server (`shadcn_server.py`) - **FUNCIONAL** 🆕
+
+Servidor MCP avançado para integração completa com shadcn/ui, oferecendo análise inteligente, geração otimizada e customização de componentes seguindo as melhores práticas da biblioteca.
+
+**Principais Funcionalidades:**
+
+- 🔍 **Análise Inteligente**: Detecta componentes shadcn/ui no código com análise de dependências
+- ⚡ **Otimização Automática**: Aplica melhores práticas (React.memo, cn() utility, ARIA roles)
+- 🎨 **Geração de Componentes**: Templates TypeScript otimizados para 10+ componentes
+- 🌙 **Criação de Temas**: Gerador de temas personalizados com suporte a dark mode
+- 📋 **Guias de Setup**: Configuração específica para Next.js, Vite, Remix, Astro
+
+**Ferramentas:**
+
+- `analyze_shadcn_component` - Análise de código com componentes shadcn/ui
+- `optimize_shadcn_component` - Otimização automática com melhores práticas
+- `generate_shadcn_component` - Geração de componentes customizados
+- `get_shadcn_component_info` - Informações detalhadas sobre componentes
+- `get_shadcn_setup_guide` - Guias de configuração por framework
+- `create_shadcn_theme` - Criador de temas personalizados
+- `get_shadcn_best_practices` - Padrões e práticas recomendadas
+
+**Componentes Suportados:**
+
+- 🧩 Layout: Accordion, Card, Dialog
+- 📝 Forms: Button, Input, Select, Form (React Hook Form + Zod)
+- 📊 Data Display: Table, Badge
+- 🔔 Feedback: Toast, Alert Dialog
+- 🎨 Advanced: Compound Components, Custom Hooks, TypeScript interfaces
+
+**Frameworks Suportados:**
+
+- Next.js, Vite, Remix, Astro, React Router
+
+**Características Avançadas:**
+
+- 🎯 **Base de Conhecimento**: Metadados completos de componentes e dependências
+- 🔧 **Templates TypeScript**: Código otimizado com validação Zod e React Hook Form
+- 📊 **Score de Acessibilidade**: Análise automática de conformidade WCAG
+- 🚀 **Multi-Framework**: Configurações específicas para cada framework
+- 🎨 **Theme Generator**: Conversão automática hex → HSL com CSS variables
+
+📚 **Documentação**: Baseada na documentação oficial shadcn/ui e padrões React modernos
+
+### 6. ✅ FastMCP Server (`fastmcp_server.py`) - **FUNCIONAL**
 
 Servidor otimizado usando FastMCP para análise de prompts MCP com funcionalidades avançadas de análise e geração de templates.
 
@@ -131,9 +175,95 @@ Servidor otimizado usando FastMCP para análise de prompts MCP com funcionalidad
 - `mcp://prompt-examples/{level}` - Exemplos de prompts por nível
 - `mcp://prompt-frameworks` - Frameworks de análise de prompts
 
-### 5. 🚧 Servidores em Desenvolvimento
+### 7. ✅ React 19 Advanced Server (`react_server.py`) - **FUNCIONAL** 🆕
 
-- **React Server** (`react_server.py`) - Em desenvolvimento
+Servidor MCP avançado para desenvolvimento React 19 com funcionalidades modernas, incluindo Server Components, Actions e integração completa com frameworks modernos.
+
+**Principais Funcionalidades:**
+
+- ⚛️ **React 19 Features**: Server Components estáveis, Actions, hook `use`
+- 🎯 **Análise de Prompts**: Avalia prompts React com pontuação e sugestões
+- 🏗️ **Templates Modernos**: Templates otimizados para componentes e aplicações
+- 🔧 **Validação de Requisitos**: Checklist completo para projetos React
+- 📊 **Best Practices**: Conformidade com padrões React 2025
+
+**Ferramentas:**
+
+- `analisar_prompt_react` - Análise de prompts com pontuação e feedback
+- `obter_template_prompt` - Templates otimizados para diferentes tipos de projeto
+- `sugerir_melhorias_contextuais` - Melhorias específicas por contexto
+- `validar_requisitos_react` - Validação de requisitos essenciais
+- `gerar_prompt_otimizado` - Geração automática de prompts estruturados
+
+**React 19 Features Suportadas:**
+
+- 🚀 **Server Components**: Rendering no servidor com performance otimizada
+- ⚡ **Actions**: Form handling automático com estados de pending
+- 🎣 **Hook `use`**: Consumo de recursos assíncronos
+- 🔄 **Ref as Prop**: Sem necessidade de forwardRef
+- 📝 **Enhanced Forms**: Validação e handling avançados
+
+**Frameworks Suportados:**
+
+- Next.js 15+, Vite 6+, Remix 2.0+, Create React App
+
+📚 **Documentação**: Baseada no React 19 (December 2024) e melhores práticas 2025
+
+### 8. ✅ Rust Idiomatic Server (`rust_server.py`) - **FUNCIONAL** 🆕
+
+Servidor MCP refatorado para seguir padrões idiomáticos Rust baseado no repositório `mre/idiomatic-rust` e diretrizes oficiais `rust-lang/api-guidelines`.
+
+**Principais Funcionalidades:**
+
+- 🦀 **Análise Idiomática**: Detecta padrões idiomáticos e anti-patterns
+- 🔧 **Immutability by Default**: Análise de uso correto de `mut`
+- 🛡️ **Error Handling Ergonômico**: Result/Option com thiserror/anyhow
+- 🔄 **Type Conversions**: From/Into traits para conversões elegantes
+- 🎯 **Enums over Booleans**: Detecção de boolean flags problemáticos
+- ⚡ **Async Patterns**: Tokio e async/await idiomático
+- 🏗️ **API Design**: Conformidade com rust-lang/api-guidelines
+
+**Ferramentas Idiomáticas:**
+
+- `analyze_idiomatic_rust` - Análise de idiomaticidade com scoring por categoria
+- `generate_idiomatic_project` - Geração de projetos seguindo padrões idiomáticos
+- `get_idiomatic_patterns` - Biblioteca completa de padrões com exemplos
+- `refactor_to_idiomatic` - Refatoração automática para código idiomático
+- `get_rust_api_guidelines` - Diretrizes oficiais organizadas por categoria
+
+**Categorias de Análise:**
+
+- 🔧 **Immutability**: "Aim for immutability by default" com análise de mut
+- 🛡️ **Error Handling**: Result over panic, context preservation
+- 🔄 **Type Conversions**: From/Into/TryFrom patterns ergonômicos
+- 🎯 **Enums over Bools**: Expressividade através de enums
+- ⚡ **Async Patterns**: async/await idiomático com Tokio
+- 🏗️ **API Design**: snake_case, PascalCase, documentação
+- 🚀 **Performance**: Zero-cost abstractions, iterator chains
+- 📚 **Documentation**: Doc comments com exemplos testáveis
+
+**Padrões Idiomáticos Implementados:**
+
+- ✅ Variables imutáveis por padrão
+- ✅ Result-based error handling com thiserror
+- ✅ Builder pattern para configurações complexas
+- ✅ Iterator chains para estilo funcional
+- ✅ From/Into traits para type conversions
+- ✅ Enums expressivos ao invés de booleans
+- ✅ Comprehensive documentation com examples
+- ✅ API guidelines compliance (naming, structure)
+
+**Baseado em:**
+
+- [mre/idiomatic-rust](https://github.com/mre/idiomatic-rust) - Padrões idiomáticos curados
+- [rust-lang/api-guidelines](https://rust-lang.github.io/api-guidelines/) - Diretrizes oficiais
+- [blessed.rs](https://blessed.rs/) - Ecosystem recommendations
+- [cheats.rs](https://cheats.rs/) - Idiomatic Rust tips
+
+📚 **Documentação**: Padrões idiomáticos Rust 2025 com scoring detalhado
+
+### 9. 🚧 Servidores em Desenvolvimento
+
 - **TypeScript Server** (`typescript_server.py`) - Em desenvolvimento
 
 ## 📚 Documentação
@@ -157,6 +287,8 @@ Documentação completa está disponível no diretório `/docs`:
   - [API do Servidor Tailwind](docs/api/tailwind_server_api.md)
   - [API de Migração Tailwind](docs/api/tailwind_migration_api.md)
   - [API do FastMCP Server](docs/api/fastmcp_server_api.md)
+  - [API do React 19 Server](docs/api/react_server_api.md)
+  - [API do Rust Advanced Server](docs/api/rust_server_api.md)
 - **Exemplos**:
   - [Exemplo Integrado](docs/examples/integrated_example.py)
   - [Exemplo do Analisador MCP](docs/examples/mcp_analyzer_example.py)
@@ -177,6 +309,8 @@ Documentação completa está disponível no diretório `/docs`:
 - **[Servidor de Engenharia de Prompts](docs/examples/prompt_server_examples.md)** - Otimização avançada
 - **[Servidor Tailwind CSS v4.1](docs/examples/tailwind_server_examples.md)** - Componentes modernos
 - **[FastMCP Server](docs/examples/fastmcp_server_examples.md)** - Geração de servidores
+- **[React 19 Advanced Server](docs/examples/react_server_examples.md)** - Desenvolvimento React moderno
+- **[Rust Advanced Server](docs/examples/rust_server_examples.md)** - Padrões Rust modernos
 
 ### 🔄 Workflows e Integração
 
@@ -225,7 +359,8 @@ O launcher centralizado permite executar todos os servidores de forma unificada:
 python main.py mcp          # Analisador de prompts MCP
 python main.py prompt       # Servidor de engenharia de prompts
 python main.py tailwind     # Servidor Tailwind CSS
-python main.py react_optimizer  # Servidor React Optimizer (NOVO!)
+python main.py react_optimizer  # Servidor React Optimizer
+python main.py shadcn        # Servidor shadcn/ui Advanced (NOVO!)
 
 # Executar todos os servidores (modo desenvolvimento)
 python main.py all
@@ -404,7 +539,9 @@ mcp-servers/
 │   ├── ✅ mcp_server.py        # Analisador de prompts MCP (funcional)
 │   ├── ✅ prompt_server.py     # Engenharia de prompts (funcional)
 │   ├── ✅ tailwind_server.py   # Suporte Tailwind CSS v4.1 (funcional)
-│   ├── 🚧 fastmcp_server.py    # Servidor FastMCP (em desenvolvimento)
+│   ├── ✅ react_optimizer_server.py # React Optimizer (funcional)
+│   ├── ✅ shadcn_server.py     # shadcn/ui Advanced (funcional) 🆕
+│   ├── ✅ fastmcp_server.py    # Servidor FastMCP (funcional)
 │   ├── 🚧 react_server.py      # Servidor React (em desenvolvimento)
 │   └── 🚧 typescript_server.py # Servidor TypeScript (em desenvolvimento)
 │
@@ -487,21 +624,21 @@ O Analisador de Prompts MCP avalia prompts em critérios específicos (pontuaç�
 
 ### ✅ Funcionalidades Implementadas
 
-- **Servidores Core**: 3/6 servidores funcionais (mcp, prompt, tailwind)
+- **Servidores Core**: 8/9 servidores funcionais (mcp, prompt, tailwind, react_optimizer, shadcn, fastmcp, react, rust)
 - **Sistema de Testes**: 11/15 testes passando (73% de sucesso)
 - **Build System**: Migração completa para uv + pyproject.toml
 - **Documentação**: README v2.0 e docs/ atualizados
 - **Scripts**: Launcher unificado e interface interativa
 
-### � Em Desenvolvimento
+### 🚧 Em Desenvolvimento
 
-- **Servidores Adicionais**: FastMCP, React, TypeScript (0% implementado)
+- **Servidores Adicionais**: React, TypeScript (2/8 servidores pendentes)
 - **Testes Restantes**: 4 testes pendentes para novos servidores
 - **Dependências**: pytest-asyncio e pytest-cov opcionais
 
 ### 🎯 Roadmap Próximas Versões
 
-- [ ] **v2.1**: Implementar servidores FastMCP, React e TypeScript
+- [ ] **v2.1**: Implementar servidores React e TypeScript restantes
 - [ ] **v2.2**: Adicionar suporte para análise de prompts em inglês
 - [ ] **v2.3**: Criar API REST para acesso remoto aos servidores
 - [ ] **v2.4**: Desenvolver interface web para visualização de resultados

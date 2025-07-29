@@ -1,30 +1,225 @@
 """
-Servidor MCP para aprimorar prompts de criação de código React/TypeScript
-Baseado em melhores práticas de desenvolvimento React moderno
+React 19 Advanced MCP Server - Servidor MCP para desenvolvimento React moderno
+==============================================================================
+
+Servidor MCP avançado para desenvolvimento com React 19, incluindo:
+- Server Components estáveis
+- Actions e form handling modernos
+- Hook `use` para recursos assíncronos
+- Ref as prop e melhorias de performance
+- Concurrent rendering e transitions
+- Integração com frameworks modernos (Next.js 15+, Vite 6+)
+
+Baseado nas últimas funcionalidades do React 19 (December 2024) e melhores práticas 2025.
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Union
 from dataclasses import dataclass
+from enum import Enum
 from fastmcp import FastMCP, Context
+from pydantic import BaseModel, Field
 import re
 import json
+import logging
+
+# Configurar logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Inicializar servidor MCP
-mcp = FastMCP("Assistente para Prompts no Contexto do ReactJS")
+mcp = FastMCP(
+    name="react-19-advanced",
+    version="19.0.0",
+    description="Servidor MCP avançado para desenvolvimento React 19 com funcionalidades modernas"
+)
 
+
+# ================================
+# REACT 19 CONTEXT AND KNOWLEDGE BASE
+# ================================
+
+class ReactFeatureType(Enum):
+    ACTIONS = "actions"
+    SERVER_COMPONENTS = "server_components"
+    USE_HOOK = "use_hook"
+    FORM_HANDLING = "form_handling"
+    CONCURRENT = "concurrent"
+    PERFORMANCE = "performance"
+
+class ReactFramework(Enum):
+    NEXTJS = "nextjs"
+    VITE = "vite"
+    REMIX = "remix"
+    GATSBY = "gatsby"
+    CREATE_REACT_APP = "cra"
 
 @dataclass
 class AnalisePrompt:
-    """Resultado da análise de um prompt"""
+    """Resultado da análise de um prompt React"""
     prompt_original: str
     pontuacao: float
     areas_fortes: List[str]
     areas_fracas: List[str]
     sugestoes: List[str]
     prompt_melhorado: str
+    react_19_features: List[str]
+    recommended_patterns: List[str]
 
+class React19Context:
+    """Base de conhecimento do React 19 e funcionalidades modernas"""
+    
+    VERSION = "19.0.0"
+    RELEASE_DATE = "2024-12-05"
+    
+    FEATURES = {
+        "actions": {
+            "description": "Actions para handling de async operations com form states",
+            "benefits": [
+                "Automatic pending states management",
+                "Optimistic updates built-in", 
+                "Improved error handling for async calls",
+                "Better form submission patterns"
+            ],
+            "use_cases": ["Form submissions", "Data mutations", "Async operations"],
+            "example": """
+// React 19 Actions example
+function SubmitForm() {
+  async function submitAction(formData) {
+    // Actions automatically handle pending states
+    const result = await submitToServer(formData);
+    return result;
+  }
 
-# Base de conhecimento de melhores práticas
+  return (
+    <form action={submitAction}>
+      <input name="email" type="email" required />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}"""
+        },
+        "server_components": {
+            "description": "Server Components estáveis para rendering no servidor",
+            "benefits": [
+                "Reduced JavaScript bundle size",
+                "Faster initial page loads",
+                "Better SEO performance",
+                "Direct database access capabilities"
+            ],
+            "use_cases": ["Static content", "Data fetching", "Server-side rendering"],
+            "example": """
+// React 19 Server Component
+async function UserProfile({ userId }) {
+  // Direct database access in Server Components
+  const user = await db.user.findUnique({ where: { id: userId } });
+  
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>{user.email}</p>
+    </div>
+  );
+}"""
+        },
+        "use_hook": {
+            "description": "Novo hook `use` para consumir recursos assíncronos",
+            "benefits": [
+                "Simplified async data fetching",
+                "Better integration with Suspense",
+                "Cleaner component code",
+                "Promise-based resource consumption"
+            ],
+            "use_cases": ["Data fetching", "Resource loading", "Async operations"],
+            "example": """
+// React 19 use hook
+import { use } from 'react';
+
+function UserComponent({ userPromise }) {
+  const user = use(userPromise);
+  
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>{user.email}</p>
+    </div>
+  );
+}"""
+        },
+        "ref_as_prop": {
+            "description": "Ref como prop direta em function components",
+            "benefits": [
+                "No more forwardRef needed",
+                "Simpler component APIs",
+                "Better TypeScript support",
+                "Cleaner component definitions"
+            ],
+            "use_cases": ["Component libraries", "Input components", "DOM access"],
+            "example": """
+// React 19 - Ref as prop (no forwardRef needed)
+function MyInput({ ref, ...props }) {
+  return <input ref={ref} {...props} />;
+}
+
+// Usage
+function App() {
+  const inputRef = useRef();
+  return <MyInput ref={inputRef} />;
+}"""
+        },
+        "enhanced_forms": {
+            "description": "Melhorias nativas em formulários com Actions integration",
+            "benefits": [
+                "Automatic form validation",
+                "Built-in loading states",
+                "Better error handling",
+                "Progressive enhancement support"
+            ],
+            "use_cases": ["Forms", "User input", "Data submission"],
+            "example": """
+// React 19 Enhanced Forms
+function ContactForm() {
+  const [error, setError] = useState(null);
+  
+  async function handleSubmit(formData) {
+    try {
+      await submitContact(formData);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  return (
+    <form action={handleSubmit}>
+      <input name="name" required />
+      <input name="email" type="email" required />
+      <textarea name="message" required />
+      <button type="submit">Send Message</button>
+      {error && <div className="error">{error}</div>}
+    </form>
+  );
+}"""
+        }
+    }
+    
+    FRAMEWORKS_SUPPORT = {
+        ReactFramework.NEXTJS: {
+            "version": "15.0+",
+            "features": ["App Router with React 19", "Server Components", "Server Actions", "Streaming"],
+            "setup": "npx create-next-app@latest --typescript --tailwind"
+        },
+        ReactFramework.VITE: {
+            "version": "6.0+", 
+            "features": ["Fast HMR", "React 19 support", "TypeScript", "Plugin ecosystem"],
+            "setup": "npm create vite@latest my-app -- --template react-ts"
+        },
+        ReactFramework.REMIX: {
+            "version": "2.0+",
+            "features": ["Server-side rendering", "Forms", "Data loading", "React 19 integration"],
+            "setup": "npx create-remix@latest"
+        }
+    }
+
+# Base de conhecimento de melhores práticas React 19
 MELHORES_PRATICAS = {
     "arquitetura": {
         "keywords": ["componente", "component", "estrutura", "arquitetura", "organização"],

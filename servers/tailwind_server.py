@@ -13,8 +13,8 @@ mcp = FastMCP("Assistente para Prompts no Contexto do TailwindCSS v4.1")
 
 # Base de conhecimento sobre Tailwind CSS v4.1
 TAILWIND_V4_CONTEXT = {
-    "version": "4.1.7",
-    "release_date": "2025-05-15",
+    "version": "4.1.0",
+    "release_date": "2025-01-22",
     "major_changes": {
         "configuration": {
             "location": "CSS file instead of tailwind.config.js",
@@ -23,10 +23,13 @@ TAILWIND_V4_CONTEXT = {
             "plugin_syntax": '@plugin "tailwindcss-animate";'
         },
         "new_utilities": {
-            "text-shadow": ["text-shadow-xs", "text-shadow-sm", "text-shadow", "text-shadow-lg", "text-shadow-xl"],
-            "mask": ["mask-b-from-50%", "mask-t-to-80%", "mask-image-gradient-to-b"],
+            "text-shadow": ["text-shadow-2xs", "text-shadow-xs", "text-shadow-sm", "text-shadow", "text-shadow-lg", "text-shadow-xl"],
+            "mask": ["mask-{direction}-from-{value}", "mask-{direction}-to-{value}", "mask-image-gradient-to-{direction}"],
             "drop-shadow-color": "drop-shadow-{color}-{opacity}",
-            "overflow-wrap": ["wrap-break-word", "wrap-anywhere"]
+            "overflow-wrap": ["wrap-break-word", "wrap-anywhere"],
+            "container-queries": "Built-in container query support (no plugin needed)",
+            "field-sizing": "field-sizing-content for form controls",
+            "color-scheme": "color-scheme-light, color-scheme-dark, color-scheme-normal"
         },
         "new_variants": {
             "user-valid": "Aplica estilos quando campo é válido após interação",
@@ -43,9 +46,17 @@ TAILWIND_V4_CONTEXT = {
             "@theme": "Define variáveis de tema no CSS"
         },
         "performance": {
-            "full_build": "3.5x a 5x mais rápido",
-            "incremental": "8.8x mais rápido com novo CSS",
-            "no_changes": "182x mais rápido sem mudanças"
+            "full_build": "3.5x mais rápido que v3.x",
+            "incremental": "8x mais rápido com novo CSS",
+            "no_changes": "100x mais rápido (microsegundos)",
+            "engine": "Nova engine Oxide (Rust) para performance máxima"
+        },
+        "v4_features": {
+            "css_first_config": "Configuração totalmente em CSS",
+            "css_variables": "Design tokens como CSS variables por padrão",
+            "oklch_colors": "Paleta de cores atualizada para OKLCH (maior gamut)",
+            "container_queries": "Container queries integradas ao core",
+            "browser_support": "Safari 16.4+, Chrome 111+, Firefox 128+"
         }
     }
 }

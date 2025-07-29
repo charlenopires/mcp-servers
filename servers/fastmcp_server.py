@@ -16,15 +16,17 @@ from fastmcp import FastMCP, Context
 
 # Inicialização do servidor FastMCP
 mcp = FastMCP(
-    name="Servidor MCP Unificado para Otimização de Prompts FastMCP",
-    description="Servidor completo para análise, otimização e geração de prompts para servidores FastMCP",
-    instructions="""Este servidor oferece ferramentas abrangentes para:
-    - Analisar qualidade de prompts de criação de servidores MCP
-    - Sugerir melhorias específicas e contextuais
-    - Gerar templates otimizados para diferentes tipos de servidor
-    - Validar requisitos contra melhores práticas
-    - Fornecer frameworks de prompt engineering
-    Use as ferramentas disponíveis para criar prompts mais eficazes.""",
+    name="FastMCP Server 2.0 - Advanced MCP Development Platform",
+    description="Servidor FastMCP 2.0 completo para desenvolvimento, análise e otimização de servidores MCP",
+    instructions="""FastMCP 2.0 é uma plataforma abrangente que oferece:
+    - Desenvolvimento rápido de servidores MCP com interface Pythônica
+    - Análise avançada de qualidade de prompts para servidores MCP
+    - Templates otimizados seguindo melhores práticas FastMCP 2.0
+    - Ferramentas de debugging e inspeção integradas (MCP Inspector)
+    - Suporte a autenticação, deployment e composição de servidores
+    - Geração automática de servidores a partir de REST APIs
+    - Testing tools e integração com plataformas AI principais
+    Use as ferramentas para aproveitar ao máximo o ecossistema FastMCP 2.0.""",
     version="2.0.0"
 )
 
@@ -105,8 +107,54 @@ class MCPRequirement(BaseModel):
         default_factory=list, description="APIs externas necessárias")
 
 
+# FastMCP 2.0 Context and Best Practices
+FASTMCP_2_0_CONTEXT = {
+    "version": "2.0.0",
+    "features": {
+        "core": [
+            "High-level Pythonic interface with decorators",
+            "Built-in MCP Inspector for debugging and testing",
+            "Comprehensive deployment tools and auth systems",
+            "Server proxying and composition capabilities",
+            "Dynamic tool rewriting and REST API generation",
+            "Integration with major AI platforms (Claude, GPT, etc.)"
+        ],
+        "development": [
+            "Fast development with minimal boilerplate code",
+            "Type hints and Pydantic model integration",
+            "Async/await native support throughout",
+            "Automatic protocol handling and content types",
+            "Built-in error management and validation"
+        ],
+        "production": [
+            "Authentication systems (OAuth 2.1, JWT)",
+            "Deployment tools for various platforms",
+            "Health checks and monitoring integration",
+            "Rate limiting and security features",
+            "Scalability patterns and connection pooling"
+        ]
+    },
+    "evolution_from_1_0": {
+        "v1_0": "Basic server building capabilities (now part of official MCP SDK)",
+        "v2_0": "Complete ecosystem: clients, auth, deployment, integrations, testing, production patterns"
+    },
+    "installation": {
+        "recommended": "uv add fastmcp",
+        "pip": "pip install fastmcp",
+        "requirements": "Python 3.8+, type hints support"
+    }
+}
+
 # Base de conhecimento de melhores práticas (versão unificada e expandida)
 BEST_PRACTICES = {
+    "fastmcp_2_0": [
+        "Use FastMCP 2.0 decorators (@mcp.tool, @mcp.resource) for simplicity",
+        "Leverage built-in MCP Inspector for testing during development",
+        "Implement proper Pydantic models for all data structures",
+        "Use FastMCP's built-in authentication and deployment features",
+        "Take advantage of automatic protocol handling",
+        "Follow FastMCP's Pythonic patterns with type hints"
+    ],
     "architecture": [
         "Use FastMCP 2.0+ with proper tool and resource decorators",
         "Implement modular structure with clear separation of concerns",

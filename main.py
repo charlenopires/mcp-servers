@@ -22,6 +22,9 @@ Uso:
     - react: Servidor React
     - typescript: Servidor TypeScript
     - react_optimizer: Servidor React Optimizer (análise + otimização)
+    - shadcn: Servidor shadcn/ui avançado
+    - rust: Servidor Rust avançado
+    - axum: Servidor Axum web framework
     - all: Executar todos os servidores (modo desenvolvimento)
     
 Exemplos:
@@ -99,6 +102,27 @@ SERVERS_CONFIG = {
         "module": "servers.react_optimizer_server",
         "port": 3006,
         "protocol": "stdio"
+    },
+    "shadcn": {
+        "name": "shadcn/ui Advanced Server",
+        "description": "Servidor avançado para componentes shadcn/ui com análise inteligente",
+        "module": "servers.shadcn_server",
+        "port": 3007,
+        "protocol": "stdio"
+    },
+    "rust": {
+        "name": "Rust Idiomatic Server",
+        "description": "Servidor MCP para desenvolvimento Rust idiomático seguindo mre/idiomatic-rust",
+        "module": "servers.rust_server",
+        "port": 3008,
+        "protocol": "stdio"
+    },
+    "axum": {
+        "name": "Axum Web Framework Server",
+        "description": "Servidor MCP para desenvolvimento com Axum web framework (tokio-rs + magic patterns)",
+        "module": "servers.axum_server",
+        "port": 3009,
+        "protocol": "stdio"
     }
 }
 
@@ -156,7 +180,7 @@ class ServerManager:
 
             # Comando para executar o servidor
             cmd = [
-                str(sys.executable), "-m", str(module_path)
+                "uv", "run", "python", "-m", str(module_path)
             ]
 
             # Adicionar argumentos específicos se fornecidos
