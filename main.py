@@ -1,33 +1,33 @@
 #!/usr/bin/env python3
 """
-MCP Servers - Launcher Principal
-=====================================
+MCP Servers - Main Launcher
+===========================
 
-Launcher para os servidores MCP especializados:
-- MCP Server: Análise de prompts MCP
-- Prompt Server: Engenharia de prompts
-- Tailwind Server: Suporte ao Tailwind CSS v4.1
-- FastMCP Server: Servidor de alta performance
-- React Server: Componentes React
-- TypeScript Server: Análise TypeScript
+Launcher for specialized MCP servers:
+- MCP Server: MCP prompt analysis
+- Prompt Server: Prompt engineering
+- Tailwind Server: Tailwind CSS v4.1 support
+- FastMCP Server: High-performance server
+- React Server: React components
+- TypeScript Server: TypeScript analysis
 
-Uso:
-    python main.py [servidor] [opções]
+Usage:
+    python main.py [server] [options]
     
-    Servidores disponíveis:
-    - mcp: Servidor de análise de prompts MCP
-    - prompt: Servidor de engenharia de prompts  
-    - tailwind: Servidor Tailwind CSS
-    - fastmcp: Servidor FastMCP
-    - react: Servidor React
-    - typescript: Servidor TypeScript
-    - react_optimizer: Servidor React Optimizer (análise + otimização)
-    - shadcn: Servidor shadcn/ui avançado
-    - rust: Servidor Rust avançado
-    - axum: Servidor Axum web framework
-    - all: Executar todos os servidores (modo desenvolvimento)
+    Available servers:
+    - mcp: MCP prompt analysis server
+    - prompt: Prompt engineering server  
+    - tailwind: Tailwind CSS server
+    - fastmcp: FastMCP server
+    - react: React server
+    - typescript: TypeScript server
+    - react_optimizer: React Optimizer server (analysis + optimization)
+    - shadcn: Advanced shadcn/ui server
+    - rust: Advanced Rust server
+    - axum: Axum web framework server
+    - all: Run all servers (development mode)
     
-Exemplos:
+Examples:
     python main.py mcp
     python main.py prompt --port 3001
     python main.py all --dev
@@ -45,81 +45,81 @@ import time
 import json
 import os
 
-# Configurar logging
+# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
-# Configurações dos servidores
+# Server configurations
 SERVERS_CONFIG = {
     "mcp": {
         "name": "MCP Analysis Server",
-        "description": "Servidor para análise de prompts MCP",
+        "description": "Server for MCP prompt analysis",
         "module": "servers.mcp_server",
         "port": 3000,
         "protocol": "stdio"
     },
     "prompt": {
         "name": "Prompt Engineering Server",
-        "description": "Servidor para engenharia de prompts",
+        "description": "Server for prompt engineering",
         "module": "servers.prompt_server",
         "port": 3001,
         "protocol": "stdio"
     },
     "tailwind": {
         "name": "Tailwind CSS Server",
-        "description": "Servidor para Tailwind CSS v4.1",
+        "description": "Server for Tailwind CSS v4.1",
         "module": "servers.tailwind_server",
         "port": 3002,
         "protocol": "stdio"
     },
     "fastmcp": {
         "name": "FastMCP Server",
-        "description": "Servidor FastMCP de alta performance",
+        "description": "High-performance FastMCP server",
         "module": "servers.fastmcp_server",
         "port": 3003,
         "protocol": "stdio"
     },
     "react": {
         "name": "React Components Server",
-        "description": "Servidor para componentes React",
+        "description": "Server for React components",
         "module": "servers.react_server",
         "port": 3004,
         "protocol": "stdio"
     },
     "typescript": {
         "name": "TypeScript Analysis Server",
-        "description": "Servidor para análise TypeScript",
+        "description": "Server for TypeScript analysis",
         "module": "servers.typescript_server",
         "port": 3005,
         "protocol": "stdio"
     },
     "react_optimizer": {
         "name": "React Optimizer Server",
-        "description": "Servidor para análise e otimização de código React + prompts",
+        "description": "Server for React code analysis and optimization + prompts",
         "module": "servers.react_optimizer_server",
         "port": 3006,
         "protocol": "stdio"
     },
     "shadcn": {
         "name": "shadcn/ui Advanced Server",
-        "description": "Servidor avançado para componentes shadcn/ui com análise inteligente",
+        "description": "Advanced server for shadcn/ui components with intelligent analysis",
         "module": "servers.shadcn_server",
         "port": 3007,
         "protocol": "stdio"
     },
     "rust": {
         "name": "Rust Idiomatic Server",
-        "description": "Servidor MCP para desenvolvimento Rust idiomático seguindo mre/idiomatic-rust",
+        "description": "MCP server for idiomatic Rust development following mre/idiomatic-rust",
         "module": "servers.rust_server",
         "port": 3008,
         "protocol": "stdio"
     },
     "axum": {
         "name": "Axum Web Framework Server",
-        "description": "Servidor MCP para desenvolvimento com Axum web framework (tokio-rs + magic patterns)",
+        "description": "MCP server for development with Axum web framework (tokio-rs + magic patterns)",
         "module": "servers.axum_server",
         "port": 3009,
         "protocol": "stdio"
@@ -128,31 +128,31 @@ SERVERS_CONFIG = {
 
 
 class ServerManager:
-    """Gerenciador de servidores MCP"""
+    """MCP server manager"""
 
     def __init__(self):
         self.running_servers: Dict[str, subprocess.Popen] = {}
         self.project_root = Path(__file__).parent
 
     def list_servers(self) -> None:
-        """Lista todos os servidores disponíveis"""
-        print("\n🚀 Servidores MCP Disponíveis:")
+        """List all available servers"""
+        print("\n🚀 Available MCP Servers:")
         print("=" * 50)
 
         for server_id, config in SERVERS_CONFIG.items():
             module_path = str(config.get('module', ''))
             server_file = self.project_root / \
                 f"{module_path.replace('.', '/')}.py"
-            status = "✅ Disponível" if server_file.exists() else "❌ Não encontrado"
+            status = "✅ Available" if server_file.exists() else "❌ Not found"
             print(f"  {server_id:12} - {config['name']}")
             print(f"  {'':12}   {config['description']}")
-            print(f"  {'':12}   Porta: {config['port']} | Status: {status}")
+            print(f"  {'':12}   Port: {config['port']} | Status: {status}")
             print()
 
     def validate_server(self, server_id: str) -> bool:
-        """Valida se um servidor existe e pode ser executado"""
+        """Validate if a server exists and can be executed"""
         if server_id not in SERVERS_CONFIG:
-            logger.error(f"Servidor '{server_id}' não encontrado")
+            logger.error(f"Server '{server_id}' not found")
             return False
 
         config = SERVERS_CONFIG[server_id]
@@ -161,14 +161,14 @@ class ServerManager:
             f"{module_path.replace('.', '/')}.py"
 
         if not server_file.exists():
-            logger.error(f"Arquivo do servidor não encontrado: {server_file}")
+            logger.error(f"Server file not found: {server_file}")
             return False
 
         return True
         return True
 
     async def start_server(self, server_id: str, args: argparse.Namespace) -> bool:
-        """Inicia um servidor específico"""
+        """Start a specific server"""
         if not self.validate_server(server_id):
             return False
 
@@ -176,23 +176,23 @@ class ServerManager:
         module_path = config['module']
 
         try:
-            logger.info(f"Iniciando {config['name']}...")
+            logger.info(f"Starting {config['name']}...")
 
-            # Comando para executar o servidor
+            # Command to execute the server
             cmd = [
                 "uv", "run", "python", "-m", str(module_path)
             ]
 
-            # Adicionar argumentos específicos se fornecidos
+            # Add specific arguments if provided
             if hasattr(args, 'port') and args.port:
                 config['port'] = args.port
 
-            # Definir variáveis de ambiente
+            # Define environment variables
             env = os.environ.copy()
             env['MCP_SERVER_PORT'] = str(config['port'])
             env['MCP_SERVER_PROTOCOL'] = str(config['protocol'])
 
-            # Executar o servidor
+            # Execute the server
             process = subprocess.Popen(
                 cmd,
                 cwd=str(self.project_root),
@@ -203,27 +203,27 @@ class ServerManager:
 
             self.running_servers[server_id] = process
 
-            # Aguardar um pouco para verificar se o processo iniciou corretamente
+            # Wait a bit to check if the process started correctly
             await asyncio.sleep(1)
 
             if process.poll() is None:
                 logger.info(
-                    f"✅ {config['name']} iniciado com sucesso (PID: {process.pid})")
+                    f"✅ {config['name']} started successfully (PID: {process.pid})")
                 if not args.quiet:
-                    print(f"📡 Servidor rodando na porta {config['port']}")
+                    print(f"📡 Server running on port {config['port']}")
                 return True
             else:
-                logger.error(f"❌ Falha ao iniciar {config['name']}")
+                logger.error(f"❌ Failed to start {config['name']}")
                 return False
 
         except Exception as e:
-            logger.error(f"Erro ao iniciar servidor {server_id}: {e}")
+            logger.error(f"Error starting server {server_id}: {e}")
             return False
 
     async def start_all_servers(self, args: argparse.Namespace) -> None:
-        """Inicia todos os servidores em modo desenvolvimento"""
+        """Start all servers in development mode"""
         logger.info(
-            "🚀 Iniciando todos os servidores em modo desenvolvimento...")
+            "🚀 Starting all servers in development mode...")
 
         successful_starts = []
         failed_starts = []
@@ -234,63 +234,63 @@ class ServerManager:
             else:
                 failed_starts.append(server_id)
 
-        print(f"\n📊 Resumo do Lançamento:")
+        print(f"\n📊 Launch Summary:")
         print(
-            f"  ✅ Sucessos: {len(successful_starts)} - {', '.join(successful_starts)}")
+            f"  ✅ Successes: {len(successful_starts)} - {', '.join(successful_starts)}")
         if failed_starts:
             print(
-                f"  ❌ Falhas: {len(failed_starts)} - {', '.join(failed_starts)}")
+                f"  ❌ Failures: {len(failed_starts)} - {', '.join(failed_starts)}")
 
         if successful_starts:
-            print(f"\n🔄 Servidores em execução. Pressione Ctrl+C para parar todos.")
+            print(f"\n🔄 Servers running. Press Ctrl+C to stop all.")
             try:
-                # Manter os servidores rodando
+                # Keep servers running
                 while True:
                     await asyncio.sleep(1)
-                    # Verificar se algum processo morreu
+                    # Check if any process died
                     for server_id in list(self.running_servers.keys()):
                         process = self.running_servers[server_id]
                         if process.poll() is not None:
                             logger.warning(
-                                f"Servidor {server_id} parou inesperadamente")
+                                f"Server {server_id} stopped unexpectedly")
                             del self.running_servers[server_id]
             except KeyboardInterrupt:
                 logger.info(
-                    "Recebido sinal de interrupção, parando servidores...")
+                    "Received interruption signal, stopping servers...")
 
     def stop_all_servers(self) -> None:
-        """Para todos os servidores em execução"""
+        """Stop all running servers"""
         if not self.running_servers:
-            logger.info("Nenhum servidor em execução")
+            logger.info("No servers running")
             return
 
-        logger.info("Parando todos os servidores...")
+        logger.info("Stopping all servers...")
 
         for server_id, process in self.running_servers.items():
             try:
-                logger.info(f"Parando {SERVERS_CONFIG[server_id]['name']}...")
+                logger.info(f"Stopping {SERVERS_CONFIG[server_id]['name']}...")
                 process.terminate()
 
-                # Aguardar término gracioso
+                # Wait for graceful termination
                 try:
                     process.wait(timeout=5)
                 except subprocess.TimeoutExpired:
-                    logger.warning(f"Forçando parada de {server_id}...")
+                    logger.warning(f"Forcing stop of {server_id}...")
                     process.kill()
                     process.wait()
 
-                logger.info(f"✅ {server_id} parado")
+                logger.info(f"✅ {server_id} stopped")
             except Exception as e:
-                logger.error(f"Erro ao parar {server_id}: {e}")
+                logger.error(f"Error stopping {server_id}: {e}")
 
         self.running_servers.clear()
-        logger.info("Todos os servidores foram parados")
+        logger.info("All servers have been stopped")
 
 
 def setup_signal_handlers(manager: ServerManager) -> None:
-    """Configura handlers de sinal para parada graciosoa"""
+    """Configure signal handlers for graceful shutdown"""
     def signal_handler(signum, frame):
-        logger.info(f"Recebido sinal {signum}, parando servidores...")
+        logger.info(f"Received signal {signum}, stopping servers...")
         manager.stop_all_servers()
         sys.exit(0)
 
@@ -299,17 +299,17 @@ def setup_signal_handlers(manager: ServerManager) -> None:
 
 
 def create_parser() -> argparse.ArgumentParser:
-    """Cria o parser de argumentos"""
+    """Create the argument parser"""
     parser = argparse.ArgumentParser(
-        description="Launcher para servidores MCP especializados",
+        description="Launcher for specialized MCP servers",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Exemplos de uso:
-  python main.py list                    # Lista servidores disponíveis
-  python main.py mcp                     # Inicia servidor MCP
-  python main.py prompt --port 3001     # Inicia servidor Prompt na porta 3001
-  python main.py all --dev              # Inicia todos os servidores
-  python main.py tailwind --quiet       # Inicia Tailwind em modo silencioso
+Usage examples:
+  python main.py list                    # List available servers
+  python main.py mcp                     # Start MCP server
+  python main.py prompt --port 3001     # Start Prompt server on port 3001
+  python main.py all --dev              # Start all servers
+  python main.py tailwind --quiet       # Start Tailwind in quiet mode
         """
     )
 
@@ -318,25 +318,25 @@ Exemplos de uso:
         nargs="?",
         choices=list(SERVERS_CONFIG.keys()) + ["all", "list"],
         default="list",
-        help="Servidor para executar ou 'all' para todos"
+        help="Server to run or 'all' for all servers"
     )
 
     parser.add_argument(
         "--port", "-p",
         type=int,
-        help="Porta personalizada para o servidor"
+        help="Custom port for the server"
     )
 
     parser.add_argument(
         "--dev",
         action="store_true",
-        help="Modo desenvolvimento (mais logs)"
+        help="Development mode (more logs)"
     )
 
     parser.add_argument(
         "--quiet", "-q",
         action="store_true",
-        help="Modo silencioso (menos logs)"
+        help="Quiet mode (fewer logs)"
     )
 
     parser.add_argument(
@@ -349,11 +349,11 @@ Exemplos de uso:
 
 
 async def main() -> None:
-    """Função principal"""
+    """Main function"""
     parser = create_parser()
     args = parser.parse_args()
 
-    # Configurar nível de logging baseado nos argumentos
+    # Configure logging level based on arguments
     if args.dev:
         logging.getLogger().setLevel(logging.DEBUG)
     elif args.quiet:
@@ -370,29 +370,29 @@ async def main() -> None:
             await manager.start_all_servers(args)
 
         else:
-            # Iniciar servidor específico
+            # Start specific server
             success = await manager.start_server(args.server, args)
             if success and not args.quiet:
                 print(
-                    f"\n🔄 Servidor {args.server} em execução. Pressione Ctrl+C para parar.")
+                    f"\n🔄 Server {args.server} running. Press Ctrl+C to stop.")
                 try:
                     while True:
                         await asyncio.sleep(1)
-                        # Verificar se o processo ainda está rodando
+                        # Check if the process is still running
                         process = manager.running_servers.get(args.server)
                         if process and process.poll() is not None:
                             logger.error(
-                                f"Servidor {args.server} parou inesperadamente")
+                                f"Server {args.server} stopped unexpectedly")
                             break
                 except KeyboardInterrupt:
-                    logger.info("Parando servidor...")
+                    logger.info("Stopping server...")
             elif not success:
                 sys.exit(1)
 
     except KeyboardInterrupt:
-        logger.info("Operação cancelada pelo usuário")
+        logger.info("Operation cancelled by user")
     except Exception as e:
-        logger.error(f"Erro inesperado: {e}")
+        logger.error(f"Unexpected error: {e}")
         sys.exit(1)
     finally:
         manager.stop_all_servers()
@@ -402,5 +402,5 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        logger.info("Programa interrompido")
+        logger.info("Program interrupted")
         sys.exit(0)

@@ -1,8 +1,8 @@
 """
-Servidor MCP Unificado para Otimização de Prompts FastMCP
+Unified MCP Server for FastMCP Prompt Optimization
 
-Este servidor combina funcionalidades de análise de prompts, geração de templates
-e aplicação de melhores práticas para desenvolvimento de servidores MCP com FastMCP.
+This server combines prompt analysis functionalities, template generation
+and best practices application for MCP server development with FastMCP.
 """
 
 import logging
@@ -14,23 +14,23 @@ from typing import Dict, List, Optional, Any, Union
 from pydantic import BaseModel, Field
 from fastmcp import FastMCP, Context
 
-# Inicialização do servidor FastMCP
+# FastMCP server initialization
 mcp = FastMCP(
     name="FastMCP Server 2.0 - Advanced MCP Development Platform",
-    description="Servidor FastMCP 2.0 completo para desenvolvimento, análise e otimização de servidores MCP",
-    instructions="""FastMCP 2.0 é uma plataforma abrangente que oferece:
-    - Desenvolvimento rápido de servidores MCP com interface Pythônica
-    - Análise avançada de qualidade de prompts para servidores MCP
-    - Templates otimizados seguindo melhores práticas FastMCP 2.0
-    - Ferramentas de debugging e inspeção integradas (MCP Inspector)
-    - Suporte a autenticação, deployment e composição de servidores
-    - Geração automática de servidores a partir de REST APIs
-    - Testing tools e integração com plataformas AI principais
-    Use as ferramentas para aproveitar ao máximo o ecossistema FastMCP 2.0.""",
+    description="Complete FastMCP 2.0 server for MCP server development, analysis and optimization",
+    instructions="""FastMCP 2.0 is a comprehensive platform that offers:
+    - Rapid MCP server development with Pythonic interface
+    - Advanced prompt quality analysis for MCP servers
+    - Optimized templates following FastMCP 2.0 best practices
+    - Integrated debugging and inspection tools (MCP Inspector)
+    - Support for authentication, deployment and server composition
+    - Automatic server generation from REST APIs
+    - Testing tools and integration with major AI platforms
+    Use the tools to make the most of the FastMCP 2.0 ecosystem.""",
     version="2.0.0"
 )
 
-# Configuração de logging estruturado
+# Structured logging configuration
 
 
 class JSONFormatter(logging.Formatter):
@@ -53,58 +53,43 @@ handler.setFormatter(JSONFormatter())
 logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
-# Modelos Pydantic para estruturação de dados
+# Pydantic models for data structuring
 
 
 class PromptAnalysis(BaseModel):
-    """Resultado da análise de um prompt MCP (modelo internacional)"""
+    """Result of MCP prompt analysis (international model)"""
     score: float = Field(
-        description="Pontuação de 0-100 indicando qualidade do prompt")
+        description="Score from 0-100 indicating prompt quality")
     strengths: List[str] = Field(
-        description="Aspectos positivos identificados")
-    weaknesses: List[str] = Field(description="Áreas que precisam melhorias")
+        description="Positive aspects identified")
+    weaknesses: List[str] = Field(description="Areas that need improvements")
     recommendations: List[str] = Field(
-        description="Recomendações específicas de melhoria")
+        description="Specific improvement recommendations")
     has_technical_requirements: bool = Field(
-        description="Se especifica requisitos técnicos")
+        description="Whether technical requirements are specified")
     has_business_context: bool = Field(
-        description="Se inclui contexto de negócio")
+        description="Whether business context is included")
     has_security_considerations: bool = Field(
-        description="Se menciona considerações de segurança")
+        description="Whether security considerations are mentioned")
 
 
-class AnalisePrompt(BaseModel):
-    """Resultado da análise de um prompt MCP (modelo em português)"""
-    pontuacao: int = Field(
-        description="Pontuação de 0-100 indicando qualidade do prompt")
-    pontos_fortes: List[str] = Field(
-        description="Aspectos positivos identificados")
-    pontos_fracos: List[str] = Field(
-        description="Áreas que precisam melhorias")
-    sugestoes: List[str] = Field(
-        description="Sugestões específicas de melhoria")
-    possui_requisitos_tecnicos: bool = Field(
-        description="Se o prompt especifica requisitos técnicos")
-    possui_contexto_negocio: bool = Field(
-        description="Se o prompt inclui contexto de negócio")
-    possui_restricoes_seguranca: bool = Field(
-        description="Se menciona considerações de segurança")
+# Removed duplicate Portuguese model - using PromptAnalysis instead
 
 
 class MCPRequirement(BaseModel):
-    """Requisitos para um servidor MCP"""
-    ferramentas: List[str] = Field(
-        default_factory=list, description="Lista de ferramentas necessárias")
-    recursos: List[str] = Field(
-        default_factory=list, description="Lista de recursos necessários")
-    transportes: List[str] = Field(
-        default_factory=list, description="Protocolos de transporte")
-    autenticacao: bool = Field(
-        default=False, description="Se requer autenticação")
-    escalabilidade: bool = Field(
-        default=False, description="Se precisa ser escalável")
-    integracao_externa: List[str] = Field(
-        default_factory=list, description="APIs externas necessárias")
+    """Requirements for an MCP server"""
+    tools: List[str] = Field(
+        default_factory=list, description="List of required tools")
+    resources: List[str] = Field(
+        default_factory=list, description="List of required resources")
+    transports: List[str] = Field(
+        default_factory=list, description="Transport protocols")
+    authentication: bool = Field(
+        default=False, description="Whether authentication is required")
+    scalability: bool = Field(
+        default=False, description="Whether scalability is needed")
+    external_integration: List[str] = Field(
+        default_factory=list, description="Required external APIs")
 
 
 # FastMCP 2.0 Context and Best Practices
@@ -145,7 +130,7 @@ FASTMCP_2_0_CONTEXT = {
     }
 }
 
-# Base de conhecimento de melhores práticas (versão unificada e expandida)
+# Best practices knowledge base (unified and expanded version)
 BEST_PRACTICES = {
     "fastmcp_2_0": [
         "Use FastMCP 2.0 decorators (@mcp.tool, @mcp.resource) for simplicity",
@@ -207,50 +192,8 @@ BEST_PRACTICES = {
     ]
 }
 
-MELHORES_PRATICAS = {
-    "seguranca": [
-        "Implementar autenticação OAuth 2.1 com tokens de curta duração",
-        "Validar todas as entradas usando JSON Schema",
-        "Sanitizar caminhos para prevenir directory traversal",
-        "Usar HTTPS com certificados TLS válidos",
-        "Implementar rate limiting para prevenir DoS",
-        "Validar metadados de ferramentas rigorosamente"
-    ],
-    "escalabilidade": [
-        "Usar Redis para armazenamento de estado distribuído",
-        "Implementar transporte SSE para conexões stateful",
-        "Utilizar processamento assíncrono com async/await",
-        "Implementar health checks (liveness/readiness)",
-        "Usar pooling de conexões para dependências externas",
-        "Considerar arquitetura serverless quando apropriado"
-    ],
-    "modularidade": [
-        "Separar ferramentas, recursos e prompts em módulos distintos",
-        "Usar decoradores @mcp.tool() e @mcp.resource() adequadamente",
-        "Implementar estrutura clara de diretórios",
-        "Criar funções reutilizáveis e testáveis",
-        "Usar mcp.mount() para composição de servidores",
-        "Manter responsabilidades bem definidas"
-    ],
-    "desempenho": [
-        "Escolher transporte apropriado (STDIO, HTTP, SSE)",
-        "Implementar cache quando possível",
-        "Usar processamento paralelo para tarefas independentes",
-        "Otimizar inicialização a frio em ambientes serverless",
-        "Minimizar latência com conexões persistentes",
-        "Implementar fragmentação semântica para documentos grandes"
-    ],
-    "observabilidade": [
-        "Implementar logging estruturado com JSON",
-        "Usar correlation IDs para rastreamento",
-        "Integrar com OpenTelemetry para traces distribuídos",
-        "Expor métricas Prometheus",
-        "Implementar health checks abrangentes",
-        "Monitorar tempos de execução e taxas de erro"
-    ]
-}
 
-# Palavras-chave para análise de prompts
+# Keywords for prompt analysis
 KEYWORDS = {
     "tools": ["@mcp.tool", "tool", "ferramenta", "função", "ação", "comando"],
     "resources": ["@mcp.resource", "resource", "recurso", "dados", "informação"],
@@ -260,16 +203,8 @@ KEYWORDS = {
     "business": ["objective", "objetivo", "propósito", "negócio", "problema", "usuário"]
 }
 
-PALAVRAS_CHAVE = {
-    "ferramentas": ["@mcp.tool", "tool", "ferramenta", "função", "ação", "comando"],
-    "recursos": ["@mcp.resource", "resource", "recurso", "dados", "informação"],
-    "transporte": ["stdio", "http", "sse", "streamable", "transporte", "protocolo"],
-    "seguranca": ["auth", "oauth", "security", "segurança", "autenticação", "validação"],
-    "escalabilidade": ["redis", "scale", "escala", "distribuído", "performance"],
-    "negocio": ["objective", "objetivo", "propósito", "negócio", "problema", "usuário"]
-}
 
-# Ferramentas de análise de prompt
+# Prompt analysis tools
 
 
 @mcp.tool()
@@ -278,13 +213,13 @@ async def analyze_mcp_prompt(
     ctx: Optional[Context] = None
 ) -> PromptAnalysis:
     """
-    Analisa um prompt de criação de servidor MCP e fornece feedback detalhado.
+    Analyzes an MCP server creation prompt and provides detailed feedback.
 
-    Esta ferramenta avalia a qualidade do prompt considerando:
-    - Clareza e completude dos requisitos
-    - Aderência às melhores práticas do FastMCP  
-    - Presença de elementos essenciais
-    - Aspectos técnicos e de produção
+    This tool evaluates prompt quality considering:
+    - Clarity and completeness of requirements
+    - Adherence to FastMCP best practices  
+    - Presence of essential elements
+    - Technical and production aspects
     """
     if ctx:
         await ctx.info("Analyzing MCP prompt for quality and completeness...")
@@ -295,7 +230,7 @@ async def analyze_mcp_prompt(
     weaknesses = []
     recommendations = []
 
-    # Análise de estrutura e clareza (0-25 pontos)
+    # Structure and clarity analysis (0-25 points)
     if len(prompt) > 100:
         score += 10
         strengths.append(
@@ -320,7 +255,7 @@ async def analyze_mcp_prompt(
         recommendations.append(
             "Organize into clear sections (Objective, Requirements, Technical, etc.)")
 
-    # Análise técnica (0-30 pontos)
+    # Technical analysis (0-30 points)
     has_tools = any(word in prompt_lower for word in KEYWORDS["tools"])
     has_resources = any(word in prompt_lower for word in KEYWORDS["resources"])
 
@@ -346,7 +281,7 @@ async def analyze_mcp_prompt(
     else:
         recommendations.append("Specify transport protocol (STDIO/HTTP/SSE)")
 
-    # Análise de melhores práticas (0-25 pontos)
+    # Best practices analysis (0-25 points)
     has_security = any(word in prompt_lower for word in KEYWORDS["security"])
     has_scalability = any(
         word in prompt_lower for word in KEYWORDS["scalability"])
@@ -370,7 +305,7 @@ async def analyze_mcp_prompt(
         score += 5
         strengths.append("Mentions asynchronous processing")
 
-    # Análise de contexto de negócio (0-20 pontos)
+    # Business context analysis (0-20 points)
     has_business_context = any(
         word in prompt_lower for word in KEYWORDS["business"])
 
@@ -399,124 +334,8 @@ async def analyze_mcp_prompt(
     )
 
 
-@mcp.tool()
-async def analisar_prompt_mcp(prompt: str) -> AnalisePrompt:
-    """
-    Analisar um prompt de criação de servidor MCP para qualidade e alinhamento com melhores práticas.
 
-    Args:
-        prompt: O texto do prompt para analisar para criação de servidor MCP
-
-    Returns:
-        AnalisePrompt: Análise detalhada com pontuação, pontos fortes, pontos fracos e recomendações
-    """
-    prompt_lower = prompt.lower()
-    pontuacao = 0
-    pontos_fortes = []
-    pontos_fracos = []
-    sugestoes = []
-
-    # Análise de estrutura básica (0-20 pontos)
-    if len(prompt) > 100:
-        pontuacao += 10
-        pontos_fortes.append(
-            "Prompt tem comprimento adequado para especificações detalhadas")
-    else:
-        pontos_fracos.append("Prompt muito breve, falta detalhamento")
-        sugestoes.append("Expanda o prompt com requisitos mais específicos")
-
-    if any(palavra in prompt_lower for palavra in ["objetivo", "propósito", "serve para"]):
-        pontuacao += 10
-        pontos_fortes.append("Objetivo ou propósito bem definido")
-    else:
-        pontos_fracos.append("Falta definição clara do objetivo")
-        sugestoes.append(
-            "Adicione uma declaração clara do que o servidor deve fazer")
-
-    # Análise técnica (0-35 pontos)
-    possui_requisitos_tecnicos = False
-
-    if any(palavra in prompt_lower for palavra in PALAVRAS_CHAVE["ferramentas"]):
-        pontuacao += 15
-        pontos_fortes.append("Especifica ferramentas necessárias")
-        possui_requisitos_tecnicos = True
-    else:
-        pontos_fracos.append("Não especifica ferramentas necessárias")
-        sugestoes.append(
-            "Defina ferramentas específicas usando padrão @mcp.tool()")
-
-    if any(palavra in prompt_lower for palavra in PALAVRAS_CHAVE["recursos"]):
-        pontuacao += 10
-        pontos_fortes.append("Define recursos a serem expostos")
-        possui_requisitos_tecnicos = True
-    else:
-        pontos_fracos.append("Não especifica recursos")
-        sugestoes.append(
-            "Considere quais dados devem ser expostos via @mcp.resource()")
-
-    if any(palavra in prompt_lower for palavra in PALAVRAS_CHAVE["transporte"]):
-        pontuacao += 5
-        pontos_fortes.append("Menciona protocolo de transporte")
-    else:
-        sugestoes.append(
-            "Especifique protocolo de transporte (STDIO/HTTP/SSE)")
-
-    if any(palavra in prompt_lower for palavra in ["type", "tipos", "pydantic", "validação"]):
-        pontuacao += 5
-        pontos_fortes.append("Considera tipagem e validação")
-
-    # Análise de segurança (0-20 pontos)
-    possui_restricoes_seguranca = False
-
-    if any(palavra in prompt_lower for palavra in PALAVRAS_CHAVE["seguranca"]):
-        pontuacao += 15
-        pontos_fortes.append("Considera requisitos de segurança")
-        possui_restricoes_seguranca = True
-    else:
-        pontos_fracos.append("Não menciona considerações de segurança")
-        sugestoes.append("Adicione requisitos de autenticação e validação")
-
-    if any(palavra in prompt_lower for palavra in ["validar", "sanitizar", "verificar"]):
-        pontuacao += 5
-        pontos_fortes.append("Menciona validação de dados")
-
-    # Análise de contexto de negócio (0-15 pontos)
-    possui_contexto_negocio = False
-
-    if any(palavra in prompt_lower for palavra in PALAVRAS_CHAVE["negocio"]):
-        pontuacao += 10
-        pontos_fortes.append("Inclui contexto de negócio")
-        possui_contexto_negocio = True
-    else:
-        pontos_fracos.append("Falta contexto de negócio")
-        sugestoes.append(
-            "Explique o problema de negócio que o servidor resolve")
-
-    if any(palavra in prompt_lower for palavra in ["exemplo", "uso", "chamada"]):
-        pontuacao += 5
-        pontos_fortes.append("Inclui exemplos de uso")
-    else:
-        sugestoes.append("Adicione exemplos concretos de uso")
-
-    # Análise de escalabilidade (0-10 pontos)
-    if any(palavra in prompt_lower for palavra in PALAVRAS_CHAVE["escalabilidade"]):
-        pontuacao += 10
-        pontos_fortes.append("Considera escalabilidade")
-    else:
-        sugestoes.append(
-            "Considere requisitos de escalabilidade para produção")
-
-    return AnalisePrompt(
-        pontuacao=pontuacao,
-        pontos_fortes=pontos_fortes,
-        pontos_fracos=pontos_fracos,
-        sugestoes=sugestoes,
-        possui_requisitos_tecnicos=possui_requisitos_tecnicos,
-        possui_contexto_negocio=possui_contexto_negocio,
-        possui_restricoes_seguranca=possui_restricoes_seguranca
-    )
-
-# Ferramentas de otimização de prompt
+# Prompt optimization tools
 
 
 @mcp.tool()
@@ -526,73 +345,74 @@ async def suggest_mcp_prompt_improvements(
     ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
-    Sugere melhorias específicas para um prompt de criação de servidor MCP.
+    Suggests specific improvements for an MCP server creation prompt.
 
-    Retorna um prompt melhorado e explica as mudanças aplicadas.
+    Returns an improved prompt and explains the applied changes.
     """
     if ctx:
         await ctx.info(f"Generating improvement suggestions for prompt...")
 
-    # Analisar o prompt original primeiro
+    # Analyze the original prompt first
     analysis = await analyze_mcp_prompt(original_prompt, ctx) if ctx else PromptAnalysis(
         score=50.0, strengths=[], weaknesses=["Simplified analysis"], recommendations=[]
     )
 
-    # Base do prompt melhorado
+    # Base of the improved prompt
     improved_sections = []
 
-    # Seção de contexto e propósito
-    if "criar" in original_prompt.lower() and "servidor" in original_prompt.lower():
-        purpose_section = """## Contexto e Objetivo
-Preciso criar um servidor MCP com FastMCP em Python que [DESCREVER PROPÓSITO ESPECÍFICO].
+    # Context and purpose section
+    if ("criar" in original_prompt.lower() and "servidor" in original_prompt.lower()) or \
+       ("create" in original_prompt.lower() and "server" in original_prompt.lower()):
+        purpose_section = """## Context and Objective
+I need to create an MCP server with FastMCP in Python that [DESCRIBE SPECIFIC PURPOSE].
 
-### Caso de Uso
-[DESCREVER QUANDO E COMO O SERVIDOR SERÁ USADO]"""
+### Use Case
+[DESCRIBE WHEN AND HOW THE SERVER WILL BE USED]"""
         improved_sections.append(purpose_section)
 
-    # Seção de requisitos funcionais
-    functional_section = """## Requisitos Funcionais
+    # Functional requirements section
+    functional_section = """## Functional Requirements
 
-### Ferramentas (@mcp.tool())
-1. **[NOME_FERRAMENTA_1]**
-   - Descrição: [O QUE FAZ]
-   - Parâmetros: [TIPO E DESCRIÇÃO]
-   - Retorno: [TIPO E FORMATO]
-   - Exemplo: [EXEMPLO DE USO]
+### Tools (@mcp.tool())
+1. **[TOOL_NAME_1]**
+   - Description: [WHAT IT DOES]
+   - Parameters: [TYPE AND DESCRIPTION]
+   - Return: [TYPE AND FORMAT]
+   - Example: [USAGE EXAMPLE]
 
-### Recursos (@mcp.resource())
-1. **[URI_RECURSO_1]**
-   - Descrição: [DADOS EXPOSTOS]
-   - Formato: [JSON/TEXT/OUTROS]"""
+### Resources (@mcp.resource())
+1. **[RESOURCE_URI_1]**
+   - Description: [EXPOSED DATA]
+   - Format: [JSON/TEXT/OTHER]"""
     improved_sections.append(functional_section)
 
-    # Seção técnica se o foco for técnico
+    # Technical section if focus is technical
     if focus_area == "technical" or focus_area is None:
-        technical_section = """## Requisitos Técnicos
+        technical_section = """## Technical Requirements
 
-- **Operações Assíncronas**: [LISTAR OPERAÇÕES QUE PRECISAM SER ASYNC]
-- **Integrações Externas**: [APIs, BANCOS DE DADOS, SERVIÇOS]
-- **Tratamento de Erros**: [COMO LIDAR COM FALHAS]
-- **Validação de Dados**: [USAR PYDANTIC MODELS]"""
+- **Asynchronous Operations**: [LIST OPERATIONS THAT NEED TO BE ASYNC]
+- **External Integrations**: [APIs, DATABASES, SERVICES]
+- **Error Handling**: [HOW TO HANDLE FAILURES]
+- **Data Validation**: [USE PYDANTIC MODELS]"""
         improved_sections.append(technical_section)
 
-    # Seção de produção se relevante
+    # Production section if relevant
     if focus_area == "production":
-        production_section = """## Requisitos de Produção
+        production_section = """## Production Requirements
 
-- **Segurança**: [AUTENTICAÇÃO, AUTORIZAÇÃO, VALIDAÇÃO]
-- **Escalabilidade**: [CONSIDERAÇÕES DE ESTADO, REDIS]
-- **Observabilidade**: [LOGGING, MÉTRICAS, TRACES]
-- **Health Checks**: [ENDPOINTS DE SAÚDE]"""
+- **Security**: [AUTHENTICATION, AUTHORIZATION, VALIDATION]
+- **Scalability**: [STATE CONSIDERATIONS, REDIS]
+- **Observability**: [LOGGING, METRICS, TRACES]
+- **Health Checks**: [HEALTH ENDPOINTS]"""
         improved_sections.append(production_section)
 
-    # Adicionar exemplos
-    example_section = """## Exemplos de Uso
+    # Add examples
+    example_section = """## Usage Examples
 
 ```python
-# Exemplo de chamada da ferramenta principal
-resultado = await client.call_tool("nome_ferramenta", {
-    "param1": "valor",
+# Example of main tool call
+result = await client.call_tool("tool_name", {
+    "param1": "value",
     "param2": 123
 })
 ```"""
@@ -600,13 +420,13 @@ resultado = await client.call_tool("nome_ferramenta", {
 
     improved_prompt = "\n\n".join(improved_sections)
 
-    # Explicar mudanças
+    # Explain changes
     changes_explanation = [
-        "Estruturado o prompt em seções claras e bem definidas",
-        "Adicionados templates para especificar ferramentas e recursos",
-        "Incluídos campos para exemplos de uso concretos",
-        "Adicionada seção de requisitos técnicos quando relevante",
-        f"Foco aplicado: {focus_area or 'geral'}"
+        "Structured the prompt into clear and well-defined sections",
+        "Added templates to specify tools and resources",
+        "Included fields for concrete usage examples",
+        "Added technical requirements section when relevant",
+        f"Applied focus: {focus_area or 'general'}"
     ]
 
     return {
@@ -614,69 +434,15 @@ resultado = await client.call_tool("nome_ferramenta", {
         "changes_explanation": changes_explanation,
         "improvement_score": min(100.0, analysis.score + 30.0),
         "next_steps": [
-            "Preencher os campos template com informações específicas",
-            "Adicionar mais detalhes sobre o contexto de uso",
-            "Revisar e validar os requisitos técnicos"
+            "Fill in template fields with specific information",
+            "Add more details about usage context",
+            "Review and validate technical requirements"
         ]
     }
 
 
-@mcp.tool()
-async def sugerir_melhorias_prompt(prompt_original: str) -> Dict[str, Any]:
-    """
-    Sugerir melhorias específicas para um prompt de criação de servidor MCP.
 
-    Args:
-        prompt_original: O prompt original para melhorar
-
-    Returns:
-        Dict contendo prompt melhorado e explicação das mudanças
-    """
-    analise = await analisar_prompt_mcp(prompt_original)
-
-    melhorias = []
-    prompt_melhorado = prompt_original
-
-    # Adicionar contexto técnico se necessário
-    if not analise.possui_requisitos_tecnicos:
-        melhorias.append("Adicionado especificação de ferramentas e recursos")
-        prompt_melhorado += "\n\nO servidor deve incluir:\n"
-        prompt_melhorado += "- Ferramentas (@mcp.tool()) para [especifique as ações]\n"
-        prompt_melhorado += "- Recursos (@mcp.resource()) para [especifique os dados]\n"
-        prompt_melhorado += "- Transporte apropriado (STDIO/HTTP/SSE) baseado no caso de uso\n"
-
-    # Adicionar segurança se não mencionada
-    if not analise.possui_restricoes_seguranca:
-        melhorias.append("Adicionado requisitos de segurança")
-        prompt_melhorado += "\n\nRequisitos de segurança:\n"
-        prompt_melhorado += "- Implementar validação de entrada com JSON Schema\n"
-        prompt_melhorado += "- Usar autenticação OAuth 2.1 se necessário\n"
-        prompt_melhorado += "- Sanitizar todas as entradas do usuário\n"
-
-    # Adicionar contexto de negócio
-    if not analise.possui_contexto_negocio:
-        melhorias.append("Adicionado template para contexto de negócio")
-        prompt_melhorado += "\n\nContexto e objetivos:\n"
-        prompt_melhorado += "- Problema a resolver: [descreva o problema]\n"
-        prompt_melhorado += "- Usuários alvo: [quem usará o servidor]\n"
-        prompt_melhorado += "- Resultado esperado: [o que o servidor deve entregar]\n"
-
-    # Adicionar melhores práticas
-    prompt_melhorado += "\n\nMelhores práticas a seguir:\n"
-    prompt_melhorado += "- Usar type hints e docstrings detalhadas\n"
-    prompt_melhorado += "- Implementar tratamento de erros adequado\n"
-    prompt_melhorado += "- Seguir estrutura modular com separação clara\n"
-    prompt_melhorado += "- Incluir testes e documentação\n"
-
-    return {
-        "prompt_original": prompt_original,
-        "prompt_melhorado": prompt_melhorado,
-        "melhorias_aplicadas": melhorias,
-        "pontuacao_original": analise.pontuacao,
-        "pontuacao_estimada": min(100, analise.pontuacao + len(melhorias) * 15)
-    }
-
-# Ferramentas de validação
+# Validation tools
 
 
 @mcp.tool()
@@ -685,9 +451,9 @@ async def validate_mcp_requirements(
     ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
-    Valida requisitos de servidor MCP contra checklist de melhores práticas.
+    Validates MCP server requirements against best practices checklist.
 
-    Verifica completude e adequação dos requisitos especificados.
+    Checks completeness and adequacy of specified requirements.
     """
     if ctx:
         await ctx.info("Validating requirements against best practices...")
@@ -749,108 +515,8 @@ async def validate_mcp_requirements(
     return validation_results
 
 
-@mcp.tool()
-async def validar_requisitos_mcp(requisitos: str) -> Dict[str, Any]:
-    """
-    Validar requisitos de servidor MCP contra lista de verificação de melhores práticas.
 
-    Args:
-        requisitos: A especificação de requisitos para validar
-
-    Returns:
-        Dict contendo resultados de validação e requisitos ausentes
-    """
-    requisitos_lower = requisitos.lower()
-    validacao = {
-        "ferramentas_definidas": False,
-        "recursos_definidos": False,
-        "transporte_especificado": False,
-        "seguranca_considerada": False,
-        "escalabilidade_planejada": False,
-        "observabilidade_incluida": False,
-        "testes_mencionados": False,
-        "documentacao_planejada": False
-    }
-
-    requisitos_ausentes = []
-    recomendacoes = []
-
-    # Validar presença de ferramentas
-    if any(palavra in requisitos_lower for palavra in PALAVRAS_CHAVE["ferramentas"]):
-        validacao["ferramentas_definidas"] = True
-    else:
-        requisitos_ausentes.append("Definição de ferramentas (@mcp.tool())")
-        recomendacoes.append(
-            "Especifique quais ações o servidor deve executar")
-
-    # Validar recursos
-    if any(palavra in requisitos_lower for palavra in PALAVRAS_CHAVE["recursos"]):
-        validacao["recursos_definidos"] = True
-    else:
-        requisitos_ausentes.append("Definição de recursos (@mcp.resource())")
-        recomendacoes.append("Defina quais dados o servidor deve expor")
-
-    # Validar transporte
-    transportes = ["stdio", "http", "sse", "streamable"]
-    if any(t in requisitos_lower for t in transportes):
-        validacao["transporte_especificado"] = True
-    else:
-        requisitos_ausentes.append("Especificação de protocolo de transporte")
-        recomendacoes.append(
-            "Escolha entre STDIO (local), HTTP (web) ou SSE (streaming)")
-
-    # Validar segurança
-    if any(palavra in requisitos_lower for palavra in PALAVRAS_CHAVE["seguranca"]):
-        validacao["seguranca_considerada"] = True
-    else:
-        requisitos_ausentes.append("Requisitos de segurança")
-        recomendacoes.append(
-            "Defina autenticação, validação de entrada e sanitização")
-
-    # Validar escalabilidade
-    if any(palavra in requisitos_lower for palavra in PALAVRAS_CHAVE["escalabilidade"]):
-        validacao["escalabilidade_planejada"] = True
-    else:
-        requisitos_ausentes.append("Planejamento de escalabilidade")
-        recomendacoes.append(
-            "Considere uso de Redis para estado distribuído se necessário")
-
-    # Validar observabilidade
-    obs_palavras = ["log", "metric", "trace", "monitor", "observ"]
-    if any(palavra in requisitos_lower for palavra in obs_palavras):
-        validacao["observabilidade_incluida"] = True
-    else:
-        requisitos_ausentes.append("Estratégia de observabilidade")
-        recomendacoes.append("Planeje logging estruturado e métricas")
-
-    # Validar testes
-    if any(palavra in requisitos_lower for palavra in ["test", "pytest", "unittest"]):
-        validacao["testes_mencionados"] = True
-    else:
-        requisitos_ausentes.append("Estratégia de testes")
-        recomendacoes.append("Inclua testes unitários e de integração")
-
-    # Validar documentação
-    if any(palavra in requisitos_lower for palavra in ["doc", "readme", "exemplo"]):
-        validacao["documentacao_planejada"] = True
-    else:
-        requisitos_ausentes.append("Plano de documentação")
-        recomendacoes.append("Planeje documentação com exemplos de uso")
-
-    # Calcular pontuação de completude
-    total_validacoes = len(validacao)
-    validacoes_passadas = sum(1 for v in validacao.values() if v)
-    completude = int((validacoes_passadas / total_validacoes) * 100)
-
-    return {
-        "validacao": validacao,
-        "requisitos_ausentes": requisitos_ausentes,
-        "recomendacoes": recomendacoes,
-        "completude_percentual": completude,
-        "pronto_para_desenvolvimento": completude >= 80
-    }
-
-# Ferramentas de geração de templates
+# Template generation tools
 
 
 @mcp.tool()
@@ -861,53 +527,53 @@ async def generate_mcp_server_template(
     ctx: Optional[Context] = None
 ) -> str:
     """
-    Gera um template de prompt otimizado para criar um servidor MCP específico.
+    Generates an optimized prompt template for creating a specific MCP server.
 
-    Templates disponíveis:
-    - basic: Servidor simples com ferramentas e recursos básicos
-    - api_integration: Servidor que integra com APIs externas
-    - data_processing: Servidor focado em processamento de dados
-    - production_ready: Servidor com todas as práticas de produção
+    Available templates:
+    - basic: Simple server with basic tools and resources
+    - api_integration: Server that integrates with external APIs
+    - data_processing: Server focused on data processing
+    - production_ready: Server with all production practices
     """
     if ctx:
         await ctx.info(f"Generating template for server type '{server_type}'...")
 
-    # Template base comum
-    base_template = f"""# Criação de Servidor MCP: {name}
+    # Common base template
+    base_template = f"""# MCP Server Creation: {name}
 
-## Objetivo
-Criar um servidor MCP com FastMCP em Python para {description}.
+## Objective
+Create an MCP server with FastMCP in Python for {description}.
 
-## Especificações Técnicas
+## Technical Specifications
 - **Framework**: FastMCP 2.0+
 - **Python**: 3.8+
-- **Estilo**: Pythônico, com type hints e docstrings detalhadas
+- **Style**: Pythonic, with type hints and detailed docstrings
 """
 
-    # Templates específicos por tipo
+    # Specific templates by type
     if server_type == "basic":
         specific_template = f"""
-## Requisitos Funcionais
+## Functional Requirements
 
-### Ferramentas
-1. **ferramenta_principal**
-   - Função: [DESCREVER FUNÇÃO PRINCIPAL]
-   - Parâmetros:
-     - param1 (str): [DESCRIÇÃO]
-     - param2 (int): [DESCRIÇÃO]
-   - Retorno: Dict com resultado processado
-   - Tratamento de erros: Validar entrada e retornar mensagens claras
+### Tools
+1. **main_tool**
+   - Function: [DESCRIBE MAIN FUNCTION]
+   - Parameters:
+     - param1 (str): [DESCRIPTION]
+     - param2 (int): [DESCRIPTION]
+   - Return: Dict with processed result
+   - Error handling: Validate input and return clear messages
 
-### Recursos
+### Resources
 1. **info://status**
-   - Retorna status atual do servidor
-   - Formato: JSON
+   - Returns current server status
+   - Format: JSON
    
 2. **config://settings**
-   - Expõe configurações atuais
-   - Formato: JSON
+   - Exposes current configuration
+   - Format: JSON
 
-### Estrutura de Código
+### Code Structure
 ```python
 from fastmcp import FastMCP, Context
 from pydantic import BaseModel, Field
@@ -916,40 +582,40 @@ from typing import Dict, Any
 mcp = FastMCP(name="{name}")
 
 @mcp.tool()
-async def ferramenta_principal(param1: str, param2: int, ctx: Context) -> Dict[str, Any]:
-    '''Docstring detalhada'''
-    # Implementação
+async def main_tool(param1: str, param2: int, ctx: Context) -> Dict[str, Any]:
+    '''Detailed docstring'''
+    # Implementation
     pass
 ```
 """
 
     elif server_type == "api_integration":
         specific_template = f"""
-## Requisitos de Integração
+## Integration Requirements
 
-### APIs Externas
-- **API Principal**: [NOME E DOCUMENTAÇÃO]
-- **Autenticação**: [MÉTODO - Bearer Token, API Key, etc]
-- **Rate Limiting**: [LIMITES E ESTRATÉGIA]
+### External APIs
+- **Main API**: [NAME AND DOCUMENTATION]
+- **Authentication**: [METHOD - Bearer Token, API Key, etc]
+- **Rate Limiting**: [LIMITS AND STRATEGY]
 
-### Ferramentas de Integração
+### Integration Tools
 1. **fetch_data**
-   - Busca dados da API externa
-   - Implementar retry logic e circuit breaker
-   - Cache de respostas quando apropriado
+   - Fetch data from external API
+   - Implement retry logic and circuit breaker
+   - Cache responses when appropriate
 
 2. **process_and_send**
-   - Processa dados e envia para API
-   - Validação robusta com Pydantic
-   - Tratamento de erros de rede
+   - Process data and send to API
+   - Robust validation with Pydantic
+   - Network error handling
 
-### Requisitos Técnicos
-- Usar httpx para chamadas assíncronas
-- Implementar timeout e retry configuráveis
-- Logging detalhado de todas as interações
-- Gerenciamento seguro de credenciais (variáveis de ambiente)
+### Technical Requirements
+- Use httpx for asynchronous calls
+- Implement configurable timeout and retry
+- Detailed logging of all interactions
+- Secure credential management (environment variables)
 
-### Exemplo de Implementação
+### Implementation Example
 ```python
 import httpx
 from fastmcp import FastMCP, Context
@@ -959,74 +625,74 @@ mcp = FastMCP(name="{name}")
 @mcp.tool()
 async def fetch_data(endpoint: str, ctx: Context) -> Dict[str, Any]:
     async with httpx.AsyncClient() as client:
-        # Implementar lógica com retry
+        # Implement logic with retry
         pass
 ```
 """
 
     elif server_type == "data_processing":
         specific_template = """
-## Requisitos de Processamento de Dados
+## Data Processing Requirements
 
-### Ferramentas de Processamento
+### Processing Tools
 1. **process_file**
-   - Aceita: CSV, JSON, Excel
-   - Processamento assíncrono com progress reporting
-   - Validação de schema com Pydantic
+   - Accepts: CSV, JSON, Excel
+   - Asynchronous processing with progress reporting
+   - Schema validation with Pydantic
 
 2. **analyze_data**
-   - Análise estatística ou ML
-   - Retorna insights estruturados
-   - Suporte a datasets grandes (streaming)
+   - Statistical analysis or ML
+   - Returns structured insights
+   - Support for large datasets (streaming)
 
-### Recursos de Dados
+### Data Resources
 1. **data://processed/{{id}}**
-   - Acesso a dados processados
-   - Paginação para grandes volumes
+   - Access to processed data
+   - Pagination for large volumes
 
-### Requisitos Técnicos
-- Usar pandas/polars para processamento eficiente
-- Implementar processamento em chunks para grandes arquivos
+### Technical Requirements
+- Use pandas/polars for efficient processing
+- Implement chunk processing for large files
 - Progress reporting via ctx.report_progress()
-- Armazenamento temporário com cleanup automático
+- Temporary storage with automatic cleanup
 
-### Considerações de Performance
-- Operações CPU-intensivas em thread pool
-- Limitar uso de memória
-- Implementar cache inteligente
+### Performance Considerations
+- CPU-intensive operations in thread pool
+- Limit memory usage
+- Implement intelligent cache
 """
 
     elif server_type == "production_ready":
         specific_template = f"""
-## Requisitos de Produção Completos
+## Complete Production Requirements
 
-### Arquitetura
-- **Estado**: Distribuído via Redis
-- **Transporte**: HTTP Streamable com fallback
+### Architecture
+- **State**: Distributed via Redis
+- **Transport**: HTTP Streamable with fallback
 - **Deployment**: Docker + Kubernetes ready
 
-### Segurança
-- Autenticação via Bearer tokens
-- Rate limiting por cliente
-- Validação completa de entrada
-- Sanitização de dados sensíveis em logs
+### Security
+- Authentication via Bearer tokens
+- Rate limiting per client
+- Complete input validation
+- Sensitive data sanitization in logs
 
-### Observabilidade
-- Logging estruturado (JSON)
-- Métricas Prometheus
-- Tracing com OpenTelemetry
+### Observability
+- Structured logging (JSON)
+- Prometheus metrics
+- Tracing with OpenTelemetry
 - Health checks (liveness/readiness)
 
-### Escalabilidade
-- Servidor stateless
+### Scalability
+- Stateless server
 - Connection pooling
-- Cache distribuído
+- Distributed cache
 - Graceful shutdown
 
-### Ferramentas Principais
-[DEFINIR FERRAMENTAS COM TODOS OS ASPECTOS ACIMA]
+### Main Tools
+[DEFINE TOOLS WITH ALL THE ABOVE ASPECTS]
 
-### Exemplo de Estrutura
+### Structure Example
 ```python
 from fastmcp import FastMCP
 import redis.asyncio as redis
@@ -1039,46 +705,46 @@ mcp = FastMCP(
     dependencies=["redis", "prometheus-client", "opentelemetry-api"]
 )
 
-# Configurar Redis para estado distribuído
-# Implementar middleware de autenticação
-# Configurar métricas e tracing
+# Configure Redis for distributed state
+# Implement authentication middleware
+# Configure metrics and tracing
 ```
 
-### Testes Requeridos
-- Testes unitários com pytest
-- Testes de integração
-- Testes de carga
-- Testes de segurança
+### Required Tests
+- Unit tests with pytest
+- Integration tests
+- Load tests
+- Security tests
 """
 
     else:
-        specific_template = "\n## Tipo de servidor não reconhecido. Use: basic, api_integration, data_processing, ou production_ready"
+        specific_template = "\n## Server type not recognized. Use: basic, api_integration, data_processing, or production_ready"
 
     full_template = base_template + specific_template
 
-    # Adicionar seção de melhores práticas
+    # Add best practices section
     best_practices = """
-## Melhores Práticas a Seguir
+## Best Practices to Follow
 
-1. **Código Limpo**
-   - Type hints em todas as funções
-   - Docstrings descritivas
-   - Nomes de variáveis significativos
+1. **Clean Code**
+   - Type hints in all functions
+   - Descriptive docstrings
+   - Meaningful variable names
    
-2. **Tratamento de Erros**
-   - Nunca deixar exceções não tratadas
-   - Mensagens de erro úteis para debugging
-   - Logging apropriado de erros
+2. **Error Handling**
+   - Never leave exceptions unhandled
+   - Useful error messages for debugging
+   - Appropriate error logging
    
 3. **Performance**
-   - Async para todas as operações I/O
-   - Evitar bloqueios desnecessários
-   - Implementar timeouts apropriados
+   - Async for all I/O operations
+   - Avoid unnecessary blocking
+   - Implement appropriate timeouts
    
-4. **Segurança**
-   - Validar toda entrada de usuário
-   - Não expor informações sensíveis
-   - Usar HTTPS em produção
+4. **Security**
+   - Validate all user input
+   - Don't expose sensitive information
+   - Use HTTPS in production
 """
 
     full_template += best_practices
@@ -1088,73 +754,64 @@ mcp = FastMCP(
 
     return full_template.format(name=name)
 
-# Recursos do servidor
+# Server resources
 
 
 @mcp.resource("mcp://best-practices")
 async def get_mcp_best_practices() -> Dict[str, List[str]]:
     """
-    Retorna um resumo das melhores práticas para desenvolvimento de servidores MCP.
+    Returns a summary of best practices for MCP server development.
 
-    Inclui práticas de estrutura, técnicas e produção.
+    Includes structural, technical and production practices.
     """
     return BEST_PRACTICES
 
 
-@mcp.resource("melhores-praticas://todas")
-async def obter_melhores_praticas_mcp() -> Dict[str, List[str]]:
-    """
-    Obter um resumo das melhores práticas de desenvolvimento de servidor MCP.
-
-    Returns:
-        Dict[str, List[str]]: Principais melhores práticas para desenvolvimento de servidor MCP
-    """
-    return MELHORES_PRATICAS
 
 
 @mcp.resource("mcp://prompt-examples/{quality_level}")
 async def get_prompt_examples(quality_level: str) -> Dict[str, Any]:
     """
-    Fornece exemplos de prompts de diferentes níveis de qualidade.
+    Provides prompt examples of different quality levels.
 
-    Níveis: bad, good, excellent
+    Levels: bad, good, excellent
     """
     examples = {
         "bad": {
-            "prompt": "criar servidor mcp que faz coisas com dados",
+            "prompt": "create mcp server that does things with data",
             "issues": [
-                "Muito vago e genérico",
-                "Não especifica ferramentas ou recursos",
-                "Sem detalhes técnicos",
-                "Sem exemplos de uso"
+                "Too vague and generic",
+                "Does not specify tools or resources",
+                "No technical details",
+                "No usage examples"
             ]
         },
         "good": {
-            "prompt": """Criar um servidor MCP com FastMCP para processar arquivos CSV.
+            "prompt": """Create an MCP server with FastMCP to process CSV files.
             
-O servidor deve ter uma ferramenta para ler CSVs e retornar dados em JSON.
-Deve tratar erros e validar o formato do arquivo.""",
+The server should have a tool to read CSVs and return data in JSON format.
+It should handle errors and validate the file format.""",
             "strengths": [
-                "Propósito claro",
-                "Menciona formato de entrada/saída",
-                "Considera tratamento de erros"
+                "Clear purpose",
+                "Mentions input/output format",
+                "Considers error handling"
             ]
         },
         "excellent": {
-            "prompt": """Criar um servidor MCP com FastMCP em Python para análise de dados de vendas.
+            "prompt": """Create an MCP server with FastMCP in Python for sales data analysis.
 
-## Requisitos Funcionais
-- Ferramenta 'analyze_sales': aceita CSV com colunas (date, product, quantity, price)
-- Retorna estatísticas: total de vendas, produto mais vendido, tendências mensais
-- Recurso 'reports://latest': expõe último relatório gerado em JSON
+## Functional Requirements
+- Tool 'analyze_sales': accepts CSV with columns (date, product, quantity, price)
+- Returns statistics: total sales, best-selling product, monthly trends
+- Resource 'reports://latest': exposes latest generated report in JSON
 
-## Requisitos Técnicos  
-- Processamento assíncrono para arquivos grandes (>100MB)
-- Validação de schema com Pydantic
-- Cache de resultados por 1 hora
-- Logging estruturado de todas as operações
+## Technical Requirements  
+- Asynchronous processing for large files (>100MB)
+- Schema validation with Pydantic
+- Cache results for 1 hour
+- Structured logging of all operations
 
-## Exemplo de Uso
+## Usage Example
 ```python
 result = await client.call_tool("analyze_sales", {
     "file_path": "sales_2024.csv",
@@ -1162,17 +819,17 @@ result = await client.call_tool("analyze_sales", {
 })
 ```""",
             "strengths": [
-                "Especificação completa e detalhada",
-                "Define claramente ferramentas e recursos",
-                "Inclui requisitos técnicos importantes",
-                "Fornece exemplo de uso concreto",
-                "Considera performance e cache"
+                "Complete and detailed specification",
+                "Clearly defines tools and resources",
+                "Includes important technical requirements",
+                "Provides concrete usage example",
+                "Considers performance and caching"
             ]
         }
     }
 
     if quality_level not in examples:
-        return {"error": f"Nível '{quality_level}' não encontrado. Use: bad, good, ou excellent"}
+        return {"error": f"Level '{quality_level}' not found. Use: bad, good, or excellent"}
 
     return examples[quality_level]
 
@@ -1180,51 +837,51 @@ result = await client.call_tool("analyze_sales", {
 @mcp.resource("mcp://frameworks")
 async def get_prompt_frameworks() -> Dict[str, Any]:
     """
-    Retorna frameworks de prompt engineering aplicáveis a criação de servidores MCP.
+    Returns prompt engineering frameworks applicable to MCP server creation.
     """
     return {
         "frameworks": {
             "CRISP": {
                 "name": "Context, Requirements, Instructions, Specifications, Prompts",
-                "description": "Framework estruturado para prompts complexos",
-                "application": "Ideal para especificar servidores MCP completos",
-                "template": """[Context] Preciso criar um servidor MCP para...
-[Requirements] O servidor deve ter as seguintes capacidades...
-[Instructions] Use FastMCP 2.0 com Python 3.8+...
-[Specifications] Ferramentas: [...], Recursos: [...], Tipos: [...]
-[Prompts/Examples] Exemplo de uso: ..."""
+                "description": "Structured framework for complex prompts",
+                "application": "Ideal for specifying complete MCP servers",
+                "template": """[Context] I need to create an MCP server for...
+[Requirements] The server should have the following capabilities...
+[Instructions] Use FastMCP 2.0 with Python 3.8+...
+[Specifications] Tools: [...], Resources: [...], Types: [...]
+[Prompts/Examples] Usage example: ..."""
             },
             "STAR": {
                 "name": "Situation, Task, Action, Result",
-                "description": "Framework para prompts orientados a resultados",
-                "application": "Bom para servidores com objetivo específico",
-                "template": """[Situation] Temos dados de vendas em múltiplos formatos...
-[Task] Precisamos de um servidor MCP que unifique e analise...
-[Action] Implementar ferramentas para importar, processar e gerar relatórios...
-[Result] O servidor deve retornar análises em formato JSON..."""
+                "description": "Framework for results-oriented prompts",
+                "application": "Good for servers with specific objectives",
+                "template": """[Situation] We have sales data in multiple formats...
+[Task] We need an MCP server that unifies and analyzes...
+[Action] Implement tools to import, process and generate reports...
+[Result] The server should return analyses in JSON format..."""
             },
             "Chain-of-Thought": {
-                "name": "Pensamento passo a passo",
-                "description": "Decompõe o problema em etapas lógicas",
-                "application": "Útil para servidores com lógica complexa",
-                "template": """Passo 1: Identificar os dados que o servidor processará
-Passo 2: Definir as transformações necessárias
-Passo 3: Especificar as ferramentas para cada transformação
-Passo 4: Determinar os recursos a expor
-Passo 5: Adicionar requisitos de erro e segurança"""
+                "name": "Step-by-step thinking",
+                "description": "Breaks down the problem into logical steps",
+                "application": "Useful for servers with complex logic",
+                "template": """Step 1: Identify the data the server will process
+Step 2: Define necessary transformations
+Step 3: Specify tools for each transformation
+Step 4: Determine resources to expose
+Step 5: Add error and security requirements"""
             }
         },
-        "recommendation": "Para servidores MCP, o framework CRISP é geralmente mais eficaz devido à sua estrutura completa"
+        "recommendation": "For MCP servers, the CRISP framework is generally more effective due to its complete structure"
     }
 
 
-@mcp.resource("template://servidor-basico")
-async def obter_template_basico() -> str:
-    """Obter template básico para criar um servidor FastMCP."""
+@mcp.resource("template://basic-server")
+async def get_basic_template() -> str:
+    """Get basic template for creating a FastMCP server."""
     return '''"""
-Servidor MCP para [DESCREVA O PROPÓSITO]
+MCP Server for [DESCRIBE PURPOSE]
 
-Este servidor [DESCREVA O QUE FAZ].
+This server [DESCRIBE WHAT IT DOES].
 """
 
 from fastmcp import FastMCP, Context
@@ -1232,40 +889,40 @@ from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
 import asyncio
 
-# Inicializar servidor
+# Initialize server
 mcp = FastMCP(
-    name="meu-servidor-mcp",
-    description="[DESCRIÇÃO DO SERVIDOR]",
+    name="my-mcp-server",
+    description="[SERVER DESCRIPTION]",
     version="1.0.0"
 )
 
-# Modelos de dados
-class MeuModelo(BaseModel):
-    """Modelo para [DESCREVA]"""
-    campo: str = Field(description="Descrição do campo")
+# Data models
+class MyModel(BaseModel):
+    """Model for [DESCRIBE]"""
+    field: str = Field(description="Field description")
 
-# Ferramentas
+# Tools
 @mcp.tool()
-async def minha_ferramenta(parametro: str) -> str:
+async def my_tool(parameter: str) -> str:
     """
-    [DESCREVA O QUE A FERRAMENTA FAZ]
+    [DESCRIBE WHAT THE TOOL DOES]
     
     Args:
-        parametro: [DESCREVA O PARÂMETRO]
+        parameter: [DESCRIBE THE PARAMETER]
         
     Returns:
-        [DESCREVA O RETORNO]
+        [DESCRIBE THE RETURN VALUE]
     """
-    # Implementar lógica aqui
-    return f"Processado: {parametro}"
+    # Implement logic here
+    return f"Processed: {parameter}"
 
-# Recursos
-@mcp.resource("dados://exemplo")
-async def meu_recurso() -> Dict[str, Any]:
-    """[DESCREVA O RECURSO]"""
-    return {"exemplo": "dados"}
+# Resources
+@mcp.resource("data://example")
+async def my_resource() -> Dict[str, Any]:
+    """[DESCRIBE THE RESOURCE]"""
+    return {"example": "data"}
 
-# Para executar localmente
+# To run locally
 if __name__ == "__main__":
     import asyncio
     from fastmcp.cli import main
@@ -1273,66 +930,66 @@ if __name__ == "__main__":
 '''
 
 
-@mcp.resource("checklist://desenvolvimento")
-async def obter_checklist_desenvolvimento() -> Dict[str, List[str]]:
-    """Obter checklist completo para desenvolvimento de servidor MCP."""
+@mcp.resource("checklist://development")
+async def get_development_checklist() -> Dict[str, List[str]]:
+    """Get complete checklist for MCP server development."""
     return {
-        "planejamento": [
-            "Definir objetivo e escopo do servidor",
-            "Identificar ferramentas necessárias",
-            "Mapear recursos a expor",
-            "Escolher protocolo de transporte",
-            "Definir requisitos de segurança",
-            "Planejar estratégia de escalabilidade"
+        "planning": [
+            "Define server objective and scope",
+            "Identify necessary tools",
+            "Map resources to expose",
+            "Choose transport protocol",
+            "Define security requirements",
+            "Plan scalability strategy"
         ],
-        "desenvolvimento": [
-            "Configurar ambiente Python 3.8+",
-            "Instalar FastMCP via pip/uv",
-            "Criar estrutura de diretórios modular",
-            "Implementar ferramentas com @mcp.tool()",
-            "Implementar recursos com @mcp.resource()",
-            "Adicionar type hints e docstrings",
-            "Implementar validação de entrada",
-            "Adicionar tratamento de erros",
-            "Configurar logging estruturado"
+        "development": [
+            "Set up Python 3.8+ environment",
+            "Install FastMCP via pip/uv",
+            "Create modular directory structure",
+            "Implement tools with @mcp.tool()",
+            "Implement resources with @mcp.resource()",
+            "Add type hints and docstrings",
+            "Implement input validation",
+            "Add error handling",
+            "Configure structured logging"
         ],
-        "testes": [
-            "Escrever testes unitários com pytest",
-            "Testar com fastmcp.Client",
-            "Validar com MCP Inspector",
-            "Testar cenários de erro",
-            "Verificar performance",
-            "Testar integrações externas"
+        "testing": [
+            "Write unit tests with pytest",
+            "Test with fastmcp.Client",
+            "Validate with MCP Inspector",
+            "Test error scenarios",
+            "Check performance",
+            "Test external integrations"
         ],
-        "seguranca": [
-            "Implementar autenticação se necessário",
-            "Validar todas as entradas",
-            "Sanitizar dados sensíveis",
-            "Configurar HTTPS em produção",
-            "Implementar rate limiting",
-            "Revisar código para vulnerabilidades",
-            "Testar com McpSafetyScanner"
+        "security": [
+            "Implement authentication if needed",
+            "Validate all inputs",
+            "Sanitize sensitive data",
+            "Configure HTTPS in production",
+            "Implement rate limiting",
+            "Review code for vulnerabilities",
+            "Test with McpSafetyScanner"
         ],
         "deployment": [
-            "Configurar CI/CD pipeline",
-            "Criar Dockerfile se necessário",
-            "Configurar health checks",
-            "Implementar monitoramento",
-            "Configurar backups",
-            "Documentar processo de deployment",
-            "Criar runbook operacional"
+            "Configure CI/CD pipeline",
+            "Create Dockerfile if needed",
+            "Configure health checks",
+            "Implement monitoring",
+            "Configure backups",
+            "Document deployment process",
+            "Create operational runbook"
         ],
-        "documentacao": [
-            "Escrever README completo",
-            "Documentar API de ferramentas",
-            "Criar exemplos de uso",
-            "Documentar configuração",
-            "Adicionar troubleshooting guide",
-            "Manter changelog atualizado"
+        "documentation": [
+            "Write complete README",
+            "Document tools API",
+            "Create usage examples",
+            "Document configuration",
+            "Add troubleshooting guide",
+            "Maintain updated changelog"
         ]
     }
 
-# Prompts do servidor
+# Server prompts
 
 
 @mcp.prompt("optimize_mcp_prompt")
@@ -1341,33 +998,33 @@ async def optimize_mcp_prompt_template(
     requirements: str
 ) -> List[Dict[str, str]]:
     """
-    Template de prompt para otimização de prompts MCP.
+    Prompt template for MCP prompt optimization.
     """
     return [
         {
             "role": "system",
-            "content": """Você é um especialista em criação de prompts para desenvolvimento de servidores MCP com FastMCP.
+            "content": """You are an expert in creating prompts for MCP server development with FastMCP.
             
-Suas especialidades incluem:
-- Estruturação clara de requisitos
-- Aplicação de melhores práticas do FastMCP
-- Considerações de produção e escalabilidade
-- Técnicas avançadas de prompt engineering
+Your specialties include:
+- Clear structuring of requirements
+- Application of FastMCP best practices
+- Production and scalability considerations
+- Advanced prompt engineering techniques
 
-Ao otimizar prompts, você sempre:
-1. Adiciona estrutura clara com seções bem definidas
-2. Especifica ferramentas e recursos com detalhes
-3. Inclui tipos de dados e exemplos
-4. Considera aspectos de produção quando relevante
-5. Sugere melhorias incrementais e práticas"""
+When optimizing prompts, you always:
+1. Add clear structure with well-defined sections
+2. Specify tools and resources with details
+3. Include data types and examples
+4. Consider production aspects when relevant
+5. Suggest incremental and practical improvements"""
         },
         {
             "role": "user",
-            "content": f"""Contexto: {user_context}
+            "content": f"""Context: {user_context}
 
-Requisitos atuais: {requirements}
+Current requirements: {requirements}
 
-Por favor, otimize este prompt para criar um servidor MCP, seguindo as melhores práticas e tornando-o mais claro, completo e eficaz."""
+Please optimize this prompt to create an MCP server, following best practices and making it clearer, more complete and effective."""
         }
     ]
 
@@ -1375,111 +1032,111 @@ Por favor, otimize este prompt para criar um servidor MCP, seguindo as melhores 
 @mcp.prompt("mcp_code_review")
 async def mcp_code_review_template(code: str) -> List[Dict[str, str]]:
     """
-    Template para revisão de código de servidores MCP.
+    Template for MCP server code review.
     """
     return [
         {
             "role": "system",
-            "content": """Você é um revisor especializado em código FastMCP.
+            "content": """You are a reviewer specialized in FastMCP code.
             
-Ao revisar, você verifica:
-- Uso correto dos decoradores @mcp.tool(), @mcp.resource(), @mcp.prompt()
-- Type hints e docstrings adequadas
-- Tratamento de erros apropriado
-- Uso de async/await para operações I/O
-- Padrões de segurança e validação
-- Estrutura e organização do código"""
+When reviewing, you check:
+- Correct use of decorators @mcp.tool(), @mcp.resource(), @mcp.prompt()
+- Adequate type hints and docstrings
+- Appropriate error handling
+- Use of async/await for I/O operations
+- Security and validation patterns
+- Code structure and organization"""
         },
         {
             "role": "user",
-            "content": f"""Revise este código de servidor MCP e sugira melhorias:
+            "content": f"""Review this MCP server code and suggest improvements:
 
 ```python
 {code}
 ```
 
-Identifique problemas e forneça sugestões específicas de melhoria."""
+Identify problems and provide specific improvement suggestions."""
         }
     ]
 
 
-@mcp.prompt("criar_servidor_mcp")
-async def prompt_criar_servidor(
-    objetivo: str,
-    ferramentas_necessarias: List[str],
-    tem_integracao_externa: bool = False,
-    precisa_escalar: bool = False
+@mcp.prompt("create_mcp_server")
+async def create_server_prompt(
+    objective: str,
+    required_tools: List[str],
+    has_external_integration: bool = False,
+    needs_scaling: bool = False
 ) -> List[Dict[str, str]]:
     """
-    Gerar um prompt otimizado para criar servidor MCP.
+    Generate an optimized prompt for creating MCP server.
 
     Args:
-        objetivo: O que o servidor deve fazer
-        ferramentas_necessarias: Lista de ferramentas requeridas
-        tem_integracao_externa: Se precisa integrar com APIs externas
-        precisa_escalar: Se precisa suportar alta carga
+        objective: What the server should do
+        required_tools: List of required tools
+        has_external_integration: If it needs to integrate with external APIs
+        needs_scaling: If it needs to support high load
 
     Returns:
-        Lista de mensagens para o prompt
+        List of messages for the prompt
     """
     prompt_parts = [
-        f"Crie um servidor MCP com FastMCP em Python que {objetivo}.",
-        "\nRequisitos técnicos:",
-        f"- Ferramentas necessárias: {', '.join(ferramentas_necessarias)}",
-        "- Use type hints e docstrings detalhadas",
-        "- Implemente validação de entrada com Pydantic",
-        "- Adicione tratamento de erros apropriado",
-        "- Siga estrutura modular com separação clara"
+        f"Create an MCP server with FastMCP in Python that {objective}.",
+        "\nTechnical requirements:",
+        f"- Required tools: {', '.join(required_tools)}",
+        "- Use type hints and detailed docstrings",
+        "- Implement input validation with Pydantic",
+        "- Add appropriate error handling",
+        "- Follow modular structure with clear separation"
     ]
 
-    if tem_integracao_externa:
+    if has_external_integration:
         prompt_parts.extend([
-            "\nIntegrações:",
-            "- Configure clients HTTP assíncronos para APIs externas",
-            "- Implemente retry logic e circuit breakers",
-            "- Use variáveis de ambiente para credenciais"
+            "\nIntegrations:",
+            "- Configure asynchronous HTTP clients for external APIs",
+            "- Implement retry logic and circuit breakers",
+            "- Use environment variables for credentials"
         ])
 
-    if precisa_escalar:
+    if needs_scaling:
         prompt_parts.extend([
-            "\nEscalabilidade:",
-            "- Use Redis para estado distribuído",
-            "- Implemente connection pooling",
-            "- Configure health checks adequados",
-            "- Use processamento assíncrono"
+            "\nScalability:",
+            "- Use Redis for distributed state",
+            "- Implement connection pooling",
+            "- Configure appropriate health checks",
+            "- Use asynchronous processing"
         ])
 
     prompt_parts.extend([
-        "\nSegurança:",
-        "- Valide todas as entradas com JSON Schema",
-        "- Sanitize paths e dados do usuário",
-        "- Implemente rate limiting se apropriado",
-        "\nInclua também:",
-        "- Exemplo de uso completo",
-        "- Instruções de configuração",
-        "- Testes básicos com pytest"
+        "\nSecurity:",
+        "- Validate all inputs with JSON Schema",
+        "- Sanitize paths and user data",
+        "- Implement rate limiting if appropriate",
+        "\nAlso include:",
+        "- Complete usage example",
+        "- Configuration instructions",
+        "- Basic tests with pytest"
     ])
 
     return [
         {"role": "user", "content": "\n".join(prompt_parts)}
     ]
 
-# Função de inicialização do servidor
+# Server initialization function
 
 
 async def main():
-    """Inicializa e executa o servidor MCP."""
-    logger.info(f"Iniciando {mcp.name}...")
-    logger.info("Servidor FastMCP unificado configurado e pronto para uso")
+    """Initialize and run the MCP server."""
+    logger.info(f"Starting {mcp.name}...")
+    logger.info("Unified FastMCP server configured and ready for use")
 
 if __name__ == "__main__":
-    # Para desenvolvimento/teste local
+    # For local development/testing
     import sys
     if "--test" in sys.argv:
-        # Modo de teste - executar algumas validações
+        # Test mode - run some validations
         asyncio.run(main())
     else:
-        # Modo normal - o FastMCP gerencia a execução
-        logger.info("Servidor pronto para execução via FastMCP CLI")
-        # Iniciar o servidor FastMCP
+        # Normal mode - FastMCP manages execution
+        logger.info("Server ready for execution via FastMCP CLI")
+        # Start the FastMCP server
         mcp.run()

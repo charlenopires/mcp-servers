@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Servidor MCP para análise de prompts de criação de servidores MCP.
-Este servidor fornece ferramentas para avaliar e dar feedback sobre prompts
-para criação de servidores MCP baseados nas melhores práticas da documentação MCP.
+MCP server for analyzing MCP server creation prompts.
+This server provides tools to evaluate and give feedback on prompts
+for creating MCP servers based on MCP documentation best practices.
 """
 
 import logging
@@ -12,440 +12,439 @@ from pydantic import BaseModel, Field
 import re
 import json
 
-# Configurar logging
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Inicializar servidor FastMCP
-mcp = FastMCP("Analisador de Prompts MCP")
+# Initialize FastMCP server
+mcp = FastMCP("MCP Prompt Analyzer")
 
 
-class AnalisePrompt(BaseModel):
-    """Modelo para resultados de análise de prompt"""
-    pontuacao: int = Field(description="Pontuação geral de qualidade de 1-10")
-    pontos_fortes: List[str] = Field(
-        description="Pontos fortes identificados no prompt")
-    pontos_fracos: List[str] = Field(description="Áreas para melhoria")
-    recomendacoes: List[str] = Field(
-        description="Recomendações específicas para melhoria")
-    alinhamento_melhores_praticas: Dict[str, bool] = Field(
-        description="Alinhamento com melhores práticas MCP")
-    elementos_ausentes: List[str] = Field(
-        description="Elementos importantes ausentes do prompt")
+class PromptAnalysis(BaseModel):
+    """Model for prompt analysis results"""
+    score: int = Field(description="Overall quality score from 1-10")
+    strengths: List[str] = Field(
+        description="Strong points identified in the prompt")
+    weaknesses: List[str] = Field(description="Areas for improvement")
+    recommendations: List[str] = Field(
+        description="Specific recommendations for improvement")
+    best_practices_alignment: Dict[str, bool] = Field(
+        description="Alignment with MCP best practices")
+    missing_elements: List[str] = Field(
+        description="Important elements missing from the prompt")
 
 
-class RelatorioValidacao(TypedDict):
-    """Estrutura tipada para relatório de validação"""
-    pontuacao_geral: int
-    validacao_aprovada: bool
-    cobertura_requisitos: Dict[str, bool]
-    requisitos_ausentes: List[str]
-    recomendacoes: List[str]
-    problemas_criticos: List[str]
-    avisos: List[str]
+class ValidationReport(TypedDict):
+    """Typed structure for validation report"""
+    overall_score: int
+    validation_passed: bool
+    requirements_coverage: Dict[str, bool]
+    missing_requirements: List[str]
+    recommendations: List[str]
+    critical_issues: List[str]
+    warnings: List[str]
 
 
-class AnalisadorPromptMCP:
-    """Analisador principal para prompts de criação de servidor MCP"""
+class MCPPromptAnalyzer:
+    """Main analyzer for MCP server creation prompts"""
 
     def __init__(self):
-        # Principais melhores práticas da documentação MCP
-        self.melhores_praticas = {
-            "proposito_claro": "Servidor deve ter um propósito bem definido e específico",
-            "design_ferramenta_adequado": "Ferramentas devem ser focadas, bem documentadas e seguir convenções de nomenclatura",
-            "tratamento_erros": "Tratamento abrangente de erros e validação",
-            "consideracoes_seguranca": "Validação de entrada, sanitização e medidas de segurança",
-            "gerenciamento_recursos": "Tratamento adequado de recursos e limpeza",
-            "documentacao": "Documentação clara e exemplos",
-            "validacao_schema": "Definições adequadas de schema e validação",
-            "protocolo_transporte": "Seleção apropriada de protocolo de transporte",
-            "estrategia_testes": "Considerações de teste e depuração",
-            "performance": "Considerações de performance e escalabilidade"
+        # Main best practices from MCP documentation
+        self.best_practices = {
+            "clear_purpose": "Server should have a well-defined and specific purpose",
+            "adequate_tool_design": "Tools should be focused, well-documented and follow naming conventions",
+            "error_handling": "Comprehensive error handling and validation",
+            "security_considerations": "Input validation, sanitization and security measures",
+            "resource_management": "Proper resource handling and cleanup",
+            "documentation": "Clear documentation and examples",
+            "schema_validation": "Proper schema definitions and validation",
+            "transport_protocol": "Appropriate transport protocol selection",
+            "testing_strategy": "Testing and debugging considerations",
+            "performance": "Performance and scalability considerations"
         }
 
-        # Padrões comuns para procurar em bons prompts
-        self.padroes_positivos = [
-            r"ferramenta(?:s)?\s+(?:que|para|de)",
-            r"implement(?:a|ar|ando)?\s+(?:um|uma|o|a)",
-            r"tratamento\s+(?:de\s+)?erro(?:s)?",
-            r"validação",
-            r"segurança",
+        # Common patterns to look for in good prompts
+        self.positive_patterns = [
+            r"tool(?:s)?\s+(?:that|for|to)",
+            r"implement(?:s|ing|ation)?\s+(?:a|an|the)",
+            r"error\s+(?:handling|treatment)",
+            r"validation",
+            r"security",
             r"schema",
-            r"documentação",
-            r"teste(?:s)?",
+            r"documentation",
+            r"test(?:s|ing)?",
             r"debug",
-            r"exemplo(?:s)?",
-            r"melhor(?:es)?\s+prática(?:s)?",
+            r"example(?:s)?",
+            r"best\s+practice(?:s)?",
             r"performance",
-            r"escalabilidade"
+            r"scalability"
         ]
 
-        # Sinais de alerta que indicam qualidade pobre do prompt
-        self.padroes_negativos = [
-            r"faça?\s+(?:um|uma|o|a)\s+(?:simples|básico|rápido)",
-            r"apenas\s+(?:crie|faça|construa)",
-            r"qualquer\s+coisa",
-            r"tanto\s+faz",
-            r"genérico",
-            r"simples\s+(?:servidor|ferramenta)"
+        # Warning signs that indicate poor prompt quality
+        self.negative_patterns = [
+            r"make?\s+(?:a|an|the)\s+(?:simple|basic|quick)",
+            r"just\s+(?:create|make|build)",
+            r"anything",
+            r"doesn't\s+matter",
+            r"generic",
+            r"simple\s+(?:server|tool)"
         ]
 
-    def analisar_prompt(self, prompt: str) -> AnalisePrompt:
-        """Analisar um prompt de criação de servidor MCP"""
+    def analyze_prompt(self, prompt: str) -> PromptAnalysis:
+        """Analyze an MCP server creation prompt"""
 
-        prompt_minusculo = prompt.lower()
+        prompt_lowercase = prompt.lower()
 
-        # Calcular pontuação base
-        pontuacao = 5  # Começar com pontuação neutra
-        pontos_fortes = []
-        pontos_fracos = []
-        recomendacoes = []
-        elementos_ausentes = []
+        # Calculate base score
+        score = 5  # Start with neutral score
+        strengths = []
+        weaknesses = []
+        recommendations = []
+        missing_elements = []
 
-        # Verificar padrões positivos
-        correspondencias_positivas = 0
-        for padrao in self.padroes_positivos:
-            if re.search(padrao, prompt_minusculo):
-                correspondencias_positivas += 1
+        # Check positive patterns
+        positive_matches = 0
+        for pattern in self.positive_patterns:
+            if re.search(pattern, prompt_lowercase):
+                positive_matches += 1
 
-        # Verificar padrões negativos
-        correspondencias_negativas = 0
-        for padrao in self.padroes_negativos:
-            if re.search(padrao, prompt_minusculo):
-                correspondencias_negativas += 1
+        # Check negative patterns
+        negative_matches = 0
+        for pattern in self.negative_patterns:
+            if re.search(pattern, prompt_lowercase):
+                negative_matches += 1
 
-        # Ajustar pontuação baseada nos padrões
-        # Limitar contribuição positiva
-        pontuacao += min(correspondencias_positivas * 0.5, 3)
-        pontuacao -= correspondencias_negativas * 1.5
+        # Adjust score based on patterns
+        # Limit positive contribution
+        score += min(positive_matches * 0.5, 3)
+        score -= negative_matches * 1.5
 
-        # Analisar contra melhores práticas
-        # Analisar contra melhores práticas
-        alinhamento_melhores_praticas: Dict[str, bool] = {}
-        self._analisar_melhores_praticas(prompt_minusculo, alinhamento_melhores_praticas,
-                                         pontos_fortes, pontos_fracos, elementos_ausentes)
-        # Gerar recomendações
-        recomendacoes = self._gerar_recomendacoes(
-            prompt_minusculo, elementos_ausentes)
+        # Analyze against best practices
+        best_practices_alignment: Dict[str, bool] = {}
+        self._analyze_best_practices(prompt_lowercase, best_practices_alignment,
+                                   strengths, weaknesses, missing_elements)
+        # Generate recommendations
+        recommendations = self._generate_recommendations(
+            prompt_lowercase, missing_elements)
 
-        # Ajuste final da pontuação baseado no alinhamento com melhores práticas
-        pontuacao_alinhamento = sum(
-            alinhamento_melhores_praticas.values()) / len(alinhamento_melhores_praticas)
-        pontuacao = int((pontuacao + pontuacao_alinhamento * 10) / 2)
-        pontuacao = max(1, min(10, pontuacao))  # Limitar entre 1-10
+        # Final score adjustment based on best practices alignment
+        alignment_score = sum(
+            best_practices_alignment.values()) / len(best_practices_alignment)
+        score = int((score + alignment_score * 10) / 2)
+        score = max(1, min(10, score))  # Limit between 1-10
 
-        return AnalisePrompt(
-            pontuacao=pontuacao,
-            pontos_fortes=pontos_fortes,
-            pontos_fracos=pontos_fracos,
-            recomendacoes=recomendacoes,
-            alinhamento_melhores_praticas=alinhamento_melhores_praticas,
-            elementos_ausentes=elementos_ausentes
+        return PromptAnalysis(
+            score=score,
+            strengths=strengths,
+            weaknesses=weaknesses,
+            recommendations=recommendations,
+            best_practices_alignment=best_practices_alignment,
+            missing_elements=missing_elements
         )
 
-    def _analisar_melhores_praticas(self, prompt: str, alinhamento: Dict[str, bool],
-                                    pontos_fortes: List[str], pontos_fracos: List[str],
-                                    elementos_ausentes: List[str]):
-        """Analisar prompt contra melhores práticas MCP"""
+    def _analyze_best_practices(self, prompt: str, alignment: Dict[str, bool],
+                              strengths: List[str], weaknesses: List[str],
+                              missing_elements: List[str]):
+        """Analyze prompt against MCP best practices"""
 
-        # Propósito claro
-        if any(palavra in prompt for palavra in ['propósito', 'objetivo', 'meta', 'específico', 'focado']):
-            alinhamento['proposito_claro'] = True
-            pontos_fortes.append(
-                "Mostra compreensão clara do propósito do servidor")
+        # Clear purpose
+        if any(word in prompt for word in ['purpose', 'objective', 'goal', 'specific', 'focused']):
+            alignment['clear_purpose'] = True
+            strengths.append(
+                "Shows clear understanding of server purpose")
         else:
-            alinhamento['proposito_claro'] = False
-            elementos_ausentes.append(
-                "Declaração clara do propósito e objetivos do servidor")
+            alignment['clear_purpose'] = False
+            missing_elements.append(
+                "Clear statement of server purpose and objectives")
 
-        # Design de ferramenta
-        if any(palavra in prompt for palavra in ['ferramenta', 'função', 'capacidade', 'funcionalidade']):
-            alinhamento['design_ferramenta_adequado'] = True
-            pontos_fortes.append("Menciona ferramentas ou funcionalidades")
+        # Tool design
+        if any(word in prompt for word in ['tool', 'function', 'capability', 'functionality']):
+            alignment['adequate_tool_design'] = True
+            strengths.append("Mentions tools or functionalities")
         else:
-            alinhamento['design_ferramenta_adequado'] = False
-            elementos_ausentes.append(
-                "Definições específicas de ferramentas e capacidades")
+            alignment['adequate_tool_design'] = False
+            missing_elements.append(
+                "Specific tool and capability definitions")
 
-        # Tratamento de erros
-        if any(palavra in prompt for palavra in ['erro', 'exceção', 'validação', 'tratar']):
-            alinhamento['tratamento_erros'] = True
-            pontos_fortes.append("Considera tratamento de erros")
+        # Error handling
+        if any(word in prompt for word in ['error', 'exception', 'validation', 'handle']):
+            alignment['error_handling'] = True
+            strengths.append("Considers error handling")
         else:
-            alinhamento['tratamento_erros'] = False
-            elementos_ausentes.append(
-                "Estratégia de tratamento de erros e validação")
+            alignment['error_handling'] = False
+            missing_elements.append(
+                "Error handling and validation strategy")
 
-        # Segurança
-        if any(palavra in prompt for palavra in ['segurança', 'seguro', 'sanitizar', 'validar']):
-            alinhamento['consideracoes_seguranca'] = True
-            pontos_fortes.append("Inclui considerações de segurança")
+        # Security
+        if any(word in prompt for word in ['security', 'secure', 'sanitize', 'validate']):
+            alignment['security_considerations'] = True
+            strengths.append("Includes security considerations")
         else:
-            alinhamento['consideracoes_seguranca'] = False
-            elementos_ausentes.append(
-                "Considerações de segurança e validação de entrada")
+            alignment['security_considerations'] = False
+            missing_elements.append(
+                "Security considerations and input validation")
 
-        # Documentação
-        if any(palavra in prompt for palavra in ['documentar', 'exemplo', 'readme', 'guia']):
-            alinhamento['documentacao'] = True
-            pontos_fortes.append("Valoriza documentação")
+        # Documentation
+        if any(word in prompt for word in ['document', 'example', 'readme', 'guide']):
+            alignment['documentation'] = True
+            strengths.append("Values documentation")
         else:
-            alinhamento['documentacao'] = False
-            elementos_ausentes.append("Documentação e exemplos de uso")
+            alignment['documentation'] = False
+            missing_elements.append("Documentation and usage examples")
 
-        # Validação de schema
-        if any(palavra in prompt for palavra in ['schema', 'tipo', 'modelo', 'estrutura']):
-            alinhamento['validacao_schema'] = True
-            pontos_fortes.append("Considera schemas de dados")
+        # Schema validation
+        if any(word in prompt for word in ['schema', 'type', 'model', 'structure']):
+            alignment['schema_validation'] = True
+            strengths.append("Considers data schemas")
         else:
-            alinhamento['validacao_schema'] = False
-            elementos_ausentes.append(
-                "Definições de schema e validação de dados")
+            alignment['schema_validation'] = False
+            missing_elements.append(
+                "Schema definitions and data validation")
 
-        # Testes
-        if any(palavra in prompt for palavra in ['teste', 'debug', 'verificar']):
-            alinhamento['estrategia_testes'] = True
-            pontos_fortes.append("Inclui considerações de teste")
+        # Testing
+        if any(word in prompt for word in ['test', 'debug', 'verify']):
+            alignment['testing_strategy'] = True
+            strengths.append("Includes testing considerations")
         else:
-            alinhamento['estrategia_testes'] = False
-            elementos_ausentes.append("Estratégia de teste e depuração")
+            alignment['testing_strategy'] = False
+            missing_elements.append("Testing and debugging strategy")
 
         # Performance
-        if any(palavra in prompt for palavra in ['performance', 'escalável', 'eficiente', 'otimizar']):
-            alinhamento['performance'] = True
-            pontos_fortes.append("Considera aspectos de performance")
+        if any(word in prompt for word in ['performance', 'scalable', 'efficient', 'optimize']):
+            alignment['performance'] = True
+            strengths.append("Considers performance aspects")
         else:
-            alinhamento['performance'] = False
-            elementos_ausentes.append(
-                "Considerações de performance e escalabilidade")
+            alignment['performance'] = False
+            missing_elements.append(
+                "Performance and scalability considerations")
 
-        # Protocolo de transporte
-        if any(palavra in prompt for palavra in ['stdio', 'http', 'sse', 'transporte', 'protocolo']):
-            alinhamento['protocolo_transporte'] = True
-            pontos_fortes.append("Especifica protocolo de transporte")
+        # Transport protocol
+        if any(word in prompt for word in ['stdio', 'http', 'sse', 'transport', 'protocol']):
+            alignment['transport_protocol'] = True
+            strengths.append("Specifies transport protocol")
         else:
-            alinhamento['protocolo_transporte'] = False
-            elementos_ausentes.append(
-                "Especificação de protocolo de transporte")
+            alignment['transport_protocol'] = False
+            missing_elements.append(
+                "Transport protocol specification")
 
-        # Gerenciamento de recursos
-        if any(palavra in prompt for palavra in ['recurso', 'limpeza', 'gerenciar', 'ciclo de vida']):
-            alinhamento['gerenciamento_recursos'] = True
-            pontos_fortes.append("Considera gerenciamento de recursos")
+        # Resource management
+        if any(word in prompt for word in ['resource', 'cleanup', 'manage', 'lifecycle']):
+            alignment['resource_management'] = True
+            strengths.append("Considers resource management")
         else:
-            alinhamento['gerenciamento_recursos'] = False
-            elementos_ausentes.append("Gerenciamento e limpeza de recursos")
+            alignment['resource_management'] = False
+            missing_elements.append("Resource management and cleanup")
 
-    def _gerar_recomendacoes(self, prompt: str, elementos_ausentes: List[str]) -> List[str]:
-        """Gerar recomendações específicas para melhorar o prompt"""
-        recomendacoes = []
+    def _generate_recommendations(self, prompt: str, missing_elements: List[str]) -> List[str]:
+        """Generate specific recommendations to improve the prompt"""
+        recommendations = []
 
-        if not any(palavra in prompt for palavra in ['ferramenta', 'função']):
-            recomendacoes.append(
-                "Definir ferramentas específicas e suas funcionalidades claramente")
+        if not any(word in prompt for word in ['tool', 'function']):
+            recommendations.append(
+                "Define specific tools and their functionalities clearly")
 
-        if not any(palavra in prompt for palavra in ['erro', 'validação']):
-            recomendacoes.append(
-                "Incluir requisitos de tratamento de erros e validação de entrada")
+        if not any(word in prompt for word in ['error', 'validation']):
+            recommendations.append(
+                "Include error handling and input validation requirements")
 
-        if not any(palavra in prompt for palavra in ['segurança', 'sanitizar']):
-            recomendacoes.append(
-                "Especificar considerações de segurança e sanitização de entrada")
+        if not any(word in prompt for word in ['security', 'sanitize']):
+            recommendations.append(
+                "Specify security considerations and input sanitization")
 
-        if not any(palavra in prompt for palavra in ['schema', 'tipo']):
-            recomendacoes.append(
-                "Definir schemas de dados e definições de tipos")
+        if not any(word in prompt for word in ['schema', 'type']):
+            recommendations.append(
+                "Define data schemas and type definitions")
 
-        if not any(palavra in prompt for palavra in ['teste', 'debug']):
-            recomendacoes.append("Incluir requisitos de teste e depuração")
+        if not any(word in prompt for word in ['test', 'debug']):
+            recommendations.append("Include testing and debugging requirements")
 
-        if not any(palavra in prompt for palavra in ['documentar', 'exemplo']):
-            recomendacoes.append("Solicitar documentação e exemplos de uso")
+        if not any(word in prompt for word in ['document', 'example']):
+            recommendations.append("Request documentation and usage examples")
 
-        if not any(palavra in prompt for palavra in ['performance', 'escalável']):
-            recomendacoes.append(
-                "Considerar requisitos de performance e escalabilidade")
+        if not any(word in prompt for word in ['performance', 'scalable']):
+            recommendations.append(
+                "Consider performance and scalability requirements")
 
         if len(prompt.split()) < 20:
-            recomendacoes.append(
-                "Fornecer requisitos mais detalhados e contexto")
+            recommendations.append(
+                "Provide more detailed requirements and context")
 
-        if not any(palavra in prompt for palavra in ['protocolo', 'transporte']):
-            recomendacoes.append(
-                "Especificar o protocolo de transporte desejado (stdio, HTTP+SSE)")
+        if not any(word in prompt for word in ['protocol', 'transport']):
+            recommendations.append(
+                "Specify the desired transport protocol (stdio, HTTP+SSE)")
 
-        return recomendacoes
+        return recommendations
 
 
-# Inicializar o analisador
-analisador = AnalisadorPromptMCP()
+# Initialize the analyzer
+analyzer = MCPPromptAnalyzer()
 
 
 @mcp.tool()
-def analisar_prompt_mcp(prompt: str) -> AnalisePrompt:
+def analyze_mcp_prompt(prompt: str) -> PromptAnalysis:
     """
-    Analisar um prompt de criação de servidor MCP para qualidade e alinhamento com melhores práticas.
+    Analyze an MCP server creation prompt for quality and alignment with best practices.
 
     Args:
-        prompt: O texto do prompt para analisar para criação de servidor MCP
+        prompt: The prompt text to analyze for MCP server creation
 
     Returns:
-        AnalisePrompt: Análise detalhada com pontuação, pontos fortes, pontos fracos e recomendações
+        AnalisePrompt: Detailed analysis with score, strengths, weaknesses and recommendations
     """
     try:
-        logger.info(f"Analisando prompt: {prompt[:100]}...")
-        analise = analisador.analisar_prompt(prompt)
-        logger.info(f"Análise completa. Pontuação: {analise.pontuacao}/10")
-        return analise
+        logger.info(f"Analyzing prompt: {prompt[:100]}...")
+        analysis = analyzer.analyze_prompt(prompt)
+        logger.info(f"Analysis complete. Score: {analysis.score}/10")
+        return analysis
     except Exception as e:
-        logger.error(f"Erro ao analisar prompt: {e}")
+        logger.error(f"Error analyzing prompt: {e}")
         raise
 
 
 @mcp.tool()
-def obter_melhores_praticas_mcp() -> Dict[str, str]:
+def get_mcp_best_practices() -> Dict[str, str]:
     """
-    Obter um resumo das melhores práticas de desenvolvimento de servidor MCP.
+    Get a summary of MCP server development best practices.
 
     Returns:
-        Dict[str, str]: Principais melhores práticas para desenvolvimento de servidor MCP
+        Dict[str, str]: Key best practices for MCP server development
     """
     return {
-        "proposito_claro": "Definir um propósito específico e focado para seu servidor MCP",
-        "design_ferramenta": "Projetar ferramentas que sejam focadas, bem documentadas e sigam convenções de nomenclatura",
-        "tratamento_erros": "Implementar tratamento abrangente de erros e validação de entrada",
-        "seguranca": "Incluir sanitização de entrada e medidas de segurança",
-        "schemas": "Definir schemas claros para todas as entradas e saídas",
-        "documentacao": "Fornecer documentação clara e exemplos de uso",
-        "testes": "Incluir estratégias de teste e depuração",
-        "performance": "Considerar requisitos de performance e escalabilidade",
-        "transporte": "Escolher protocolo de transporte apropriado (stdio para local, HTTP+SSE para remoto)",
-        "recursos": "Implementar gerenciamento adequado de recursos e limpeza"
+        "clear_purpose": "Define a specific and focused purpose for your MCP server",
+        "tool_design": "Design tools that are focused, well-documented and follow naming conventions",
+        "error_handling": "Implement comprehensive error handling and input validation",
+        "security": "Include input sanitization and security measures",
+        "schemas": "Define clear schemas for all inputs and outputs",
+        "documentation": "Provide clear documentation and usage examples",
+        "testing": "Include testing and debugging strategies",
+        "performance": "Consider performance and scalability requirements",
+        "transport": "Choose appropriate transport protocol (stdio for local, HTTP+SSE for remote)",
+        "resources": "Implement proper resource management and cleanup"
     }
 
 
 @mcp.tool()
-def sugerir_melhorias_prompt(prompt_original: str) -> Dict[str, Any]:
+def suggest_prompt_improvements(original_prompt: str) -> Dict[str, Any]:
     """
-    Sugerir melhorias específicas para um prompt de criação de servidor MCP.
+    Suggest specific improvements for an MCP server creation prompt.
 
     Args:
-        prompt_original: O prompt original para melhorar
+        original_prompt: The original prompt to improve
 
     Returns:
-        Dict contendo prompt melhorado e explicação das mudanças
+        Dict containing improved prompt and explanation of changes
     """
     try:
-        analise = analisador.analisar_prompt(prompt_original)
+        analysis = analyzer.analyze_prompt(original_prompt)
 
-        # Gerar prompt melhorado
-        secoes_melhoradas = []
+        # Generate improved prompt
+        improved_sections = []
 
-        # Adicionar propósito se ausente
-        if not analise.alinhamento_melhores_praticas.get('proposito_claro', False):
-            secoes_melhoradas.append(
-                "Propósito: Criar um servidor MCP com um objetivo específico e bem definido."
+        # Add purpose if missing
+        if not analysis.best_practices_alignment.get('clear_purpose', False):
+            improved_sections.append(
+                "Purpose: Create an MCP server with a specific and well-defined objective."
             )
 
-        # Adicionar especificações de ferramenta se ausente
-        if not analise.alinhamento_melhores_praticas.get('design_ferramenta_adequado', False):
-            secoes_melhoradas.append(
-                "Ferramentas: Definir ferramentas específicas com nomes claros, descrições e parâmetros."
+        # Add tool specifications if missing
+        if not analysis.best_practices_alignment.get('adequate_tool_design', False):
+            improved_sections.append(
+                "Tools: Define specific tools with clear names, descriptions and parameters."
             )
 
-        # Adicionar requisitos técnicos
-        adicoes_tecnicas = []
-        if not analise.alinhamento_melhores_praticas.get('tratamento_erros', False):
-            adicoes_tecnicas.append("tratamento abrangente de erros")
-        if not analise.alinhamento_melhores_praticas.get('consideracoes_seguranca', False):
-            adicoes_tecnicas.append(
-                "validação de entrada e medidas de segurança")
-        if not analise.alinhamento_melhores_praticas.get('validacao_schema', False):
-            adicoes_tecnicas.append("definições adequadas de schema")
+        # Add technical requirements
+        technical_additions = []
+        if not analysis.best_practices_alignment.get('error_handling', False):
+            technical_additions.append("comprehensive error handling")
+        if not analysis.best_practices_alignment.get('security_considerations', False):
+            technical_additions.append(
+                "input validation and security measures")
+        if not analysis.best_practices_alignment.get('schema_validation', False):
+            technical_additions.append("proper schema definitions")
 
-        if adicoes_tecnicas:
-            secoes_melhoradas.append(
-                f"Requisitos Técnicos: Incluir {', '.join(adicoes_tecnicas)}."
+        if technical_additions:
+            improved_sections.append(
+                f"Technical Requirements: Include {', '.join(technical_additions)}."
             )
 
-        # Adicionar documentação e testes
-        if not analise.alinhamento_melhores_praticas.get('documentacao', False):
-            secoes_melhoradas.append(
-                "Documentação: Fornecer documentação clara e exemplos de uso."
+        # Add documentation and testing
+        if not analysis.best_practices_alignment.get('documentation', False):
+            improved_sections.append(
+                "Documentation: Provide clear documentation and usage examples."
             )
 
-        if not analise.alinhamento_melhores_praticas.get('estrategia_testes', False):
-            secoes_melhoradas.append(
-                "Testes: Incluir estratégia de teste e considerações de depuração."
+        if not analysis.best_practices_alignment.get('testing_strategy', False):
+            improved_sections.append(
+                "Testing: Include testing strategy and debugging considerations."
             )
 
-        prompt_melhorado = prompt_original
-        if secoes_melhoradas:
-            prompt_melhorado += "\n\nRequisitos Adicionais:\n" + \
-                "\n".join(secoes_melhoradas)
+        improved_prompt = original_prompt
+        if improved_sections:
+            improved_prompt += "\n\nAdditional Requirements:\n" + \
+                "\n".join(improved_sections)
 
         return {
-            "prompt_original": prompt_original,
-            "prompt_melhorado": prompt_melhorado,
-            "melhorias_feitas": secoes_melhoradas,
-            "melhoria_pontuacao": f"Melhoria esperada de {analise.pontuacao}/10 para {min(10, analise.pontuacao + len(secoes_melhoradas))}/10"
+            "original_prompt": original_prompt,
+            "improved_prompt": improved_prompt,
+            "improvements_made": improved_sections,
+            "score_improvement": f"Expected improvement from {analysis.score}/10 to {min(10, analysis.score + len(improved_sections))}/10"
         }
 
     except Exception as e:
-        logger.error(f"Erro ao melhorar prompt: {e}")
+        logger.error(f"Error improving prompt: {e}")
         raise
 
 
 @mcp.tool()
-def validar_requisitos_mcp(requisitos: str) -> RelatorioValidacao:
+def validate_mcp_requirements(requirements: str) -> ValidationReport:
     """
-    Validar requisitos de servidor MCP contra lista de verificação de melhores práticas.
+    Validate MCP server requirements against best practices checklist.
 
     Args:
-        requisitos: A especificação de requisitos para validar
+        requirements: The requirements specification to validate
 
     Returns:
-        RelatorioValidacao contendo resultados de validação e requisitos ausentes
+        ValidationReport containing validation results and missing requirements
     """
     try:
-        analise = analisador.analisar_prompt(requisitos)
+        analysis = analyzer.analyze_prompt(requirements)
 
-        # Criar relatório detalhado de validação
-        relatorio_validacao: RelatorioValidacao = {
-            "pontuacao_geral": analise.pontuacao,
-            "validacao_aprovada": analise.pontuacao >= 7,
-            "cobertura_requisitos": analise.alinhamento_melhores_praticas,
-            "requisitos_ausentes": analise.elementos_ausentes,
-            "recomendacoes": analise.recomendacoes,
-            "problemas_criticos": [],
-            "avisos": []
+        # Create detailed validation report
+        validation_report: ValidationReport = {
+            "overall_score": analysis.score,
+            "validation_passed": analysis.score >= 7,
+            "requirements_coverage": analysis.best_practices_alignment,
+            "missing_requirements": analysis.missing_elements,
+            "recommendations": analysis.recommendations,
+            "critical_issues": [],
+            "warnings": []
         }
 
-        # Identificar problemas críticos
-        if not analise.alinhamento_melhores_praticas.get('consideracoes_seguranca', False):
-            relatorio_validacao["problemas_criticos"].append(
-                "Considerações de segurança ausentes")
+        # Identify critical issues
+        if not analysis.best_practices_alignment.get('security_considerations', False):
+            validation_report["critical_issues"].append(
+                "Security considerations missing")
 
-        if not analise.alinhamento_melhores_praticas.get('tratamento_erros', False):
-            relatorio_validacao["problemas_criticos"].append(
-                "Estratégia de tratamento de erros ausente")
+        if not analysis.best_practices_alignment.get('error_handling', False):
+            validation_report["critical_issues"].append(
+                "Error handling strategy missing")
 
-        # Identificar avisos
-        if not analise.alinhamento_melhores_praticas.get('documentacao', False):
-            relatorio_validacao["avisos"].append(
-                "Requisitos de documentação não especificados")
+        # Identify warnings
+        if not analysis.best_practices_alignment.get('documentation', False):
+            validation_report["warnings"].append(
+                "Documentation requirements not specified")
 
-        if not analise.alinhamento_melhores_praticas.get('estrategia_testes', False):
-            relatorio_validacao["avisos"].append(
-                "Estratégia de teste não definida")
+        if not analysis.best_practices_alignment.get('testing_strategy', False):
+            validation_report["warnings"].append(
+                "Testing strategy not defined")
 
-        return relatorio_validacao
+        return validation_report
 
     except Exception as e:
-        logger.error(f"Erro ao validar requisitos: {e}")
+        logger.error(f"Error validating requirements: {e}")
         raise
 
 
 if __name__ == "__main__":
-    # Executar o servidor MCP
+    # Run the MCP server
     mcp.run()

@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-Servidor MCP para contextualização de prompts do Tailwind CSS v4.1
-Ajuda a gerar código atualizado com as novas funcionalidades do Tailwind CSS
+MCP server for Tailwind CSS v4.1 prompt contextualization
+Helps generate updated code with new Tailwind CSS features
 """
 
 from fastmcp import FastMCP
 from typing import Dict, Any, List
 import json
 
-# Inicializa o servidor MCP
-mcp = FastMCP("Assistente para Prompts no Contexto do TailwindCSS v4.1")
+# Initialize MCP server
+mcp = FastMCP("Assistant for TailwindCSS v4.1 Context Prompts")
 
-# Base de conhecimento sobre Tailwind CSS v4.1
+# Knowledge base about Tailwind CSS v4.1
 TAILWIND_V4_CONTEXT = {
     "version": "4.1.0",
     "release_date": "2025-01-22",
@@ -32,73 +32,73 @@ TAILWIND_V4_CONTEXT = {
             "color-scheme": "color-scheme-light, color-scheme-dark, color-scheme-normal"
         },
         "new_variants": {
-            "user-valid": "Aplica estilos quando campo é válido após interação",
-            "user-invalid": "Aplica estilos quando campo é inválido após interação",
-            "noscript": "Aplica estilos quando JavaScript está desabilitado",
-            "inverted-colors": "Aplica estilos quando cores invertidas estão ativas",
-            "details-content": "Visa conteúdo de elementos <details>"
+            "user-valid": "Applies styles when field is valid after interaction",
+            "user-invalid": "Applies styles when field is invalid after interaction",
+            "noscript": "Applies styles when JavaScript is disabled",
+            "inverted-colors": "Applies styles when inverted colors are active",
+            "details-content": "Targets content of <details> elements"
         },
         "directives": {
-            "@source": "Controla escaneamento de arquivos",
-            "@source not": "Exclui caminhos do escaneamento",
-            "@source inline": "Funciona como safelist",
-            "@utility": "Define utilitários customizados",
-            "@theme": "Define variáveis de tema no CSS"
+            "@source": "Controls file scanning",
+            "@source not": "Excludes paths from scanning",
+            "@source inline": "Works as safelist",
+            "@utility": "Defines custom utilities",
+            "@theme": "Defines theme variables in CSS"
         },
         "performance": {
-            "full_build": "3.5x mais rápido que v3.x",
-            "incremental": "8x mais rápido com novo CSS",
-            "no_changes": "100x mais rápido (microsegundos)",
-            "engine": "Nova engine Oxide (Rust) para performance máxima"
+            "full_build": "3.5x faster than v3.x",
+            "incremental": "8x faster with new CSS",
+            "no_changes": "100x faster (microseconds)",
+            "engine": "New Oxide engine (Rust) for maximum performance"
         },
         "v4_features": {
-            "css_first_config": "Configuração totalmente em CSS",
-            "css_variables": "Design tokens como CSS variables por padrão",
-            "oklch_colors": "Paleta de cores atualizada para OKLCH (maior gamut)",
-            "container_queries": "Container queries integradas ao core",
+            "css_first_config": "Configuration entirely in CSS",
+            "css_variables": "Design tokens as CSS variables by default",
+            "oklch_colors": "Updated color palette to OKLCH (wider gamut)",
+            "container_queries": "Container queries integrated into core",
             "browser_support": "Safari 16.4+, Chrome 111+, Firefox 128+"
         }
     }
 }
 
-# Templates de código atualizado
+# Updated code templates
 CODE_TEMPLATES = {
-    "basic_setup": """/* Configuração básica do Tailwind CSS v4.1 */
+    "basic_setup": """/* Basic Tailwind CSS v4.1 configuration */
 @import "tailwindcss";
 
-/* Definir tema customizado */
+/* Define custom theme */
 @theme inline {
   --color-primary: #007bff;
   --color-secondary: #6c757d;
   --color-background: #f8f9fa;
 }
 
-/* Configurar escaneamento de arquivos */
+/* Configure file scanning */
 @source "./src/**/*.{js,jsx,ts,tsx,vue}";
 @source "./components/**/*.{js,jsx,ts,tsx}";
 @source not "./node_modules";
 
-/* Adicionar plugins se necessário */
+/* Add plugins if needed */
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";""",
 
-    "text_shadow_example": """<!-- Exemplo de sombra de texto -->
+    "text_shadow_example": """<!-- Text shadow example -->
 <h1 class="text-4xl font-bold text-shadow-lg text-shadow-black/50">
-  Título com Sombra
+  Title with Shadow
 </h1>
 
-<!-- Sombra colorida -->
+<!-- Colored shadow -->
 <h2 class="text-2xl text-shadow-sm text-shadow-blue-500/30">
-  Subtítulo com Sombra Azul
+  Subtitle with Blue Shadow
 </h2>""",
 
-    "mask_example": """<!-- Máscara de gradiente em imagem -->
+    "mask_example": """<!-- Gradient mask on image -->
 <div class="relative">
   <img src="hero.jpg" alt="Hero" class="w-full h-96 object-cover">
   <div class="absolute inset-0 mask-b-from-transparent mask-b-to-black/80"></div>
 </div>""",
 
-    "form_validation": """<!-- Validação de formulário com novas variantes -->
+    "form_validation": """<!-- Form validation with new variants -->
 <form>
   <input 
     type="email" 
@@ -106,23 +106,23 @@ CODE_TEMPLATES = {
            user-valid:border-green-500 
            user-invalid:border-red-500
            focus:outline-none px-4 py-2 rounded"
-    placeholder="Digite seu email"
+    placeholder="Enter your email"
   >
   
-  <!-- Mensagem para quando JS está desabilitado -->
+  <!-- Message for when JS is disabled -->
   <div class="hidden noscript:block p-4 bg-yellow-100 text-yellow-800 mt-4">
-    JavaScript é necessário para validação em tempo real
+    JavaScript is required for real-time validation
   </div>
 </form>""",
 
-    "responsive_text": """<!-- Texto responsivo com quebra inteligente -->
+    "responsive_text": """<!-- Responsive text with intelligent wrapping -->
 <p class="wrap-anywhere max-w-prose">
-  Este texto pode conter URLs muito longas como 
-  https://exemplo.com/caminho/muito/longo/que/poderia/quebrar/o/layout
-  e ainda assim manterá o layout intacto.
+  This text can contain very long URLs like 
+  https://example.com/very/long/path/that/could/break/the/layout
+  and still maintain the layout intact.
 </p>""",
 
-    "custom_utility": """/* Definir utilitário customizado */
+    "custom_utility": """/* Define custom utility */
 @utility flex-center {
   display: flex;
   justify-content: center;
@@ -133,10 +133,10 @@ CODE_TEMPLATES = {
   margin: auto;
 }
 
-<!-- Uso no HTML -->
+<!-- Usage in HTML -->
 <div class="flex-center min-h-screen">
   <div class="margin-auto p-8">
-    Conteúdo centralizado
+    Centered content
   </div>
 </div>"""
 }
@@ -145,16 +145,16 @@ CODE_TEMPLATES = {
 @mcp.tool()
 async def contextualize_tailwind_prompt(prompt: str) -> Dict[str, Any]:
     """
-    Contextualiza um prompt sobre Tailwind CSS com informações da v4.1
+    Contextualizes a Tailwind CSS prompt with v4.1 information
 
     Args:
-        prompt: O prompt original do usuário
+        prompt: The user's original prompt
 
     Returns:
-        Prompt enriquecido com contexto do Tailwind CSS v4.1
+        Prompt enriched with Tailwind CSS v4.1 context
     """
 
-    # Detecta menções ao Tailwind
+    # Detect Tailwind mentions
     tailwind_keywords = ["tailwind", "tailwindcss", "tw", "utility-first"]
     is_tailwind_related = any(keyword in prompt.lower()
                               for keyword in tailwind_keywords)
@@ -163,72 +163,72 @@ async def contextualize_tailwind_prompt(prompt: str) -> Dict[str, Any]:
         return {
             "original_prompt": prompt,
             "contextualized": False,
-            "message": "Prompt não parece estar relacionado ao Tailwind CSS"
+            "message": "Prompt does not appear to be related to Tailwind CSS"
         }
 
-    # Analisa o tipo de solicitação
+    # Analyze request type
     request_type = analyze_request_type(prompt)
 
-    # Constrói o contexto apropriado
+    # Build appropriate context
     context_parts = []
 
-    # Adiciona informação sobre a versão
+    # Add version information
     context_parts.append(
-        f"IMPORTANTE: Use Tailwind CSS v{TAILWIND_V4_CONTEXT['version']} (última versão estável).")
+        f"IMPORTANT: Use Tailwind CSS v{TAILWIND_V4_CONTEXT['version']} (latest stable version).")
 
-    # Adiciona contexto específico baseado no tipo de solicitação
+    # Add specific context based on request type
     if "config" in request_type or "setup" in request_type:
-        context_parts.append("\nCONFIGURAÇÃO ATUALIZADA:")
+        context_parts.append("\nUPDATED CONFIGURATION:")
         context_parts.append(
-            "- A configuração agora é feita diretamente no arquivo CSS, não mais em tailwind.config.js")
+            "- Configuration is now done directly in CSS file, no longer in tailwind.config.js")
         context_parts.append(
-            "- Use @theme inline para definir variáveis de tema")
+            "- Use @theme inline to define theme variables")
         context_parts.append(
-            "- Use @source para configurar escaneamento de arquivos")
-        context_parts.append(f"\nEXEMPLO:\n{CODE_TEMPLATES['basic_setup']}")
+            "- Use @source to configure file scanning")
+        context_parts.append(f"\nEXAMPLE:\n{CODE_TEMPLATES['basic_setup']}")
 
     if "shadow" in request_type or "text-shadow" in prompt.lower():
-        context_parts.append("\nNOVAS UTILIDADES DE SOMBRA:")
+        context_parts.append("\nNEW SHADOW UTILITIES:")
         context_parts.append(
-            "- text-shadow-* agora disponível (xs, sm, base, lg, xl)")
+            "- text-shadow-* now available (xs, sm, base, lg, xl)")
         context_parts.append(
-            "- Suporta cores e opacidade: text-shadow-black/50")
-        context_parts.append("- drop-shadow colorido: drop-shadow-blue-500/30")
+            "- Supports colors and opacity: text-shadow-black/50")
+        context_parts.append("- Colored drop-shadow: drop-shadow-blue-500/30")
         context_parts.append(
-            f"\nEXEMPLO:\n{CODE_TEMPLATES['text_shadow_example']}")
+            f"\nEXAMPLE:\n{CODE_TEMPLATES['text_shadow_example']}")
 
     if "mask" in request_type or "gradient" in request_type:
-        context_parts.append("\nNOVAS UTILIDADES DE MÁSCARA:")
+        context_parts.append("\nNEW MASK UTILITIES:")
         context_parts.append(
-            "- mask-* para efeitos de gradiente e transparência")
-        context_parts.append("- Suporta direções: mask-b-from-*, mask-t-to-*")
-        context_parts.append(f"\nEXEMPLO:\n{CODE_TEMPLATES['mask_example']}")
+            "- mask-* for gradient and transparency effects")
+        context_parts.append("- Supports directions: mask-b-from-*, mask-t-to-*")
+        context_parts.append(f"\nEXAMPLE:\n{CODE_TEMPLATES['mask_example']}")
 
     if "form" in request_type or "validation" in request_type:
-        context_parts.append("\nNOVAS VARIANTES DE VALIDAÇÃO:")
+        context_parts.append("\nNEW VALIDATION VARIANTS:")
         context_parts.append(
-            "- user-valid: e user-invalid: para validação após interação")
+            "- user-valid: and user-invalid: for validation after interaction")
         context_parts.append(
-            "- Evita mostrar erros antes do usuário interagir")
+            "- Avoids showing errors before user interaction")
         context_parts.append(
-            f"\nEXEMPLO:\n{CODE_TEMPLATES['form_validation']}")
+            f"\nEXAMPLE:\n{CODE_TEMPLATES['form_validation']}")
 
     if "text" in request_type or "wrap" in request_type:
-        context_parts.append("\nNOVAS UTILIDADES DE TEXTO:")
+        context_parts.append("\nNEW TEXT UTILITIES:")
         context_parts.append(
-            "- wrap-anywhere e wrap-break-word para quebra de texto")
-        context_parts.append("- Útil para URLs longas e conteúdo dinâmico")
+            "- wrap-anywhere and wrap-break-word for text wrapping")
+        context_parts.append("- Useful for long URLs and dynamic content")
         context_parts.append(
-            f"\nEXEMPLO:\n{CODE_TEMPLATES['responsive_text']}")
+            f"\nEXAMPLE:\n{CODE_TEMPLATES['responsive_text']}")
 
-    # Adiciona informações gerais importantes
-    context_parts.append("\nOUTRAS MUDANÇAS IMPORTANTES:")
-    context_parts.append("- Performance: builds até 5x mais rápidos")
-    context_parts.append("- Novas variantes: noscript:, inverted-colors:")
-    context_parts.append("- @utility para criar utilitários customizados")
-    context_parts.append("- Compatibilidade melhorada com navegadores antigos")
+    # Add important general information
+    context_parts.append("\nOTHER IMPORTANT CHANGES:")
+    context_parts.append("- Performance: builds up to 5x faster")
+    context_parts.append("- New variants: noscript:, inverted-colors:")
+    context_parts.append("- @utility to create custom utilities")
+    context_parts.append("- Improved compatibility with older browsers")
 
-    # Constrói o prompt contextualizado
+    # Build contextualized prompt
     contextualized_prompt = f"{prompt}\n\n{chr(10).join(context_parts)}"
 
     return {
@@ -244,13 +244,13 @@ async def contextualize_tailwind_prompt(prompt: str) -> Dict[str, Any]:
 @mcp.tool()
 async def get_tailwind_v4_info(feature: str = "") -> Dict[str, Any]:
     """
-    Obtém informações específicas sobre features do Tailwind CSS v4.1
+    Gets specific information about Tailwind CSS v4.1 features
 
     Args:
-        feature: Feature específica para consultar (opcional)
+        feature: Specific feature to query (optional)
 
     Returns:
-        Informações detalhadas sobre a feature ou visão geral
+        Detailed information about the feature or overview
     """
 
     if not feature:
@@ -260,15 +260,15 @@ async def get_tailwind_v4_info(feature: str = "") -> Dict[str, Any]:
             "installation": {
                 "steps": [
                     "npm install tailwindcss @tailwindcss/postcss",
-                    "Adicionar plugin ao postcss.config.js",
-                    'Importar no CSS: @import "tailwindcss";'
+                    "Add plugin to postcss.config.js",
+                    'Import in CSS: @import "tailwindcss";'
                 ]
             }
         }
 
     feature_lower = feature.lower()
 
-    # Retorna informações específicas da feature
+    # Return specific feature information
     feature_info = {}
 
     if "shadow" in feature_lower:
@@ -308,50 +308,50 @@ async def generate_tailwind_v4_code(
     requirements: str = ""
 ) -> Dict[str, Any]:
     """
-    Gera código Tailwind CSS v4.1 baseado no tipo de componente
+    Generates Tailwind CSS v4.1 code based on component type
 
     Args:
-        component_type: Tipo de componente (card, form, hero, etc.)
-        requirements: Requisitos específicos
+        component_type: Component type (card, form, hero, etc.)
+        requirements: Specific requirements
 
     Returns:
-        Código gerado com Tailwind CSS v4.1
+        Generated code with Tailwind CSS v4.1
     """
 
     code_snippets = {
-        "card": f"""<!-- Card moderno com Tailwind CSS v4.1 -->
+        "card": f"""<!-- Modern card with Tailwind CSS v4.1 -->
 <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-shadow">
-  <!-- Imagem com máscara de gradiente -->
+  <!-- Image with gradient mask -->
   <div class="relative h-48">
-    <img src="produto.jpg" alt="Produto" class="w-full h-full object-cover">
+    <img src="product.jpg" alt="Product" class="w-full h-full object-cover">
     <div class="absolute inset-0 mask-b-from-transparent mask-b-to-black/60"></div>
   </div>
   
-  <!-- Conteúdo -->
+  <!-- Content -->
   <div class="p-6">
     <h3 class="text-xl font-bold text-shadow-sm text-shadow-black/20 mb-2">
-      Título do Card
+      Card Title
     </h3>
     <p class="text-gray-600 wrap-anywhere">
-      {requirements or 'Descrição do card com suporte para textos longos'}
+      {requirements or 'Card description with support for long texts'}
     </p>
     
-    <!-- Botão com drop-shadow colorido -->
+    <!-- Button with colored drop-shadow -->
     <button class="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg 
                    drop-shadow-lg drop-shadow-blue-500/25 
                    hover:bg-blue-600 transition-colors">
-      Saiba Mais
+      Learn More
     </button>
   </div>
 </div>""",
 
-        "form": f"""<!-- Formulário com validação Tailwind CSS v4.1 -->
+        "form": f"""<!-- Form with validation Tailwind CSS v4.1 -->
 <form class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
   <h2 class="text-2xl font-bold mb-6 text-shadow text-shadow-gray-500/20">
-    {requirements or 'Formulário de Contato'}
+    {requirements or 'Contact Form'}
   </h2>
   
-  <!-- Campo de email com validação -->
+  <!-- Email field with validation -->
   <div class="mb-4">
     <label class="block text-gray-700 mb-2">Email</label>
     <input 
@@ -362,28 +362,28 @@ async def generate_tailwind_v4_code(
              user-invalid:border-red-500 user-invalid:bg-red-50
              focus:outline-none focus:ring-2 focus:ring-blue-500
              transition-colors"
-      placeholder="seu@email.com"
+      placeholder="your@email.com"
     >
   </div>
   
-  <!-- Campo de mensagem -->
+  <!-- Message field -->
   <div class="mb-6">
-    <label class="block text-gray-700 mb-2">Mensagem</label>
+    <label class="block text-gray-700 mb-2">Message</label>
     <textarea 
       rows="4"
       class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg
              focus:outline-none focus:ring-2 focus:ring-blue-500
              wrap-anywhere"
-      placeholder="Digite sua mensagem..."
+      placeholder="Enter your message..."
     ></textarea>
   </div>
   
-  <!-- Aviso noscript -->
+  <!-- Noscript warning -->
   <div class="hidden noscript:block p-3 bg-amber-100 text-amber-800 rounded mb-4">
-    JavaScript desabilitado: validação básica apenas
+    JavaScript disabled: basic validation only
   </div>
   
-  <!-- Botão submit -->
+  <!-- Submit button -->
   <button 
     type="submit"
     class="w-full bg-gradient-to-r from-blue-500 to-blue-600 
@@ -391,28 +391,28 @@ async def generate_tailwind_v4_code(
            drop-shadow-lg drop-shadow-blue-500/30
            hover:from-blue-600 hover:to-blue-700
            transition-all duration-200">
-    Enviar
+    Submit
   </button>
 </form>""",
 
-        "hero": f"""<!-- Hero Section com Tailwind CSS v4.1 -->
+        "hero": f"""<!-- Hero Section with Tailwind CSS v4.1 -->
 <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
-  <!-- Background com máscara -->
+  <!-- Background with mask -->
   <div class="absolute inset-0">
     <img src="hero-bg.jpg" alt="Background" class="w-full h-full object-cover">
     <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60"></div>
     <div class="absolute inset-0 mask-b-from-50% mask-b-to-black"></div>
   </div>
   
-  <!-- Conteúdo -->
+  <!-- Content -->
   <div class="relative z-10 text-center text-white px-6">
     <h1 class="text-5xl md:text-7xl font-bold mb-6 
                text-shadow-lg text-shadow-black/75">
-      {requirements or 'Título Impactante'}
+      {requirements or 'Impactful Title'}
     </h1>
     <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto
               text-shadow-sm text-shadow-black/50">
-      Subtítulo com sombra sutil para melhor legibilidade
+      Subtitle with subtle shadow for better readability
     </p>
     
     <!-- CTAs -->
@@ -420,28 +420,28 @@ async def generate_tailwind_v4_code(
       <button class="px-8 py-4 bg-white text-black font-semibold rounded-lg
                      drop-shadow-xl drop-shadow-white/20
                      hover:bg-gray-100 transition-colors">
-        Começar Agora
+        Get Started
       </button>
       <button class="px-8 py-4 border-2 border-white text-white font-semibold rounded-lg
                      hover:bg-white hover:text-black transition-colors">
-        Saiba Mais
+        Learn More
       </button>
     </div>
   </div>
 </section>"""
     }
 
-    # Retorna o código apropriado ou um template genérico
+    # Return appropriate code or generic template
     if component_type.lower() in code_snippets:
         code = code_snippets[component_type.lower()]
     else:
-        code = f"""<!-- Componente {component_type} com Tailwind CSS v4.1 -->
+        code = f"""<!-- {component_type} component with Tailwind CSS v4.1 -->
 <div class="p-6 bg-white rounded-lg shadow-md">
   <h3 class="text-xl font-bold text-shadow text-shadow-gray-400/30 mb-4">
     {component_type.title()}
   </h3>
   <p class="text-gray-600 wrap-anywhere">
-    {requirements or f'Conteúdo do {component_type}'}
+    {requirements or f'{component_type} content'}
   </p>
 </div>"""
 
@@ -452,7 +452,7 @@ async def generate_tailwind_v4_code(
             "text-shadow",
             "mask utilities",
             "user-valid/invalid variants",
-            "drop-shadow colorido",
+            "colored drop-shadow",
             "wrap-anywhere"
         ],
         "version": TAILWIND_V4_CONTEXT["version"]
@@ -462,13 +462,13 @@ async def generate_tailwind_v4_code(
 @mcp.tool()
 async def get_tailwind_v4_docs() -> Dict[str, Any]:
     """
-    Retorna a documentação resumida do Tailwind CSS v4.1
+    Returns summarized documentation for Tailwind CSS v4.1
 
     Returns:
-        Documentação completa sobre as mudanças no Tailwind CSS v4.1
+        Complete documentation about Tailwind CSS v4.1 changes
     """
     return {
-        "description": "Documentação resumida do Tailwind CSS v4.1",
+        "description": "Summarized Tailwind CSS v4.1 documentation",
         "content": TAILWIND_V4_CONTEXT,
         "format": "application/json"
     }
@@ -477,32 +477,32 @@ async def get_tailwind_v4_docs() -> Dict[str, Any]:
 @mcp.tool()
 async def get_tailwind_v4_examples() -> Dict[str, Any]:
     """
-    Retorna exemplos de código do Tailwind CSS v4.1
+    Returns code examples for Tailwind CSS v4.1
 
     Returns:
-        Coleção de templates e exemplos de código para as novas funcionalidades
+        Collection of templates and code examples for new features
     """
     return {
-        "description": "Exemplos de código Tailwind CSS v4.1",
+        "description": "Tailwind CSS v4.1 code examples",
         "content": CODE_TEMPLATES,
         "format": "application/json"
     }
 
-# Funções auxiliares
+# Helper functions
 
 
 def analyze_request_type(prompt: str) -> List[str]:
-    """Analisa o tipo de solicitação no prompt"""
+    """Analyzes the request type in the prompt"""
     prompt_lower = prompt.lower()
     request_types = []
 
     keyword_map = {
-        "config": ["config", "configurar", "setup", "instalar", "installation"],
-        "shadow": ["shadow", "sombra", "text-shadow", "drop-shadow"],
-        "mask": ["mask", "máscara", "gradient", "fade", "transparência"],
-        "form": ["form", "formulário", "input", "validation", "validação"],
-        "text": ["text", "texto", "typography", "wrap", "quebra"],
-        "variant": ["variant", "variante", "state", "estado", "hover", "focus"]
+        "config": ["config", "configure", "setup", "install", "installation"],
+        "shadow": ["shadow", "text-shadow", "drop-shadow"],
+        "mask": ["mask", "gradient", "fade", "transparency"],
+        "form": ["form", "input", "validation"],
+        "text": ["text", "typography", "wrap", "break"],
+        "variant": ["variant", "state", "hover", "focus"]
     }
 
     for request_type, keywords in keyword_map.items():
@@ -513,7 +513,7 @@ def analyze_request_type(prompt: str) -> List[str]:
 
 
 def get_relevant_examples(request_types: List[str]) -> List[str]:
-    """Retorna exemplos relevantes baseados nos tipos de solicitação"""
+    """Returns relevant examples based on request types"""
     examples = []
 
     example_map = {
@@ -533,15 +533,15 @@ def get_relevant_examples(request_types: List[str]) -> List[str]:
     return examples
 
 
-# Configuração e execução do servidor
+# Server configuration and execution
 if __name__ == "__main__":
-    # Inicia o servidor
-    print("🎨 Servidor MCP Tailwind CSS v4.1 Assistant iniciado!")
-    print("📚 Ferramentas disponíveis:")
-    print("  - contextualize_tailwind_prompt: Enriquece prompts com contexto v4.1")
-    print("  - get_tailwind_v4_info: Obtém informações sobre features específicas")
-    print("  - generate_tailwind_v4_code: Gera código com as novas funcionalidades")
-    print("  - get_tailwind_v4_docs: Obtém documentação resumida do Tailwind CSS v4.1")
-    print("  - get_tailwind_v4_examples: Obtém exemplos de código Tailwind CSS v4.1")
+    # Start server
+    print("🎨 MCP Tailwind CSS v4.1 Assistant server started!")
+    print("📚 Available tools:")
+    print("  - contextualize_tailwind_prompt: Enriches prompts with v4.1 context")
+    print("  - get_tailwind_v4_info: Gets information about specific features")
+    print("  - generate_tailwind_v4_code: Generates code with new features")
+    print("  - get_tailwind_v4_docs: Gets summarized Tailwind CSS v4.1 documentation")
+    print("  - get_tailwind_v4_examples: Gets Tailwind CSS v4.1 code examples")
 
     mcp.run()

@@ -1,16 +1,16 @@
 """
-React 19 Advanced MCP Server - Servidor MCP para desenvolvimento React moderno
+React 19 Advanced MCP Server - MCP Server for modern React development
 ==============================================================================
 
-Servidor MCP avançado para desenvolvimento com React 19, incluindo:
-- Server Components estáveis
-- Actions e form handling modernos
-- Hook `use` para recursos assíncronos
-- Ref as prop e melhorias de performance
-- Concurrent rendering e transitions
-- Integração com frameworks modernos (Next.js 15+, Vite 6+)
+Advanced MCP server for React 19 development, including:
+- Stable Server Components
+- Modern Actions and form handling
+- `use` hook for async resources
+- Ref as prop and performance improvements
+- Concurrent rendering and transitions
+- Integration with modern frameworks (Next.js 15+, Vite 6+)
 
-Baseado nas últimas funcionalidades do React 19 (December 2024) e melhores práticas 2025.
+Based on the latest React 19 features (December 2024) and 2025 best practices.
 """
 
 from typing import Dict, List, Optional, Any, Union
@@ -22,15 +22,15 @@ import re
 import json
 import logging
 
-# Configurar logging
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Inicializar servidor MCP
+# Initialize MCP server
 mcp = FastMCP(
     name="react-19-advanced",
     version="19.0.0",
-    description="Servidor MCP avançado para desenvolvimento React 19 com funcionalidades modernas"
+    description="Advanced MCP server for React 19 development with modern features"
 )
 
 
@@ -54,26 +54,26 @@ class ReactFramework(Enum):
     CREATE_REACT_APP = "cra"
 
 @dataclass
-class AnalisePrompt:
-    """Resultado da análise de um prompt React"""
-    prompt_original: str
-    pontuacao: float
-    areas_fortes: List[str]
-    areas_fracas: List[str]
-    sugestoes: List[str]
-    prompt_melhorado: str
+class PromptAnalysis:
+    """Result of React prompt analysis"""
+    original_prompt: str
+    score: float
+    strong_areas: List[str]
+    weak_areas: List[str]
+    suggestions: List[str]
+    improved_prompt: str
     react_19_features: List[str]
     recommended_patterns: List[str]
 
 class React19Context:
-    """Base de conhecimento do React 19 e funcionalidades modernas"""
+    """React 19 knowledge base and modern features"""
     
     VERSION = "19.0.0"
     RELEASE_DATE = "2024-12-05"
     
     FEATURES = {
         "actions": {
-            "description": "Actions para handling de async operations com form states",
+            "description": "Actions for handling async operations with form states",
             "benefits": [
                 "Automatic pending states management",
                 "Optimistic updates built-in", 
@@ -99,7 +99,7 @@ function SubmitForm() {
 }"""
         },
         "server_components": {
-            "description": "Server Components estáveis para rendering no servidor",
+            "description": "Stable Server Components for server-side rendering",
             "benefits": [
                 "Reduced JavaScript bundle size",
                 "Faster initial page loads",
@@ -122,7 +122,7 @@ async function UserProfile({ userId }) {
 }"""
         },
         "use_hook": {
-            "description": "Novo hook `use` para consumir recursos assíncronos",
+            "description": "New `use` hook for consuming async resources",
             "benefits": [
                 "Simplified async data fetching",
                 "Better integration with Suspense",
@@ -146,7 +146,7 @@ function UserComponent({ userPromise }) {
 }"""
         },
         "ref_as_prop": {
-            "description": "Ref como prop direta em function components",
+            "description": "Ref as direct prop in function components",
             "benefits": [
                 "No more forwardRef needed",
                 "Simpler component APIs",
@@ -167,7 +167,7 @@ function App() {
 }"""
         },
         "enhanced_forms": {
-            "description": "Melhorias nativas em formulários com Actions integration",
+            "description": "Native form improvements with Actions integration",
             "benefits": [
                 "Automatic form validation",
                 "Built-in loading states",
@@ -219,514 +219,516 @@ function ContactForm() {
         }
     }
 
-# Base de conhecimento de melhores práticas React 19
-MELHORES_PRATICAS = {
-    "arquitetura": {
-        "keywords": ["componente", "component", "estrutura", "arquitetura", "organização"],
-        "praticas": [
-            "Usar componentes pequenos, focados e reutilizáveis",
-            "Aplicar o Princípio da Responsabilidade Única",
-            "Organizar componentes em estrutura modular",
-            "Separar lógica de apresentação"
+# React 19 best practices knowledge base
+BEST_PRACTICES = {
+    "architecture": {
+        "keywords": ["componente", "component", "estrutura", "arquitetura", "organização", "structure", "architecture", "organization"],
+        "practices": [
+            "Use small, focused and reusable components",
+            "Apply Single Responsibility Principle",
+            "Organize components in modular structure",
+            "Separate logic from presentation"
         ]
     },
     "typescript": {
         "keywords": ["typescript", "tipos", "types", "interface", "tipagem"],
-        "praticas": [
-            "Definir interfaces para props e estado",
-            "Usar tipos genéricos para componentes reutilizáveis",
-            "Aplicar strict mode no tsconfig.json",
-            "Tipar manipuladores de eventos corretamente"
+        "practices": [
+            "Define interfaces for props and state",
+            "Use generic types for reusable components",
+            "Apply strict mode in tsconfig.json",
+            "Type event handlers correctly"
         ]
     },
     "hooks": {
         "keywords": ["hooks", "useState", "useEffect", "custom hook"],
-        "praticas": [
-            "Preferir componentes funcionais com Hooks",
-            "Criar custom hooks para lógica reutilizável",
-            "Gerenciar arrays de dependências corretamente",
-            "Evitar useEffect desnecessários"
+        "practices": [
+            "Prefer functional components with Hooks",
+            "Create custom hooks for reusable logic",
+            "Manage dependency arrays correctly",
+            "Avoid unnecessary useEffect"
         ]
     },
     "performance": {
-        "keywords": ["performance", "otimização", "memoização", "lazy", "virtual"],
-        "praticas": [
-            "Implementar React.memo para componentes puros",
-            "Usar useMemo e useCallback estrategicamente",
-            "Aplicar code splitting com React.lazy",
-            "Virtualizar listas grandes com react-window"
+        "keywords": ["performance", "optimization", "memoization", "lazy", "virtual"],
+        "practices": [
+            "Implement React.memo for pure components",
+            "Use useMemo and useCallback strategically",
+            "Apply code splitting with React.lazy",
+            "Virtualize large lists with react-window"
         ]
     },
-    "estado": {
+    "state": {
         "keywords": ["estado", "state", "redux", "zustand", "context"],
-        "praticas": [
-            "Escolher a solução de estado apropriada",
-            "Evitar estado redundante e duplicado",
-            "Estruturar estado de forma plana",
-            "Elevar estado apenas quando necessário"
+        "practices": [
+            "Choose appropriate state solution",
+            "Avoid redundant and duplicate state",
+            "Structure state in a flat way",
+            "Lift state only when necessary"
         ]
     },
     "ui_ux": {
-        "keywords": ["ui", "ux", "interface", "design", "responsivo", "acessibilidade"],
-        "praticas": [
-            "Implementar design responsivo mobile-first",
-            "Garantir acessibilidade com ARIA labels",
-            "Usar sistemas de design consistentes",
-            "Aplicar feedback visual para ações do usuário"
+        "keywords": ["ui", "ux", "interface", "design", "responsivo", "acessibilidade", "responsive", "accessibility"],
+        "practices": [
+            "Implement mobile-first responsive design",
+            "Ensure accessibility with ARIA labels",
+            "Use consistent design systems",
+            "Apply visual feedback for user actions"
         ]
     },
-    "testes": {
+    "tests": {
         "keywords": ["teste", "test", "jest", "testing library"],
-        "praticas": [
-            "Escrever testes unitários para componentes",
-            "Implementar testes de integração",
-            "Usar React Testing Library",
-            "Manter cobertura de testes adequada"
+        "practices": [
+            "Write unit tests for components",
+            "Implement integration tests",
+            "Use React Testing Library",
+            "Maintain adequate test coverage"
         ]
     },
-    "codigo_limpo": {
-        "keywords": ["clean", "limpo", "legível", "manutenível"],
-        "praticas": [
-            "Seguir convenções de nomenclatura (PascalCase para componentes)",
-            "Usar ESLint e Prettier para consistência",
-            "Documentar componentes complexos",
-            "Aplicar princípios DRY e SOLID"
+    "clean_code": {
+        "keywords": ["clean", "limpo", "legível", "manutenível", "readable", "maintainable"],
+        "practices": [
+            "Follow naming conventions (PascalCase for components)",
+            "Use ESLint and Prettier for consistency",
+            "Document complex components",
+            "Apply DRY and SOLID principles"
         ]
     }
 }
 
-# Templates de prompts otimizados
-TEMPLATES_PROMPTS = {
-    "componente_basico": """
-Crie um componente React com TypeScript seguindo estas especificações:
+# Optimized prompt templates
+PROMPT_TEMPLATES = {
+    "basic_component": """
+Create a React component with TypeScript following these specifications:
 
-**Requisitos Funcionais:**
-{requisitos_funcionais}
+**Functional Requirements:**
+{functional_requirements}
 
-**Requisitos Técnicos:**
-- TypeScript com tipos explícitos para props e estado
-- Componente funcional usando Hooks modernos
-- Seguir convenções de nomenclatura (PascalCase para componente, camelCase para funções)
-- Implementar tratamento de erros apropriado
-- Adicionar comentários JSDoc para props
+**Technical Requirements:**
+- TypeScript with explicit types for props and state
+- Functional component using modern Hooks
+- Follow naming conventions (PascalCase for component, camelCase for functions)
+- Implement appropriate error handling
+- Add JSDoc comments for props
 
-**Estrutura e Organização:**
-- Organizar em pasta própria com arquivo de teste
-- Separar tipos/interfaces em arquivo próprio se complexo
-- Usar barrel exports (index.ts) para exportação limpa
+**Structure and Organization:**
+- Organize in its own folder with test file
+- Separate types/interfaces in separate file if complex
+- Use barrel exports (index.ts) for clean exports
 
 **Performance:**
-- Aplicar React.memo se o componente for puro
-- Usar useMemo/useCallback onde apropriado
-- Implementar lazy loading se aplicável
+- Apply React.memo if component is pure
+- Use useMemo/useCallback where appropriate
+- Implement lazy loading if applicable
 
-**UI/UX e Acessibilidade:**
-- Design responsivo mobile-first
-- Incluir atributos ARIA apropriados
-- Implementar navegação por teclado
-- Fornecer feedback visual para estados (loading, erro, sucesso)
+**UI/UX and Accessibility:**
+- Mobile-first responsive design
+- Include appropriate ARIA attributes
+- Implement keyboard navigation
+- Provide visual feedback for states (loading, error, success)
 
-**Qualidade de Código:**
-- Seguir princípios SOLID e DRY
-- Código limpo e autoexplicativo
-- Configuração ESLint/Prettier aplicada
+**Code Quality:**
+- Follow SOLID and DRY principles
+- Clean and self-explanatory code
+- ESLint/Prettier configuration applied
 """,
 
-    "aplicacao_completa": """
-Desenvolva uma aplicação React completa com TypeScript incluindo:
+    "complete_application": """
+Develop a complete React application with TypeScript including:
 
-**Arquitetura e Estrutura:**
-- Estrutura de pastas escalável e modular
-- Separação clara de concerns (componentes, hooks, utils, types)
-- Configuração de roteamento com React Router
-- Setup de ferramentas (ESLint, Prettier, Husky)
+**Architecture and Structure:**
+- Scalable and modular folder structure
+- Clear separation of concerns (components, hooks, utils, types)
+- Routing configuration with React Router
+- Tooling setup (ESLint, Prettier, Husky)
 
-**Gestão de Estado:**
-- Implementar solução apropriada (Context API, Zustand, ou Redux Toolkit)
-- Estado local vs global bem definido
-- Evitar prop drilling
-- Estado estruturado sem redundâncias
+**State Management:**
+- Implement appropriate solution (Context API, Zustand, or Redux Toolkit)
+- Well-defined local vs global state
+- Avoid prop drilling
+- Structured state without redundancies
 
-**Componentes e Reutilização:**
-- Biblioteca de componentes reutilizáveis
-- Sistema de design consistente
-- Componentes compostos para UI complexa
-- Custom hooks para lógica compartilhada
+**Components and Reusability:**
+- Reusable component library
+- Consistent design system
+- Compound components for complex UI
+- Custom hooks for shared logic
 
-**Performance e Otimização:**
-- Code splitting por rotas
-- Lazy loading de componentes pesados
-- Virtualização para listas grandes
-- Otimização de re-renderizações
+**Performance and Optimization:**
+- Code splitting by routes
+- Lazy loading of heavy components
+- Virtualization for large lists
+- Re-render optimization
 
 **UI/UX Excellence:**
-- Design system implementado
-- Tema claro/escuro
-- Animações e transições suaves
-- Padrões de interação intuitivos
+- Implemented design system
+- Light/dark theme
+- Smooth animations and transitions
+- Intuitive interaction patterns
 
-**Acessibilidade (a11y):**
-- Conformidade WCAG nível AA
-- Navegação completa por teclado
-- Leitores de tela suportados
-- Contraste de cores adequado
+**Accessibility (a11y):**
+- WCAG AA level compliance
+- Complete keyboard navigation
+- Screen reader support
+- Adequate color contrast
 
-**Testes e Qualidade:**
-- Testes unitários com Jest e React Testing Library
-- Testes de integração para fluxos críticos
-- Configuração de CI/CD
-- Documentação abrangente
+**Testing and Quality:**
+- Unit tests with Jest and React Testing Library
+- Integration tests for critical flows
+- CI/CD configuration
+- Comprehensive documentation
 """
 }
 
 
-def analisar_areas_cobertas(prompt: str) -> Dict[str, bool]:
-    """Analisa quais áreas de melhores práticas o prompt cobre"""
-    areas_cobertas = {}
+def analyze_covered_areas(prompt: str) -> Dict[str, bool]:
+    """Analyzes which best practices areas the prompt covers"""
+    covered_areas = {}
     prompt_lower = prompt.lower()
 
-    for area, info in MELHORES_PRATICAS.items():
-        # Verifica se alguma keyword da área está presente
-        coberta = any(keyword in prompt_lower for keyword in info["keywords"])
-        areas_cobertas[area] = coberta
+    for area, info in BEST_PRACTICES.items():
+        # Check if any keyword from the area is present
+        is_covered = any(keyword in prompt_lower for keyword in info["keywords"])
+        covered_areas[area] = is_covered
 
-    return areas_cobertas
-
-
-def calcular_pontuacao(areas_cobertas: Dict[str, bool]) -> float:
-    """Calcula pontuação baseada nas áreas cobertas"""
-    total_areas = len(areas_cobertas)
-    areas_cobertas_count = sum(areas_cobertas.values())
-
-    # Pontuação base
-    pontuacao = (areas_cobertas_count / total_areas) * 100
-
-    # Bônus por áreas críticas
-    areas_criticas = ["typescript", "performance",
-                      "codigo_limpo", "arquitetura"]
-    bonus = sum(10 for area in areas_criticas if areas_cobertas.get(area, False))
-
-    return min(100, pontuacao + bonus)
+    return covered_areas
 
 
-def gerar_sugestoes(areas_cobertas: Dict[str, bool]) -> List[str]:
-    """Gera sugestões baseadas nas áreas não cobertas"""
-    sugestoes = []
+def calculate_score(covered_areas: Dict[str, bool]) -> float:
+    """Calculates score based on covered areas"""
+    total_areas = len(covered_areas)
+    covered_areas_count = sum(covered_areas.values())
 
-    for area, coberta in areas_cobertas.items():
-        if not coberta:
-            info = MELHORES_PRATICAS[area]
-            sugestao = f"Adicione requisitos sobre {area.replace('_', ' ')}: "
-            sugestao += ", ".join(info["praticas"][:2])
-            sugestoes.append(sugestao)
+    # Base score
+    score = (covered_areas_count / total_areas) * 100
 
-    return sugestoes
+    # Bonus for critical areas
+    critical_areas = ["typescript", "performance",
+                      "clean_code", "architecture"]
+    bonus = sum(10 for area in critical_areas if covered_areas.get(area, False))
+
+    return min(100, score + bonus)
 
 
-def melhorar_prompt(prompt_original: str, areas_cobertas: Dict[str, bool]) -> str:
-    """Melhora o prompt adicionando aspectos faltantes"""
-    prompt_melhorado = prompt_original.strip()
+def generate_suggestions(covered_areas: Dict[str, bool]) -> List[str]:
+    """Generates suggestions based on uncovered areas"""
+    suggestions = []
 
-    # Adiciona seções faltantes
-    secoes_adicionar = []
+    for area, is_covered in covered_areas.items():
+        if not is_covered:
+            info = BEST_PRACTICES[area]
+            suggestion = f"Add requirements about {area.replace('_', ' ')}: "
+            suggestion += ", ".join(info["practices"][:2])
+            suggestions.append(suggestion)
 
-    if not areas_cobertas.get("typescript"):
-        secoes_adicionar.append("""
-**Requisitos TypeScript:**
-- Use TypeScript com tipos explícitos para todas as props, estado e funções
-- Defina interfaces claras para estruturas de dados
-- Configure strict mode no tsconfig.json""")
+    return suggestions
 
-    if not areas_cobertas.get("performance"):
-        secoes_adicionar.append("""
-**Otimização de Performance:**
-- Implemente memoização onde apropriado (React.memo, useMemo, useCallback)
-- Use lazy loading para componentes não críticos
-- Considere virtualização para listas grandes""")
 
-    if not areas_cobertas.get("ui_ux"):
-        secoes_adicionar.append("""
-**UI/UX e Acessibilidade:**
-- Design responsivo que funcione bem em mobile e desktop
-- Implemente acessibilidade seguindo padrões WCAG
-- Forneça feedback visual claro para todas as interações""")
+def improve_prompt(original_prompt: str, covered_areas: Dict[str, bool]) -> str:
+    """Improves the prompt by adding missing aspects"""
+    improved_prompt = original_prompt.strip()
 
-    if not areas_cobertas.get("codigo_limpo"):
-        secoes_adicionar.append("""
-**Qualidade de Código:**
-- Siga convenções de nomenclatura do React (PascalCase para componentes)
-- Configure ESLint e Prettier
-- Escreva código limpo e autoexplicativo com comentários onde necessário""")
+    # Add missing sections
+    sections_to_add = []
 
-    if secoes_adicionar:
-        prompt_melhorado += "\n\n" + "\n".join(secoes_adicionar)
+    if not covered_areas.get("typescript"):
+        sections_to_add.append("""
+**TypeScript Requirements:**
+- Use TypeScript with explicit types for all props, state and functions
+- Define clear interfaces for data structures
+- Configure strict mode in tsconfig.json""")
 
-    return prompt_melhorado
+    if not covered_areas.get("performance"):
+        sections_to_add.append("""
+**Performance Optimization:**
+- Implement memoization where appropriate (React.memo, useMemo, useCallback)
+- Use lazy loading for non-critical components
+- Consider virtualization for large lists""")
+
+    if not covered_areas.get("ui_ux"):
+        sections_to_add.append("""
+**UI/UX and Accessibility:**
+- Responsive design that works well on mobile and desktop
+- Implement accessibility following WCAG standards
+- Provide clear visual feedback for all interactions""")
+
+    if not covered_areas.get("clean_code"):
+        sections_to_add.append("""
+**Code Quality:**
+- Follow React naming conventions (PascalCase for components)
+- Configure ESLint and Prettier
+- Write clean and self-explanatory code with comments where necessary""")
+
+    if sections_to_add:
+        improved_prompt += "\n\n" + "\n".join(sections_to_add)
+
+    return improved_prompt
 
 
 @mcp.tool()
-async def analisar_prompt_react(prompt: str) -> AnalisePrompt:
+async def analyze_react_prompt(prompt: str) -> PromptAnalysis:
     """
-    Analisa um prompt para criação de código React e fornece feedback detalhado
+    Analyzes a React code creation prompt and provides detailed feedback
 
     Args:
-        prompt: O prompt a ser analisado
+        prompt: The prompt to be analyzed
 
     Returns:
-        Análise completa com pontuação, pontos fortes/fracos e sugestões
+        Complete analysis with score, strengths/weaknesses and suggestions
     """
-    # Analisar áreas cobertas
-    areas_cobertas = analisar_areas_cobertas(prompt)
+    # Analyze covered areas
+    covered_areas = analyze_covered_areas(prompt)
 
-    # Calcular pontuação
-    pontuacao = calcular_pontuacao(areas_cobertas)
+    # Calculate score
+    score = calculate_score(covered_areas)
 
-    # Identificar pontos fortes
-    areas_fortes = [
+    # Identify strong areas
+    strong_areas = [
         area.replace('_', ' ').title()
-        for area, coberta in areas_cobertas.items()
-        if coberta
+        for area, is_covered in covered_areas.items()
+        if is_covered
     ]
 
-    # Identificar pontos fracos
-    areas_fracas = [
+    # Identify weak areas
+    weak_areas = [
         area.replace('_', ' ').title()
-        for area, coberta in areas_cobertas.items()
-        if not coberta
+        for area, is_covered in covered_areas.items()
+        if not is_covered
     ]
 
-    # Gerar sugestões
-    sugestoes = gerar_sugestoes(areas_cobertas)
+    # Generate suggestions
+    suggestions = generate_suggestions(covered_areas)
 
-    # Melhorar prompt
-    prompt_melhorado = melhorar_prompt(prompt, areas_cobertas)
+    # Improve prompt
+    improved_prompt = improve_prompt(prompt, covered_areas)
 
-    return AnalisePrompt(
-        prompt_original=prompt,
-        pontuacao=pontuacao,
-        areas_fortes=areas_fortes,
-        areas_fracas=areas_fracas,
-        sugestoes=sugestoes,
-        prompt_melhorado=prompt_melhorado
+    return PromptAnalysis(
+        original_prompt=prompt,
+        score=score,
+        strong_areas=strong_areas,
+        weak_areas=weak_areas,
+        suggestions=suggestions,
+        improved_prompt=improved_prompt,
+        react_19_features=[],
+        recommended_patterns=[]
     )
 
 
 @mcp.tool()
-async def obter_template_prompt(tipo: str = "componente_basico") -> Dict[str, str]:
+async def get_prompt_template(template_type: str = "basic_component") -> Dict[str, str]:
     """
-    Obtém um template de prompt otimizado para React
+    Gets an optimized prompt template for React
 
     Args:
-        tipo: Tipo de template ('componente_basico' ou 'aplicacao_completa')
+        template_type: Template type ('basic_component' or 'complete_application')
 
     Returns:
-        Template de prompt com estrutura otimizada
+        Prompt template with optimized structure
     """
-    template = TEMPLATES_PROMPTS.get(
-        tipo, TEMPLATES_PROMPTS["componente_basico"])
+    template = PROMPT_TEMPLATES.get(
+        template_type, PROMPT_TEMPLATES["basic_component"])
 
     return {
-        "tipo": tipo,
+        "type": template_type,
         "template": template,
-        "instrucoes": "Substitua {requisitos_funcionais} pelos requisitos específicos do seu projeto"
+        "instructions": "Replace {functional_requirements} with your project's specific requirements"
     }
 
 
 @mcp.tool()
-async def sugerir_melhorias_contextuais(
+async def suggest_contextual_improvements(
     prompt: str,
-    contexto: str = "componente"
+    context: str = "component"
 ) -> Dict[str, Any]:
     """
-    Sugere melhorias específicas baseadas no contexto do desenvolvimento
+    Suggests specific improvements based on development context
 
     Args:
-        prompt: Prompt original
-        contexto: Tipo de desenvolvimento ('componente', 'hook', 'aplicacao', 'biblioteca')
+        prompt: Original prompt
+        context: Development type ('component', 'hook', 'application', 'library')
 
     Returns:
-        Sugestões contextualizadas e prompt melhorado
+        Contextualized suggestions and improved prompt
     """
-    melhorias_por_contexto = {
-        "componente": [
-            "Especifique se o componente deve ser controlado ou não-controlado",
-            "Defina claramente as props obrigatórias e opcionais",
-            "Inclua requisitos de acessibilidade específicos",
-            "Mencione se deve suportar refs (forwardRef)"
+    improvements_by_context = {
+        "component": [
+            "Specify if the component should be controlled or uncontrolled",
+            "Clearly define required and optional props",
+            "Include specific accessibility requirements",
+            "Mention if it should support refs (forwardRef)"
         ],
         "hook": [
-            "Defina o tipo de retorno do hook claramente",
-            "Especifique se o hook deve ser síncrono ou assíncrono",
-            "Inclua tratamento de cleanup/unmount",
-            "Mencione se deve ter memoização interna"
+            "Clearly define the hook's return type",
+            "Specify if the hook should be synchronous or asynchronous",
+            "Include cleanup/unmount handling",
+            "Mention if it should have internal memoization"
         ],
-        "aplicacao": [
-            "Especifique a estratégia de roteamento desejada",
-            "Defina requisitos de autenticação/autorização",
-            "Inclua necessidades de internacionalização",
-            "Mencione requisitos de PWA se aplicável"
+        "application": [
+            "Specify the desired routing strategy",
+            "Define authentication/authorization requirements",
+            "Include internationalization needs",
+            "Mention PWA requirements if applicable"
         ],
-        "biblioteca": [
-            "Defina a API pública claramente",
-            "Especifique compatibilidade de versões React",
-            "Inclua requisitos de tree-shaking",
-            "Mencione se deve suportar SSR"
+        "library": [
+            "Clearly define the public API",
+            "Specify React version compatibility",
+            "Include tree-shaking requirements",
+            "Mention if it should support SSR"
         ]
     }
 
-    melhorias = melhorias_por_contexto.get(
-        contexto, melhorias_por_contexto["componente"])
+    improvements = improvements_by_context.get(
+        context, improvements_by_context["component"])
 
-    # Adicionar melhorias ao prompt
-    prompt_melhorado = prompt + "\n\n**Requisitos Adicionais:**\n"
-    prompt_melhorado += "\n".join(f"- {melhoria}" for melhoria in melhorias)
+    # Add improvements to prompt
+    improved_prompt = prompt + "\n\n**Additional Requirements:**\n"
+    improved_prompt += "\n".join(f"- {improvement}" for improvement in improvements)
 
     return {
-        "contexto": contexto,
-        "melhorias_sugeridas": melhorias,
-        "prompt_melhorado": prompt_melhorado
+        "context": context,
+        "suggested_improvements": improvements,
+        "improved_prompt": improved_prompt
     }
 
 
 @mcp.tool()
-async def validar_requisitos_react(requisitos: str) -> Dict[str, Any]:
+async def validate_react_requirements(requirements: str) -> Dict[str, Any]:
     """
-    Valida se os requisitos incluem aspectos essenciais para desenvolvimento React
+    Validates if requirements include essential aspects for React development
 
     Args:
-        requisitos: String com os requisitos do projeto
+        requirements: String with project requirements
 
     Returns:
-        Validação detalhada com checklist e requisitos faltantes
+        Detailed validation with checklist and missing requirements
     """
     checklist = {
-        "tipagem_typescript": bool(re.search(r"typescript|tipos?|types?|interface", requisitos, re.I)),
-        "gestao_estado": bool(re.search(r"estado|state|redux|context|zustand", requisitos, re.I)),
-        "componentes_funcionais": bool(re.search(r"funcional|functional|hooks?", requisitos, re.I)),
-        "performance": bool(re.search(r"performance|otimiza|memo|lazy", requisitos, re.I)),
-        "acessibilidade": bool(re.search(r"acessib|a11y|aria|wcag", requisitos, re.I)),
-        "responsividade": bool(re.search(r"responsiv|mobile|breakpoint", requisitos, re.I)),
-        "testes": bool(re.search(r"test|jest|testing.library", requisitos, re.I)),
-        "estrutura_pastas": bool(re.search(r"estrutura|folder|organiza|arquitetura", requisitos, re.I)),
-        "codigo_limpo": bool(re.search(r"clean|limpo|eslint|prettier", requisitos, re.I)),
-        "tratamento_erros": bool(re.search(r"erro|error|exception|boundary", requisitos, re.I))
+        "typescript_typing": bool(re.search(r"typescript|tipos?|types?|interface", requirements, re.I)),
+        "state_management": bool(re.search(r"estado|state|redux|context|zustand", requirements, re.I)),
+        "functional_components": bool(re.search(r"funcional|functional|hooks?", requirements, re.I)),
+        "performance": bool(re.search(r"performance|otimiza|memo|lazy", requirements, re.I)),
+        "accessibility": bool(re.search(r"acessib|a11y|aria|wcag", requirements, re.I)),
+        "responsiveness": bool(re.search(r"responsiv|mobile|breakpoint", requirements, re.I)),
+        "testing": bool(re.search(r"test|jest|testing.library", requirements, re.I)),
+        "folder_structure": bool(re.search(r"estrutura|folder|organiza|arquitetura", requirements, re.I)),
+        "clean_code": bool(re.search(r"clean|limpo|eslint|prettier", requirements, re.I)),
+        "error_handling": bool(re.search(r"erro|error|exception|boundary", requirements, re.I))
     }
 
-    requisitos_faltantes = [
+    missing_requirements = [
         req.replace('_', ' ').title()
-        for req, presente in checklist.items()
-        if not presente
+        for req, is_present in checklist.items()
+        if not is_present
     ]
 
-    validacao_completa = all(checklist.values())
-    percentual_cobertura = (sum(checklist.values()) / len(checklist)) * 100
+    complete_validation = all(checklist.values())
+    coverage_percentage = (sum(checklist.values()) / len(checklist)) * 100
 
-    recomendacoes = []
-    if not checklist["tipagem_typescript"]:
-        recomendacoes.append(
-            "Adicione requisitos explícitos sobre uso de TypeScript com tipos bem definidos")
-    if not checklist["acessibilidade"]:
-        recomendacoes.append(
-            "Inclua requisitos de acessibilidade seguindo padrões WCAG")
+    recommendations = []
+    if not checklist["typescript_typing"]:
+        recommendations.append(
+            "Add explicit requirements about using TypeScript with well-defined types")
+    if not checklist["accessibility"]:
+        recommendations.append(
+            "Include accessibility requirements following WCAG standards")
     if not checklist["performance"]:
-        recomendacoes.append(
-            "Especifique requisitos de performance e otimização")
+        recommendations.append(
+            "Specify performance and optimization requirements")
 
     return {
-        "validacao_completa": validacao_completa,
-        "percentual_cobertura": percentual_cobertura,
+        "complete_validation": complete_validation,
+        "coverage_percentage": coverage_percentage,
         "checklist": checklist,
-        "requisitos_faltantes": requisitos_faltantes,
-        "recomendacoes": recomendacoes
+        "missing_requirements": missing_requirements,
+        "recommendations": recommendations
     }
 
 
 @mcp.tool()
-async def gerar_prompt_otimizado(
-    descricao_projeto: str,
-    tipo_projeto: str = "componente",
-    nivel_detalhe: str = "completo"
+async def generate_optimized_prompt(
+    project_description: str,
+    project_type: str = "component",
+    detail_level: str = "complete"
 ) -> str:
     """
-    Gera um prompt otimizado completo baseado na descrição do projeto
+    Generates a complete optimized prompt based on project description
 
     Args:
-        descricao_projeto: Descrição básica do que precisa ser desenvolvido
-        tipo_projeto: Tipo do projeto ('componente', 'aplicacao', 'biblioteca')
-        nivel_detalhe: Nível de detalhe desejado ('basico', 'intermediario', 'completo')
+        project_description: Basic description of what needs to be developed
+        project_type: Project type ('component', 'application', 'library')
+        detail_level: Desired detail level ('basic', 'intermediate', 'complete')
 
     Returns:
-        Prompt otimizado e estruturado
+        Optimized and structured prompt
     """
-    # Base do prompt
-    prompt = f"Desenvolva {descricao_projeto} usando React com TypeScript.\n\n"
+    # Base prompt
+    prompt = f"Develop {project_description} using React with TypeScript.\n\n"
 
-    # Adicionar seções baseadas no nível de detalhe
-    if nivel_detalhe in ["intermediario", "completo"]:
-        prompt += """**Arquitetura e Estrutura:**
-- Componentes pequenos, focados e reutilizáveis
-- Princípio da Responsabilidade Única
-- Estrutura de pastas modular e escalável
-- Separação clara entre lógica e apresentação
-
-"""
-
-    prompt += """**TypeScript e Tipagem:**
-- Tipos explícitos para todas as props, estado e retornos de função
-- Interfaces bem definidas para estruturas de dados
-- Uso de genéricos para componentes reutilizáveis
-- Strict mode habilitado
+    # Add sections based on detail level
+    if detail_level in ["intermediate", "complete"]:
+        prompt += """**Architecture and Structure:**
+- Small, focused and reusable components
+- Single Responsibility Principle
+- Modular and scalable folder structure
+- Clear separation between logic and presentation
 
 """
 
-    if tipo_projeto == "aplicacao":
-        prompt += """**Gestão de Estado:**
-- Escolha apropriada entre Context API, Zustand ou Redux Toolkit
-- Estado estruturado sem redundâncias
-- Separação clara entre estado local e global
-- Evitar prop drilling
+    prompt += """**TypeScript and Typing:**
+- Explicit types for all props, state and function returns
+- Well-defined interfaces for data structures
+- Use of generics for reusable components
+- Strict mode enabled
 
 """
 
-    prompt += """**Performance e Otimização:**
-- Memoização estratégica com React.memo, useMemo e useCallback
-- Code splitting e lazy loading onde apropriado
-- Virtualização para listas grandes
-- Análise e prevenção de re-renderizações desnecessárias
+    if project_type == "application":
+        prompt += """**State Management:**
+- Appropriate choice between Context API, Zustand or Redux Toolkit
+- Structured state without redundancies
+- Clear separation between local and global state
+- Avoid prop drilling
 
 """
 
-    if nivel_detalhe == "completo":
-        prompt += """**UI/UX e Design:**
-- Design responsivo mobile-first
-- Sistema de design consistente
-- Feedback visual para todas as interações
-- Animações suaves e não intrusivas
-- Modo claro/escuro se aplicável
-
-**Acessibilidade (a11y):**
-- Conformidade com WCAG nível AA
-- Navegação completa por teclado
-- ARIA labels apropriados
-- Suporte para leitores de tela
-- Contraste de cores adequado
-
-**Qualidade de Código:**
-- Convenções de nomenclatura React (PascalCase, camelCase)
-- ESLint e Prettier configurados
-- Princípios SOLID e DRY aplicados
-- Código limpo e autoexplicativo
-- Documentação JSDoc para componentes públicos
-
-**Testes:**
-- Testes unitários para componentes e hooks
-- Testes de integração para fluxos principais
-- Uso de React Testing Library
-- Cobertura mínima de 80%
+    prompt += """**Performance and Optimization:**
+- Strategic memoization with React.memo, useMemo and useCallback
+- Code splitting and lazy loading where appropriate
+- Virtualization for large lists
+- Analysis and prevention of unnecessary re-renders
 
 """
 
-    prompt += f"\n**Requisitos Específicos:**\n{descricao_projeto}"
+    if detail_level == "complete":
+        prompt += """**UI/UX and Design:**
+- Mobile-first responsive design
+- Consistent design system
+- Visual feedback for all interactions
+- Smooth and non-intrusive animations
+- Light/dark mode if applicable
+
+**Accessibility (a11y):**
+- WCAG AA level compliance
+- Complete keyboard navigation
+- Appropriate ARIA labels
+- Screen reader support
+- Adequate color contrast
+
+**Code Quality:**
+- React naming conventions (PascalCase, camelCase)
+- ESLint and Prettier configured
+- SOLID and DRY principles applied
+- Clean and self-explanatory code
+- JSDoc documentation for public components
+
+**Testing:**
+- Unit tests for components and hooks
+- Integration tests for main flows
+- Use of React Testing Library
+- Minimum 80% coverage
+
+"""
+
+    prompt += f"\n**Specific Requirements:**\n{project_description}"
 
     return prompt
 
@@ -734,30 +736,30 @@ async def gerar_prompt_otimizado(
 
 
 @mcp.tool()
-async def obter_recursos_servidor() -> Dict[str, Any]:
+async def get_server_resources() -> Dict[str, Any]:
     """
-    Retorna informações sobre os recursos disponíveis neste servidor MCP
+    Returns information about the resources available in this MCP server
 
     Returns:
-        Dicionário com descrição dos recursos e como usá-los
+        Dictionary with description of resources and how to use them
     """
     return {
-        "nome": "React Prompt Enhancer MCP",
-        "versao": "1.0.0",
-        "descricao": "Servidor MCP para aprimorar prompts de desenvolvimento React/TypeScript",
-        "ferramentas_disponiveis": {
-            "analisar_prompt_react": "Analisa e pontua um prompt, fornecendo sugestões de melhoria",
-            "obter_template_prompt": "Fornece templates otimizados para diferentes tipos de projeto",
-            "sugerir_melhorias_contextuais": "Sugere melhorias específicas baseadas no contexto",
-            "validar_requisitos_react": "Valida se os requisitos cobrem aspectos essenciais",
-            "gerar_prompt_otimizado": "Gera um prompt completo e otimizado a partir de uma descrição"
+        "name": "React Prompt Enhancer MCP",
+        "version": "1.0.0",
+        "description": "MCP server for enhancing React/TypeScript development prompts",
+        "available_tools": {
+            "analyze_react_prompt": "Analyzes and scores a prompt, providing improvement suggestions",
+            "get_prompt_template": "Provides optimized templates for different project types",
+            "suggest_contextual_improvements": "Suggests specific improvements based on context",
+            "validate_react_requirements": "Validates if requirements cover essential aspects",
+            "generate_optimized_prompt": "Generates a complete and optimized prompt from a description"
         },
-        "melhores_praticas_cobertas": list(MELHORES_PRATICAS.keys()),
-        "exemplo_uso": {
-            "1_analise": "Use 'analisar_prompt_react' para avaliar seu prompt atual",
-            "2_melhoria": "Aplique as sugestões fornecidas",
-            "3_validacao": "Use 'validar_requisitos_react' para garantir cobertura completa",
-            "4_otimizacao": "Use 'gerar_prompt_otimizado' para criar prompts estruturados"
+        "covered_best_practices": list(BEST_PRACTICES.keys()),
+        "usage_example": {
+            "1_analysis": "Use 'analyze_react_prompt' to evaluate your current prompt",
+            "2_improvement": "Apply the provided suggestions",
+            "3_validation": "Use 'validate_react_requirements' to ensure complete coverage",
+            "4_optimization": "Use 'generate_optimized_prompt' to create structured prompts"
         }
     }
 

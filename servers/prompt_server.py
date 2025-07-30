@@ -1,6 +1,6 @@
 """
-Servidor MCP de Engenharia de Prompts
-Implementa técnicas avançadas de engenharia de prompts para otimizar consultas
+MCP Prompt Engineering Server
+Implements advanced prompt engineering techniques for optimizing queries
 """
 
 from typing import Dict, List, Optional, Any
@@ -9,12 +9,12 @@ from pydantic import BaseModel
 import re
 from enum import Enum
 
-# Inicializa o servidor MCP
-mcp = FastMCP("Assistente de Melhores Práticas de Engenharia de Prompts")
+# Initialize the MCP server
+mcp = FastMCP("Prompt Engineering Best Practices Assistant")
 
 
 class TaskType(Enum):
-    """Tipos de tarefas identificadas"""
+    """Identified task types"""
     TEXT_GENERATION = "text_generation"
     CODE_GENERATION = "code_generation"
     IMAGE_GENERATION = "image_generation"
@@ -27,7 +27,7 @@ class TaskType(Enum):
 
 
 class PromptOptimizationRequest(BaseModel):
-    """Modelo de requisição para otimização de prompt"""
+    """Request model for prompt optimization"""
     prompt: str
     task_type: Optional[str] = None
     target_audience: Optional[str] = None
@@ -36,7 +36,7 @@ class PromptOptimizationRequest(BaseModel):
 
 
 class OptimizedPrompt(BaseModel):
-    """Modelo de resposta com prompt otimizado"""
+    """Response model with optimized prompt"""
     original_prompt: str
     optimized_prompt: str
     techniques_applied: List[str]
@@ -45,42 +45,42 @@ class OptimizedPrompt(BaseModel):
 
 
 class PromptEngineer:
-    """Classe principal para engenharia de prompts"""
+    """Main class for prompt engineering"""
 
     def __init__(self):
         self.frameworks = {
             "RACE": ["Role", "Action", "Context", "Expectation"],
             "TRACE": ["Task", "Request", "Action", "Context", "Example"],
             "CRISPE": ["Capacity/Role", "Insight", "Statement", "Personality", "Experiment"],
-            "CORE": ["Contexto", "Objetivo", "Papel", "Exemplo"],
+            "CORE": ["Context", "Objective", "Role", "Example"],
             "COAST": ["Context", "Objective", "Actions", "Scenario", "Task"]
         }
 
         self.techniques = {
-            "clareza": self._apply_clarity,
-            "contexto": self._apply_context,
+            "clarity": self._apply_clarity,
+            "context": self._apply_context,
             "persona": self._apply_persona,
             "few_shot": self._apply_few_shot,
             "cot": self._apply_chain_of_thought,
-            "formato": self._apply_format_specification,
-            "delimitadores": self._apply_delimiters
+            "format": self._apply_format_specification,
+            "delimiters": self._apply_delimiters
         }
 
     def identify_task_type(self, prompt: str) -> TaskType:
-        """Identifica o tipo de tarefa baseado no prompt"""
+        """Identifies the task type based on the prompt"""
         prompt_lower = prompt.lower()
 
-        # Palavras-chave para cada tipo de tarefa
+        # Keywords for each task type
         keywords = {
-            TaskType.CODE_GENERATION: ["código", "programa", "função", "script", "implementar", "desenvolver"],
-            TaskType.IMAGE_GENERATION: ["imagem", "desenhe", "crie uma ilustração", "gere uma foto"],
-            TaskType.ANALYSIS: ["analise", "avalie", "examine", "investigue", "compare"],
-            TaskType.CREATIVE: ["crie", "invente", "imagine", "história", "poema", "criativo"],
-            TaskType.PROBLEM_SOLVING: ["resolva", "solucione", "como fazer", "problema", "desafio"],
-            TaskType.QUESTION_ANSWERING: ["o que é", "quem é", "quando", "onde", "por que", "explique"],
-            TaskType.TRANSLATION: ["traduza", "tradução", "para inglês", "para português"],
+            TaskType.CODE_GENERATION: ["code", "program", "function", "script", "implement", "develop", "coding", "programming", "implementation", "development"],
+            TaskType.IMAGE_GENERATION: ["image", "draw", "create illustration", "generate photo", "picture", "visual", "graphic", "artwork"],
+            TaskType.ANALYSIS: ["analyze", "evaluate", "examine", "investigate", "compare", "assessment", "review", "study"],
+            TaskType.CREATIVE: ["create", "invent", "imagine", "story", "poem", "creative", "write", "compose", "design", "craft"],
+            TaskType.PROBLEM_SOLVING: ["solve", "solution", "how to", "problem", "challenge", "fix", "resolve", "troubleshoot", "issue"],
+            TaskType.QUESTION_ANSWERING: ["what is", "who is", "when", "where", "why", "explain", "how", "define", "describe", "clarify"],
+            TaskType.TRANSLATION: ["translate", "translation", "to english", "to spanish", "to french", "to german", "convert language", "interpret"],
             TaskType.SUMMARIZATION: [
-                "resuma", "resumo", "sintetize", "principais pontos"]
+                "summarize", "summary", "synthesize", "main points", "overview", "abstract", "key points", "brief"]
         }
 
         for task_type, words in keywords.items():
@@ -90,13 +90,13 @@ class PromptEngineer:
         return TaskType.TEXT_GENERATION
 
     def _apply_clarity(self, prompt: str, context: Dict[str, Any]) -> str:
-        """Aplica técnicas de clareza e especificidade"""
-        # Remove ambiguidades comuns
+        """Applies clarity and specificity techniques"""
+        # Remove common ambiguities
         clarity_improvements = {
-            "isso": "o conceito/item mencionado anteriormente",
-            "aquilo": "o elemento específico",
-            "coisa": "o objeto/conceito",
-            "fazer": "executar/realizar a tarefa específica"
+            "this": "the specific concept/item mentioned previously",
+            "that": "the particular element referenced",
+            "thing": "the specific object/concept",
+            "do": "execute/perform the specific task"
         }
 
         improved = prompt
@@ -108,65 +108,65 @@ class PromptEngineer:
         return improved
 
     def _apply_context(self, prompt: str, context: Dict[str, Any]) -> str:
-        """Adiciona contexto relevante ao prompt"""
+        """Adds relevant context to the prompt"""
         context_additions = []
 
         if context.get("target_audience"):
             context_additions.append(
-                f"Público-alvo: {context['target_audience']}")
+                f"Target audience: {context['target_audience']}")
 
         if context.get("desired_length"):
             context_additions.append(
-                f"Extensão desejada: {context['desired_length']}")
+                f"Desired length: {context['desired_length']}")
 
         if context.get("tone"):
-            context_additions.append(f"Tom: {context['tone']}")
+            context_additions.append(f"Tone: {context['tone']}")
 
         if context_additions:
-            return f"{prompt}\n\nContexto:\n" + "\n".join(f"- {item}" for item in context_additions)
+            return f"{prompt}\n\nContext:\n" + "\n".join(f"- {item}" for item in context_additions)
 
         return prompt
 
     def _apply_persona(self, prompt: str, task_type: TaskType) -> str:
-        """Aplica atribuição de papel baseado no tipo de tarefa"""
+        """Applies role assignment based on task type"""
         personas = {
-            TaskType.CODE_GENERATION: "Você é um desenvolvedor de software experiente com profundo conhecimento em boas práticas de programação",
-            TaskType.ANALYSIS: "Você é um analista especializado com capacidade de examinar dados e informações de forma crítica e detalhada",
-            TaskType.CREATIVE: "Você é um escritor criativo com habilidade para criar conteúdo original e envolvente",
-            TaskType.PROBLEM_SOLVING: "Você é um consultor especializado em resolução de problemas complexos",
-            TaskType.QUESTION_ANSWERING: "Você é um especialista no assunto com capacidade de explicar conceitos de forma clara e didática"
+            TaskType.CODE_GENERATION: "You are an experienced software developer with deep knowledge of programming best practices",
+            TaskType.ANALYSIS: "You are a specialized analyst with the ability to examine data and information critically and in detail",
+            TaskType.CREATIVE: "You are a creative writer with the ability to create original and engaging content",
+            TaskType.PROBLEM_SOLVING: "You are a consultant specialized in solving complex problems",
+            TaskType.QUESTION_ANSWERING: "You are a subject matter expert with the ability to explain concepts clearly and didactically"
         }
 
         persona = personas.get(
-            task_type, "Você é um assistente útil e conhecedor")
+            task_type, "You are a helpful and knowledgeable assistant")
         return f"{persona}.\n\n{prompt}"
 
     def _apply_few_shot(self, prompt: str, task_type: TaskType) -> str:
-        """Adiciona exemplos relevantes quando apropriado"""
+        """Adds relevant examples when appropriate"""
         if task_type == TaskType.CODE_GENERATION:
-            return prompt + "\n\nExemplo de formato esperado:\n```python\ndef funcao_exemplo():\n    # Implementação clara e comentada\n    pass\n```"
+            return prompt + "\n\nExpected format example:\n```python\ndef example_function():\n    # Clear and commented implementation\n    pass\n```"
         elif task_type == TaskType.ANALYSIS:
-            return prompt + "\n\nEstrutura esperada:\n1. Introdução\n2. Análise detalhada\n3. Conclusões\n4. Recomendações"
+            return prompt + "\n\nExpected structure:\n1. Introduction\n2. Detailed analysis\n3. Conclusions\n4. Recommendations"
 
         return prompt
 
     def _apply_chain_of_thought(self, prompt: str, task_type: TaskType) -> str:
-        """Aplica Chain-of-Thought para tarefas complexas"""
+        """Applies Chain-of-Thought for complex tasks"""
         if task_type in [TaskType.PROBLEM_SOLVING, TaskType.ANALYSIS]:
-            return prompt + "\n\nPor favor, pense passo a passo e mostre seu raciocínio antes de chegar à resposta final."
+            return prompt + "\n\nPlease think step by step and show your reasoning before reaching the final answer."
 
         return prompt
 
     def _apply_format_specification(self, prompt: str, context: Dict[str, Any]) -> str:
-        """Especifica o formato de saída desejado"""
+        """Specifies the desired output format"""
         format_specs = []
 
-        if "lista" in prompt.lower():
-            format_specs.append("Formato: Lista com marcadores")
-        elif "tabela" in prompt.lower():
-            format_specs.append("Formato: Tabela estruturada")
+        if "list" in prompt.lower():
+            format_specs.append("Format: Bulleted list")
+        elif "table" in prompt.lower():
+            format_specs.append("Format: Structured table")
         elif "json" in prompt.lower():
-            format_specs.append("Formato: JSON válido")
+            format_specs.append("Format: Valid JSON")
 
         if format_specs:
             return prompt + "\n\n" + "\n".join(format_specs)
@@ -174,14 +174,14 @@ class PromptEngineer:
         return prompt
 
     def _apply_delimiters(self, prompt: str) -> str:
-        """Aplica delimitadores para melhor estruturação"""
-        # Identifica seções do prompt
+        """Applies delimiters for better structuring"""
+        # Identify prompt sections
         if "\n" in prompt and len(prompt.split("\n")) > 2:
             sections = prompt.split("\n")
-            structured = "### Solicitação Principal ###\n" + sections[0]
+            structured = "### Main Request ###\n" + sections[0]
 
             if len(sections) > 1:
-                structured += "\n\n### Detalhes Adicionais ###\n" + \
+                structured += "\n\n### Additional Details ###\n" + \
                     "\n".join(sections[1:])
 
             return structured
@@ -189,12 +189,12 @@ class PromptEngineer:
         return prompt
 
     def optimize_prompt(self, request: PromptOptimizationRequest) -> OptimizedPrompt:
-        """Otimiza o prompt aplicando técnicas apropriadas"""
+        """Optimizes the prompt by applying appropriate techniques"""
         original = request.prompt
         task_type = self.identify_task_type(original)
         techniques_used = []
 
-        # Contexto para as técnicas
+        # Context for techniques
         context = {
             "target_audience": request.target_audience,
             "desired_length": request.desired_length,
@@ -202,51 +202,51 @@ class PromptEngineer:
             "task_type": task_type
         }
 
-        # Aplica técnicas em ordem
+        # Apply techniques in order
         optimized = original
 
-        # 1. Clareza
+        # 1. Clarity
         optimized = self._apply_clarity(optimized, context)
         if optimized != original:
-            techniques_used.append("Clareza e Especificidade")
+            techniques_used.append("Clarity and Specificity")
 
         # 2. Persona
         temp = optimized
         optimized = self._apply_persona(optimized, task_type)
         if optimized != temp:
-            techniques_used.append("Atribuição de Papel (Persona)")
+            techniques_used.append("Role Assignment (Persona)")
 
-        # 3. Contexto
+        # 3. Context
         temp = optimized
         optimized = self._apply_context(optimized, context)
         if optimized != temp:
-            techniques_used.append("Contexto Detalhado")
+            techniques_used.append("Detailed Context")
 
-        # 4. Chain-of-Thought para tarefas complexas
+        # 4. Chain-of-Thought for complex tasks
         temp = optimized
         optimized = self._apply_chain_of_thought(optimized, task_type)
         if optimized != temp:
             techniques_used.append("Chain-of-Thought (CoT)")
 
-        # 5. Few-shot quando apropriado
+        # 5. Few-shot when appropriate
         temp = optimized
         optimized = self._apply_few_shot(optimized, task_type)
         if optimized != temp:
             techniques_used.append("Few-Shot Examples")
 
-        # 6. Formato
+        # 6. Format
         temp = optimized
         optimized = self._apply_format_specification(optimized, context)
         if optimized != temp:
-            techniques_used.append("Especificação de Formato")
+            techniques_used.append("Format Specification")
 
-        # 7. Delimitadores
+        # 7. Delimiters
         temp = optimized
         optimized = self._apply_delimiters(optimized)
         if optimized != temp:
-            techniques_used.append("Delimitadores Estruturais")
+            techniques_used.append("Structural Delimiters")
 
-        # Sugestões adicionais
+        # Additional suggestions
         suggestions = self._generate_suggestions(task_type, original)
 
         return OptimizedPrompt(
@@ -258,43 +258,43 @@ class PromptEngineer:
         )
 
     def _generate_suggestions(self, task_type: TaskType, prompt: str) -> List[str]:
-        """Gera sugestões específicas para melhorar o prompt"""
+        """Generates specific suggestions to improve the prompt"""
         suggestions = []
 
-        # Sugestões gerais
+        # General suggestions
         if len(prompt) < 20:
             suggestions.append(
-                "Considere adicionar mais detalhes sobre o que você deseja")
+                "Consider adding more details about what you want")
 
         if "?" not in prompt and task_type == TaskType.QUESTION_ANSWERING:
-            suggestions.append("Formule sua pergunta de forma clara com '?'")
+            suggestions.append("Formulate your question clearly with '?'")
 
-        # Sugestões específicas por tipo
+        # Type-specific suggestions
         task_suggestions = {
             TaskType.CODE_GENERATION: [
-                "Especifique a linguagem de programação desejada",
-                "Mencione requisitos de performance ou restrições",
-                "Indique se precisa de comentários no código"
+                "Specify the desired programming language",
+                "Mention performance requirements or constraints",
+                "Indicate if you need comments in the code"
             ],
             TaskType.IMAGE_GENERATION: [
-                "Descreva o estilo artístico desejado",
-                "Especifique cores, iluminação e composição",
-                "Adicione detalhes sobre o ambiente/cenário"
+                "Describe the desired artistic style",
+                "Specify colors, lighting and composition",
+                "Add details about the environment/scenario"
             ],
             TaskType.ANALYSIS: [
-                "Defina os critérios de análise",
-                "Especifique o nível de profundidade desejado",
-                "Indique se precisa de recomendações"
+                "Define the analysis criteria",
+                "Specify the desired level of depth",
+                "Indicate if you need recommendations"
             ]
         }
 
         if task_type in task_suggestions:
             suggestions.extend(task_suggestions[task_type])
 
-        return suggestions[:3]  # Retorna no máximo 3 sugestões
+        return suggestions[:3]  # Returns maximum 3 suggestions
 
 
-# Instancia o engenheiro de prompts
+# Instantiate the prompt engineer
 engineer = PromptEngineer()
 
 
@@ -307,17 +307,17 @@ async def optimize_prompt(
     tone: Optional[str] = None
 ) -> Dict[str, Any]:
     """
-    Otimiza um prompt aplicando as melhores práticas de engenharia de prompts
+    Optimizes a prompt by applying prompt engineering best practices
 
     Args:
-        prompt: O prompt original a ser otimizado
-        task_type: Tipo de tarefa (opcional, será detectado automaticamente)
-        target_audience: Público-alvo da resposta
-        desired_length: Extensão desejada da resposta
-        tone: Tom desejado (formal, informal, técnico, etc.)
+        prompt: The original prompt to be optimized
+        task_type: Task type (optional, will be detected automatically)
+        target_audience: Target audience for the response
+        desired_length: Desired length of the response
+        tone: Desired tone (formal, informal, technical, etc.)
 
     Returns:
-        Dicionário com o prompt otimizado e informações sobre as técnicas aplicadas
+        Dictionary with the optimized prompt and information about applied techniques
     """
     request = PromptOptimizationRequest(
         prompt=prompt,
@@ -341,13 +341,13 @@ async def optimize_prompt(
 @mcp.tool()
 async def analyze_prompt(prompt: str) -> Dict[str, Any]:
     """
-    Analisa um prompt e fornece feedback sobre sua qualidade
+    Analyzes a prompt and provides feedback on its quality
 
     Args:
-        prompt: O prompt a ser analisado
+        prompt: The prompt to be analyzed
 
     Returns:
-        Análise detalhada do prompt com pontuação e recomendações
+        Detailed analysis of the prompt with scoring and recommendations
     """
     analysis = {
         "prompt": prompt,
@@ -359,62 +359,63 @@ async def analyze_prompt(prompt: str) -> Dict[str, Any]:
         "recommendations": []
     }
 
-    # Análise de qualidade
+    # Quality analysis
     score = 0
 
-    # Clareza (0-25 pontos)
+    # Clarity (0-25 points)
     if len(prompt) > 20:
         score += 10
-        analysis["strengths"].append("Comprimento adequado")
+        analysis["strengths"].append("Adequate length")
     else:
-        analysis["weaknesses"].append("Prompt muito curto")
+        analysis["weaknesses"].append("Prompt too short")
 
-    if not any(word in prompt.lower() for word in ["isso", "aquilo", "coisa"]):
+    if not any(word in prompt.lower() for word in ["this", "that", "thing"]):
         score += 15
-        analysis["strengths"].append("Linguagem específica")
+        analysis["strengths"].append("Specific language")
     else:
-        analysis["weaknesses"].append("Contém termos vagos")
+        analysis["weaknesses"].append("Contains vague terms")
 
-    # Contexto (0-25 pontos)
-    context_indicators = ["para", "quando", "onde", "como", "por que"]
+    # Context (0-25 points)
+    context_indicators = ["for", "when", "where", "how", "why", "because", "since", "during", "about", "regarding"]
     if any(indicator in prompt.lower() for indicator in context_indicators):
         score += 25
-        analysis["strengths"].append("Inclui contexto")
+        analysis["strengths"].append("Includes context")
     else:
-        analysis["weaknesses"].append("Falta contexto")
+        analysis["weaknesses"].append("Lacks context")
         analysis["recommendations"].append(
-            "Adicione contexto sobre quando, onde ou como")
+            "Add context about when, where or how")
 
-    # Objetivo claro (0-25 pontos)
-    action_verbs = ["crie", "analise", "explique",
-                    "desenvolva", "resuma", "traduza"]
+    # Clear objective (0-25 points)
+    action_verbs = ["create", "analyze", "explain",
+                    "develop", "summarize", "translate", "write", "generate", "produce",
+                    "design", "build", "implement"]
     if any(verb in prompt.lower() for verb in action_verbs):
         score += 25
-        analysis["strengths"].append("Objetivo claro")
+        analysis["strengths"].append("Clear objective")
     else:
-        analysis["weaknesses"].append("Objetivo pouco claro")
+        analysis["weaknesses"].append("Unclear objective")
         analysis["recommendations"].append(
-            "Use verbos de ação para clarificar o objetivo")
+            "Use action verbs to clarify the objective")
 
-    # Estrutura (0-25 pontos)
+    # Structure (0-25 points)
     if "?" in prompt or "\n" in prompt:
         score += 25
-        analysis["strengths"].append("Bem estruturado")
+        analysis["strengths"].append("Well structured")
     else:
         analysis["recommendations"].append(
-            "Considere usar pontuação ou quebras de linha para estruturar melhor")
+            "Consider using punctuation or line breaks for better structure")
 
     analysis["quality_score"] = score
 
-    # Recomendações baseadas na pontuação
+    # Recommendations based on score
     if score < 50:
         analysis["recommendations"].insert(
-            0, "Este prompt precisa de melhorias significativas")
+            0, "This prompt needs significant improvements")
     elif score < 75:
         analysis["recommendations"].insert(
-            0, "Prompt razoável, mas pode ser melhorado")
+            0, "Reasonable prompt, but can be improved")
     else:
-        analysis["recommendations"].insert(0, "Prompt bem estruturado!")
+        analysis["recommendations"].insert(0, "Well-structured prompt!")
 
     return analysis
 
@@ -422,17 +423,17 @@ async def analyze_prompt(prompt: str) -> Dict[str, Any]:
 @mcp.tool()
 async def suggest_framework(task_description: str) -> Dict[str, Any]:
     """
-    Sugere o melhor framework de prompt para uma tarefa específica
+    Suggests the best prompt framework for a specific task
 
     Args:
-        task_description: Descrição da tarefa a ser realizada
+        task_description: Description of the task to be performed
 
     Returns:
-        Framework recomendado com exemplo de aplicação
+        Recommended framework with application example
     """
     task_type = engineer.identify_task_type(task_description)
 
-    # Mapeamento de tipos de tarefa para frameworks
+    # Mapping of task types to frameworks
     framework_mapping = {
         TaskType.TEXT_GENERATION: "TRACE",
         TaskType.CODE_GENERATION: "RACE",
@@ -446,27 +447,27 @@ async def suggest_framework(task_description: str) -> Dict[str, Any]:
     recommended_framework = framework_mapping.get(task_type, "RACE")
     framework_components = engineer.frameworks[recommended_framework]
 
-    # Cria exemplo baseado na tarefa
+    # Create task-based example
     examples = {
         "RACE": {
-            "Role": "Você é um especialista no assunto",
-            "Action": "Explique detalhadamente",
-            "Context": "Para uma audiência técnica",
-            "Expectation": "Resposta estruturada com exemplos"
+            "Role": "You are a subject matter expert",
+            "Action": "Explain in detail",
+            "Context": "For a technical audience",
+            "Expectation": "Structured response with examples"
         },
         "TRACE": {
-            "Task": "Criar conteúdo informativo",
-            "Request": "Desenvolva um texto completo",
-            "Action": "Escreva de forma clara e envolvente",
-            "Context": "Para profissionais da área",
-            "Example": "Similar a artigos de revistas especializadas"
+            "Task": "Create informative content",
+            "Request": "Develop a complete text",
+            "Action": "Write clearly and engagingly",
+            "Context": "For professionals in the field",
+            "Example": "Similar to specialized magazine articles"
         },
         "CRISPE": {
-            "Capacity/Role": "Criador de conteúdo inovador",
-            "Insight": "Compreenda as tendências atuais",
-            "Statement": "Crie algo único e memorável",
-            "Personality": "Tom criativo e inspirador",
-            "Experiment": "Explore abordagens não convencionais"
+            "Capacity/Role": "Innovative content creator",
+            "Insight": "Understand current trends",
+            "Statement": "Create something unique and memorable",
+            "Personality": "Creative and inspiring tone",
+            "Experiment": "Explore unconventional approaches"
         }
     }
 
@@ -477,7 +478,7 @@ async def suggest_framework(task_description: str) -> Dict[str, Any]:
         "recommended_framework": recommended_framework,
         "framework_components": framework_components,
         "example_application": example,
-        "usage_tip": f"Use o framework {recommended_framework} estruturando seu prompt com cada componente"
+        "usage_tip": f"Use the {recommended_framework} framework by structuring your prompt with each component"
     }
 
 
@@ -487,35 +488,35 @@ async def apply_advanced_technique(
     technique: str = "chain_of_thought"
 ) -> Dict[str, Any]:
     """
-    Aplica técnicas avançadas de raciocínio ao prompt
+    Applies advanced reasoning techniques to the prompt
 
     Args:
-        prompt: O prompt original
-        technique: Técnica a aplicar (chain_of_thought, self_consistency, react, tree_of_thoughts)
+        prompt: The original prompt
+        technique: Technique to apply (chain_of_thought, self_consistency, react, tree_of_thoughts)
 
     Returns:
-        Prompt modificado com a técnica avançada aplicada
+        Modified prompt with the advanced technique applied
     """
     techniques_map = {
         "chain_of_thought": {
             "name": "Chain-of-Thought (CoT)",
-            "suffix": "\n\nVamos pensar passo a passo:\n1. Primeiro, vamos entender o problema\n2. Depois, analisar as possíveis abordagens\n3. Por fim, chegar a uma solução detalhada",
-            "description": "Guia o modelo através de etapas de raciocínio"
+            "suffix": "\n\nLet's think step by step:\n1. First, let's understand the problem\n2. Then, analyze possible approaches\n3. Finally, arrive at a detailed solution",
+            "description": "Guides the model through reasoning steps"
         },
         "self_consistency": {
             "name": "Self-Consistency",
-            "suffix": "\n\nGere 3 abordagens diferentes para esta questão e depois sintetize a melhor resposta com base nas abordagens geradas.",
-            "description": "Múltiplos caminhos de raciocínio para maior confiabilidade"
+            "suffix": "\n\nGenerate 3 different approaches to this question and then synthesize the best answer based on the generated approaches.",
+            "description": "Multiple reasoning paths for greater reliability"
         },
         "react": {
             "name": "ReAct (Reason + Act)",
-            "suffix": "\n\nPensamento: Analise o que precisa ser feito\nAção: Determine os passos necessários\nObservação: Avalie os resultados de cada passo\nRepita até chegar à solução completa.",
-            "description": "Combina raciocínio com ações iterativas"
+            "suffix": "\n\nThought: Analyze what needs to be done\nAction: Determine the necessary steps\nObservation: Evaluate the results of each step\nRepeat until reaching the complete solution.",
+            "description": "Combines reasoning with iterative actions"
         },
         "tree_of_thoughts": {
             "name": "Tree of Thoughts (ToT)",
-            "suffix": "\n\nExplore múltiplas possibilidades:\n- Caminho A: [desenvolva esta abordagem]\n- Caminho B: [desenvolva alternativa]\n- Caminho C: [explore outra opção]\nAvalie qual caminho é mais promissor e desenvolva-o completamente.",
-            "description": "Exploração de múltiplos caminhos de pensamento"
+            "suffix": "\n\nExplore multiple possibilities:\n- Path A: [develop this approach]\n- Path B: [develop alternative]\n- Path C: [explore another option]\nEvaluate which path is most promising and develop it completely.",
+            "description": "Exploration of multiple thought paths"
         }
     }
 
@@ -530,112 +531,115 @@ async def apply_advanced_technique(
         "enhanced_prompt": enhanced_prompt,
         "technique_applied": tech_info["name"],
         "technique_description": tech_info["description"],
-        "best_for": "Problemas complexos que requerem raciocínio estruturado"
+        "best_for": "Complex problems that require structured reasoning"
     }
 
 
 @mcp.tool()
 async def check_bias(prompt: str) -> Dict[str, Any]:
     """
-    Verifica potenciais vieses no prompt e sugere mitigações
+    Checks for potential biases in the prompt and suggests mitigations
 
     Args:
-        prompt: O prompt a ser verificado
+        prompt: The prompt to be checked
 
     Returns:
-        Análise de vieses com sugestões de mitigação
+        Bias analysis with mitigation suggestions
     """
     biases_found = []
     mitigations = []
 
-    # Verificação de vieses de gênero
+    # Gender bias verification
     gender_terms = {
-        "masculino": ["ele", "homem", "masculino", "senhor"],
-        "feminino": ["ela", "mulher", "feminino", "senhora"]
+        "masculine": ["he", "man", "masculine", "sir", "male", "gentleman", "his", "him"],
+        "feminine": ["she", "woman", "feminine", "madam", "female", "lady", "her", "hers"]
     }
 
-    gender_bias = {"masculino": 0, "feminino": 0}
+    gender_bias = {"masculine": 0, "feminine": 0}
     for gender, terms in gender_terms.items():
         for term in terms:
             if term in prompt.lower():
                 gender_bias[gender] += 1
 
-    if gender_bias["masculino"] > 0 and gender_bias["feminino"] == 0:
+    if gender_bias["masculine"] > 0 and gender_bias["feminine"] == 0:
         biases_found.append(
-            "Possível viés de gênero (apenas termos masculinos)")
+            "Possible gender bias (only masculine terms)")
         mitigations.append(
-            "Use linguagem neutra em gênero ou inclua exemplos diversos")
+            "Use gender-neutral language or include diverse examples")
 
-    # Verificação de estereótipos profissionais
+    # Professional stereotypes verification
     stereotypes = {
-        "engenheiro": "profissional de engenharia",
-        "enfermeira": "profissional de enfermagem",
-        "secretária": "profissional administrativo"
+        "engineer": "engineering professional",
+        "nurse": "nursing professional",
+        "secretary": "administrative professional",
+        "developer": "software professional",
+        "manager": "management professional",
+        "assistant": "administrative professional"
     }
 
     for stereotype, neutral in stereotypes.items():
         if stereotype in prompt.lower():
             biases_found.append(
-                f"Termo com potencial estereótipo: '{stereotype}'")
+                f"Term with potential stereotype: '{stereotype}'")
             mitigations.append(
-                f"Considere usar '{neutral}' para maior neutralidade")
+                f"Consider using '{neutral}' for greater neutrality")
 
-    # Verificação de premissas culturais
-    if any(word in prompt.lower() for word in ["normal", "padrão", "comum"]):
-        biases_found.append("Possíveis premissas culturais não especificadas")
+    # Cultural assumptions verification
+    if any(word in prompt.lower() for word in ["normal", "standard", "common", "typical"]):
+        biases_found.append("Possible unspecified cultural assumptions")
         mitigations.append(
-            "Especifique o contexto cultural ou use termos mais inclusivos")
+            "Specify cultural context or use more inclusive terms")
 
-    # Sugestão de prompt para desafiar vieses
-    bias_challenger = "\n\nAo responder, considere múltiplas perspectivas e evite fazer suposições baseadas em estereótipos."
+    # Prompt suggestion to challenge biases
+    bias_challenger = "\n\nWhen responding, consider multiple perspectives and avoid making assumptions based on stereotypes."
 
     return {
         "prompt": prompt,
-        "biases_detected": biases_found if biases_found else ["Nenhum viés óbvio detectado"],
+        "biases_detected": biases_found if biases_found else ["No obvious bias detected"],
         "mitigation_suggestions": mitigations,
         "bias_score": len(biases_found),
         "improved_prompt": prompt + bias_challenger if biases_found else prompt,
         "general_tips": [
-            "Use linguagem inclusiva",
-            "Evite generalizações",
-            "Considere múltiplas perspectivas",
-            "Especifique contextos quando relevante"
+            "Use inclusive language",
+            "Avoid generalizations",
+            "Consider multiple perspectives",
+            "Specify contexts when relevant"
         ]
     }
 
-# Configuração e inicialização
+# Configuration and initialization
 if __name__ == "__main__":
     import asyncio
 
-    # Exemplo de uso
+    # Usage example
     async def test_server():
-        # Teste de otimização
+        # Optimization test
         result = await optimize_prompt(
-            prompt="explique isso",
-            target_audience="estudantes universitários",
-            tone="didático"
+            prompt="explain this concept",
+            target_audience="university students",
+            tone="didactic"
         )
-        print("Otimização:", result)
+        print("Optimization:", result)
 
-        # Teste de análise
-        analysis = await analyze_prompt("Como funciona a fotossíntese?")
-        print("\nAnálise:", analysis)
+        # Analysis test
+        analysis = await analyze_prompt("How does photosynthesis work?")
+        print("\nAnalysis:", analysis)
 
-        # Teste de framework
-        framework = await suggest_framework("Preciso criar um relatório de vendas")
-        print("\nFramework sugerido:", framework)
+        # Framework test
+        framework = await suggest_framework("I need to create a sales report")
+        print("\nSuggested framework:", framework)
 
-    # Inicia o servidor
-    print("Servidor MCP de Engenharia de Prompts iniciado!")
-    print("Ferramentas disponíveis:")
-    print("- optimize_prompt: Otimiza prompts automaticamente")
-    print("- analyze_prompt: Analisa qualidade de prompts")
-    print("- suggest_framework: Sugere frameworks apropriados")
-    print("- apply_advanced_technique: Aplica técnicas avançadas")
-    print("- check_bias: Verifica e mitiga vieses")
+    # Start the server
+    print("MCP Prompt Engineering Server started!")
+    print("Available tools:")
+    print("- optimize_prompt: Optimizes prompts automatically")
+    print("- analyze_prompt: Analyzes prompt quality")
+    print("- suggest_framework: Suggests appropriate frameworks")
+    print("- apply_advanced_technique: Applies advanced techniques")
+    print("- check_bias: Checks and mitigates biases")
 
-    # Para testes locais
+    # For local testing
     # asyncio.run(test_server())
 
-    # Inicia o servidor MCP
+    # Start the MCP server
     mcp.run()
