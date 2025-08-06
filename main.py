@@ -10,6 +10,7 @@ Launcher for specialized MCP servers:
 - FastMCP Server: High-performance server
 - React Server: React components
 - TypeScript Server: TypeScript analysis
+- Docker Server: Docker optimization and best practices
 
 Usage:
     python main.py [server] [options]
@@ -25,6 +26,7 @@ Usage:
     - shadcn: Advanced shadcn/ui server
     - rust: Advanced Rust server
     - axum: Axum web framework server
+    - docker: Docker optimization server
     - all: Run all servers (development mode)
     
 Examples:
@@ -122,6 +124,13 @@ SERVERS_CONFIG = {
         "description": "MCP server for development with Axum web framework (tokio-rs + magic patterns)",
         "module": "servers.axum_server",
         "port": 3009,
+        "protocol": "stdio"
+    },
+    "docker": {
+        "name": "Docker Optimizer Server",
+        "description": "MCP server for Docker containerization with security best practices and multi-stage optimization",
+        "module": "servers.docker_optimizer_server",
+        "port": 3010,
         "protocol": "stdio"
     }
 }

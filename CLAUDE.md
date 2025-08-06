@@ -16,29 +16,41 @@ uv sync
 
 ### Server Management
 ```bash
-# Interactive server launcher with menu
+# Modern interactive CLI with multi-select (recommended)
+uv run mcp_servers
+
+# Show server status with rich formatting  
+uv run mcp_servers --status
+
+# Alternative direct calls
+python launcher_cli.py
+uv run python launcher_cli.py
+
+# Interactive server launcher with menu  
 ./run_servers.sh
 
 # Run specific server
-python main.py mcp                    # MCP prompt analyzer
-python main.py prompt                 # Prompt engineering
-python main.py tailwind              # Tailwind CSS v4.1
-python main.py react_optimizer       # React code analysis/optimization  
-python main.py shadcn                 # shadcn/ui components
-python main.py rust                   # Rust idiomatic patterns
-python main.py react                  # React 19 features
+uv run python main.py mcp                    # MCP prompt analyzer
+uv run python main.py prompt                 # Prompt engineering
+uv run python main.py tailwind              # Tailwind CSS v4.1
+uv run python main.py react_optimizer       # React code analysis/optimization  
+uv run python main.py shadcn                 # shadcn/ui components
+uv run python main.py rust                   # Rust idiomatic patterns
+uv run python main.py react                  # React 19 features
+uv run python main.py axum                   # Axum web framework patterns
+uv run python main.py docker                 # Docker optimization and best practices
 
 # Run all servers (development mode)
-python main.py all --dev
+uv run python main.py all --dev
 
 # Custom port
-python main.py mcp --port 3001
+uv run python main.py mcp --port 3001
 ```
 
 ### Testing
 ```bash
 # Run all tests
-python run_tests.py
+uv run python run_tests.py
 
 # Run specific test file
 uv run pytest tests/test_mcp_server.py -v
@@ -62,14 +74,14 @@ uv run ruff check servers/mcp_server.py
 
 ## Architecture Overview
 
-This is a **Model Context Protocol (MCP) servers collection** written in Python that provides specialized tools for prompt analysis, engineering, and modern web development. The project follows a modular architecture with 8 functional servers (8/9 complete, TypeScript server in development).
+This is a **Model Context Protocol (MCP) servers collection** written in Python that provides specialized tools for prompt analysis, engineering, and modern web development. The project follows a modular architecture with 10 functional servers (10/11 complete, TypeScript server in development).
 
 ### Core Architecture Components
 
 **1. Centralized Launcher System**
 - `main.py` - Unified server launcher with async support and process management
 - `run_servers.sh` - Interactive shell interface with colored menu system
-- Each server runs as independent MCP protocol-compliant process on different ports (3000-3008)
+- Each server runs as independent MCP protocol-compliant process on different ports (3000-3010)
 
 **2. Server Modules (`servers/` directory)**
 All servers extend FastMCP framework and follow consistent patterns:
@@ -90,6 +102,10 @@ All servers extend FastMCP framework and follow consistent patterns:
 - **React Server** (`react_server.py`): React 19 features (Server Components, Actions, `use` hook)
 - **React Optimizer** (`react_optimizer_server.py`): Unified React code analysis + prompt optimization for AI tools (v0.dev, Cursor)
 - **shadcn/ui Server** (`shadcn_server.py`): shadcn/ui component analysis, generation, and theming
+- **Axum Server** (`axum_server.py`): Axum web framework patterns and magic patterns from rust ecosystem
+
+**DevOps/Infrastructure Servers:**
+- **Docker Server** (`docker_optimizer_server.py`): Docker containerization with security best practices and multi-stage optimization
 
 **Prompt Engineering Servers:**
 - **MCP Server** (`mcp_server.py`): Analyzes prompts for MCP server creation (1-10 scoring system)

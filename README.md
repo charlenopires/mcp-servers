@@ -1,32 +1,35 @@
-# 🚀 MCP Servers v2.0 - Collection of MCP Servers
+# 🚀 MCP Servers v2.1 - Modern Interactive CLI Collection
 
 [![Python](https://img.shields.io/badge/Python-3.12%2B-blue)](https://www.python.org/)
 [![FastMCP](https://img.shields.io/badge/FastMCP-2.4.0%2B-green)](https://github.com/fastmcp/fastmcp)
 [![uv](https://img.shields.io/badge/uv-Package%20Manager-purple)](https://github.com/astral-sh/uv)
 [![License](https://img.shields.io/badge/License-MIT-orange)](LICENSE)
+[![CLI](https://img.shields.io/badge/Interactive%20CLI-Vue%20Style-cyan)](https://questionary.readthedocs.io/)
 [![Tests](https://img.shields.io/badge/Tests-32%2F37%20Passed-green)](https://pytest.org/)
 
-Modernized platform of MCP (Model Context Protocol) servers for specialized prompt processing, including MCP prompt analysis, prompt engineering, and Tailwind CSS v4.1 support.
+**Modern interactive platform** of MCP (Model Context Protocol) servers with **Vue CLI-style multi-select interface** for specialized prompt processing, containerization, and modern web development.
 
-## 🌟 Version 2.0 Features
+## 🌟 Version 2.1 Features
+
+### 🎯 **NEW: Interactive CLI Experience**
+
+- **Vue CLI-style Interface**: Multi-select checkboxes for server selection
+- **Rich Formatted Output**: Colorized tables, progress bars, and status indicators  
+- **Smart Categorization**: Servers grouped by function (Analysis, Frontend, Backend, DevOps)
+- **Real-time Monitoring**: Live server status and graceful shutdown handling
 
 ### 🚀 Centralized Management
 
-- **Main Launcher**: `main.py` unifies execution of all servers
-- **Simplified Interface**: Modernized `run_servers.sh` and `run_tests.py` scripts
-- **Asynchronous Execution**: Native support for asynchronous operations
+- **Multiple Launchers**: Choose between CLI (`launcher_cli.py`), main (`main.py`), or shell (`run_servers.sh`)
+- **Execution Modes**: Development, Production, and Silent modes with parallel/sequential options
+- **Asynchronous Architecture**: Native async/await support with concurrent server management
 
 ### 🛠️ Modern Build System
 
-- **uv Package Manager**: Complete migration from pip to uv
+- **uv Package Manager**: Ultra-fast dependency management
+- **Rich Dependencies**: questionary, rich, colorama for enhanced UX
 - **pyproject.toml**: Centralized project configuration
-- **Build System**: Hatchling as build backend
-
-### 🧪 Modernized Testing Framework
-
-- **Pytest**: Professional testing framework
-- **Code Coverage**: Integrated coverage reports
-- **Parallel Tests**: Optimized test execution
+- **Build System**: Hatchling with optimized packaging
 
 ## 🌟 Overview
 
@@ -34,13 +37,15 @@ MCP Servers is a collection of specialized servers based on the MCP (Model Conte
 
 ### ✨ Key Features
 
-- 🔍 **MCP Prompt Analysis**: Evaluates prompts for MCP server creation
-- 📝 **Prompt Engineering**: Optimizes prompts for different tasks
-- 🎨 **Tailwind CSS v4.1 Support**: Helps with prompts in the context of the new version
-- 🧪 **Complete Testing**: 32/37 tests passing with comprehensive coverage
-- 🚀 **Parallel Execution**: Scripts to run servers in parallel
-- ⚡ **Modern Build System**: uv + pyproject.toml + hatchling
-- 🔧 **Unified Launcher**: main.py centralizes execution of all servers
+- 🎯 **Interactive Multi-Select CLI**: Vue CLI-style checkbox interface for server selection
+- 📊 **Rich Status Dashboard**: Real-time server monitoring with colorized output
+- 🔍 **MCP Prompt Analysis**: Advanced prompts evaluation with scoring systems
+- 📝 **Prompt Engineering**: Multi-framework optimization (CRISPE, RACE, TRACE)
+- 🐳 **Docker Optimization**: Container security best practices and multi-stage builds
+- 🎨 **Modern Frontend Tools**: Tailwind v4.1, React 19, shadcn/ui support
+- 🦀 **Backend Excellence**: Rust idiomatic patterns and Axum web framework
+- ⚡ **Parallel Execution**: Concurrent server management with graceful shutdown
+- 🔧 **Multiple Interfaces**: CLI, terminal menu, or programmatic access
 
 ## 📦 Available Servers
 
@@ -248,6 +253,40 @@ Advanced MCP server for Axum web framework development following official best p
 - `get_axum_magic_patterns` - Magic patterns from rust ecosystem
 - `create_axum_middleware` - Custom middleware creation
 
+### 10. ✅ Docker Optimizer Server (`docker_optimizer_server.py`) - **FUNCTIONAL** 🆕
+
+Advanced MCP server for Docker containerization with focus on prompt optimization and best practices implementation following 2025 container security standards.
+
+**Main Features:**
+
+- 🐳 **Docker Prompt Analysis**: Evaluates Docker prompts with 0-100 scoring system
+- 🔧 **Automatic Enhancement**: Transforms basic prompts into production-ready specifications
+- 🛡️ **Security Best Practices**: Non-root users, minimal images, vulnerability scanning
+- ⚡ **Multi-stage Optimization**: Intelligent layer caching and size reduction
+- 🏗️ **Complete Configuration**: Dockerfile + docker-compose + .dockerignore generation
+
+**Tools:**
+
+- `analyze_docker_prompt` - Docker prompt analysis with detailed feedback
+- `enhance_docker_prompt` - Automatic prompt enhancement with best practices
+- `validate_dockerfile` - Dockerfile validation against security standards
+- `generate_docker_config` - Complete Docker configuration generation
+
+**Supported Technologies:**
+
+- 🐍 Python (FastAPI, Django, Flask)
+- 🟢 Node.js (Express, Next.js, React)
+- 🦀 Rust (Axum, Actix)
+- 🐹 Go (Gin, Echo)
+
+**2025 Best Practices:**
+
+- 🛡️ Security-first approach with non-root execution
+- 🚀 Multi-stage builds for optimal image sizes
+- 🔍 Health checks and monitoring integration
+- 📋 Production-ready docker-compose configurations
+- 🎯 Framework-specific optimizations
+
 ### 🚧 Servers in Development
 
 - **TypeScript Server** (`typescript_server.py`) - In development
@@ -272,109 +311,175 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # Install dependencies and create virtual environment
 uv sync
 
-# Verify installation
-python main.py --help
+# 🎯 Try the modern interactive CLI (recommended)
+uv run mcp_servers
+
+# 📊 Check server status with rich formatting  
+uv run mcp_servers --status
+
+# Alternative ways to launch
+python launcher_cli.py
+uv run python launcher_cli.py
+
+# 🔧 Traditional command-line interface
+uv run python main.py --help
 ```
 
 ## 🚀 Quick Usage
 
-### Main Launcher
+### 🎯 **Modern Interactive CLI (Recommended)**
 
-The centralized launcher allows running all servers in a unified way:
+Experience the Vue CLI-style interface with multi-select checkboxes:
 
 ```bash
-# Run specific server
-python main.py mcp          # MCP prompt analyzer
-python main.py prompt       # Prompt engineering server
-python main.py tailwind     # Tailwind CSS server
-python main.py react_optimizer  # React Optimizer server
-python main.py shadcn        # shadcn/ui Advanced server
-python main.py rust          # Rust Idiomatic server
-python main.py axum          # Axum Web Framework server
+# Launch interactive CLI with multi-select (recommended)
+uv run mcp_servers
 
-# Run all servers (development mode)
-python main.py all
+# Show rich server status dashboard
+uv run mcp_servers --status
 
-# Complete help
-python main.py --help
+# Alternative direct calls
+python launcher_cli.py
+uv run python launcher_cli.py
+
+# Quick demo of all features
+uv run python demo_cli.py
 ```
 
-### Interactive Interface
+**Interactive Features:**
+- ✅ **Multi-select servers** with checkboxes (↑↓ navigate, SPACE select)
+- ⚙️ **Execution modes**: Development, Production, Silent
+- 🔄 **Parallel options**: Run servers simultaneously or sequentially  
+- 📊 **Real-time monitoring** with colored progress indicators
+- 🛑 **Graceful shutdown** with Ctrl+C handling
+
+### 🔧 **Traditional Command-Line**
+
+Direct server execution for automation and scripting:
 
 ```bash
-# Interface with colored menu (recommended)
+# Run specific servers
+uv run python main.py mcp docker rust    # Multiple servers
+uv run python main.py react_optimizer    # Single server with long name
+uv run python main.py all --dev         # All servers in development mode
+
+# Custom port and options
+uv run python main.py mcp --port 3001   # Custom port
+uv run python main.py tailwind --quiet  # Quiet mode
+
+# Complete help and server list
+uv run python main.py --help
+uv run python main.py list
+```
+
+### 🎨 **Interactive Menu Interface**
+
+Traditional terminal menu with numbered options:
+
+```bash
+# Colored interactive menu
 ./run_servers.sh
 
-# Direct execution with options
-bash run_servers.sh menu
-bash run_servers.sh mcp
+# Direct commands
+bash run_servers.sh docker
+bash run_servers.sh status
 ```
 
 ### Run Tests
 
 ```bash
 # All tests (using modernized runner)
-python run_tests.py
+uv run python run_tests.py
 
 # Specific test by module
-python run_tests.py mcp_server
-python run_tests.py prompt_server
-python run_tests.py tailwind_server
+uv run python run_tests.py mcp_server
+uv run python run_tests.py prompt_server
+uv run python run_tests.py tailwind_server
 
 # Using pytest directly
 uv run python -m pytest tests/ -v
 
 # With detailed report
-python run_tests.py --verbose
+uv run python run_tests.py --verbose
 ```
 
-## ⚡ Quick Start
+## ⚡ Quick Start Examples
 
-### 🎯 Complete Integration Demo
+### 🎯 **Scenario 1: Frontend Development**
 
-Run our demo that shows all servers working together:
+Select React, Tailwind, and shadcn/ui servers for modern frontend development:
 
 ```bash
-# Complete integration demo
-python docs/examples/complete_integration_demo.py
+# Interactive multi-select (recommended)
+uv run mcp_servers
+# Select: React Optimizer + Tailwind CSS + shadcn/ui + Development Mode
+
+# Direct command
+uv run python main.py react_optimizer tailwind shadcn --dev
 ```
 
-This demo demonstrates:
+### 🐳 **Scenario 2: Full-Stack with Docker**
 
-- ✅ Complete MCP prompt analysis
-- ✅ Optimization with CRISPE/RACE/TRACE frameworks
-- ✅ Tailwind v4.1 component creation
-- ✅ Automatic MCP server generation
-- ✅ End-to-end integrated workflow
-
-## 📋 Usage Examples
-
-### MCP Prompt Analysis
-
-```python
-# Using the library directly
-from servers.mcp_server import AnalisadorPromptMCP
-
-analisador = AnalisadorPromptMCP()
-resultado = analisador.analisar_prompt(
-    "Create an MCP server for Python code analysis"
-)
-
-print(f"Score: {resultado.pontuacao}/10")
-print(f"Recommendations: {resultado.recomendacoes}")
-```
-
-### Execution via Launcher
+Complete development environment with containerization:
 
 ```bash
-# Complete interactive interface
-./run_servers.sh
+# Interactive selection with rich interface
+uv run mcp_servers --status  # Check all servers
+uv run mcp_servers           # Select: Docker + React + Rust + Axum
 
-# Run all servers in development
-python main.py all --dev
+# Command-line approach  
+uv run python main.py docker rust axum react --dev
+```
 
-# Run specific servers in parallel
-python main.py mcp prompt tailwind
+### 🔍 **Scenario 3: Prompt Engineering Workflow**
+
+MCP server development and prompt optimization:
+
+```bash
+# Quick demo of interactive features
+uv run python demo_cli.py
+
+# Full prompt engineering stack
+uv run mcp_servers
+# Select: MCP Analysis + Prompt Engineering + FastMCP + Production Mode
+```
+
+## 📋 Advanced Usage
+
+### 🎛️ **CLI Interface Comparison**
+
+| Interface | Command | Best For | Features |
+|-----------|---------|----------|----------|
+| **Interactive CLI** | `uv run mcp_servers` | **Interactive Development** | Vue CLI-style, multi-select, rich output |
+| **Direct CLI** | `uv run python launcher_cli.py` | **Development & Testing** | Same features, direct Python call |
+| **Main Launcher** | `uv run python main.py` | **Automation & Scripts** | Direct commands, programmatic access |
+| **Shell Menu** | `./run_servers.sh` | **Traditional Terminal** | Numbered menu, bash compatibility |
+
+### 🔧 **Integration Examples**
+
+```bash
+# Development workflow with multiple interfaces
+uv run mcp_servers --status           # Check server health  
+uv run python main.py mcp --port 3001 # Start specific server
+./run_servers.sh docker               # Traditional menu approach
+
+# Automation and CI/CD
+uv run python main.py all --quiet             # Silent bulk execution
+uv run python main.py list | grep FUNCTIONAL  # Server validation
+uv run python demo_cli.py > server_report.txt # Generate reports
+```
+
+### 📊 **Monitoring and Status**
+
+```bash
+# Rich formatted status dashboard
+uv run mcp_servers --status
+
+# Server health check for automation  
+uv run python main.py list
+
+# Traditional status with colors
+./run_servers.sh status
 ```
 
 ## 🧪 Testing System v2.0
@@ -388,12 +493,12 @@ The v2.0 project includes a modernized testing system with pytest:
 ⚠️ 1 warning (pytest-asyncio not installed)
 
 # Run all tests
-python run_tests.py
+uv run python run_tests.py
 
 # Specific tests by module
-python run_tests.py mcp_server      # ✅ 10/10 tests passing
-python run_tests.py prompt_server   # ✅ 1/1 test passing, 4 skipped
-python run_tests.py tailwind_server # 🚧 In development
+uv run python run_tests.py mcp_server      # ✅ 10/10 tests passing
+uv run python run_tests.py prompt_server   # ✅ 1/1 test passing, 4 skipped
+uv run python run_tests.py tailwind_server # 🚧 In development
 
 # Using pytest directly
 uv run python -m pytest tests/ -v
@@ -407,6 +512,7 @@ uv run python -m pytest tests/ --cov=servers --cov-report=term-missing
 ```text
 mcp-servers/
 ├── 🚀 main.py                  # Unified main launcher
+├── 🎯 launcher_cli.py          # Modern interactive CLI (Vue CLI-style)
 ├── 🔧 pyproject.toml           # Project configuration (uv)
 ├── 🧪 run_tests.py             # Modernized test runner
 ├── 📜 run_servers.sh           # Interactive execution script
@@ -422,6 +528,7 @@ mcp-servers/
 │   ├── ✅ react_server.py      # React server (functional)
 │   ├── ✅ rust_server.py       # Rust Idiomatic server (functional)
 │   ├── ✅ axum_server.py       # Axum Web Framework server (functional)
+│   ├── ✅ docker_optimizer_server.py # Docker Optimizer server (functional)
 │   └── 🚧 typescript_server.py # TypeScript server (in development)
 │
 ├── 🧪 tests/                   # Tests with pytest (11/15 passing)
@@ -503,25 +610,29 @@ The MCP Prompt Analyzer evaluates prompts on specific criteria (1-10 scoring):
 - **pyproject.toml**: Centralized project configuration
 - **Hatchling**: Modern and efficient build backend
 
-### Automation Scripts
+### Interface Scripts
 
-- 🚀 **main.py** - Centralized launcher for all servers
-- 🔧 **run_servers.sh** - Interactive interface with colored menu
-- 🧪 **run_tests.py** - Modernized test runner with reports
+- 🎯 **uv run mcp_servers** - **Primary interactive CLI** with Vue-style multi-select checkboxes
+- 🎯 **launcher_cli.py** - **Direct interactive CLI** (same features, direct Python call)
+- 🚀 **main.py** - **Direct command launcher** for automation and scripting  
+- 🔧 **run_servers.sh** - **Traditional terminal menu** with numbered options
+- 🧪 **run_tests.py** - **Modernized test runner** with coverage reports
+- 🎬 **demo_cli.py** - **Feature demonstration** and capability showcase
 
 ### Advanced Features
 
-- ⚡ **Asynchronous Execution**: Native support for async/await operations
-- 🔄 **Auto Reload**: Hot reload in development mode
-- 📊 **Test Reports**: Coverage and detailed reports
-- 🎨 **Colored Interface**: Colorized output for better UX
-- 🛡️ **Signal Handling**: Clean shutdown with Ctrl+C
+- 🎯 **Vue CLI-style Interface**: Checkbox selection with rich formatting and real-time feedback
+- ⚡ **Asynchronous Execution**: Parallel server management with async/await patterns
+- 📊 **Rich Status Dashboard**: Colorized tables, progress bars, and live monitoring
+- 🔄 **Execution Modes**: Development (verbose), Production (optimized), Silent (minimal)
+- 🛡️ **Graceful Shutdown**: Clean Ctrl+C handling with process termination
+- 📋 **Smart Validation**: Real-time server file checking and dependency verification
 
 ## 📈 Project Status
 
 ### ✅ Implemented Features
 
-- **Core Servers**: 9/10 functional servers (mcp, prompt, tailwind, react_optimizer, shadcn, fastmcp, react, rust, axum)
+- **Core Servers**: 10/11 functional servers (mcp, prompt, tailwind, react_optimizer, shadcn, fastmcp, react, rust, axum, docker)
 - **Testing System**: 11/15 tests passing (73% success rate)
 - **Build System**: Complete migration to uv + pyproject.toml
 - **Documentation**: README v2.0 and updated docs/
@@ -529,7 +640,7 @@ The MCP Prompt Analyzer evaluates prompts on specific criteria (1-10 scoring):
 
 ### 🚧 In Development
 
-- **Additional Servers**: TypeScript (1/10 servers pending)
+- **Additional Servers**: TypeScript (1/11 servers pending)
 - **Remaining Tests**: 4 pending tests for new servers
 - **Dependencies**: Optional pytest-asyncio and pytest-cov
 
