@@ -55,10 +55,10 @@ Analyzes prompts for MCP server creation, scoring them (1-10) and providing spec
 
 **Tools:**
 
-- `analisar_prompt_mcp` - Complete prompt analysis
-- `obter_melhores_praticas_mcp` - Information about best practices
-- `sugerir_melhorias_prompt` - Specific suggestions
-- `validar_requisitos_mcp` - Validation against MCP requirements
+- `mcp_analyze_server_prompt` - Complete prompt analysis
+- `mcp_get_best_practices` - Information about best practices
+- `mcp_suggest_prompt_improvements` - Specific suggestions
+- `mcp_validate_requirements` - Validation against MCP requirements
 
 ### 2. ✅ Prompt Engineering Server (`prompt_server.py`) - **FUNCTIONAL**
 
@@ -66,10 +66,11 @@ Optimizes prompts for different tasks using advanced prompt engineering strategi
 
 **Tools:**
 
-- `optimize_prompt` - Applies optimization techniques
-- `analyze_prompt` - Evaluates prompt structure
-- `suggest_framework` - Applies different strategies
-- `apply_advanced_technique` - Creates templates for different scenarios
+- `prompt_optimize_generic` - Applies optimization techniques
+- `prompt_analyze_generic` - Evaluates prompt structure
+- `prompt_suggest_framework` - Applies different strategies
+- `prompt_apply_technique` - Creates templates for different scenarios
+- `prompt_check_bias` - Checks for potential biases in prompts
 
 ### 3. ✅ Tailwind CSS v4.1 Server (`tailwind_server.py`) - **FUNCTIONAL**
 
@@ -77,10 +78,11 @@ Provides context and support for development with Tailwind CSS v4.1.
 
 **Tools:**
 
-- `contextualize_tailwind_prompt` - Summary of v4.1 features
-- `get_tailwind_v4_info` - Helps with migration between versions
-- `generate_tailwind_v4_code` - Optimizes class usage
-- `get_tailwind_v4_docs` - Creates components following best practices
+- `tailwind_contextualize_prompt` - Summary of v4.1 features
+- `tailwind_get_v4_info` - Helps with migration between versions
+- `tailwind_generate_v4_code` - Optimizes class usage
+- `tailwind_get_v4_docs` - Creates components following best practices
+- `tailwind_get_v4_examples` - Provides code examples for v4.1 features
 
 ### 4. ✅ React Optimizer Server (`react_optimizer_server.py`) - **FUNCTIONAL** 🆕
 
@@ -95,13 +97,13 @@ Unified server for analysis/optimization of existing React code and prompt optim
 
 **Tools:**
 
-- `analyze_react_code` - Analysis of existing React code
-- `optimize_react_code` - Automatic optimization with 2025 trends
-- `analyze_react_prompt` - Prompt quality analysis
-- `optimize_react_prompt` - Prompt optimization for AI tools (v0.dev, Cursor, etc.)
-- `validate_prompt_quality` - Development workflow generation
-- `get_react_trends_2025` - React 2025 best practices
-- `generate_component_template` - Component integration validation
+- `react_optimizer_analyze_code` - Analysis of existing React code
+- `react_optimizer_optimize_code` - Automatic optimization with 2025 trends
+- `react_optimizer_analyze_prompt` - Prompt quality analysis
+- `react_optimizer_optimize_prompt` - Prompt optimization for AI tools (v0.dev, Cursor, etc.)
+- `react_optimizer_validate_prompt_quality` - Development workflow generation
+- `react_optimizer_get_trends_2025` - React 2025 best practices
+- `react_optimizer_generate_component_template` - Component integration validation
 
 **Supported UI/UX 2025 Trends:**
 
@@ -130,13 +132,13 @@ Advanced MCP server for complete shadcn/ui integration, offering intelligent ana
 
 **Tools:**
 
-- `analyze_shadcn_component` - Code analysis with shadcn/ui components
-- `optimize_shadcn_component` - Automatic optimization with best practices
-- `generate_shadcn_component` - Custom component generation
-- `get_shadcn_component_info` - Detailed component information
-- `get_shadcn_setup_guide` - Configuration guides by framework
-- `create_shadcn_theme` - Custom theme creator
-- `get_shadcn_best_practices` - Recommended patterns and practices
+- `shadcn_analyze_component` - Code analysis with shadcn/ui components
+- `shadcn_optimize_component` - Automatic optimization with best practices
+- `shadcn_generate_component` - Custom component generation
+- `shadcn_get_component_info` - Detailed component information
+- `shadcn_get_setup_guide` - Configuration guides by framework
+- `shadcn_create_theme` - Custom theme creator
+- `shadcn_get_best_practices` - Recommended patterns and practices
 
 **Supported Components:**
 
@@ -156,10 +158,10 @@ Optimized server using FastMCP for MCP prompt analysis with advanced analysis an
 
 **Tools:**
 
-- `analyze_mcp_prompt` - Advanced MCP prompt analysis with scoring
-- `suggest_mcp_prompt_improvements` - Specific improvement suggestions
-- `validate_mcp_requirements` - Complete MCP requirements validation
-- `generate_mcp_server_template` - Server template generation
+- `fastmcp_analyze_mcp_prompt` - Advanced MCP prompt analysis with scoring
+- `fastmcp_suggest_prompt_improvements` - Specific improvement suggestions
+- `fastmcp_validate_requirements` - Complete MCP requirements validation
+- `fastmcp_generate_server_template` - Server template generation
 
 **Resources:**
 
@@ -181,11 +183,12 @@ Advanced MCP server for React 19 development with modern features, including Ser
 
 **Tools:**
 
-- `analisar_prompt_react` - Prompt analysis with scoring and feedback
-- `obter_template_prompt` - Optimized templates for different project types
-- `sugerir_melhorias_contextuais` - Context-specific improvements
-- `validar_requisitos_react` - Essential requirements validation
-- `gerar_prompt_otimizado` - Automatic structured prompt generation
+- `react19_analyze_prompt` - Prompt analysis with scoring and feedback
+- `react19_get_prompt_template` - Optimized templates for different project types
+- `react19_suggest_contextual_improvements` - Context-specific improvements
+- `react19_validate_requirements` - Essential requirements validation
+- `react19_generate_optimized_prompt` - Automatic structured prompt generation
+- `react19_get_server_resources` - Information about server resources
 
 **Supported React 19 Features:**
 
@@ -215,11 +218,11 @@ MCP server refactored to follow idiomatic Rust patterns based on the `mre/idioma
 
 **Idiomatic Tools:**
 
-- `analyze_idiomatic_rust` - Idiomatic analysis with scoring by category
-- `generate_idiomatic_project` - Project generation following idiomatic patterns
-- `get_idiomatic_patterns` - Complete pattern library with examples
-- `refactor_to_idiomatic` - Automatic refactoring to idiomatic code
-- `get_rust_api_guidelines` - Official guidelines organized by category
+- `rust_analyze_idiomatic_code` - Idiomatic analysis with scoring by category
+- `rust_generate_idiomatic_project` - Project generation following idiomatic patterns
+- `rust_get_idiomatic_patterns` - Complete pattern library with examples
+- `rust_refactor_to_idiomatic` - Automatic refactoring to idiomatic code
+- `rust_get_api_guidelines` - Official guidelines organized by category
 
 **Analysis Categories:**
 
@@ -246,12 +249,12 @@ Advanced MCP server for Axum web framework development following official best p
 
 **Tools:**
 
-- `analyze_axum_code` - Axum code analysis with pattern detection
-- `generate_axum_project` - Complete project generation
-- `get_axum_patterns` - Pattern library with practical examples
-- `optimize_axum_handler` - Handler optimization with best practices
-- `get_axum_magic_patterns` - Magic patterns from rust ecosystem
-- `create_axum_middleware` - Custom middleware creation
+- `axum_analyze_code` - Axum code analysis with pattern detection
+- `axum_generate_project` - Complete project generation
+- `axum_get_patterns` - Pattern library with practical examples
+- `axum_optimize_handler` - Handler optimization with best practices
+- `axum_get_magic_patterns` - Magic patterns from rust ecosystem
+- `axum_create_middleware` - Custom middleware creation
 
 ### 10. ✅ Docker Optimizer Server (`docker_optimizer_server.py`) - **FUNCTIONAL** 🆕
 
@@ -267,10 +270,10 @@ Advanced MCP server for Docker containerization with focus on prompt optimizatio
 
 **Tools:**
 
-- `analyze_docker_prompt` - Docker prompt analysis with detailed feedback
-- `enhance_docker_prompt` - Automatic prompt enhancement with best practices
-- `validate_dockerfile` - Dockerfile validation against security standards
-- `generate_docker_config` - Complete Docker configuration generation
+- `docker_analyze_prompt` - Docker prompt analysis with detailed feedback
+- `docker_enhance_prompt` - Automatic prompt enhancement with best practices
+- `docker_validate_dockerfile` - Dockerfile validation against security standards
+- `docker_generate_config` - Complete Docker configuration generation
 
 **Supported Technologies:**
 
@@ -289,7 +292,16 @@ Advanced MCP server for Docker containerization with focus on prompt optimizatio
 
 ### 🚧 Servers in Development
 
-- **TypeScript Server** (`typescript_server.py`) - In development
+### TypeScript MCP Server (`typescript_server.py`) - **IN DEVELOPMENT**
+
+Portuguese-language MCP server for TypeScript server creation analysis following MCP best practices.
+
+**Tools (In Development):**
+
+- `typescript_analyze_mcp_prompt` - Análise completa de prompt para MCP
+- `typescript_get_mcp_best_practices` - Melhores práticas de desenvolvimento MCP
+- `typescript_suggest_prompt_improvements` - Sugestões específicas de melhorias
+- `typescript_validate_mcp_requirements` - Validação contra requisitos MCP
 
 ## 🛠️ Installation
 
@@ -347,6 +359,7 @@ uv run python demo_cli.py
 ```
 
 **Interactive Features:**
+- 🚀 **Quick Start All**: One-click option to launch all functional servers
 - ✅ **Multi-select servers** with checkboxes (↑↓ navigate, SPACE select)
 - ⚙️ **Execution modes**: Development, Production, Silent
 - 🔄 **Parallel options**: Run servers simultaneously or sequentially  
@@ -418,14 +431,18 @@ uv run mcp_servers
 uv run python main.py react_optimizer tailwind shadcn --dev
 ```
 
-### 🐳 **Scenario 2: Full-Stack with Docker**
+### 🐳 **Scenario 2: Full-Stack Development Environment**
 
-Complete development environment with containerization:
+Complete development environment setup:
 
 ```bash
-# Interactive selection with rich interface
-uv run mcp_servers --status  # Check all servers
-uv run mcp_servers           # Select: Docker + React + Rust + Axum
+# Quick Start All - Launch all functional servers at once
+uv run mcp_servers
+# Select: 🚀 START ALL SERVERS (first option)
+
+# Custom selection with rich interface
+uv run mcp_servers --status  # Check all servers first
+uv run mcp_servers           # Then select: Docker + React + Rust + Axum
 
 # Command-line approach  
 uv run python main.py docker rust axum react --dev

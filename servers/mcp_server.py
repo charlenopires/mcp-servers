@@ -281,7 +281,7 @@ analyzer = MCPPromptAnalyzer()
 
 
 @mcp.tool()
-def analyze_mcp_prompt(prompt: str) -> PromptAnalysis:
+def mcp_analyze_server_prompt(prompt: str) -> PromptAnalysis:
     """
     Analyze an MCP server creation prompt for quality and alignment with best practices.
 
@@ -302,7 +302,7 @@ def analyze_mcp_prompt(prompt: str) -> PromptAnalysis:
 
 
 @mcp.tool()
-def get_mcp_best_practices() -> Dict[str, str]:
+def mcp_get_best_practices() -> Dict[str, str]:
     """
     Get a summary of MCP server development best practices.
 
@@ -324,7 +324,7 @@ def get_mcp_best_practices() -> Dict[str, str]:
 
 
 @mcp.tool()
-def suggest_prompt_improvements(original_prompt: str) -> Dict[str, Any]:
+def mcp_suggest_prompt_improvements(original_prompt: str) -> Dict[str, Any]:
     """
     Suggest specific improvements for an MCP server creation prompt.
 
@@ -396,7 +396,7 @@ def suggest_prompt_improvements(original_prompt: str) -> Dict[str, Any]:
 
 
 @mcp.tool()
-def validate_mcp_requirements(requirements: str) -> ValidationReport:
+def mcp_validate_requirements(requirements: str) -> ValidationReport:
     """
     Validate MCP server requirements against best practices checklist.
 

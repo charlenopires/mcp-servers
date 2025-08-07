@@ -32,7 +32,7 @@ This server specializes in Rust code analysis and improvement, offering tools to
 
 ## Available Tools
 
-### `analyze_idiomatic_rust(code: str)`
+### `rust_analyze_idiomatic_code(code: str)`
 Analyzes Rust code for idiomatic patterns and provides comprehensive feedback.
 
 **Parameters:**
@@ -52,7 +52,7 @@ Analyzes Rust code for idiomatic patterns and provides comprehensive feedback.
 - **Iterator Usage**: Functional programming patterns
 - **Memory Safety**: Safe memory management practices
 
-### `generate_idiomatic_project(project_type: str, options?)`
+### `rust_generate_idiomatic_project(project_type: str, options?)`
 Generates complete Rust projects following idiomatic patterns.
 
 **Parameters:**
@@ -78,7 +78,7 @@ Generates complete Rust projects following idiomatic patterns.
 - `documentation` (string): README and API documentation
 - `tests` (object): Comprehensive test suite
 
-### `get_idiomatic_patterns(category: str = "all")`
+### `rust_get_idiomatic_patterns(category: str = "all")`
 Returns idiomatic Rust patterns organized by category.
 
 **Parameters:**
@@ -97,7 +97,7 @@ Returns idiomatic Rust patterns organized by category.
 - Good vs. bad pattern comparisons
 - Performance implications and trade-offs
 
-### `refactor_to_idiomatic(code: str, focus_areas?: string[])`
+### `rust_refactor_to_idiomatic(code: str, focus_areas?: string[])`
 Refactors Rust code to follow idiomatic patterns.
 
 **Parameters:**
@@ -118,7 +118,7 @@ Refactors Rust code to follow idiomatic patterns.
 - `explanations` (array): Detailed explanations for each change
 - `performance_impact` (string): Expected performance improvement
 
-### `get_rust_api_guidelines()`
+### `rust_get_api_guidelines()`
 Returns the official Rust API design guidelines.
 
 **Returns:**
@@ -283,7 +283,7 @@ path = "src/main.rs"
 
 ### Code Analysis
 ```python
-analysis = analyze_idiomatic_rust("""
+analysis = rust_analyze_idiomatic_code("""
 fn process_items(items: Vec<String>) -> Vec<String> {
     let mut result = Vec::new();
     for item in items {
@@ -297,7 +297,7 @@ fn process_items(items: Vec<String>) -> Vec<String> {
 
 ### Project Generation
 ```python
-project = generate_idiomatic_project(
+project = rust_generate_idiomatic_project(
     "web-api",
     features=["database", "authentication"],
     complexity="intermediate"
@@ -307,7 +307,7 @@ project = generate_idiomatic_project(
 
 ### Code Refactoring
 ```python
-refactored = refactor_to_idiomatic(code, ["iterators", "error_handling"])
+refactored = rust_refactor_to_idiomatic(code, ["iterators", "error_handling"])
 # Returns improved code with iterator chains and proper error handling
 ```
 

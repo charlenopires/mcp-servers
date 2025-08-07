@@ -1838,7 +1838,7 @@ my-idiomatic-lib/
 # ================================
 
 @mcp.tool()
-async def analyze_idiomatic_rust(code: str) -> Dict[str, Any]:
+async def rust_analyze_idiomatic_code(code: str) -> Dict[str, Any]:
     """
     Analisa código Rust para padrões idiomáticos baseado em mre/idiomatic-rust.
     
@@ -1873,7 +1873,7 @@ async def analyze_idiomatic_rust(code: str) -> Dict[str, Any]:
         raise
 
 @mcp.tool()
-async def generate_idiomatic_project(
+async def rust_generate_idiomatic_project(
     project_type: str,
     features: Optional[List[str]] = None,
     complexity: str = "intermediate"
@@ -1916,7 +1916,7 @@ async def generate_idiomatic_project(
         raise
 
 @mcp.tool()
-async def get_idiomatic_patterns(category: str = "all") -> Dict[str, Any]:
+async def rust_get_idiomatic_patterns(category: str = "all") -> Dict[str, Any]:
     """
     Retorna padrões idiomáticos Rust por categoria baseado em mre/idiomatic-rust.
     
@@ -1971,7 +1971,7 @@ async def get_idiomatic_patterns(category: str = "all") -> Dict[str, Any]:
         raise
 
 @mcp.tool()
-async def refactor_to_idiomatic(
+async def rust_refactor_to_idiomatic(
     code: str,
     focus_areas: Optional[List[str]] = None
 ) -> Dict[str, Any]:
@@ -2043,7 +2043,7 @@ async def refactor_to_idiomatic(
         raise
 
 @mcp.tool()
-async def get_rust_api_guidelines() -> Dict[str, Any]:
+async def rust_get_api_guidelines() -> Dict[str, Any]:
     """
     Retorna diretrizes de API do Rust oficial (rust-lang/api-guidelines).
     

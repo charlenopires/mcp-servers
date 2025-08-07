@@ -1200,7 +1200,7 @@ class ReactUnifiedOptimizer:
 
 
 @mcp.tool()
-async def analyze_react_code(
+async def react_optimizer_analyze_code(
     code: str,
     component_type: str = "component"
 ) -> Dict[str, Any]:
@@ -1237,7 +1237,7 @@ async def analyze_react_code(
 
 
 @mcp.tool()
-async def optimize_react_code(
+async def react_optimizer_optimize_code(
     code: str,
     focus_areas: Optional[List[str]] = None
 ) -> Dict[str, Any]:
@@ -1273,7 +1273,7 @@ async def optimize_react_code(
 
 
 @mcp.tool()
-async def analyze_react_prompt(prompt: str) -> Dict[str, Any]:
+async def react_optimizer_analyze_prompt(prompt: str) -> Dict[str, Any]:
     """
     Analisa um prompt básico para React e identifica oportunidades de melhoria.
 
@@ -1305,7 +1305,7 @@ async def analyze_react_prompt(prompt: str) -> Dict[str, Any]:
 
 
 @mcp.tool()
-async def optimize_react_prompt(
+async def react_optimizer_optimize_prompt(
     prompt: str,
     target_ai_tool: str = "generic",
     component_type: Optional[str] = None,
@@ -1361,7 +1361,7 @@ async def optimize_react_prompt(
 
 
 @mcp.tool()
-async def validate_prompt_quality(prompt: str) -> Dict[str, Any]:
+async def react_optimizer_validate_prompt_quality(prompt: str) -> Dict[str, Any]:
     """
     Valida a qualidade de um prompt para geração de código React com score 0-100.
 
@@ -1428,7 +1428,7 @@ async def validate_prompt_quality(prompt: str) -> Dict[str, Any]:
 
 
 @mcp.tool()
-async def generate_component_template(
+async def react_optimizer_generate_component_template(
     component_type: str,
     complexity: str = "intermediate",
     target_ai_tool: str = "generic",
@@ -1562,7 +1562,7 @@ async def generate_component_template(
 
 
 @mcp.tool()
-async def get_react_trends_2025() -> Dict[str, Any]:
+async def react_optimizer_get_trends_2025() -> Dict[str, Any]:
     """
     Retorna as principais tendências React e UI/UX para 2025.
 

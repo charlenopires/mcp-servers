@@ -26,7 +26,7 @@ This server helps developers create better MCP servers by analyzing their creati
 
 ## Available Tools
 
-### `analyze_mcp_prompt(prompt: str)`
+### `mcp_analyze_server_prompt(prompt: str)`
 Analyzes an MCP server creation prompt for quality and alignment with best practices.
 
 **Parameters:**
@@ -42,14 +42,14 @@ Analyzes an MCP server creation prompt for quality and alignment with best pract
 
 **Example:**
 ```python
-analysis = analyze_mcp_prompt("""
+analysis = mcp_analyze_server_prompt("""
 Create an MCP server for file management with tools to read, write, 
 and delete files. Include proper error handling and security validation.
 """)
 # Returns detailed analysis with score and recommendations
 ```
 
-### `get_mcp_best_practices()`
+### `mcp_get_best_practices()`
 Returns a summary of MCP server development best practices.
 
 **Returns:**
@@ -57,11 +57,11 @@ Returns a summary of MCP server development best practices.
 
 **Example:**
 ```python
-practices = get_mcp_best_practices()
+practices = mcp_get_best_practices()
 # Returns: {"clear_purpose": "Define a specific...", "tool_design": "Design tools..."}
 ```
 
-### `suggest_prompt_improvements(original_prompt: str)`
+### `mcp_suggest_prompt_improvements(original_prompt: str)`
 Suggests specific improvements for an MCP server creation prompt.
 
 **Parameters:**
@@ -75,11 +75,11 @@ Suggests specific improvements for an MCP server creation prompt.
 
 **Example:**
 ```python
-improvements = suggest_prompt_improvements("Create a simple MCP server")
+improvements = mcp_suggest_prompt_improvements("Create a simple MCP server")
 # Returns enhanced prompt with additional requirements
 ```
 
-### `validate_mcp_requirements(requirements: str)`
+### `mcp_validate_requirements(requirements: str)`
 Validates MCP server requirements against best practices checklist.
 
 **Parameters:**
@@ -131,7 +131,7 @@ Add schema definitions for all data types.
 Include comprehensive testing and documentation.
 """
 
-analysis = analyze_mcp_prompt(prompt)
+analysis = mcp_analyze_server_prompt(prompt)
 print(f"Quality Score: {analysis.score}/10")
 for recommendation in analysis.recommendations:
     print(f"• {recommendation}")
@@ -147,7 +147,7 @@ Security: Input validation, rate limiting
 Documentation: API examples and usage guide
 """
 
-validation = validate_mcp_requirements(requirements)
+validation = mcp_validate_requirements(requirements)
 if validation.validation_passed:
     print("✅ Requirements meet MCP best practices")
 else:

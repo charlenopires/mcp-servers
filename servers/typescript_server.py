@@ -10,25 +10,25 @@ import re
 from datetime import datetime
 
 # Inicializar o servidor MCP
-mcp = FastMCP("Otimização de Prompts TypeScript")
+mcp = FastMCP("TypeScript Analysis Server")
 
 # Modelos de dados
 
 
 class AnalisePrompt(BaseModel):
-    """Resultado da análise de um prompt TypeScript"""
+    """Result of TypeScript prompt analysis"""
     pontuacao: float = Field(
-        description="Pontuação de qualidade do prompt (0-100)")
+        description="Quality score of the prompt (0-100)")
     pontos_fortes: List[str] = Field(
-        description="Aspectos positivos do prompt")
-    pontos_fracos: List[str] = Field(description="Aspectos a melhorar")
-    recomendacoes: List[str] = Field(description="Recomendações específicas")
+        description="Positive aspects of the prompt")
+    pontos_fracos: List[str] = Field(description="Aspects to improve")
+    recomendacoes: List[str] = Field(description="Specific recommendations")
     categorias_ausentes: List[str] = Field(
-        description="Categorias importantes não mencionadas")
+        description="Important categories not mentioned")
 
 
 class MelhoriaPrompt(BaseModel):
-    """Sugestão de melhoria para um prompt"""
+    """Prompt improvement suggestion"""
     prompt_melhorado: str = Field(description="Versão aprimorada do prompt")
     justificativa: str = Field(
         description="Explicação das melhorias aplicadas")
@@ -110,15 +110,15 @@ PALAVRAS_CHAVE_QUALIDADE = {
 
 
 @mcp.tool()
-async def analisar_prompt_mcp(prompt: str) -> AnalisePrompt:
+async def typescript_analyze_mcp_prompt(prompt: str) -> AnalisePrompt:
     """
-    Analisar um prompt de criação de servidor MCP para qualidade e alinhamento com melhores práticas.
+    Analyze an MCP server creation prompt for quality and alignment with best practices.
 
     Args:
-        prompt: O texto do prompt para analisar para criação de servidor MCP
+        prompt: The prompt text to analyze for MCP server creation
 
     Returns:
-        AnalisePrompt: Análise detalhada com pontuação, pontos fortes, pontos fracos e recomendações
+        AnalisePrompt: Detailed analysis with score, strengths, weaknesses and recommendations
     """
     prompt_lower = prompt.lower()
 
@@ -233,12 +233,12 @@ async def analisar_prompt_mcp(prompt: str) -> AnalisePrompt:
 
 
 @mcp.tool()
-async def obter_melhores_praticas_mcp() -> Dict[str, str]:
+async def typescript_get_mcp_best_practices() -> Dict[str, str]:
     """
-    Obter um resumo das melhores práticas de desenvolvimento de servidor MCP.
+    Get a summary of MCP server development best practices.
 
     Returns:
-        Dict[str, str]: Principais melhores práticas para desenvolvimento de servidor MCP
+        Dict[str, str]: Key best practices for MCP server development
     """
     return {
         "estrutura_codigo": """
@@ -293,15 +293,15 @@ async def obter_melhores_praticas_mcp() -> Dict[str, str]:
 
 
 @mcp.tool()
-async def sugerir_melhorias_prompt(prompt_original: str) -> Dict[str, Any]:
+async def typescript_suggest_prompt_improvements(prompt_original: str) -> Dict[str, Any]:
     """
-    Sugerir melhorias específicas para um prompt de criação de servidor MCP.
+    Suggest specific improvements for an MCP server creation prompt.
 
     Args:
-        prompt_original: O prompt original para melhorar
+        prompt_original: The original prompt to improve
 
     Returns:
-        Dict contendo prompt melhorado e explicação das mudanças
+        Dict containing improved prompt and explanation of changes
     """
     # Analisar o prompt original
     analise = await analisar_prompt_mcp(prompt_original)
@@ -411,15 +411,15 @@ Pontuação estimada após melhorias: {min(analise.pontuacao + len(melhorias) * 
 
 
 @mcp.tool()
-async def validar_requisitos_mcp(requisitos: str) -> Dict[str, Any]:
+async def typescript_validate_mcp_requirements(requisitos: str) -> Dict[str, Any]:
     """
-    Validar requisitos de servidor MCP contra lista de verificação de melhores práticas.
+    Validate MCP server requirements against best practices checklist.
 
     Args:
-        requisitos: A especificação de requisitos para validar
+        requisitos: The requirements specification to validate
 
     Returns:
-        Dict contendo resultados de validação e requisitos ausentes
+        Dict containing validation results and missing requirements
     """
     requisitos_lower = requisitos.lower()
     validacoes = {}

@@ -1412,7 +1412,7 @@ export default function Page() {{
 # ================================
 
 @mcp.tool()
-async def analyze_shadcn_component(code: str) -> Dict[str, Any]:
+async def shadcn_analyze_component(code: str) -> Dict[str, Any]:
     """
     Analisa código que usa componentes shadcn/ui e fornece insights detalhados.
     
@@ -1435,7 +1435,7 @@ async def analyze_shadcn_component(code: str) -> Dict[str, Any]:
         raise
 
 @mcp.tool()
-async def optimize_shadcn_component(
+async def shadcn_optimize_component(
     code: str,
     focus_areas: Optional[List[str]] = None
 ) -> Dict[str, Any]:
@@ -1462,7 +1462,7 @@ async def optimize_shadcn_component(
         raise
 
 @mcp.tool()
-async def generate_shadcn_component(
+async def shadcn_generate_component(
     component_type: str,
     use_case: str = "",
     framework: str = "next",
@@ -1513,7 +1513,7 @@ async def generate_shadcn_component(
         raise
 
 @mcp.tool()
-async def get_shadcn_component_info(component_name: str = "") -> Dict[str, Any]:
+async def shadcn_get_component_info(component_name: str = "") -> Dict[str, Any]:
     """
     Obtém informações detalhadas sobre componentes shadcn/ui disponíveis.
     
@@ -1562,7 +1562,7 @@ async def get_shadcn_component_info(component_name: str = "") -> Dict[str, Any]:
         raise
 
 @mcp.tool()
-async def get_shadcn_setup_guide(framework: str = "next") -> Dict[str, Any]:
+async def shadcn_get_setup_guide(framework: str = "next") -> Dict[str, Any]:
     """
     Fornece guia completo de configuração do shadcn/ui para diferentes frameworks.
     
@@ -1628,7 +1628,7 @@ async def get_shadcn_setup_guide(framework: str = "next") -> Dict[str, Any]:
         raise
 
 @mcp.tool()
-async def create_shadcn_theme(
+async def shadcn_create_theme(
     primary_color: str = "#000000",
     secondary_color: str = "#f1f5f9",
     accent_color: str = "#0ea5e9",
@@ -1840,7 +1840,7 @@ export default config;'''
         raise
 
 @mcp.tool()
-async def get_shadcn_best_practices() -> Dict[str, Any]:
+async def shadcn_get_best_practices() -> Dict[str, Any]:
     """
     Retorna guia de melhores práticas para uso do shadcn/ui.
     

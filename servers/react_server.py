@@ -465,7 +465,7 @@ def improve_prompt(original_prompt: str, covered_areas: Dict[str, bool]) -> str:
 
 
 @mcp.tool()
-async def analyze_react_prompt(prompt: str) -> PromptAnalysis:
+async def react19_analyze_prompt(prompt: str) -> PromptAnalysis:
     """
     Analyzes a React code creation prompt and provides detailed feedback
 
@@ -514,7 +514,7 @@ async def analyze_react_prompt(prompt: str) -> PromptAnalysis:
 
 
 @mcp.tool()
-async def get_prompt_template(template_type: str = "basic_component") -> Dict[str, str]:
+async def react19_get_prompt_template(template_type: str = "basic_component") -> Dict[str, str]:
     """
     Gets an optimized prompt template for React
 
@@ -535,7 +535,7 @@ async def get_prompt_template(template_type: str = "basic_component") -> Dict[st
 
 
 @mcp.tool()
-async def suggest_contextual_improvements(
+async def react19_suggest_contextual_improvements(
     prompt: str,
     context: str = "component"
 ) -> Dict[str, Any]:
@@ -591,7 +591,7 @@ async def suggest_contextual_improvements(
 
 
 @mcp.tool()
-async def validate_react_requirements(requirements: str) -> Dict[str, Any]:
+async def react19_validate_requirements(requirements: str) -> Dict[str, Any]:
     """
     Validates if requirements include essential aspects for React development
 
@@ -644,7 +644,7 @@ async def validate_react_requirements(requirements: str) -> Dict[str, Any]:
 
 
 @mcp.tool()
-async def generate_optimized_prompt(
+async def react19_generate_optimized_prompt(
     project_description: str,
     project_type: str = "component",
     detail_level: str = "complete"
@@ -736,7 +736,7 @@ async def generate_optimized_prompt(
 
 
 @mcp.tool()
-async def get_server_resources() -> Dict[str, Any]:
+async def react19_get_server_resources() -> Dict[str, Any]:
     """
     Returns information about the resources available in this MCP server
 

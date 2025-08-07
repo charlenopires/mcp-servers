@@ -208,7 +208,7 @@ KEYWORDS = {
 
 
 @mcp.tool()
-async def analyze_mcp_prompt(
+async def fastmcp_analyze_mcp_prompt(
     prompt: str,
     ctx: Optional[Context] = None
 ) -> PromptAnalysis:
@@ -339,7 +339,7 @@ async def analyze_mcp_prompt(
 
 
 @mcp.tool()
-async def suggest_mcp_prompt_improvements(
+async def fastmcp_suggest_prompt_improvements(
     original_prompt: str,
     focus_area: Optional[str] = None,
     ctx: Optional[Context] = None
@@ -353,7 +353,7 @@ async def suggest_mcp_prompt_improvements(
         await ctx.info(f"Generating improvement suggestions for prompt...")
 
     # Analyze the original prompt first
-    analysis = await analyze_mcp_prompt(original_prompt, ctx) if ctx else PromptAnalysis(
+    analysis = await fastmcp_analyze_mcp_prompt(original_prompt, ctx) if ctx else PromptAnalysis(
         score=50.0, strengths=[], weaknesses=["Simplified analysis"], recommendations=[]
     )
 
@@ -446,7 +446,7 @@ result = await client.call_tool("tool_name", {
 
 
 @mcp.tool()
-async def validate_mcp_requirements(
+async def fastmcp_validate_requirements(
     requirements: str,
     ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
@@ -520,7 +520,7 @@ async def validate_mcp_requirements(
 
 
 @mcp.tool()
-async def generate_mcp_server_template(
+async def fastmcp_generate_server_template(
     server_type: str,
     name: str,
     description: str,

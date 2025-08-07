@@ -143,7 +143,7 @@ CODE_TEMPLATES = {
 
 
 @mcp.tool()
-async def contextualize_tailwind_prompt(prompt: str) -> Dict[str, Any]:
+async def tailwind_contextualize_prompt(prompt: str) -> Dict[str, Any]:
     """
     Contextualizes a Tailwind CSS prompt with v4.1 information
 
@@ -242,7 +242,7 @@ async def contextualize_tailwind_prompt(prompt: str) -> Dict[str, Any]:
 
 
 @mcp.tool()
-async def get_tailwind_v4_info(feature: str = "") -> Dict[str, Any]:
+async def tailwind_get_v4_info(feature: str = "") -> Dict[str, Any]:
     """
     Gets specific information about Tailwind CSS v4.1 features
 
@@ -303,7 +303,7 @@ async def get_tailwind_v4_info(feature: str = "") -> Dict[str, Any]:
 
 
 @mcp.tool()
-async def generate_tailwind_v4_code(
+async def tailwind_generate_v4_code(
     component_type: str,
     requirements: str = ""
 ) -> Dict[str, Any]:
@@ -460,7 +460,7 @@ async def generate_tailwind_v4_code(
 
 
 @mcp.tool()
-async def get_tailwind_v4_docs() -> Dict[str, Any]:
+async def tailwind_get_v4_docs() -> Dict[str, Any]:
     """
     Returns summarized documentation for Tailwind CSS v4.1
 
@@ -475,7 +475,7 @@ async def get_tailwind_v4_docs() -> Dict[str, Any]:
 
 
 @mcp.tool()
-async def get_tailwind_v4_examples() -> Dict[str, Any]:
+async def tailwind_get_v4_examples() -> Dict[str, Any]:
     """
     Returns code examples for Tailwind CSS v4.1
 
@@ -538,10 +538,10 @@ if __name__ == "__main__":
     # Start server
     print("🎨 MCP Tailwind CSS v4.1 Assistant server started!")
     print("📚 Available tools:")
-    print("  - contextualize_tailwind_prompt: Enriches prompts with v4.1 context")
-    print("  - get_tailwind_v4_info: Gets information about specific features")
-    print("  - generate_tailwind_v4_code: Generates code with new features")
-    print("  - get_tailwind_v4_docs: Gets summarized Tailwind CSS v4.1 documentation")
-    print("  - get_tailwind_v4_examples: Gets Tailwind CSS v4.1 code examples")
+    print("  - tailwind_contextualize_prompt: Enriches prompts with v4.1 context")
+    print("  - tailwind_get_v4_info: Gets information about specific features")
+    print("  - tailwind_generate_v4_code: Generates code with new features")
+    print("  - tailwind_get_v4_docs: Gets summarized Tailwind CSS v4.1 documentation")
+    print("  - tailwind_get_v4_examples: Gets Tailwind CSS v4.1 code examples")
 
     mcp.run()

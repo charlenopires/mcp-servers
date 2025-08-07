@@ -148,10 +148,10 @@ class TestIntegracaoFerramentas:
 
     def test_analisar_prompt_ferramenta(self):
         """Testar a ferramenta de análise de prompt"""
-        from servers.mcp_server import analisar_prompt_mcp
+        from servers.mcp_server import mcp_analyze_server_prompt
 
         prompt = "Criar servidor MCP com operações de arquivo"
-        resultado = analisar_prompt_mcp(prompt)
+        resultado = mcp_analyze_server_prompt(prompt)
 
         assert isinstance(resultado, AnalisePrompt)
         assert resultado.pontuacao >= 1

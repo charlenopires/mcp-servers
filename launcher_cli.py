@@ -14,7 +14,9 @@ Features:
 - Development/production modes
 
 Usage:
-    python launcher_cli.py
+    uv run mcp_servers                (recommended)
+    python launcher_cli.py            (alternative)
+    uv run python launcher_cli.py     (alternative)
 """
 
 import asyncio
@@ -233,6 +235,19 @@ class MCPLauncherCLI:
         validation_results = self.validate_server_files()
         choices = []
         
+        # Add "Start All Servers" option at the top
+        available_servers = [sid for sid, available in validation_results.items() 
+                           if available and SERVERS_CONFIG[sid]['status'] == 'functional']
+        
+        choices.append(questionary.Choice(
+            title="🚀 START ALL SERVERS\n    Launch all available functional servers simultaneously",
+            value="__ALL_SERVERS__",
+            disabled=len(available_servers) == 0
+        ))
+        
+        choices.append(questionary.Separator())
+        choices.append(questionary.Separator('── Individual Servers ──'))
+        
         # Group by category
         categories = {}
         for server_id, config in SERVERS_CONFIG.items():
@@ -243,7 +258,7 @@ class MCPLauncherCLI:
         
         # Add choices by category
         for category, servers in categories.items():
-            if len(choices) > 0:
+            if len(choices) > 3:  # Account for the "Start All" option and separators
                 choices.append(questionary.Separator())
                 
             choices.append(questionary.Separator(f'── {category} Servers ──'))
@@ -269,26 +284,36 @@ class MCPLauncherCLI:
         
         return choices
 
-    def prompt_server_selection(self) -> List[str]:
+    async def prompt_server_selection(self) -> List[str]:
         """Prompt user for server selection"""
         console.print("[bold yellow]🎯 Server Selection[/bold yellow]")
         console.print("[dim]Use ↑↓ to navigate, SPACE to select, ENTER to confirm[/dim]")
         console.print()
         
-        selected_servers = questionary.checkbox(
+        selected_servers = await questionary.checkbox(
             "Please select the servers you want to run:",
             choices=self.get_server_choices(),
             validate=validate_server_selection,
             qmark="🎯",
             instruction="(Use arrow keys to navigate, SPACE to select, ENTER to confirm)"
-        ).ask()
+        ).ask_async()
+        
+        # Handle "Start All Servers" option
+        if "__ALL_SERVERS__" in selected_servers:
+            validation_results = self.validate_server_files()
+            all_functional_servers = [
+                server_id for server_id, config in SERVERS_CONFIG.items()
+                if validation_results[server_id] and config['status'] == 'functional'
+            ]
+            console.print(f"[green]🚀 Starting all {len(all_functional_servers)} functional servers![/green]")
+            return all_functional_servers
         
         return selected_servers or []
 
-    def prompt_execution_options(self) -> Dict[str, Any]:
+    async def prompt_execution_options(self) -> Dict[str, Any]:
         """Prompt for execution options"""
         # Mode selection
-        mode = questionary.select(
+        mode = await questionary.select(
             "Select execution mode:",
             choices=[
                 questionary.Choice("🚀 Development Mode (verbose logging, auto-reload)", "dev"),
@@ -296,23 +321,23 @@ class MCPLauncherCLI:
                 questionary.Choice("🔇 Silent Mode (minimal output)", "quiet")
             ],
             qmark="⚙️"
-        ).ask()
+        ).ask_async()
         
         # Parallel execution
-        parallel = questionary.confirm(
+        parallel = await questionary.confirm(
             "Run servers in parallel?",
             default=True,
             qmark="🔄"
-        ).ask()
+        ).ask_async()
         
         # Show logs (only if not quiet mode)
         show_logs = True
         if mode != 'quiet':
-            show_logs = questionary.confirm(
+            show_logs = await questionary.confirm(
                 "Show server logs in real-time?",
                 default=True,
                 qmark="📊"
-            ).ask()
+            ).ask_async()
         
         return {
             'mode': mode,
@@ -553,10 +578,14 @@ class MCPLauncherCLI:
         """Show help information"""
         help_panel = Panel.fit(
             "[bold]Available Commands:[/bold]\n\n"
-            "[green]python launcher_cli.py[/green]     - Start interactive launcher\n"
-            "[green]python launcher_cli.py --help[/green] - Show this help\n"
-            "[green]python launcher_cli.py --status[/green] - Show server status\n\n"
+            "[green]uv run mcp_servers[/green]         - Start interactive launcher (recommended)\n"
+            "[green]uv run mcp_servers --help[/green]  - Show this help\n"
+            "[green]uv run mcp_servers --status[/green] - Show server status\n\n"
+            "[dim]Alternative direct calls:[/dim]\n"
+            "[green]python launcher_cli.py[/green]     - Direct Python call\n"
+            "[green]uv run python launcher_cli.py[/green] - Direct uv call\n\n"
             "[bold]Features:[/bold]\n"
+            "• 🚀 Quick 'Start All Servers' option\n"
             "• Multi-select servers with checkboxes\n" 
             "• Parallel/sequential execution modes\n"
             "• Development/production/quiet modes\n"
@@ -582,14 +611,14 @@ class MCPLauncherCLI:
             self.show_banner()
             
             # Server selection
-            selected_servers = self.prompt_server_selection()
+            selected_servers = await self.prompt_server_selection()
             if not selected_servers:
                 console.print("[yellow]No servers selected. Exiting.[/yellow]")
                 return
             
             # Execution options
             console.print()
-            execution_options = self.prompt_execution_options()
+            execution_options = await self.prompt_execution_options()
             
             # Start servers
             await self.start_servers(selected_servers, execution_options)
@@ -614,18 +643,23 @@ def setup_signal_handlers(launcher: MCPLauncherCLI):
     signal.signal(signal.SIGTERM, signal_handler)
 
 
-async def main():
-    """Main entry point"""
+async def async_main():
+    """Async main entry point"""
     launcher = MCPLauncherCLI()
     setup_signal_handlers(launcher)
     await launcher.run(sys.argv[1:])
 
 
-if __name__ == "__main__":
+def main():
+    """Synchronous entry point for pyproject.toml script"""
     try:
-        asyncio.run(main())
+        asyncio.run(async_main())
     except KeyboardInterrupt:
         console.print("\n[yellow]Goodbye! 👋[/yellow]")
     except Exception as e:
         console.print(f"[red]Fatal error: {e}[/red]")
         sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

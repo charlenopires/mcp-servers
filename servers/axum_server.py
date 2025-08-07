@@ -1829,7 +1829,7 @@ Cargo.lock
 # ================================
 
 @mcp.tool()
-async def analyze_axum_code(code: str) -> Dict[str, Any]:
+async def axum_analyze_code(code: str) -> Dict[str, Any]:
     """
     Analisa código Axum seguindo melhores práticas oficiais e magic patterns.
     
@@ -1868,7 +1868,7 @@ async def analyze_axum_code(code: str) -> Dict[str, Any]:
         raise
 
 @mcp.tool()
-async def generate_axum_project(
+async def axum_generate_project(
     project_type: str,
     features: Optional[List[str]] = None,
     include_database: bool = True,
@@ -1905,7 +1905,7 @@ async def generate_axum_project(
         raise
 
 @mcp.tool()
-async def get_axum_patterns(category: str = "all") -> Dict[str, Any]:
+async def axum_get_patterns(category: str = "all") -> Dict[str, Any]:
     """
     Retorna padrões Axum por categoria com exemplos práticos.
     
@@ -1960,7 +1960,7 @@ async def get_axum_patterns(category: str = "all") -> Dict[str, Any]:
         raise
 
 @mcp.tool()
-async def optimize_axum_handler(
+async def axum_optimize_handler(
     handler_code: str,
     focus_areas: Optional[List[str]] = None
 ) -> Dict[str, Any]:
@@ -2027,7 +2027,7 @@ async def optimize_axum_handler(
         raise
 
 @mcp.tool()
-async def get_axum_magic_patterns() -> Dict[str, Any]:
+async def axum_get_magic_patterns() -> Dict[str, Any]:
     """
     Retorna padrões mágicos do Axum baseados em rust-magic-patterns.
     
@@ -2060,7 +2060,7 @@ async def get_axum_magic_patterns() -> Dict[str, Any]:
         raise
 
 @mcp.tool()
-async def create_axum_middleware(
+async def axum_create_middleware(
     middleware_type: str,
     functionality: str
 ) -> Dict[str, Any]:

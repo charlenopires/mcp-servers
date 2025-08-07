@@ -60,7 +60,7 @@ This server assists developers working with Tailwind CSS v4.1 by providing updat
 
 ## Available Tools
 
-### `contextualize_tailwind_prompt(prompt: str)`
+### `tailwind_contextualize_prompt(prompt: str)`
 Analyzes and enriches prompts with relevant Tailwind CSS v4.1 context.
 
 **Parameters:**
@@ -75,11 +75,11 @@ Analyzes and enriches prompts with relevant Tailwind CSS v4.1 context.
 
 **Example:**
 ```python
-result = contextualize_tailwind_prompt("Create a card component with shadows")
+result = tailwind_contextualize_prompt("Create a card component with shadows")
 # Returns prompt enhanced with text-shadow utilities and examples
 ```
 
-### `get_tailwind_v4_info(feature: str = "")`
+### `tailwind_get_v4_info(feature: str = "")`
 Provides detailed information about specific Tailwind CSS v4.1 features.
 
 **Parameters:**
@@ -99,11 +99,11 @@ Provides detailed information about specific Tailwind CSS v4.1 features.
 
 **Example:**
 ```python
-info = get_tailwind_v4_info("shadow")
+info = tailwind_get_v4_info("shadow")
 # Returns: utilities, usage patterns, and code examples for text shadows
 ```
 
-### `generate_tailwind_v4_code(component_type: str, requirements: str = "")`
+### `tailwind_generate_v4_code(component_type: str, requirements: str = "")`
 Generates modern component code using Tailwind CSS v4.1 features.
 
 **Parameters:**
@@ -127,11 +127,11 @@ Generates modern component code using Tailwind CSS v4.1 features.
 
 **Example:**
 ```python
-code = generate_tailwind_v4_code("card", "product showcase with hover effects")
+code = tailwind_generate_v4_code("card", "product showcase with hover effects")
 # Returns complete card component with text shadows, masks, and animations
 ```
 
-### `get_tailwind_v4_docs()`
+### `tailwind_get_v4_docs()`
 Returns comprehensive documentation about Tailwind CSS v4.1 changes.
 
 **Returns:**
@@ -141,7 +141,7 @@ Returns comprehensive documentation about Tailwind CSS v4.1 changes.
 - Performance improvements
 - Browser compatibility
 
-### `get_tailwind_v4_examples()`
+### `tailwind_get_v4_examples()`
 Provides a collection of practical code examples using v4.1 features.
 
 **Returns:**

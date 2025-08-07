@@ -127,7 +127,7 @@ APP_TEMPLATES = {
 
 
 @mcp.tool()
-async def analyze_docker_prompt(prompt: str) -> dict[str, Any]:
+async def docker_analyze_prompt(prompt: str) -> dict[str, Any]:
     """
     Analisa um prompt de criação Docker e fornece feedback detalhado
 
@@ -250,7 +250,7 @@ async def analyze_docker_prompt(prompt: str) -> dict[str, Any]:
 
 
 @mcp.tool()
-async def enhance_docker_prompt(
+async def docker_enhance_prompt(
     prompt: str,
     app_type: str | None = None,
     include_compose: bool = True,
@@ -340,7 +340,7 @@ async def enhance_docker_prompt(
 
 
 @mcp.tool()
-async def validate_dockerfile(dockerfile_content: str) -> dict[str, Any]:
+async def docker_validate_dockerfile(dockerfile_content: str) -> dict[str, Any]:
     """
     Valida um Dockerfile existente contra best practices
 
@@ -405,7 +405,7 @@ async def validate_dockerfile(dockerfile_content: str) -> dict[str, Any]:
 
 
 @mcp.tool()
-async def generate_docker_config(
+async def docker_generate_config(
     project_description: str, app_type: str, features: list[str] | None = None
 ) -> dict[str, Any]:
     """

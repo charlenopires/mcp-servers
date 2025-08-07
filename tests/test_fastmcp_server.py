@@ -15,10 +15,10 @@ try:
     from servers.fastmcp_server import (
         PromptAnalysis,
         MCPRequirements,
-        analyze_mcp_prompt,
-        suggest_mcp_prompt_improvements,
-        validate_mcp_requirements,
-        generate_mcp_server_template,
+        fastmcp_analyze_mcp_prompt,
+        fastmcp_suggest_prompt_improvements,
+        fastmcp_validate_requirements,
+        fastmcp_generate_server_template,
         get_mcp_best_practices,
         get_prompt_examples,
         get_prompt_frameworks,
@@ -132,7 +132,7 @@ class TestFastMCPAnalysisFunctions:
         e exemplos de uso.
         """
 
-        result = await analyze_mcp_prompt(prompt, mock_ctx)
+        result = await fastmcp_analyze_mcp_prompt(prompt, mock_ctx)
 
         assert isinstance(result, PromptAnalysis)
         assert 0 <= result.score <= 100
@@ -169,7 +169,7 @@ class TestFastMCPAnalysisFunctions:
         result = await client.call_tool("analyze_sales", {"file": "sales.csv"})
         """
 
-        result = await analyze_mcp_prompt(good_prompt, mock_ctx)
+        result = await fastmcp_analyze_mcp_prompt(good_prompt, mock_ctx)
 
         # Prompt bem estruturado deve ter score alto
         assert result.score >= 70
@@ -188,7 +188,7 @@ class TestFastMCPAnalysisFunctions:
 
         basic_prompt = "Criar servidor MCP para dados"
 
-        result = await suggest_mcp_prompt_improvements(basic_prompt, None, mock_ctx)
+        result = await fastmcp_suggest_prompt_improvements(basic_prompt, None, mock_ctx)
 
         assert isinstance(result, dict)
         assert "improved_prompt" in result
@@ -209,11 +209,11 @@ class TestFastMCPAnalysisFunctions:
         prompt = "Criar servidor MCP básico"
 
         # Teste com foco técnico
-        result_tech = await suggest_mcp_prompt_improvements(prompt, "technical", mock_ctx)
+        result_tech = await fastmcp_suggest_prompt_improvements(prompt, "technical", mock_ctx)
         assert "technical" in result_tech["changes_explanation"][-1].lower()
 
         # Teste com foco em produção
-        result_prod = await suggest_mcp_prompt_improvements(prompt, "production", mock_ctx)
+        result_prod = await fastmcp_suggest_prompt_improvements(prompt, "production", mock_ctx)
         assert "production" in result_prod["changes_explanation"][-1].lower()
 
     @pytest.mark.skipif(not FASTMCP_AVAILABLE, reason="FastMCP não disponível")
@@ -231,7 +231,7 @@ class TestFastMCPAnalysisFunctions:
         Operações assíncronas: sim, para arquivos grandes
         """
 
-        result = await validate_mcp_requirements(good_requirements, mock_ctx)
+        result = await fastmcp_validate_requirements(good_requirements, mock_ctx)
 
         assert isinstance(result, dict)
         assert "is_valid" in result
@@ -252,7 +252,7 @@ class TestFastMCPAnalysisFunctions:
 
         incomplete_requirements = "Criar algo com dados"
 
-        result = await validate_mcp_requirements(incomplete_requirements, mock_ctx)
+        result = await fastmcp_validate_requirements(incomplete_requirements, mock_ctx)
 
         assert result["completeness_score"] < 60
         assert result["is_valid"] is False
@@ -269,7 +269,7 @@ class TestFastMCPAnalysisFunctions:
                           "data_processing", "production_ready"]
 
         for server_type in template_types:
-            result = await generate_mcp_server_template(
+            result = await fastmcp_generate_server_template(
                 server_type=server_type,
                 name="TestServer",
                 description="Servidor de teste",
@@ -371,15 +371,15 @@ class TestFastMCPIntegration:
         initial_prompt = "Fazer servidor para arquivos"
 
         # 2. Analisar prompt inicial
-        analysis = await analyze_mcp_prompt(initial_prompt, mock_ctx)
+        analysis = await fastmcp_analyze_mcp_prompt(initial_prompt, mock_ctx)
         initial_score = analysis.score
 
         # 3. Sugerir melhorias
-        improvements = await suggest_mcp_prompt_improvements(initial_prompt, None, mock_ctx)
+        improvements = await fastmcp_suggest_prompt_improvements(initial_prompt, None, mock_ctx)
         improved_prompt = improvements["improved_prompt"]
 
         # 4. Analisar prompt melhorado
-        improved_analysis = await analyze_mcp_prompt(improved_prompt, mock_ctx)
+        improved_analysis = await fastmcp_analyze_mcp_prompt(improved_prompt, mock_ctx)
         improved_score = improved_analysis.score
 
         # 5. Validar que houve melhoria
@@ -394,7 +394,7 @@ class TestFastMCPIntegration:
         mock_ctx = AsyncMock()
 
         # 1. Gerar template
-        template = await generate_mcp_server_template(
+        template = await fastmcp_generate_server_template(
             server_type="basic",
             name="DataProcessor",
             description="Processamento de dados",
@@ -402,7 +402,7 @@ class TestFastMCPIntegration:
         )
 
         # 2. Validar o template gerado
-        validation = await validate_mcp_requirements(template, mock_ctx)
+        validation = await fastmcp_validate_requirements(template, mock_ctx)
 
         # 3. Template gerado deve ser válido
         assert validation["is_valid"] is True
@@ -446,7 +446,7 @@ def mock_context():
 @pytest.mark.asyncio
 async def test_analyze_prompt_scores(prompt_content, expected_min_score, mock_context):
     """Testa que diferentes qualidades de prompt resultam em scores apropriados"""
-    result = await analyze_mcp_prompt(prompt_content, mock_context)
+    result = await fastmcp_analyze_mcp_prompt(prompt_content, mock_context)
     assert result.score >= expected_min_score
 
 

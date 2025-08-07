@@ -32,7 +32,7 @@ This server helps users create better prompts by applying established prompt eng
 
 ## Available Tools
 
-### `optimize_prompt(prompt, task_type?, target_audience?, desired_length?, tone?)`
+### `prompt_optimize_generic(prompt, task_type?, target_audience?, desired_length?, tone?)`
 Optimizes a prompt by applying prompt engineering best practices.
 
 **Parameters:**
@@ -51,7 +51,7 @@ Optimizes a prompt by applying prompt engineering best practices.
 
 **Example:**
 ```python
-result = optimize_prompt(
+result = prompt_optimize_generic(
     "Create a function", 
     target_audience="developers",
     tone="technical"
@@ -59,7 +59,7 @@ result = optimize_prompt(
 # Returns optimized prompt with role, context, and examples
 ```
 
-### `analyze_prompt(prompt: str)`
+### `prompt_analyze_generic(prompt: str)`
 Analyzes a prompt and provides detailed feedback on its quality.
 
 **Parameters:**
@@ -76,11 +76,11 @@ Analyzes a prompt and provides detailed feedback on its quality.
 
 **Example:**
 ```python
-analysis = analyze_prompt("Explain machine learning")
+analysis = prompt_analyze_generic("Explain machine learning")
 # Returns: quality_score: 45, weaknesses: ["Lacks context", "Unclear objective"]
 ```
 
-### `suggest_framework(task_description: str)`
+### `prompt_suggest_framework(task_description: str)`
 Suggests the optimal prompt framework for a specific task type.
 
 **Parameters:**
@@ -104,11 +104,11 @@ Suggests the optimal prompt framework for a specific task type.
 
 **Example:**
 ```python
-framework = suggest_framework("Generate Python code for data analysis")
+framework = prompt_suggest_framework("Generate Python code for data analysis")
 # Returns: recommended_framework: "RACE", components: ["Role", "Action", "Context", "Expectation"]
 ```
 
-### `apply_advanced_technique(prompt: str, technique: str = "chain_of_thought")`
+### `prompt_apply_technique(prompt: str, technique: str = "chain_of_thought")`
 Applies advanced reasoning techniques to enhance prompt effectiveness.
 
 **Parameters:**
@@ -130,14 +130,14 @@ Applies advanced reasoning techniques to enhance prompt effectiveness.
 
 **Example:**
 ```python
-enhanced = apply_advanced_technique(
+enhanced = prompt_apply_technique(
     "Solve this complex optimization problem",
     "tree_of_thoughts"
 )
 # Returns prompt with multi-path exploration guidance
 ```
 
-### `check_bias(prompt: str)`
+### `prompt_check_bias(prompt: str)`
 Detects potential biases in prompts and suggests mitigations.
 
 **Parameters:**
@@ -158,7 +158,7 @@ Detects potential biases in prompts and suggests mitigations.
 
 **Example:**
 ```python
-bias_check = check_bias("Ask the businessman to review this")
+bias_check = prompt_check_bias("Ask the businessman to review this")
 # Returns: biases_found: ["Gender bias"], mitigations: ["Use gender-neutral terms"]
 ```
 
@@ -205,18 +205,18 @@ bias_check = check_bias("Ask the businessman to review this")
 python main.py prompt
 
 # Optimize a simple prompt
-optimize_prompt("Write code") 
+prompt_optimize_generic("Write code") 
 # Returns enhanced prompt with role, context, and specific requirements
 ```
 
 ### Framework-Based Enhancement
 ```python
 # Get framework recommendation
-framework = suggest_framework("Create a marketing campaign for a SaaS product")
+framework = prompt_suggest_framework("Create a marketing campaign for a SaaS product")
 # Returns: CRISPE framework with creative components
 
 # Apply the framework
-optimized = optimize_prompt(
+optimized = prompt_optimize_generic(
     "Create a marketing campaign for a SaaS product",
     task_type="creative",
     target_audience="marketing professionals"
@@ -226,7 +226,7 @@ optimized = optimize_prompt(
 ### Advanced Reasoning Application
 ```python
 # Apply Chain-of-Thought to complex problem
-enhanced = apply_advanced_technique(
+enhanced = prompt_apply_technique(
     "Design a distributed system architecture",
     "chain_of_thought"
 )
@@ -236,7 +236,7 @@ enhanced = apply_advanced_technique(
 ### Bias Detection Workflow
 ```python
 # Check for biases before using
-bias_check = check_bias("Ask the developer to code this")
+bias_check = prompt_check_bias("Ask the developer to code this")
 if bias_check["biases_found"]:
     print("Biases detected:", bias_check["biases_found"])
     print("Suggestions:", bias_check["mitigations"])

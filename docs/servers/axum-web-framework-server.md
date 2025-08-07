@@ -32,7 +32,7 @@ This server focuses on Axum web development, providing intelligent analysis of A
 
 ## Available Tools
 
-### `analyze_axum_code(code: str)`
+### `axum_analyze_code(code: str)`
 Analyzes Axum code following official best practices and magic patterns.
 
 **Parameters:**
@@ -53,7 +53,7 @@ Analyzes Axum code following official best practices and magic patterns.
 - **State Management**: Application state patterns
 - **Route Organization**: Route structure and grouping
 
-### `generate_axum_project(project_type: str, options?)`
+### `axum_generate_project(project_type: str, options?)`
 Generates complete Axum projects with modern patterns.
 
 **Parameters:**
@@ -83,7 +83,7 @@ Generates complete Axum projects with modern patterns.
 - `configuration` (object): Environment and config files
 - `documentation` (string): README and API docs
 
-### `get_axum_patterns(category: str = "all")`
+### `axum_get_patterns(category: str = "all")`
 Returns Axum patterns organized by category with practical examples.
 
 **Parameters:**
@@ -102,7 +102,7 @@ Returns Axum patterns organized by category with practical examples.
 - Performance implications and trade-offs
 - Security considerations for each pattern
 
-### `optimize_axum_handler(handler_code: str, focus_areas?: string[])`
+### `axum_optimize_handler(handler_code: str, focus_areas?: string[])`
 Optimizes Axum handlers applying best practices and magic patterns.
 
 **Parameters:**
@@ -123,7 +123,7 @@ Optimizes Axum handlers applying best practices and magic patterns.
 - `performance_impact` (string): Expected performance gain
 - `explanation` (string): Detailed explanation of changes
 
-### `get_axum_magic_patterns()`
+### `axum_get_magic_patterns()`
 Returns advanced Axum patterns based on rust-magic-patterns.
 
 **Returns:**
@@ -133,7 +133,7 @@ Returns advanced Axum patterns based on rust-magic-patterns.
 - **Performance Patterns**: High-throughput optimization techniques
 - **Safety Patterns**: Memory-safe concurrent patterns
 
-### `create_axum_middleware(middleware_type: str, functionality: str)`
+### `axum_create_middleware(middleware_type: str, functionality: str)`
 Creates custom Axum middleware with best practices.
 
 **Parameters:**
@@ -375,7 +375,7 @@ async fn main() -> anyhow::Result<()> {
 
 ### Code Analysis
 ```python
-analysis = analyze_axum_code("""
+analysis = axum_analyze_code("""
 async fn get_users() -> Json<Vec<User>> {
     let users = fetch_all_users().await;
     Json(users)
@@ -386,7 +386,7 @@ async fn get_users() -> Json<Vec<User>> {
 
 ### Project Generation
 ```python
-project = generate_axum_project(
+project = axum_generate_project(
     "api_server",
     features=["database", "authentication", "metrics"],
     include_auth=True
@@ -396,7 +396,7 @@ project = generate_axum_project(
 
 ### Handler Optimization
 ```python
-optimized = optimize_axum_handler(handler_code, ["error_handling", "performance"])
+optimized = axum_optimize_handler(handler_code, ["error_handling", "performance"])
 # Returns optimized handler with proper error handling and performance improvements
 ```
 

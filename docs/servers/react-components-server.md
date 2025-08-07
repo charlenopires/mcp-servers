@@ -33,7 +33,7 @@ This server specializes in React 19 development workflows, providing intelligent
 
 ## Available Tools
 
-### `analyze_react_prompt(prompt: str)`
+### `react19_analyze_prompt(prompt: str)`
 Analyzes React development prompts for quality and completeness.
 
 **Parameters:**
@@ -49,14 +49,14 @@ Analyzes React development prompts for quality and completeness.
 
 **Example:**
 ```python
-analysis = analyze_react_prompt("""
+analysis = react19_analyze_prompt("""
 Create a React component for user authentication with form validation,
 loading states, and error handling. Use React 19 features where appropriate.
 """)
 # Returns: score: 78, features: ["forms", "state_management", "error_handling"]
 ```
 
-### `get_prompt_template(template_type: str = "basic_component")`
+### `react19_get_prompt_template(template_type: str = "basic_component")`
 Provides optimized prompt templates for React development.
 
 **Parameters:**
@@ -75,7 +75,7 @@ Provides optimized prompt templates for React development.
 - `react_features` (array): React features covered
 - `best_practices` (array): Included best practices
 
-### `suggest_contextual_improvements(prompt: str, context: str = "component")`
+### `react19_suggest_contextual_improvements(prompt: str, context: str = "component")`
 Suggests React-specific improvements based on development context.
 
 **Parameters:**
@@ -95,7 +95,7 @@ Suggests React-specific improvements based on development context.
 - `react_patterns_added` (array): React patterns included
 - `score_improvement` (number): Expected score improvement
 
-### `validate_react_requirements(requirements: str)`
+### `react19_validate_requirements(requirements: str)`
 Validates React project requirements against best practices.
 
 **Parameters:**
@@ -109,7 +109,7 @@ Validates React project requirements against best practices.
 - `react_specific_issues` (array): React-related concerns
 - `recommendations` (array): Improvement suggestions
 
-### `generate_optimized_prompt(project_description: str, project_type: str = "component", detail_level: str = "complete")`
+### `react19_generate_optimized_prompt(project_description: str, project_type: str = "component", detail_level: str = "complete")`
 Generates comprehensive React development prompts.
 
 **Parameters:**
@@ -133,7 +133,7 @@ Generates comprehensive React development prompts.
 - `react_features_recommended` (array): Suggested React features
 - `additional_considerations` (array): Extra recommendations
 
-### `get_server_resources()`
+### `react19_get_server_resources()`
 Returns information about available React development resources.
 
 **Returns:**
@@ -199,7 +199,7 @@ Returns information about available React development resources.
 
 ### Component Analysis
 ```python
-analysis = analyze_react_prompt("""
+analysis = react19_analyze_prompt("""
 Create a shopping cart component with add/remove functionality,
 quantity updates, total calculation, and checkout integration.
 """)
@@ -209,13 +209,13 @@ print(f"Recommendations: {analysis['recommendations']}")
 
 ### Template Generation
 ```python
-template = get_prompt_template("server_component")
+template = react19_get_prompt_template("server_component")
 # Returns structured template for React 19 Server Components
 ```
 
 ### Requirement Validation
 ```python
-validation = validate_react_requirements("""
+validation = react19_validate_requirements("""
 Project: E-commerce Dashboard
 Components: ProductList, CartSummary, UserProfile
 Features: Authentication, data fetching, form handling
@@ -226,7 +226,7 @@ Performance: Code splitting, lazy loading
 
 ### Prompt Optimization
 ```python
-optimized = generate_optimized_prompt(
+optimized = react19_generate_optimized_prompt(
     "User authentication system",
     project_type="application",
     detail_level="complete"

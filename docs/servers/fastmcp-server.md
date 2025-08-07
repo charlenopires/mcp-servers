@@ -32,7 +32,7 @@ This server specializes in MCP server development workflows, offering intelligen
 
 ## Available Tools
 
-### `analyze_mcp_prompt(prompt: str)`
+### `fastmcp_analyze_mcp_prompt(prompt: str)`
 Analyzes an MCP server creation prompt and provides detailed feedback.
 
 **Parameters:**
@@ -53,7 +53,7 @@ Analyzes an MCP server creation prompt and provides detailed feedback.
 
 **Example:**
 ```python
-analysis = analyze_mcp_prompt("""
+analysis = fastmcp_analyze_mcp_prompt("""
 Create an MCP server for file management with FastMCP.
 Include tools for reading, writing, and deleting files.
 Add proper error handling and input validation.
@@ -62,7 +62,7 @@ Include comprehensive testing and documentation.
 # Returns: score: 85, strengths: ["Clear objective", "Security considerations"]
 ```
 
-### `suggest_mcp_prompt_improvements(original_prompt: str, focus_area?: str)`
+### `fastmcp_suggest_prompt_improvements(original_prompt: str, focus_area?: str)`
 Suggests specific improvements for an MCP server creation prompt.
 
 **Parameters:**
@@ -85,14 +85,14 @@ Suggests specific improvements for an MCP server creation prompt.
 
 **Example:**
 ```python
-improvements = suggest_mcp_prompt_improvements(
+improvements = fastmcp_suggest_prompt_improvements(
     "Create a database MCP server",
     focus_area="technical"
 )
 # Returns structured prompt with technical requirements, error handling, etc.
 ```
 
-### `validate_mcp_requirements(requirements: str)`
+### `fastmcp_validate_requirements(requirements: str)`
 Validates MCP server requirements against FastMCP best practices checklist.
 
 **Parameters:**
@@ -118,7 +118,7 @@ Validates MCP server requirements against FastMCP best practices checklist.
 
 **Example:**
 ```python
-validation = validate_mcp_requirements("""
+validation = fastmcp_validate_requirements("""
 Purpose: File management server for development workflows
 Tools: read_file, write_file, delete_file, list_directory
 Security: Input path validation, access control
@@ -127,7 +127,7 @@ Testing: Unit tests for all tools, integration tests
 # Returns: validation_passed: true, score: 78
 ```
 
-### `generate_mcp_server_template(server_type: str, name: str, description: str)`
+### `fastmcp_generate_server_template(server_type: str, name: str, description: str)`
 Generates an optimized prompt template for creating a specific MCP server.
 
 **Parameters:**
@@ -150,7 +150,7 @@ Generates an optimized prompt template for creating a specific MCP server.
 
 **Example:**
 ```python
-template = generate_mcp_server_template(
+template = fastmcp_generate_server_template(
     "api_integration",
     "GitHub Integration Server", 
     "Server for GitHub API operations"
@@ -230,27 +230,27 @@ The server validates against these FastMCP 2.0 best practices:
 python main.py fastmcp
 
 # Analyze a prompt
-analyze_mcp_prompt("Create a file management server")
+fastmcp_analyze_mcp_prompt("Create a file management server")
 # Returns detailed analysis with suggestions
 ```
 
 ### Improvement Workflow
 ```python
 # Get improvement suggestions
-improvements = suggest_mcp_prompt_improvements("""
+improvements = fastmcp_suggest_prompt_improvements("""
 Create a weather server that gets weather data.
 """)
 
 # Apply suggestions and re-analyze
 improved_prompt = improvements["improved_prompt"]
-new_analysis = analyze_mcp_prompt(improved_prompt)
+new_analysis = fastmcp_analyze_mcp_prompt(improved_prompt)
 print(f"Score improved from 30 to {new_analysis['score']}")
 ```
 
 ### Template Generation Workflow
 ```python
 # Generate a production-ready template
-template = generate_mcp_server_template(
+template = fastmcp_generate_server_template(
     server_type="production_ready",
     name="E-commerce Analytics Server",
     description="Server for e-commerce data analysis and reporting"
@@ -273,7 +273,7 @@ Testing: Mock API responses, integration tests
 Documentation: API reference, usage examples
 """
 
-validation = validate_mcp_requirements(requirements)
+validation = fastmcp_validate_requirements(requirements)
 if not validation["validation_passed"]:
     print("Issues to resolve:")
     for issue in validation["critical_issues"]:

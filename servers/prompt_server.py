@@ -299,7 +299,7 @@ engineer = PromptEngineer()
 
 
 @mcp.tool()
-async def optimize_prompt(
+async def prompt_optimize_generic(
     prompt: str,
     task_type: Optional[str] = None,
     target_audience: Optional[str] = None,
@@ -339,7 +339,7 @@ async def optimize_prompt(
 
 
 @mcp.tool()
-async def analyze_prompt(prompt: str) -> Dict[str, Any]:
+async def prompt_analyze_generic(prompt: str) -> Dict[str, Any]:
     """
     Analyzes a prompt and provides feedback on its quality
 
@@ -421,7 +421,7 @@ async def analyze_prompt(prompt: str) -> Dict[str, Any]:
 
 
 @mcp.tool()
-async def suggest_framework(task_description: str) -> Dict[str, Any]:
+async def prompt_suggest_framework(task_description: str) -> Dict[str, Any]:
     """
     Suggests the best prompt framework for a specific task
 
@@ -483,7 +483,7 @@ async def suggest_framework(task_description: str) -> Dict[str, Any]:
 
 
 @mcp.tool()
-async def apply_advanced_technique(
+async def prompt_apply_technique(
     prompt: str,
     technique: str = "chain_of_thought"
 ) -> Dict[str, Any]:
@@ -536,7 +536,7 @@ async def apply_advanced_technique(
 
 
 @mcp.tool()
-async def check_bias(prompt: str) -> Dict[str, Any]:
+async def prompt_check_bias(prompt: str) -> Dict[str, Any]:
     """
     Checks for potential biases in the prompt and suggests mitigations
 
@@ -614,7 +614,7 @@ if __name__ == "__main__":
     # Usage example
     async def test_server():
         # Optimization test
-        result = await optimize_prompt(
+        result = await prompt_optimize_generic(
             prompt="explain this concept",
             target_audience="university students",
             tone="didactic"
@@ -622,21 +622,21 @@ if __name__ == "__main__":
         print("Optimization:", result)
 
         # Analysis test
-        analysis = await analyze_prompt("How does photosynthesis work?")
+        analysis = await prompt_analyze_generic("How does photosynthesis work?")
         print("\nAnalysis:", analysis)
 
         # Framework test
-        framework = await suggest_framework("I need to create a sales report")
+        framework = await prompt_suggest_framework("I need to create a sales report")
         print("\nSuggested framework:", framework)
 
     # Start the server
     print("MCP Prompt Engineering Server started!")
     print("Available tools:")
-    print("- optimize_prompt: Optimizes prompts automatically")
-    print("- analyze_prompt: Analyzes prompt quality")
-    print("- suggest_framework: Suggests appropriate frameworks")
-    print("- apply_advanced_technique: Applies advanced techniques")
-    print("- check_bias: Checks and mitigates biases")
+    print("- prompt_optimize_generic: Optimizes prompts automatically")
+    print("- prompt_analyze_generic: Analyzes prompt quality")
+    print("- prompt_suggest_framework: Suggests appropriate frameworks")
+    print("- prompt_apply_technique: Applies advanced techniques")
+    print("- prompt_check_bias: Checks and mitigates biases")
 
     # For local testing
     # asyncio.run(test_server())

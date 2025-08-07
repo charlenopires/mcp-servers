@@ -32,7 +32,7 @@ This server offers comprehensive React code optimization and prompt enhancement 
 
 ## Available Tools
 
-### `analyze_react_code(code: str, component_type: str = "component")`
+### `react_optimizer_analyze_code(code: str, component_type: str = "component")`
 Analyzes React code for conformity with 2025 best practices.
 
 **Parameters:**
@@ -47,7 +47,7 @@ Analyzes React code for conformity with 2025 best practices.
 - `issues` (array): Identified problems and suggestions
 - `optimizations` (array): Performance improvement recommendations
 
-### `optimize_react_code(code: str, focus_areas?: string[])`
+### `react_optimizer_optimize_code(code: str, focus_areas?: string[])`
 Optimizes React code applying modern best practices.
 
 **Parameters:**
@@ -67,7 +67,7 @@ Optimizes React code applying modern best practices.
 - `performance_impact` (string): Expected performance improvement
 - `explanation` (string): Detailed explanation of changes
 
-### `analyze_react_prompt(prompt: str)`
+### `react_optimizer_analyze_prompt(prompt: str)`
 Analyzes React development prompts for optimization opportunities.
 
 **Parameters:**
@@ -79,7 +79,7 @@ Analyzes React development prompts for optimization opportunities.
 - `suggestions` (array): Improvement recommendations
 - `ai_tool_compatibility` (object): Compatibility with different AI tools
 
-### `optimize_react_prompt(prompt: str, target_ai_tool: str = "generic", options?)`
+### `react_optimizer_optimize_prompt(prompt: str, target_ai_tool: str = "generic", options?)`
 Optimizes prompts for generating modern React code.
 
 **Parameters:**
@@ -95,7 +95,7 @@ Optimizes prompts for generating modern React code.
 - `enhancements_added` (array): List of improvements
 - `target_tool_notes` (string): Tool-specific recommendations
 
-### `validate_prompt_quality(prompt: str)`
+### `react_optimizer_validate_prompt_quality(prompt: str)`
 Validates prompt quality for React code generation.
 
 **Parameters:**
@@ -107,7 +107,7 @@ Validates prompt quality for React code generation.
 - `recommendations` (array): Improvement suggestions
 - `estimated_output_quality` (string): Expected AI output quality
 
-### `generate_component_template(component_type: str, complexity: str = "intermediate", options?)`
+### `react_optimizer_generate_component_template(component_type: str, complexity: str = "intermediate", options?)`
 Generates optimized prompt templates for specific component types.
 
 **Parameters:**
@@ -131,7 +131,7 @@ Generates optimized prompt templates for specific component types.
 - `best_practices_included` (array): Included best practices
 - `expected_features` (array): Features the template will generate
 
-### `get_react_trends_2025()`
+### `react_optimizer_get_trends_2025()`
 Returns comprehensive guide to React and UI/UX trends for 2025.
 
 **Returns:**
@@ -217,7 +217,7 @@ Returns comprehensive guide to React and UI/UX trends for 2025.
 
 ### Code Analysis
 ```python
-analysis = analyze_react_code("""
+analysis = react_optimizer_analyze_code("""
 function UserCard({ user }) {
   return <div onClick={() => alert(user.name)}>{user.name}</div>;
 }
@@ -227,13 +227,13 @@ function UserCard({ user }) {
 
 ### Code Optimization
 ```python
-optimized = optimize_react_code(code, ["accessibility", "performance"])
+optimized = react_optimizer_optimize_code(code, ["accessibility", "performance"])
 # Returns optimized version with proper semantic HTML, keyboard support, memoization
 ```
 
 ### Prompt Optimization
 ```python
-optimized_prompt = optimize_react_prompt(
+optimized_prompt = react_optimizer_optimize_prompt(
   "Create a login form",
   target_ai_tool="v0_dev",
   include_accessibility=True
@@ -243,7 +243,7 @@ optimized_prompt = optimize_react_prompt(
 
 ### Template Generation
 ```python
-template = generate_component_template(
+template = react_optimizer_generate_component_template(
   "dashboard",
   complexity="complex",
   target_ai_tool="cursor"

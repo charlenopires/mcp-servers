@@ -32,7 +32,7 @@ This server specializes in shadcn/ui component development, providing tools for 
 
 ## Available Tools
 
-### `analyze_shadcn_component(code: str)`
+### `shadcn_analyze_component(code: str)`
 Analyzes React code using shadcn/ui components for optimization opportunities.
 
 **Parameters:**
@@ -45,7 +45,7 @@ Analyzes React code using shadcn/ui components for optimization opportunities.
 - `accessibility_issues` (array): A11y concerns
 - `performance_notes` (array): Performance optimization tips
 
-### `optimize_shadcn_component(code: str, focus_areas?: string[])`
+### `shadcn_optimize_component(code: str, focus_areas?: string[])`
 Optimizes shadcn/ui component code applying best practices.
 
 **Parameters:**
@@ -63,7 +63,7 @@ Optimizes shadcn/ui component code applying best practices.
 - `changes_applied` (array): Applied optimizations
 - `explanation` (string): Detailed change explanation
 
-### `generate_shadcn_component(component_type: str, options?)`
+### `shadcn_generate_component(component_type: str, options?)`
 Generates optimized shadcn/ui components with modern patterns.
 
 **Parameters:**
@@ -82,7 +82,7 @@ Generates optimized shadcn/ui components with modern patterns.
 - `"data-table"` - Advanced data tables
 - `"chart"` - Data visualization components
 
-### `get_shadcn_component_info(component_name?: str)`
+### `shadcn_get_component_info(component_name?: str)`
 Provides detailed information about shadcn/ui components.
 
 **Parameters:**
@@ -92,7 +92,7 @@ Provides detailed information about shadcn/ui components.
 - Component documentation, props, variants, and usage examples
 - Complete library overview if no component specified
 
-### `get_shadcn_setup_guide(framework: str = "next")`
+### `shadcn_get_setup_guide(framework: str = "next")`
 Provides comprehensive setup instructions for different frameworks.
 
 **Parameters:**
@@ -110,7 +110,7 @@ Provides comprehensive setup instructions for different frameworks.
 - Framework-specific optimizations
 - Common troubleshooting solutions
 
-### `create_shadcn_theme(primary_color?: str, options?)`
+### `shadcn_create_theme(primary_color?: str, options?)`
 Creates custom themes for shadcn/ui applications.
 
 **Parameters:**
@@ -124,7 +124,7 @@ Creates custom themes for shadcn/ui applications.
 - Design token specifications
 - Implementation instructions
 
-### `get_shadcn_best_practices()`
+### `shadcn_get_best_practices()`
 Returns comprehensive shadcn/ui best practices guide.
 
 **Returns:**
@@ -273,7 +273,7 @@ const customTheme = {
 
 ### Component Analysis
 ```python
-analysis = analyze_shadcn_component("""
+analysis = shadcn_analyze_component("""
 import { Button } from "@/components/ui/button"
 
 function MyComponent() {
@@ -285,7 +285,7 @@ function MyComponent() {
 
 ### Component Generation
 ```python
-component = generate_shadcn_component(
+component = shadcn_generate_component(
   "form",
   use_case="user registration",
   framework="next",
@@ -296,7 +296,7 @@ component = generate_shadcn_component(
 
 ### Theme Creation
 ```python
-theme = create_shadcn_theme(
+theme = shadcn_create_theme(
   primary_color="#7c3aed",
   secondary_color="#f1f5f9", 
   theme_name="brand"
