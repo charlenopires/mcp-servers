@@ -27,6 +27,7 @@ Usage:
     - rust: Advanced Rust server
     - axum: Axum web framework server
     - docker: Docker optimization server
+    - python: Python development optimizer server
     - all: Run all servers (development mode)
     
 Examples:
@@ -131,6 +132,13 @@ SERVERS_CONFIG = {
         "description": "MCP server for Docker containerization with security best practices and multi-stage optimization",
         "module": "servers.docker_optimizer_server",
         "port": 3010,
+        "protocol": "stdio"
+    },
+    "python": {
+        "name": "Python Development Optimizer",
+        "description": "MCP server for Python code analysis, optimization, and modern paradigms following best practices",
+        "module": "servers.python_optimizer_server",
+        "port": 3011,
         "protocol": "stdio"
     }
 }

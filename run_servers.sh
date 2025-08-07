@@ -64,13 +64,12 @@ show_interactive_menu() {
     echo -e "${GREEN}11${NC}) 🦀 Servidor Rust Idiomatic (mre/idiomatic-rust patterns)"
     echo -e "${GREEN}12${NC}) 🌐 Servidor Axum (tokio-rs web framework + magic patterns)"
     echo -e "${GREEN}13${NC}) 🐳 Servidor Docker (Otimização e boas práticas de containerização)"
-    echo ""
-    echo -e "${CYAN}🚧 EM DESENVOLVIMENTO:${NC}"
-    echo -e "${YELLOW}14${NC}) 🚧 Servidor TypeScript (Em desenvolvimento)"
+    echo -e "${GREEN}14${NC}) 🐍 Servidor Python (Análise de código e paradigmas modernos)"
+    echo -e "${GREEN}15${NC}) 📘 Servidor TypeScript (Análise avançada e Clean Architecture)"
     echo ""
     echo -e "${GREEN} 0${NC}) ❌ Sair"
     echo ""
-    echo -e -n "${BLUE}Digite sua opção (0-14): ${NC}"
+    echo -e -n "${BLUE}Digite sua opção (0-15): ${NC}"
     
     read -r choice
     
@@ -128,14 +127,19 @@ show_interactive_menu() {
             uv run python main.py docker
             ;;
         14)
-            echo -e "\n${YELLOW}🚧 Servidor TypeScript ainda em desenvolvimento${NC}"
+            echo -e "\n${GREEN}🐍 Iniciando Servidor Python...${NC}\n"
+            uv run python main.py python
+            ;;
+        15)
+            echo -e "\n${GREEN}📘 Iniciando Servidor TypeScript...${NC}\n"
+            uv run python main.py typescript
             ;;
         0)
             echo -e "\n${GREEN}👋 Até logo!${NC}"
             exit 0
             ;;
         *)
-            echo -e "\n${RED}❌ Opção inválida. Escolha entre 0-14.${NC}"
+            echo -e "\n${RED}❌ Opção inválida. Escolha entre 0-15.${NC}"
             ;;
     esac
 }
@@ -156,7 +160,8 @@ show_server_status() {
         ["rust"]="✅ FUNCIONAL - Rust Idiomatic seguindo mre/idiomatic-rust patterns"
         ["axum"]="✅ FUNCIONAL - Axum web framework com tokio-rs + magic patterns"
         ["docker"]="✅ FUNCIONAL - Docker containerização com security best practices"
-        ["typescript"]="🚧 EM DESENVOLVIMENTO - Análise TypeScript"
+        ["python"]="✅ FUNCIONAL - Python desenvolvimento com paradigmas modernos (OOP/Functional/Async)"
+        ["typescript"]="✅ FUNCIONAL - TypeScript moderno com Clean Architecture e SOLID principles"
     )
     
     declare -A server_ports=(
@@ -171,9 +176,11 @@ show_server_status() {
         ["rust"]="3008"
         ["axum"]="3009"
         ["docker"]="3010"
+        ["python"]="3011"
+        ["typescript"]="3005"
     )
     
-    for server in mcp prompt tailwind fastmcp react_optimizer shadcn react rust axum docker typescript; do
+    for server in mcp prompt tailwind fastmcp react_optimizer shadcn react rust axum docker python typescript; do
         status=${server_status[$server]}
         port=${server_ports[$server]}
         echo -e "  ${GREEN}$server${NC} (porta $port): $status"
@@ -181,8 +188,8 @@ show_server_status() {
     
     echo ""
     echo -e "${YELLOW}📈 Estatísticas:${NC}"
-    echo -e "  • Servidores funcionais: ${GREEN}10/11${NC} (90.9%)"
-    echo -e "  • Em desenvolvimento: ${YELLOW}1/11${NC} (9.1%)"
+    echo -e "  • Servidores funcionais: ${GREEN}12/12${NC} (100%)"
+    echo -e "  • Em desenvolvimento: ${YELLOW}0/12${NC} (0%)"
     echo -e "  • Framework: ${BLUE}FastMCP 2.0 + Python 3.12+${NC}"
     echo -e "  • Gerenciador: ${PURPLE}uv (ultrafast package manager)${NC}"
     echo ""
@@ -220,7 +227,8 @@ show_help() {
     echo -e "  ${GREEN}rust${NC}           - Servidor Rust Idiomatic (mre/idiomatic-rust patterns)"
     echo -e "  ${GREEN}axum${NC}           - Servidor Axum Web Framework (tokio-rs + magic patterns)"
     echo -e "  ${GREEN}docker${NC}         - Servidor Docker (Otimização e boas práticas)"
-    echo -e "  ${YELLOW}typescript${NC}     - Servidor TypeScript (🚧 em desenvolvimento)"
+    echo -e "  ${GREEN}python${NC}         - Servidor Python (Análise de código e paradigmas modernos)"
+    echo -e "  ${GREEN}typescript${NC}     - Servidor TypeScript (Análise avançada e Clean Architecture)"
     echo ""
     echo -e "${YELLOW}Opções:${NC}"
     echo -e "  ${GREEN}--dev${NC}          - Modo desenvolvimento (mais logs)"
@@ -274,7 +282,7 @@ main() {
         "status")
             show_server_status
             ;;
-        "all"|"mcp"|"prompt"|"tailwind"|"fastmcp"|"react"|"typescript"|"react_optimizer"|"shadcn"|"rust"|"axum"|"docker")
+        "all"|"mcp"|"prompt"|"tailwind"|"fastmcp"|"react"|"typescript"|"react_optimizer"|"shadcn"|"rust"|"axum"|"docker"|"python")
             echo -e "${GREEN}🚀 Iniciando servidor(es)...${NC}"
             echo ""
             

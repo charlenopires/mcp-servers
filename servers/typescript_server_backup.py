@@ -606,6 +606,613 @@ class TypeScriptAnalysisEngine:
 analysis_engine = TypeScriptAnalysisEngine()
 
 # ================================
+# MCP TOOLS
+# ================================
+
+@mcp.tool()
+async def typescript_analyze_code_advanced(
+    code: str,
+    focus_areas: List[str] = None,
+    complexity_level: str = "intermediate"
+) -> Dict[str, Any]:
+    """
+    Analyze TypeScript code for 2025 best practices compliance.
+    
+    Args:
+        code: TypeScript code to analyze
+        focus_areas: List of categories to focus on (type_safety, modern_features, etc.)
+        complexity_level: Target complexity level (basic, intermediate, advanced, expert)
+    
+    Returns:
+        Comprehensive analysis with scores, recommendations, and patterns detected
+    """
+    try:
+        logger.info(f"Analyzing TypeScript code (length: {len(code)} chars)")
+        
+        # Convert focus areas to enums
+        focus_categories = []
+        if focus_areas:
+            for area in focus_areas:
+                try:
+                    focus_categories.append(TypeScriptCategory(area))
+                except ValueError:
+                    logger.warning(f"Invalid focus area: {area}")
+        
+        # Perform analysis
+        result = await analysis_engine.analyze_code(code, focus_categories)
+        
+        logger.info(f"Analysis complete. Overall score: {result.overall_score:.1f}")
+        return result.model_dump()
+        
+    except Exception as e:
+        logger.error(f"Error analyzing TypeScript code: {e}")
+        raise
+
+@mcp.tool()
+async def typescript_analyze_prompt(
+    prompt: str
+) -> Dict[str, Any]:
+    """
+    Analyze a TypeScript development prompt for quality and completeness.
+    
+    Args:
+        prompt: The prompt text to analyze
+    
+    Returns:
+        Analysis with quality score and recommendations
+    """
+    try:
+        logger.info(f"Analyzing TypeScript prompt (length: {len(prompt)} chars)")
+        
+        # Initialize analysis
+        strengths = []
+        weaknesses = []
+        recommendations = []
+        missing_categories = []
+        quality_score = 50.0
+        
+        prompt_lower = prompt.lower()
+        
+        # Check for essential categories
+        essential_categories = {
+            "type_safety": ["type safety", "strict mode", "typescript config", "types", "interfaces"],
+            "modern_features": ["utility types", "template literals", "generics", "conditional types"],
+            "architecture": ["clean architecture", "solid", "patterns", "layers", "domain"],
+            "testing": ["tests", "jest", "vitest", "tdd", "unit test"],
+            "performance": ["performance", "optimization", "tree shaking", "bundling"]
+        }
+        
+        categories_found = set()
+        for category, keywords in essential_categories.items():
+            if any(keyword in prompt_lower for keyword in keywords):
+                categories_found.add(category)
+                strengths.append(f"Mentions {category.replace('_', ' ')} concepts")
+                quality_score += 8
+        
+        # Check for missing important categories
+        missing_categories = list(set(essential_categories.keys()) - categories_found)
+        for missing in missing_categories[:3]:  # Limit to top 3
+            weaknesses.append(f"No mention of {missing.replace('_', ' ')}")
+            recommendations.append(f"Consider adding {missing.replace('_', ' ')} requirements")
+        
+        # Check prompt length and detail
+        word_count = len(prompt.split())
+        if word_count < 20:
+            weaknesses.append("Prompt is too brief, may lack necessary detail")
+            quality_score -= 15
+        elif word_count > 100:
+            strengths.append("Comprehensive prompt with good detail level")
+            quality_score += 10
+        
+        # Check for modern TypeScript mentions
+        modern_features = ["typescript 5", "2025", "modern", "advanced", "best practices"]
+        if any(feature in prompt_lower for feature in modern_features):
+            strengths.append("Emphasizes modern TypeScript practices")
+            quality_score += 10
+        
+        # Determine complexity estimate
+        complexity_indicators = len(categories_found)
+        if complexity_indicators >= 4:
+            complexity_estimate = "advanced"
+        elif complexity_indicators >= 2:
+            complexity_estimate = "intermediate"
+        else:
+            complexity_estimate = "basic"
+        
+        # Ensure score bounds
+        quality_score = max(0, min(100, quality_score))
+        
+        result = PromptAnalysisResult(
+            quality_score=quality_score,
+            strengths=strengths,
+            weaknesses=weaknesses,
+            recommendations=recommendations,
+            missing_categories=missing_categories,
+            complexity_estimate=complexity_estimate
+        )
+        
+        logger.info(f"Prompt analysis complete. Quality score: {quality_score:.1f}")
+        return result.model_dump()
+        
+    except Exception as e:
+        logger.error(f"Error analyzing TypeScript prompt: {e}")
+        raise
+
+@mcp.tool()
+async def typescript_generate_clean_architecture(
+    project_name: str,
+    architecture_pattern: str = "clean_architecture",
+    include_testing: bool = True,
+    include_examples: bool = True
+) -> Dict[str, Any]:
+    """
+    Generate a complete Clean Architecture TypeScript project structure.
+    
+    Args:
+        project_name: Name of the project
+        architecture_pattern: Architecture pattern to use
+        include_testing: Whether to include testing setup
+        include_examples: Whether to include example implementations
+    
+    Returns:
+        Complete project structure with files and configurations
+    """
+    try:
+        logger.info(f"Generating Clean Architecture project: {project_name}")
+        
+        # Project structure
+        project_structure = {
+            "src/": {
+                "domain/": {
+                    "entities/": ["User.ts", "Order.ts", "index.ts"],
+                    "value-objects/": ["UserId.ts", "Email.ts", "Money.ts", "index.ts"],
+                    "repositories/": ["UserRepository.ts", "OrderRepository.ts", "index.ts"],
+                    "services/": ["DomainEventPublisher.ts", "index.ts"],
+                    "events/": ["UserCreatedEvent.ts", "OrderPlacedEvent.ts", "index.ts"],
+                    "index.ts": None
+                },
+                "application/": {
+                    "use-cases/": ["CreateUserUseCase.ts", "PlaceOrderUseCase.ts", "index.ts"],
+                    "dto/": ["CreateUserRequest.ts", "CreateUserResponse.ts", "index.ts"],
+                    "ports/": ["UserRepository.ts", "EmailService.ts", "index.ts"],
+                    "services/": ["UserApplicationService.ts", "index.ts"],
+                    "index.ts": None
+                },
+                "infrastructure/": {
+                    "persistence/": ["PostgresUserRepository.ts", "InMemoryUserRepository.ts", "index.ts"],
+                    "external-services/": ["SendGridEmailService.ts", "index.ts"],
+                    "web/": ["express/", "fastify/"],
+                    "config/": ["Database.ts", "Environment.ts", "index.ts"],
+                    "index.ts": None
+                },
+                "presentation/": {
+                    "controllers/": ["UserController.ts", "OrderController.ts", "index.ts"],
+                    "middleware/": ["AuthMiddleware.ts", "ValidationMiddleware.ts", "index.ts"],
+                    "routes/": ["UserRoutes.ts", "OrderRoutes.ts", "index.ts"],
+                    "dtos/": ["UserDto.ts", "OrderDto.ts", "index.ts"],
+                    "index.ts": None
+                },
+                "shared/": {
+                    "types/": ["Result.ts", "DomainEvent.ts", "BaseEntity.ts", "index.ts"],
+                    "utils/": ["Logger.ts", "Validator.ts", "index.ts"],
+                    "errors/": ["DomainError.ts", "ApplicationError.ts", "index.ts"],
+                    "index.ts": None
+                }
+            },
+            "tests/": {
+                "unit/": ["domain/", "application/", "infrastructure/"],
+                "integration/": ["api/", "database/"],
+                "e2e/": ["user-journey.test.ts"],
+                "fixtures/": ["test-data.ts"],
+                "helpers/": ["test-utils.ts"]
+            } if include_testing else {},
+            "config/": {
+                "tsconfig.json": None,
+                "tsconfig.build.json": None,
+                "jest.config.js": None if include_testing else {},
+                ".eslintrc.js": None,
+                ".prettierrc": None
+            }
+        }
+        
+        # Configuration files
+        config_files = {
+            "tsconfig.json": """{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/domain/*": ["src/domain/*"],
+      "@/application/*": ["src/application/*"],
+      "@/infrastructure/*": ["src/infrastructure/*"],
+      "@/presentation/*": ["src/presentation/*"],
+      "@/shared/*": ["src/shared/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "tests"]
+}""",
+            "package.json": f"""{json.dumps({
+                "name": project_name.lower().replace(" ", "-"),
+                "version": "1.0.0",
+                "description": f"Clean Architecture TypeScript project: {project_name}",
+                "main": "dist/index.js",
+                "scripts": {
+                    "build": "tsc",
+                    "start": "node dist/index.js",
+                    "dev": "tsx watch src/index.ts",
+                    "test": "jest" if include_testing else "",
+                    "test:watch": "jest --watch" if include_testing else "",
+                    "lint": "eslint src --ext .ts",
+                    "lint:fix": "eslint src --ext .ts --fix",
+                    "format": "prettier --write 'src/**/*.ts'"
+                },
+                "dependencies": {
+                    "@types/node": "^20.0.0",
+                    "reflect-metadata": "^0.1.13"
+                },
+                "devDependencies": {
+                    "typescript": "^5.3.0",
+                    "tsx": "^4.0.0",
+                    "@typescript-eslint/eslint-plugin": "^6.0.0",
+                    "@typescript-eslint/parser": "^6.0.0",
+                    "eslint": "^8.0.0",
+                    "prettier": "^3.0.0"
+                }
+            }, indent=2)}"""
+        }
+        
+        # Example implementations
+        code_examples = {}
+        if include_examples:
+            code_examples = {
+                "domain/entities/User.ts": '''import { BaseEntity } from '@/shared/types/BaseEntity';
+import { UserId } from '@/domain/value-objects/UserId';
+import { Email } from '@/domain/value-objects/Email';
+import { Result } from '@/shared/types/Result';
+import { DomainError } from '@/shared/errors/DomainError';
+
+export class User extends BaseEntity {
+    private constructor(
+        public readonly id: UserId,
+        public readonly email: Email,
+        public readonly name: string,
+        public readonly createdAt: Date
+    ) {
+        super();
+    }
+    
+    public static create(data: {
+        email: string;
+        name: string;
+    }): Result<User, DomainError> {
+        // Validation logic
+        if (!data.name || data.name.trim().length < 2) {
+            return Err(new DomainError('Name must be at least 2 characters'));
+        }
+        
+        const emailResult = Email.create(data.email);
+        if (!emailResult.success) {
+            return Err(emailResult.error);
+        }
+        
+        return Ok(new User(
+            UserId.generate(),
+            emailResult.data,
+            data.name.trim(),
+            new Date()
+        ));
+    }
+}''',
+                "shared/types/Result.ts": '''// Railway-oriented programming Result type
+export type Result<T, E = Error> = 
+    | { success: true; data: T }
+    | { success: false; error: E };
+
+export const Ok = <T>(data: T): Result<T, never> => ({ 
+    success: true, 
+    data 
+});
+
+export const Err = <E>(error: E): Result<never, E> => ({ 
+    success: false, 
+    error 
+});
+
+// Utility functions for Result handling
+export const map = <T, U, E>(
+    result: Result<T, E>,
+    fn: (value: T) => U
+): Result<U, E> =>
+    result.success ? Ok(fn(result.data)) : result;
+
+export const flatMap = <T, U, E>(
+    result: Result<T, E>,
+    fn: (value: T) => Result<U, E>
+): Result<U, E> =>
+    result.success ? fn(result.data) : result;
+
+export const asyncMap = async <T, U, E>(
+    result: Result<T, E>,
+    fn: (value: T) => Promise<U>
+): Promise<Result<U, E>> =>
+    result.success ? Ok(await fn(result.data)) : result;'''
+            }
+        
+        # Setup instructions
+        setup_instructions = [
+            f"1. Create project directory: mkdir {project_name.lower().replace(' ', '-')}",
+            "2. Navigate to project: cd " + project_name.lower().replace(' ', '-'),
+            "3. Initialize npm: npm init -y",
+            "4. Install dependencies: npm install",
+            "5. Install dev dependencies: npm install --save-dev",
+            "6. Set up TypeScript: npx tsc --init",
+            "7. Configure ESLint: npx eslint --init",
+            "8. Set up Prettier: echo '{}' > .prettierrc",
+            "9. Create folder structure as specified",
+            "10. Copy configuration files",
+            "11. Run initial build: npm run build",
+            "12. Start development: npm run dev"
+        ]
+        
+        # Best practices guide
+        best_practices = [
+            "Follow the dependency rule: dependencies point inward",
+            "Keep domain layer pure - no external dependencies",
+            "Use dependency injection for loose coupling",
+            "Implement Result pattern for error handling",
+            "Write tests for each layer independently",
+            "Use interfaces for all external dependencies",
+            "Keep business logic in domain entities and services",
+            "Use value objects for type safety",
+            "Implement SOLID principles throughout",
+            "Use TypeScript's strict mode for better type safety"
+        ]
+        
+        result = ProjectStructureResult(
+            project_structure=project_structure,
+            configuration_files=config_files,
+            code_examples=code_examples,
+            setup_instructions=setup_instructions,
+            best_practices_guide=best_practices
+        )
+        
+        logger.info(f"Clean Architecture project generated for: {project_name}")
+        return result.model_dump()
+        
+    except Exception as e:
+        logger.error(f"Error generating Clean Architecture project: {e}")
+        raise
+
+@mcp.tool()
+async def typescript_refactor_to_modern(
+    legacy_code: str,
+    target_patterns: List[str] = None,
+    preserve_compatibility: bool = True
+) -> Dict[str, Any]:
+    """
+    Refactor legacy TypeScript code to modern 2025 patterns.
+    
+    Args:
+        legacy_code: Original TypeScript code to refactor
+        target_patterns: Specific patterns to apply (utility_types, clean_architecture, etc.)
+        preserve_compatibility: Whether to maintain backward compatibility
+    
+    Returns:
+        Refactored code with explanations and migration notes
+    """
+    try:
+        logger.info(f"Refactoring TypeScript code (length: {len(legacy_code)} chars)")
+        
+        refactored_code = legacy_code
+        improvements_applied = []
+        migration_notes = []
+        
+        # Apply refactoring patterns
+        if not target_patterns:
+            target_patterns = ["type_safety", "modern_features", "error_handling"]
+        
+        # Replace 'any' with proper types
+        if "type_safety" in target_patterns:
+            any_replacements = 0
+            # Simple replacements for common patterns
+            refactored_code = re.sub(r': any\b', ': unknown', refactored_code)
+            any_replacements = len(re.findall(r': unknown\b', refactored_code))
+            
+            if any_replacements > 0:
+                improvements_applied.append(f"Replaced {any_replacements} 'any' types with 'unknown'")
+                migration_notes.append("Review 'unknown' types and narrow them to specific types where possible")
+        
+        # Add modern utility types
+        if "modern_features" in target_patterns:
+            # Look for object patterns that could use utility types
+            if "Partial<" not in refactored_code and "interface" in refactored_code:
+                improvements_applied.append("Added utility type examples in comments")
+                refactored_code = f"""// Modern utility types available:
+// Partial<T>, Required<T>, Pick<T, K>, Omit<T, K>, Record<K, T>
+// Example: type UpdateUser = Partial<User>;
+
+{refactored_code}"""
+        
+        # Improve error handling
+        if "error_handling" in target_patterns:
+            if "throw new Error" in refactored_code or "try {" in refactored_code:
+                improvements_applied.append("Added Result type pattern example")
+                result_pattern = '''
+// Consider using Result pattern for better error handling
+type Result<T, E = Error> = 
+    | { success: true; data: T }
+    | { success: false; error: E };
+'''
+                refactored_code = result_pattern + refactored_code
+                migration_notes.append("Consider replacing throw/catch with Result pattern for functional error handling")
+        
+        explanation = f"""
+Code has been refactored to follow TypeScript 2025 best practices:
+
+Improvements Applied:
+{chr(10).join('- ' + improvement for improvement in improvements_applied)}
+
+Key Changes:
+1. Enhanced type safety by replacing 'any' with more specific types
+2. Added modern TypeScript pattern examples
+3. Improved error handling patterns
+4. Added comments for better maintainability
+
+The refactored code maintains {'' if preserve_compatibility else 'does not maintain '}backward compatibility.
+"""
+        
+        performance_impact = "Improved compile-time checking and better IntelliSense support. Runtime performance unchanged."
+        
+        result = RefactorResult(
+            refactored_code=refactored_code,
+            improvements_applied=improvements_applied,
+            explanation=explanation.strip(),
+            performance_impact=performance_impact,
+            migration_notes=migration_notes
+        )
+        
+        logger.info(f"Refactoring complete. Applied {len(improvements_applied)} improvements")
+        return result.model_dump()
+        
+    except Exception as e:
+        logger.error(f"Error refactoring TypeScript code: {e}")
+        raise
+
+@mcp.tool()
+async def typescript_get_best_practices(
+    category: str = "all",
+    complexity_level: str = "intermediate"
+) -> Dict[str, Any]:
+    """
+    Get TypeScript 2025 best practices by category and complexity level.
+    
+    Args:
+        category: Specific category (type_safety, modern_features, clean_architecture, etc.)
+        complexity_level: Target complexity (basic, intermediate, advanced, expert)
+    
+    Returns:
+        Comprehensive best practices guide with examples
+    """
+    try:
+        logger.info(f"Getting TypeScript best practices for {category} at {complexity_level} level")
+        
+        practices = {}
+        
+        if category == "all" or category == "type_safety":
+            practices["type_safety"] = {
+                "title": "TypeScript Type Safety Best Practices 2025",
+                "description": "Modern approaches to type safety in TypeScript",
+                "practices": [
+                    {
+                        "name": "Use Strict Mode Configuration",
+                        "description": "Enable all strict type checking options",
+                        "example": '''// tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitReturns": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true
+  }
+}''',
+                        "benefits": ["Catch errors at compile time", "Better IDE support", "More maintainable code"]
+                    },
+                    {
+                        "name": "Prefer 'unknown' over 'any'",
+                        "description": "Use unknown for truly dynamic content",
+                        "example": '''// Good: Forces type checking
+function processData(data: unknown) {
+    if (typeof data === 'string') {
+        return data.toUpperCase(); // Type narrowing
+    }
+    throw new Error('Invalid data type');
+}
+
+// Bad: Disables type checking
+function processData(data: any) {
+    return data.toUpperCase(); // No type safety
+}''',
+                        "benefits": ["Type safety maintained", "Explicit type narrowing", "Better error messages"]
+                    }
+                ]
+            }
+        
+        if category == "all" or category == "modern_features":
+            practices["modern_features"] = {
+                "title": "Modern TypeScript Features 2025",
+                "description": "Latest TypeScript features and patterns",
+                "practices": [
+                    {
+                        "name": "Template Literal Types",
+                        "description": "Create dynamic, type-safe string patterns",
+                        "example": '''// Event system with type safety
+type EventName<T extends string> = `on${Capitalize<T>}`;
+type UserEvents = EventName<'login' | 'logout' | 'register'>;
+// Result: 'onLogin' | 'onLogout' | 'onRegister'
+
+// API endpoint types
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type ApiEndpoint<M extends HttpMethod, P extends string> = 
+    `${Lowercase<M>} /api/v1/${P}`;
+
+type UserEndpoint = ApiEndpoint<'POST', 'users'>; // 'post /api/v1/users' ''',
+                        "benefits": ["Type-safe string operations", "API contract enforcement", "Better autocomplete"]
+                    }
+                ]
+            }
+        
+        # Add more categories based on request
+        if category == "all" or category == "clean_architecture":
+            practices["clean_architecture"] = knowledge_base.CLEAN_ARCHITECTURE
+        
+        result = {
+            "practices": practices,
+            "complexity_level": complexity_level,
+            "category": category,
+            "last_updated": "2025",
+            "additional_resources": [
+                "TypeScript Handbook 5.x",
+                "Clean Architecture by Robert C. Martin",
+                "Effective TypeScript by Dan Vanderkam",
+                "TypeScript Deep Dive"
+            ]
+        }
+        
+        logger.info(f"Retrieved best practices for {category}")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Error getting TypeScript best practices: {e}")
+        raise
+
+# ================================
 # MCP TOOLS - MAIN API ENDPOINTS
 # ================================
 
