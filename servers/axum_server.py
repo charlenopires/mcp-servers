@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-Axum Web Framework MCP Server - Servidor MCP para desenvolvimento web com Axum
-=============================================================================
+Axum Web Framework MCP Server
+=============================
 
-Servidor MCP avançado para desenvolvimento web moderno com Axum, incluindo:
-- Análise de código Axum seguindo melhores práticas oficiais
-- Padrões de routing, middleware e handlers
-- Extractors e responses idiomáticos
-- Error handling robusto com Tower
-- State management e testing patterns
-- Rust magic patterns para metaprogramming
-- Performance optimization com async/await
+Advanced MCP server for modern web development with Axum, featuring:
+- Axum code analysis following official best practices
+- Routing patterns, middleware, and handler optimization
+- Idiomatic extractors and responses
+- Robust error handling with Tower ecosystem
+- State management and testing patterns
+- Rust magic patterns for metaprogramming
+- Performance optimization with async/await
 
-Baseado em: tokio-rs/axum, docs.rs/axum, alexpusch/rust-magic-patterns
+Based on: tokio-rs/axum, docs.rs/axum, alexpusch/rust-magic-patterns
 """
 
 import asyncio
@@ -25,23 +25,19 @@ from enum import Enum
 from fastmcp import FastMCP
 from pydantic import BaseModel, Field
 
-# Configurar logging
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Inicializar servidor MCP
-mcp = FastMCP(
-    name="axum-web-framework-server",
-    version="0.8.0",
-    description="Servidor MCP para desenvolvimento web moderno com Axum seguindo padrões oficiais"
-)
+# Initialize FastMCP server (following pattern of other servers)
+mcp = FastMCP("Axum Web Framework Server")
 
 # ================================
 # AXUM KNOWLEDGE BASE & PATTERNS
 # ================================
 
 class AxumFeatureType(Enum):
-    """Categorias de funcionalidades Axum"""
+    """Axum feature categories"""
     ROUTING = "routing"
     HANDLERS = "handlers"
     EXTRACTORS = "extractors"
@@ -54,7 +50,7 @@ class AxumFeatureType(Enum):
     MAGIC_PATTERNS = "magic_patterns"
 
 class ProjectType(Enum):
-    """Tipos de projetos Axum"""
+    """Axum project types"""
     API_SERVER = "api_server"
     WEB_APPLICATION = "web_application"
     MICROSERVICE = "microservice"
@@ -63,7 +59,7 @@ class ProjectType(Enum):
 
 @dataclass
 class AxumAnalysisResult:
-    """Resultado da análise de código Axum"""
+    """Axum code analysis result"""
     code: str
     score: int
     routing_patterns: Dict[str, bool]
@@ -78,18 +74,18 @@ class AxumAnalysisResult:
     recommendations: List[str]
 
 class AxumKnowledgeBase:
-    """Base de conhecimento Axum baseada em tokio-rs/axum e magic patterns"""
+    """Axum knowledge base based on tokio-rs/axum and magic patterns"""
     
     VERSION = "0.8.0"
     MSRV = "1.78"  # Minimum Supported Rust Version
     
-    # Padrão: Routing Moderno
+    # Pattern: Modern Routing
     ROUTING_PATTERNS = {
         "macro_free_routing": {
-            "description": "Roteamento sem macros usando Router API",
-            "best_practice": "Use Router::new() com métodos chainados para definir rotas",
+            "description": "Macro-free routing using Router API",
+            "best_practice": "Use Router::new() with chained methods to define routes",
             "example": """
-// Idiomático: routing declarativo sem macros
+// Idiomatic: declarative routing without macros
 use axum::{Router, routing::{get, post}};
 
 fn create_app() -> Router {
@@ -107,24 +103,24 @@ fn api_v1_routes() -> Router {
         .route("/metrics", get(metrics))
 }""",
             "anti_pattern": """
-// Anti-padrão: rotas não organizadas
+// Anti-pattern: unorganized routes
 let app = Router::new()
     .route("/users", get(users_handler))
     .route("/users/create", post(create_handler))
-    .route("/users/update", put(update_handler)); // inconsistente com REST
+    .route("/users/update", put(update_handler)); // inconsistent with REST
 """,
             "benefits": [
-                "Roteamento type-safe sem runtime overhead",
-                "Composição modular de rotas",
-                "Integração perfeita com Tower middleware",
-                "Erro de compilação para rotas malformadas"
+                "Type-safe routing without runtime overhead",
+                "Modular route composition",
+                "Perfect integration with Tower middleware",
+                "Compile-time errors for malformed routes"
             ]
         },
         "nested_routing": {
-            "description": "Organização hierárquica de rotas com nest",
-            "best_practice": "Use nest() para organizar rotas em módulos lógicos",
+            "description": "Hierarchical route organization with nest",
+            "best_practice": "Use nest() to organize routes in logical modules",
             "example": """
-// Organização modular com nest
+// Modular organization with nest
 fn app() -> Router<AppState> {
     Router::new()
         .nest("/api/v1", api_routes())
@@ -149,11 +145,11 @@ fn admin_routes() -> Router<AppState> {
         }
     }
     
-    # Padrão: Handlers Idiomáticos
+    # Pattern: Idiomatic Handlers
     HANDLER_PATTERNS = {
         "async_handlers": {
-            "description": "Handlers assíncronos com extractor patterns",
-            "best_practice": "Handlers devem ser async functions com extractors tipados",
+            "description": "Async handlers with extractor patterns",
+            "best_practice": "Handlers should be async functions with typed extractors",
             "example": """
 use axum::{Json, Path, Query, extract::State};
 use serde::{Deserialize, Serialize};
@@ -171,7 +167,7 @@ struct User {
     email: String,
 }
 
-// Handler idiomático com múltiplos extractors
+// Idiomatic handler with multiple extractors
 async fn create_user(
     State(db): State<DatabasePool>,
     Json(payload): Json<CreateUserRequest>,
@@ -186,7 +182,7 @@ async fn create_user(
     Ok(Json(user))
 }
 
-// Handler com Path e Query extractors
+// Handler with Path and Query extractors
 async fn get_user_posts(
     Path(user_id): Path<u32>,
     Query(params): Query<HashMap<String, String>>,
@@ -200,18 +196,18 @@ async fn get_user_posts(
     Ok(Json(posts))
 }""",
             "anti_pattern": """
-// Anti-padrão: handler não tipado com erro manual
+// Anti-pattern: untyped handler with manual error handling
 async fn bad_handler(req: Request<Body>) -> Response<Body> {
     let body = hyper::body::to_bytes(req.into_body()).await.unwrap();
     let json: serde_json::Value = serde_json::from_slice(&body).unwrap();
-    // parsing manual, sem type safety
+    // manual parsing, without type safety
     Response::new(Body::from("ok"))
 }"""
         },
         "handler_composition": {
-            "description": "Composição e reutilização de handlers",
+            "description": "Handler composition and reuse",
             "example": """
-// Handlers compostos e reutilizáveis
+// Composable and reusable handlers
 async fn authenticated_handler<T>(
     auth: AuthExtractor,
     handler: impl Fn(User) -> T,
@@ -237,22 +233,22 @@ where
         }
     }
     
-    # Padrão: Extractors Avançados
+    # Pattern: Advanced Extractors
     EXTRACTOR_PATTERNS = {
         "builtin_extractors": {
-            "description": "Extractors built-in do Axum",
+            "description": "Built-in Axum extractors",
             "patterns": {
-                "Json": "Extrai e deserializa JSON do request body",
-                "Path": "Extrai parâmetros da URL path",
-                "Query": "Extrai query parameters",
-                "State": "Acesso ao application state",
-                "Headers": "Acesso a HTTP headers",
-                "Extension": "Extensões de request personalizadas"
+                "Json": "Extract and deserialize JSON from request body",
+                "Path": "Extract parameters from URL path",
+                "Query": "Extract query parameters",
+                "State": "Access to application state",
+                "Headers": "Access to HTTP headers",
+                "Extension": "Custom request extensions"
             },
             "example": """
 use axum::extract::{Path, Query, Json, State, HeaderMap};
 
-// Múltiplos extractors em um handler
+// Multiple extractors in one handler
 async fn complex_handler(
     Path(id): Path<u32>,
     Query(params): Query<SearchParams>,
@@ -260,7 +256,7 @@ async fn complex_handler(
     State(app_state): State<AppState>,
     headers: HeaderMap,
 ) -> Result<Json<Response>, AppError> {
-    // Todos os extractors são automaticamente validados
+    // All extractors are automatically validated
     let user_agent = headers.get("user-agent");
     let result = app_state.update_item(id, payload, params).await?;
     Ok(Json(result))
@@ -274,11 +270,11 @@ struct SearchParams {
 }"""
         },
         "custom_extractors": {
-            "description": "Extractors personalizados com FromRequest",
+            "description": "Custom extractors with FromRequest",
             "example": """
 use axum::{async_trait, extract::FromRequestParts, http::request::Parts};
 
-// Custom extractor para autenticação
+// Custom extractor for authentication
 struct AuthenticatedUser {
     id: u32,
     email: String,
@@ -310,25 +306,25 @@ where
     }
 }
 
-// Uso do custom extractor
+// Using custom extractor
 async fn protected_handler(
     auth_user: AuthenticatedUser,
     Json(data): Json<UpdateData>,
 ) -> Result<Json<Success>, AppError> {
-    // auth_user já foi validado automaticamente
+    // auth_user is already validated automatically
     process_authenticated_request(auth_user.id, data).await
 }"""
         }
     }
     
-    # Padrão: Responses Idiomáticos
+    # Pattern: Idiomatic Responses
     RESPONSE_PATTERNS = {
         "into_response": {
-            "description": "Tipos de response com IntoResponse trait",
+            "description": "Response types with IntoResponse trait",
             "example": """
 use axum::{response::IntoResponse, http::StatusCode, Json};
 
-// Diferentes tipos de response
+// Different response types
 async fn json_response() -> Json<User> {
     Json(User { id: 1, name: "John".to_string() })
 }
@@ -367,14 +363,14 @@ where
 }"""
         },
         "streaming_responses": {
-            "description": "Responses em streaming para dados grandes",
+            "description": "Streaming responses for large data",
             "example": """
 use axum::body::StreamBody;
 use futures::stream::{self, StreamExt};
 
 async fn stream_data() -> StreamBody<impl Stream<Item = Result<Bytes, io::Error>>> {
     let stream = stream::iter(0..1000)
-        .map(|i| Ok(Bytes::from(format!("data chunk {}\n", i))));
+        .map(|i| Ok(Bytes::from(format!("data chunk {}\\n", i))));
     
     StreamBody::new(stream)
 }
@@ -390,10 +386,10 @@ async fn sse_handler() -> Sse<impl Stream<Item = Result<Event, Infallible>>> {
         }
     }
     
-    # Padrão: Middleware Patterns
+    # Pattern: Middleware Patterns
     MIDDLEWARE_PATTERNS = {
         "tower_middleware": {
-            "description": "Integração com ecosystem Tower",
+            "description": "Integration with Tower ecosystem",
             "example": """
 use tower::{ServiceBuilder, timeout::TimeoutLayer, limit::RateLimitLayer};
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
@@ -411,7 +407,7 @@ fn create_app() -> Router {
 }"""
         },
         "custom_middleware": {
-            "description": "Middleware customizado com layer pattern",
+            "description": "Custom middleware with layer pattern",
             "example": """
 use axum::{middleware::Next, http::Request, response::Response};
 
@@ -432,17 +428,17 @@ async fn auth_middleware<B>(
     Ok(next.run(req).await)
 }
 
-// Aplicação do middleware
+// Apply middleware
 let app = Router::new()
     .route("/protected", get(protected_handler))
     .layer(axum::middleware::from_fn(auth_middleware));"""
         }
     }
     
-    # Padrão: Error Handling Robusto
+    # Pattern: Robust Error Handling
     ERROR_HANDLING_PATTERNS = {
         "custom_error_types": {
-            "description": "Error types customizados com IntoResponse",
+            "description": "Custom error types with IntoResponse",
             "example": """
 use axum::{response::IntoResponse, http::StatusCode, Json};
 use thiserror::Error;
@@ -499,7 +495,7 @@ async fn get_user(Path(id): Path<u32>) -> Result<Json<User>, AppError> {
 }"""
         },
         "error_layer": {
-            "description": "Error handling layer para tratamento centralizado",
+            "description": "Error handling layer for centralized treatment",
             "example": """
 use axum::error_handling::HandleErrorLayer;
 
@@ -522,10 +518,10 @@ let app = Router::new()
         }
     }
     
-    # Padrão: State Management
+    # Pattern: State Management
     STATE_MANAGEMENT_PATTERNS = {
         "shared_state": {
-            "description": "Estado compartilhado com Arc e State extractor",
+            "description": "Shared state with Arc and State extractor",
             "example": """
 use std::sync::Arc;
 use axum::extract::State;
@@ -559,11 +555,11 @@ let app = Router::new()
     .with_state(shared_state);"""
         },
         "extension_state": {
-            "description": "Estado por request com Extension",
+            "description": "Per-request state with Extension",
             "example": """
 use axum::{Extension, middleware::Next, http::Request};
 
-// Middleware que adiciona contexto per-request
+// Middleware that adds per-request context
 async fn add_request_context<B>(
     mut req: Request<B>,
     next: Next<B>,
@@ -587,10 +583,10 @@ async fn handler(Extension(ctx): Extension<RequestContext>) -> Json<Value> {
         }
     }
     
-    # Padrão: Testing Patterns
+    # Pattern: Testing Patterns
     TESTING_PATTERNS = {
         "integration_tests": {
-            "description": "Testes de integração com TestClient",
+            "description": "Integration tests with TestClient",
             "example": """
 use axum_test::TestServer;
 use tower::ServiceExt;
@@ -631,9 +627,9 @@ async fn create_test_state() -> AppState {
 }"""
         },
         "mock_extractors": {
-            "description": "Mock de extractors para unit tests",
+            "description": "Mock extractors for unit tests",
             "example": """
-// Unit test para handler específico
+// Unit test for specific handler
 #[tokio::test]
 async fn test_get_user_handler() {
     let mock_state = create_mock_state();
@@ -651,13 +647,13 @@ async fn test_get_user_handler() {
         }
     }
     
-    # Padrão: Magic Patterns (baseado em alexpusch/rust-magic-patterns)
+    # Pattern: Magic Patterns (based on alexpusch/rust-magic-patterns)
     MAGIC_PATTERNS = {
         "axum_function_parameters": {
-            "description": "Magic function parameters como no Axum",
-            "explanation": "Axum usa traits e type system para permitir handlers com assinaturas flexíveis",
+            "description": "Magic function parameters like in Axum",
+            "explanation": "Axum uses traits and type system to enable handlers with flexible signatures",
             "example": """
-// Magic: diferentes assinaturas de handler funcionam
+// Magic: different handler signatures work
 async fn handler1() -> &'static str { "hello" }
 async fn handler2(Path(id): Path<u32>) -> String { format!("id: {}", id) }
 async fn handler3(
@@ -665,12 +661,12 @@ async fn handler3(
     Json(data): Json<Value>
 ) -> Json<Response> { /* ... */ }
 
-// Como funciona internamente (simplificado):
+// How it works internally (simplified):
 trait Handler<T> {
     fn call(self, extractors: T) -> impl Future<Output = Response>;
 }
 
-// Implementação para diferentes aridades
+// Implementation for different arities
 impl<F, Fut> Handler<()> for F
 where
     F: FnOnce() -> Fut,
@@ -693,12 +689,12 @@ where
 }"""
         },
         "async_pipeline": {
-            "description": "Pipeline assíncrono para processamento de dados",
+            "description": "Async pipeline for data processing",
             "example": """
 use tokio::sync::mpsc;
 use futures::stream::{Stream, StreamExt};
 
-// Pipeline assíncrono para processamento de requests
+// Async pipeline for request processing
 struct RequestPipeline {
     input: mpsc::Receiver<Request>,
     output: mpsc::Sender<Response>,
@@ -732,9 +728,9 @@ fn create_processing_stream() -> impl Stream<Item = ProcessedData> {
 }"""
         },
         "type_level_routing": {
-            "description": "Routing a nível de tipos para type safety",
+            "description": "Type-level routing for type safety",
             "example": """
-// Type-safe routing com phantom types
+// Type-safe routing with phantom types
 use std::marker::PhantomData;
 
 struct Route<T> {
@@ -756,7 +752,7 @@ const CREATE_USER: Route<CreateUser> = Route {
     _phantom: PhantomData,
 };
 
-// Handler registration com type safety
+// Handler registration with type safety
 trait RouteHandler<T> {
     type Response: IntoResponse;
     fn handle(&self) -> Self::Response;
@@ -769,7 +765,7 @@ impl RouteHandler<GetUser> for MyHandler {
     }
 }
 
-// Router que garante type safety
+// Router that ensures type safety
 fn register_route<T, H>(route: Route<T>, handler: H) -> RouterBuilder
 where
     H: RouteHandler<T>,
@@ -779,10 +775,10 @@ where
         }
     }
     
-    # Padrão: Performance Optimization
+    # Pattern: Performance Optimization
     PERFORMANCE_PATTERNS = {
         "connection_pooling": {
-            "description": "Connection pooling para databases",
+            "description": "Connection pooling for databases",
             "example": """
 use sqlx::{PgPool, postgres::PgPoolOptions};
 
@@ -811,7 +807,7 @@ async fn get_users(State(state): State<AppState>) -> Result<Json<Vec<User>>, App
 }"""
         },
         "caching_layer": {
-            "description": "Layer de cache para responses",
+            "description": "Caching layer for responses",
             "example": """
 use moka::future::Cache;
 use std::time::Duration;
@@ -849,7 +845,7 @@ async fn cached_handler(
 }"""
         },
         "streaming_optimization": {
-            "description": "Otimizações para streaming de dados grandes",
+            "description": "Optimizations for streaming large data",
             "example": """
 use futures::stream::{Stream, StreamExt};
 use tokio_util::io::ReaderStream;
@@ -863,13 +859,13 @@ async fn stream_large_file(
     
     let headers = [
         ("content-type", "application/octet-stream"),
-        ("content-disposition", &format!("attachment; filename=\"{}\"", filename)),
+        ("content-disposition", &format!("attachment; filename=\\"{}\\"", filename)),
     ];
     
     Ok((headers, StreamBody::new(stream)))
 }
 
-// Chunked JSON streaming para APIs
+// Chunked JSON streaming for APIs
 async fn stream_json_array<T>(
     data: impl Stream<Item = T> + Send + 'static
 ) -> impl IntoResponse 
@@ -892,13 +888,13 @@ where
     }
 
 class AxumAnalyzer:
-    """Analisador de código Axum seguindo padrões oficiais"""
+    """Axum code analyzer following official patterns"""
     
     def __init__(self):
         self.knowledge_base = AxumKnowledgeBase()
     
     async def analyze_axum_code(self, code: str) -> AxumAnalysisResult:
-        """Analisa código Axum para padrões e best practices"""
+        """Analyze Axum code for patterns and best practices"""
         
         score = 70  # Base score
         routing_patterns = {}
@@ -912,39 +908,39 @@ class AxumAnalyzer:
         magic_patterns_detected = []
         recommendations = []
         
-        # Análise de routing patterns
+        # Analyze routing patterns
         routing_patterns.update(await self._analyze_routing_patterns(code))
         
-        # Análise de handlers
+        # Analyze handlers
         handler_quality.update(await self._analyze_handlers(code))
         
-        # Análise de extractors
+        # Analyze extractors
         extractor_usage.update(await self._analyze_extractors(code))
         
-        # Análise de middleware
+        # Analyze middleware
         middleware_patterns.update(await self._analyze_middleware(code))
         
-        # Análise de error handling
+        # Analyze error handling
         error_handling.update(await self._analyze_error_handling(code))
         
-        # Análise de performance
+        # Analyze performance
         performance_issues.extend(await self._analyze_performance(code))
         
-        # Análise de segurança
+        # Analyze security
         security_concerns.extend(await self._analyze_security(code))
         
-        # Detecção de magic patterns
+        # Detect magic patterns
         magic_patterns_detected.extend(await self._detect_magic_patterns(code))
         
         # Best practices compliance
         best_practices_compliance.update(await self._analyze_best_practices(code))
         
-        # Gerar recomendações
+        # Generate recommendations
         recommendations.extend(await self._generate_recommendations(
             routing_patterns, handler_quality, extractor_usage, error_handling
         ))
         
-        # Calcular score final
+        # Calculate final score
         score = await self._calculate_score(
             routing_patterns, handler_quality, extractor_usage, 
             middleware_patterns, error_handling, len(performance_issues), len(security_concerns)
@@ -966,7 +962,7 @@ class AxumAnalyzer:
         )
     
     async def _analyze_routing_patterns(self, code: str) -> Dict[str, bool]:
-        """Analisa padrões de routing"""
+        """Analyze routing patterns"""
         patterns = {}
         
         # Macro-free routing
@@ -982,7 +978,7 @@ class AxumAnalyzer:
         return patterns
     
     async def _analyze_handlers(self, code: str) -> Dict[str, bool]:
-        """Analisa qualidade dos handlers"""
+        """Analyze handler quality"""
         quality = {}
         
         # Async handlers
@@ -997,7 +993,7 @@ class AxumAnalyzer:
         return quality
     
     async def _analyze_extractors(self, code: str) -> Dict[str, bool]:
-        """Analisa uso de extractors"""
+        """Analyze extractor usage"""
         usage = {}
         
         # Built-in extractors
@@ -1014,7 +1010,7 @@ class AxumAnalyzer:
         return usage
     
     async def _analyze_middleware(self, code: str) -> Dict[str, bool]:
-        """Analisa padrões de middleware"""
+        """Analyze middleware patterns"""
         patterns = {}
         
         # Tower middleware
@@ -1029,7 +1025,7 @@ class AxumAnalyzer:
         return patterns
     
     async def _analyze_error_handling(self, code: str) -> Dict[str, bool]:
-        """Analisa error handling"""
+        """Analyze error handling"""
         handling = {}
         
         # Custom error types
@@ -1044,7 +1040,7 @@ class AxumAnalyzer:
         return handling
     
     async def _analyze_performance(self, code: str) -> List[str]:
-        """Analisa issues de performance"""
+        """Analyze performance issues"""
         issues = []
         
         # Database connections
@@ -1062,7 +1058,7 @@ class AxumAnalyzer:
         return issues
     
     async def _analyze_security(self, code: str) -> List[str]:
-        """Analisa concerns de segurança"""
+        """Analyze security concerns"""
         concerns = []
         
         # Authentication
@@ -1080,7 +1076,7 @@ class AxumAnalyzer:
         return concerns
     
     async def _detect_magic_patterns(self, code: str) -> List[str]:
-        """Detecta magic patterns no código"""
+        """Detect magic patterns in code"""
         patterns = []
         
         if "FromRequestParts" in code:
@@ -1095,7 +1091,7 @@ class AxumAnalyzer:
         return patterns
     
     async def _analyze_best_practices(self, code: str) -> Dict[str, bool]:
-        """Analisa conformidade com best practices"""
+        """Analyze best practices compliance"""
         compliance = {}
         
         # Code organization
@@ -1116,7 +1112,7 @@ class AxumAnalyzer:
         extractors: Dict[str, bool],
         errors: Dict[str, bool]
     ) -> List[str]:
-        """Gera recomendações baseadas na análise"""
+        """Generate recommendations based on analysis"""
         recommendations = []
         
         if not routing.get("uses_nested_routing", False):
@@ -1143,17 +1139,17 @@ class AxumAnalyzer:
         performance_issues: int,
         security_concerns: int
     ) -> int:
-        """Calcula score final baseado na análise"""
+        """Calculate final score based on analysis"""
         base_score = 70
         
-        # Bonus por boas práticas
+        # Bonus for good practices
         routing_bonus = sum(routing.values()) * 4
         handler_bonus = sum(handlers.values()) * 5
         extractor_bonus = sum(extractors.values()) * 3
         middleware_bonus = sum(middleware.values()) * 3
         error_bonus = sum(errors.values()) * 4
         
-        # Penalidades
+        # Penalties
         performance_penalty = performance_issues * 5
         security_penalty = security_concerns * 8
         
@@ -1164,7 +1160,7 @@ class AxumAnalyzer:
         return max(0, min(100, final_score))
 
 class AxumProjectGenerator:
-    """Gerador de projetos Axum seguindo best practices"""
+    """Axum project generator following best practices"""
     
     def __init__(self):
         self.knowledge_base = AxumKnowledgeBase()
@@ -1176,7 +1172,7 @@ class AxumProjectGenerator:
         include_database: bool = True,
         include_auth: bool = True
     ) -> Dict[str, Any]:
-        """Gera projeto Axum completo"""
+        """Generate complete Axum project"""
         
         if features is None:
             features = ["json", "database", "middleware", "testing"]
@@ -1194,7 +1190,7 @@ class AxumProjectGenerator:
         return await templates[project_type](features, include_database, include_auth)
     
     async def _generate_api_server(self, features: List[str], include_db: bool, include_auth: bool) -> Dict[str, Any]:
-        """Gera API server com Axum"""
+        """Generate API server with Axum"""
         
         cargo_toml = f"""[package]
 name = "axum-api-server"
@@ -1825,19 +1821,19 @@ Cargo.lock
 """
 
 # ================================
-# FERRAMENTAS MCP AXUM
+# AXUM MCP TOOLS
 # ================================
 
 @mcp.tool()
-async def axum_analyze_code(code: str) -> Dict[str, Any]:
+async def analyze_axum_code(code: str) -> Dict[str, Any]:
     """
-    Analisa código Axum seguindo melhores práticas oficiais e magic patterns.
+    Analyzes Axum code following official best practices and magic patterns.
     
     Args:
-        code: Código Axum para análise
+        code: Axum code for analysis
         
     Returns:
-        Análise completa com score, padrões detectados e recomendações
+        Complete analysis with score, detected patterns, and recommendations
     """
     try:
         analyzer = AxumAnalyzer()
@@ -1868,23 +1864,23 @@ async def axum_analyze_code(code: str) -> Dict[str, Any]:
         raise
 
 @mcp.tool()
-async def axum_generate_project(
+async def generate_axum_project(
     project_type: str,
     features: Optional[List[str]] = None,
     include_database: bool = True,
     include_auth: bool = True
 ) -> Dict[str, Any]:
     """
-    Gera projeto Axum completo seguindo patterns modernos.
+    Generates complete Axum project following modern patterns.
     
     Args:
-        project_type: Tipo do projeto (api_server, web_application, microservice, full_stack)
-        features: Lista de features desejadas
-        include_database: Incluir suporte a database
-        include_auth: Incluir sistema de autenticação
+        project_type: Project type (api_server, web_application, microservice, full_stack)
+        features: List of desired features
+        include_database: Include database support
+        include_auth: Include authentication system
         
     Returns:
-        Estrutura completa do projeto com código Axum
+        Complete project structure with Axum code
     """
     try:
         generator = AxumProjectGenerator()
@@ -1905,15 +1901,15 @@ async def axum_generate_project(
         raise
 
 @mcp.tool()
-async def axum_get_patterns(category: str = "all") -> Dict[str, Any]:
+async def get_axum_patterns(category: str = "all") -> Dict[str, Any]:
     """
-    Retorna padrões Axum por categoria com exemplos práticos.
+    Returns Axum patterns by category with practical examples.
     
     Args:
-        category: Categoria específica ou "all" para todas
+        category: Specific category or "all" for all categories
         
     Returns:
-        Padrões Axum com exemplos de código
+        Axum patterns with code examples
     """
     try:
         knowledge_base = AxumKnowledgeBase()
@@ -1960,40 +1956,40 @@ async def axum_get_patterns(category: str = "all") -> Dict[str, Any]:
         raise
 
 @mcp.tool()
-async def axum_optimize_handler(
+async def optimize_axum_handler(
     handler_code: str,
     focus_areas: Optional[List[str]] = None
 ) -> Dict[str, Any]:
     """
-    Otimiza handler Axum aplicando best practices e magic patterns.
+    Optimizes Axum handler applying best practices and magic patterns.
     
     Args:
-        handler_code: Código do handler original
-        focus_areas: Áreas de foco para otimização
+        handler_code: Original handler code
+        focus_areas: Focus areas for optimization
         
     Returns:
-        Handler otimizado com explicações das mudanças
+        Optimized handler with explanations of changes
     """
     try:
         if focus_areas is None:
             focus_areas = ["extractors", "error_handling", "type_safety", "performance"]
         
-        # Análise inicial
+        # Initial analysis
         analyzer = AxumAnalyzer()
         analysis = await analyzer.analyze_axum_code(handler_code)
         
         optimized_code = handler_code
         changes_made = []
         
-        # Otimizações baseadas no foco
+        # Optimizations based on focus
         if "extractors" in focus_areas:
-            # Sugerir extractors apropriados
+            # Suggest appropriate extractors
             if "request:" in optimized_code and "Request<" in optimized_code:
                 optimized_code += "\n// TODO: Consider using typed extractors (Path, Query, Json) instead of raw Request"
                 changes_made.append("🔧 Suggested typed extractors for better ergonomics")
         
         if "error_handling" in focus_areas:
-            # Melhorar error handling
+            # Improve error handling
             if "Result<" not in optimized_code:
                 optimized_code = re.sub(
                     r'async fn (\w+)\([^)]*\) -> ([^{]+)',
@@ -2003,7 +1999,7 @@ async def axum_optimize_handler(
                 changes_made.append("🛡️ Added Result return type for proper error handling")
         
         if "type_safety" in focus_areas:
-            # Melhorar type safety
+            # Improve type safety
             if "Json(" not in optimized_code and "json" in optimized_code.lower():
                 optimized_code += "\n// TODO: Use Json<T> extractor for type-safe JSON parsing"
                 changes_made.append("🎯 Suggested Json<T> extractor for type safety")
@@ -2027,12 +2023,12 @@ async def axum_optimize_handler(
         raise
 
 @mcp.tool()
-async def axum_get_magic_patterns() -> Dict[str, Any]:
+async def get_axum_magic_patterns() -> Dict[str, Any]:
     """
-    Retorna padrões mágicos do Axum baseados em rust-magic-patterns.
+    Returns Axum magic patterns based on rust-magic-patterns.
     
     Returns:
-        Padrões mágicos com explicações técnicas
+        Magic patterns with technical explanations
     """
     try:
         knowledge_base = AxumKnowledgeBase()
@@ -2060,19 +2056,19 @@ async def axum_get_magic_patterns() -> Dict[str, Any]:
         raise
 
 @mcp.tool()
-async def axum_create_middleware(
+async def create_axum_middleware(
     middleware_type: str,
     functionality: str
 ) -> Dict[str, Any]:
     """
-    Cria middleware customizado para Axum.
+    Creates custom middleware for Axum.
     
     Args:
-        middleware_type: Tipo de middleware (auth, logging, cors, etc.)
-        functionality: Descrição da funcionalidade desejada
+        middleware_type: Middleware type (auth, logging, cors, etc.)
+        functionality: Description of desired functionality
         
     Returns:
-        Código de middleware com exemplos de uso
+        Middleware code with usage examples
     """
     try:
         middleware_templates = {
@@ -2224,30 +2220,30 @@ let app = Router::new()
         raise
 
 # ================================
-# RECURSOS ADICIONAIS
+# ADDITIONAL RESOURCES
 # ================================
 
 @mcp.resource(uri="guide://axum-web-development")
 async def get_axum_development_guide() -> str:
-    """Guia completo de desenvolvimento web com Axum"""
+    """Complete Axum web development guide"""
     return json.dumps({
-        "title": "Guia de Desenvolvimento Web com Axum 2025",
+        "title": "Axum Web Development Guide 2025",
         "based_on": [
             "tokio-rs/axum official repository",
             "docs.rs/axum comprehensive documentation",
             "alexpusch/rust-magic-patterns advanced techniques"
         ],
         "sections": {
-            "routing": "Macro-free routing com Router API e nested routes",
-            "handlers": "Handlers assíncronos com extractors tipados",
-            "extractors": "Built-in e custom extractors para type safety",
-            "responses": "IntoResponse trait e custom response types",
+            "routing": "Macro-free routing with Router API and nested routes",
+            "handlers": "Async handlers with typed extractors",
+            "extractors": "Built-in and custom extractors for type safety",
+            "responses": "IntoResponse trait and custom response types",
             "middleware": "Tower middleware ecosystem integration",
-            "error_handling": "Custom error types com structured responses",
-            "state_management": "Shared state com Arc e State extractor",
-            "testing": "Integration testing com axum-test",
-            "magic_patterns": "Advanced Rust patterns e metaprogramming",
-            "performance": "Otimizações para high-performance web services"
+            "error_handling": "Custom error types with structured responses",
+            "state_management": "Shared state with Arc and State extractor",
+            "testing": "Integration testing with axum-test",
+            "magic_patterns": "Advanced Rust patterns and metaprogramming",
+            "performance": "Optimizations for high-performance web services"
         },
         "key_frameworks": {
             "axum": "Ergonomic web framework built on Tokio/Tower/Hyper",
@@ -2256,23 +2252,24 @@ async def get_axum_development_guide() -> str:
             "hyper": "Low-level HTTP implementation"
         },
         "features": {
-            "code_analysis": "Análise de código Axum com scoring detalhado",
-            "project_generation": "Geração de projetos seguindo best practices",
-            "pattern_library": "Biblioteca completa de padrões Axum",
-            "magic_patterns": "Advanced Rust techniques e metaprogramming",
+            "code_analysis": "Axum code analysis with detailed scoring",
+            "project_generation": "Project generation following best practices",
+            "pattern_library": "Complete library of Axum patterns",
+            "magic_patterns": "Advanced Rust techniques and metaprogramming",
             "middleware_creation": "Custom middleware generation",
-            "handler_optimization": "Otimização automática de handlers"
+            "handler_optimization": "Automatic handler optimization"
         }
     }, indent=2)
 
 # ================================
-# INICIALIZAÇÃO DO SERVIDOR
+# SERVER INITIALIZATION
 # ================================
 
 if __name__ == "__main__":
-    logger.info("Starting Axum Web Framework MCP Server")
-    logger.info("Features: Code Analysis | Project Generation | Magic Patterns | Middleware")
-    logger.info("Based on: tokio-rs/axum + docs.rs/axum + alexpusch/rust-magic-patterns")
+    logger.info("🌐 Axum Web Framework MCP Server starting...")
+    logger.info("🚀 Specialized in modern async web development with type safety")
+    logger.info("📚 Based on: tokio-rs/axum + docs.rs/axum + alexpusch/rust-magic-patterns")
+    logger.info("🔧 Features: Code Analysis | Project Generation | Magic Patterns | Middleware Creation")
     
-    # Executar o servidor MCP
+    # Run the MCP server
     mcp.run()

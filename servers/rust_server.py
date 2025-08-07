@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-Rust Idiomatic MCP Server - Servidor MCP para desenvolvimento Rust idiomático
-============================================================================
+Rust Idiomatic MCP Server
+==========================
 
-Servidor MCP avançado baseado nos padrões idiomáticos de Rust, incluindo:
-- Análise de código seguindo rust-lang/api-guidelines
-- Padrões idiomáticos do repositório mre/idiomatic-rust
-- Error handling ergonômico com Result/Option
-- Traits e generics para código flexível e reutilizável
-- Async/await patterns com Tokio
-- Immutability por padrão e zero-cost abstractions
-- Type safety e compile-time guarantees
+Advanced MCP server based on Rust idiomatic patterns, featuring:
+- Code analysis following rust-lang/api-guidelines
+- Idiomatic patterns from mre/idiomatic-rust repository
+- Ergonomic error handling with Result/Option
+- Traits and generics for flexible and reusable code
+- Async/await patterns with Tokio
+- Immutability by default and zero-cost abstractions
+- Type safety and compile-time guarantees
 
-Baseado em: rust-lang/api-guidelines, mre/idiomatic-rust, e blessed.rs
+Based on: rust-lang/api-guidelines, mre/idiomatic-rust, and blessed.rs
 """
 
 import asyncio
@@ -25,23 +25,19 @@ from enum import Enum
 from fastmcp import FastMCP
 from pydantic import BaseModel, Field
 
-# Configurar logging
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Inicializar servidor MCP
-mcp = FastMCP(
-    name="rust-idiomatic-server",
-    version="1.80.0",
-    description="Servidor MCP para desenvolvimento Rust idiomático seguindo api-guidelines e mre/idiomatic-rust"
-)
+# Initialize FastMCP server (following pattern of other servers)
+mcp = FastMCP("Rust Idiomatic Patterns Server")
 
 # ================================
 # RUST IDIOMATIC PATTERNS & KNOWLEDGE BASE
 # ================================
 
 class IdiomaticCategory(Enum):
-    """Categorias de padrões idiomáticos Rust"""
+    """Rust idiomatic pattern categories"""
     IMMUTABILITY = "immutability"
     ERROR_HANDLING = "error_handling"
     TYPE_CONVERSIONS = "type_conversions"
@@ -55,7 +51,7 @@ class IdiomaticCategory(Enum):
     PERFORMANCE = "performance"
 
 class RustComplexity(Enum):
-    """Níveis de complexidade para análise"""
+    """Complexity levels for analysis"""
     BEGINNER = "beginner"
     INTERMEDIATE = "intermediate"
     ADVANCED = "advanced"
@@ -63,7 +59,7 @@ class RustComplexity(Enum):
 
 @dataclass
 class IdiomaticAnalysisResult:
-    """Resultado da análise de código Rust idiomático"""
+    """Result of Rust idiomatic code analysis"""
     code: str
     idiomaticity_score: int
     category_scores: Dict[str, int]
@@ -74,22 +70,22 @@ class IdiomaticAnalysisResult:
     compliance_with_api_guidelines: Dict[str, bool]
 
 class RustIdiomaticKnowledgeBase:
-    """Base de conhecimento Rust idiomático baseada em mre/idiomatic-rust"""
+    """Rust idiomatic knowledge base based on mre/idiomatic-rust"""
     
-    VERSION = "1.80.0"
+    VERSION = "1.82.0"
     EDITION = "2021"
     
-    # Padrão: Immutability por padrão
+    # Pattern: Immutability by Default
     IMMUTABILITY_PATTERNS = {
         "default_immutable": {
             "principle": "Aim For Immutability in Rust",
-            "description": "Variables são imutáveis por padrão - use mut apenas quando necessário",
+            "description": "Variables are immutable by default - use mut only when necessary",
             "good_example": """
-// Idiomático: imutável por padrão
+// Idiomatic: immutable by default
 let data = vec![1, 2, 3, 4, 5];
 let sum: i32 = data.iter().sum();
 
-// Use mut apenas quando necessário
+// Use mut only when necessary
 let mut counter = 0;
 for item in &data {
     if item % 2 == 0 {
@@ -97,1213 +93,972 @@ for item in &data {
     }
 }""",
             "anti_pattern": """
-// Anti-padrão: mut desnecessário
-let mut data = vec![1, 2, 3, 4, 5]; // não precisa ser mut
-let mut sum: i32 = data.iter().sum(); // não precisa ser mut
-""",
+// Anti-pattern: unnecessary mut
+let mut data = vec![1, 2, 3, 4, 5]; // data never changes
+let mut sum = data.iter().sum(); // sum never changes""",
             "benefits": [
-                "Código mais seguro e previsível",
-                "Easier to reason about",
-                "Concorrência sem data races",
-                "Otimizações do compilador"
+                "Prevents accidental mutations",
+                "Makes code easier to reason about",
+                "Enables compiler optimizations",
+                "Communicates intent clearly"
             ]
         },
-        "immutable_collections": {
-            "description": "Use coleções imutáveis quando possível",
+        "structural_immutability": {
+            "description": "Use immutable data structures and functional patterns",
             "good_example": """
-// Idiomático: construção imutável
-fn create_lookup_table() -> HashMap<String, u32> {
-    [
-        ("one".to_string(), 1),
-        ("two".to_string(), 2),
-        ("three".to_string(), 3),
-    ].into_iter().collect()
+use std::collections::HashMap;
+
+// Idiomatic: return new state instead of mutating
+fn add_user(mut users: HashMap<u32, String>, id: u32, name: String) -> HashMap<u32, String> {
+    users.insert(id, name);
+    users
 }
 
-// Ou usando lazy_static para dados constantes
-lazy_static! {
-    static ref CONSTANTS: HashMap<&'static str, u32> = {
-        let mut m = HashMap::new();
-        m.insert("one", 1);
-        m.insert("two", 2);
-        m
-    };
+// Or use builder pattern for complex construction
+#[derive(Debug, Clone)]
+pub struct Config {
+    pub host: String,
+    pub port: u16,
+    pub timeout: std::time::Duration,
+}
+
+impl Config {
+    pub fn builder() -> ConfigBuilder {
+        ConfigBuilder::default()
+    }
 }""",
-            "anti_pattern": """
-// Anti-padrão: mutabilidade desnecessária
-fn create_lookup_table() -> HashMap<String, u32> {
-    let mut map = HashMap::new();
-    map.insert("one".to_string(), 1);
-    map.insert("two".to_string(), 2);
-    map.insert("three".to_string(), 3);
-    map // poderia ser construído de forma imutável
-}"""
+            "benefits": [
+                "Reduces bugs from shared mutable state",
+                "Enables safe concurrent programming",
+                "Makes testing easier"
+            ]
         }
     }
     
-    # Padrão: Error Handling Idiomático
+    # Pattern: Ergonomic Error Handling
     ERROR_HANDLING_PATTERNS = {
         "result_over_panic": {
-            "principle": "Return Result instead of panicking",
-            "description": "Use Result<T, E> para errors recuperáveis, panic apenas para bugs",
+            "principle": "Use Result<T, E> instead of panicking",
+            "description": "Return errors instead of panicking to allow callers to handle failures",
             "good_example": """
-use thiserror::Error;
+use std::fs::File;
+use std::io::Result;
 
-#[derive(Error, Debug)]
-pub enum ConfigError {
-    #[error("IO error: {0}")]
-    Io(#[from] std::io::Error),
-    #[error("Parse error: {message}")]
-    Parse { message: String },
-    #[error("Missing required field: {field}")]
-    MissingField { field: String },
+// Idiomatic: return Result for recoverable errors
+fn read_config(path: &str) -> Result<Config> {
+    let file = File::open(path)?;
+    let config = serde_json::from_reader(file)?;
+    Ok(config)
 }
 
-pub type Result<T> = std::result::Result<T, ConfigError>;
-
-// Idiomático: retorna Result
-pub fn load_config(path: &Path) -> Result<Config> {
-    let content = std::fs::read_to_string(path)?;
-    let config: Config = toml::from_str(&content)
-        .map_err(|e| ConfigError::Parse { 
-            message: e.to_string() 
-        })?;
+// Custom error types for better error handling
+#[derive(Debug, thiserror::Error)]
+pub enum ConfigError {
+    #[error("Failed to read config file: {0}")]
+    Io(#[from] std::io::Error),
     
-    validate_config(&config)?;
-    Ok(config)
+    #[error("Invalid config format: {0}")]
+    InvalidFormat(#[from] serde_json::Error),
+    
+    #[error("Missing required field: {field}")]
+    MissingField { field: String },
 }""",
             "anti_pattern": """
-// Anti-padrão: panic em situações recuperáveis
-pub fn load_config(path: &Path) -> Config {
-    let content = std::fs::read_to_string(path)
-        .expect("Config file must exist"); // panic!
-    
-    toml::from_str(&content)
-        .expect("Config must be valid") // panic!
+// Anti-pattern: panicking instead of error handling
+fn read_config(path: &str) -> Config {
+    let file = File::open(path).expect("Config file must exist");
+    serde_json::from_reader(file).expect("Config must be valid JSON")
+}""",
+            "benefits": [
+                "Allows callers to handle errors appropriately",
+                "Makes errors part of the API contract",
+                "Improves program robustness"
+            ]
+        },
+        "question_mark_operator": {
+            "description": "Use ? operator for ergonomic error propagation",
+            "good_example": """
+use std::fs;
+use std::io::Result;
+
+// Idiomatic: use ? for clean error propagation
+fn process_file(path: &str) -> Result<String> {
+    let content = fs::read_to_string(path)?;
+    let processed = content.trim().to_uppercase();
+    Ok(processed)
+}
+
+// Chain operations with ?
+fn complex_operation() -> Result<String> {
+    let config = read_config("config.json")?;
+    let data = fetch_data(&config.url)?;
+    let result = process_data(data)?;
+    Ok(result)
+}""",
+            "anti_pattern": """
+// Anti-pattern: manual error handling
+fn process_file(path: &str) -> Result<String> {
+    match fs::read_to_string(path) {
+        Ok(content) => {
+            let processed = content.trim().to_uppercase();
+            Ok(processed)
+        }
+        Err(e) => Err(e),
+    }
 }"""
         },
-        "context_preserving_errors": {
-            "description": "Preserve error context using thiserror or anyhow",
+        "option_for_nullable": {
+            "description": "Use Option<T> instead of null pointers",
             "good_example": """
-use anyhow::{Context, Result};
+// Idiomatic: use Option for potentially missing values
+fn find_user_by_id(users: &[User], id: u32) -> Option<&User> {
+    users.iter().find(|user| user.id == id)
+}
 
-fn process_file(path: &Path) -> Result<ProcessedData> {
-    let content = std::fs::read_to_string(path)
-        .with_context(|| format!("Failed to read file: {}", path.display()))?;
-    
-    let parsed = parse_content(&content)
-        .with_context(|| "Failed to parse file content")?;
-    
-    let processed = transform_data(parsed)
-        .with_context(|| "Failed to transform parsed data")?;
-    
-    Ok(processed)
+// Chain Option operations
+fn get_user_email(users: &[User], id: u32) -> Option<String> {
+    find_user_by_id(users, id)
+        .map(|user| user.email.clone())
+}
+
+// Use combinators for complex logic
+fn process_optional_data(data: Option<String>) -> Option<String> {
+    data.filter(|s| !s.is_empty())
+        .map(|s| s.to_uppercase())
 }""",
-            "anti_pattern": """
-// Anti-padrão: perda de contexto
-fn process_file(path: &Path) -> Result<ProcessedData, Box<dyn Error>> {
-    let content = std::fs::read_to_string(path)?; // contexto perdido
-    let parsed = parse_content(&content)?; // contexto perdido  
-    let processed = transform_data(parsed)?; // contexto perdido
-    Ok(processed)
-}"""
+            "benefits": [
+                "Eliminates null pointer exceptions",
+                "Makes nullable values explicit",
+                "Provides rich combinator API"
+            ]
         }
     }
     
-    # Padrão: Type Conversions Idiomáticas
+    # Pattern: Smart Type Conversions
     TYPE_CONVERSION_PATTERNS = {
         "from_into_traits": {
-            "principle": "Use From/Into for convenient conversions",
-            "description": "Implemente From para conversões infallible, TryFrom para fallible",
+            "description": "Use From/Into traits for type conversions",
             "good_example": """
-use std::convert::{From, TryFrom};
-
+// Idiomatic: implement From trait
 #[derive(Debug)]
 pub struct UserId(u32);
 
-#[derive(Debug)]
-pub struct UserName(String);
-
-// Idiomático: From para conversões simples
 impl From<u32> for UserId {
     fn from(id: u32) -> Self {
         UserId(id)
     }
 }
 
-impl From<String> for UserName {
-    fn from(name: String) -> Self {
-        UserName(name)
+// Into is automatically implemented
+fn create_user(id: impl Into<UserId>, name: String) -> User {
+    User {
+        id: id.into(),
+        name,
     }
 }
 
-// TryFrom para conversões que podem falhar
-impl TryFrom<&str> for UserName {
-    type Error = ValidationError;
-    
-    fn try_from(name: &str) -> Result<Self, Self::Error> {
-        if name.len() < 3 {
-            return Err(ValidationError::TooShort);
-        }
-        if name.len() > 50 {
-            return Err(ValidationError::TooLong);
-        }
-        Ok(UserName(name.to_string()))
+// Use for error type conversions
+impl From<std::io::Error> for MyError {
+    fn from(err: std::io::Error) -> Self {
+        MyError::Io(err)
     }
-}
-
-// Uso ergonômico
-fn create_user(id: u32, name: &str) -> Result<User, ValidationError> {
-    Ok(User {
-        id: id.into(),           // From<u32>
-        name: name.try_into()?,  // TryFrom<&str>
-    })
 }""",
             "anti_pattern": """
-// Anti-padrão: constructors manuais
+// Anti-pattern: custom conversion methods
 impl UserId {
-    pub fn new(id: u32) -> Self {
+    pub fn from_u32(id: u32) -> Self {
         UserId(id)
     }
-}
-
-impl UserName {
-    pub fn new(name: String) -> Self {
-        UserName(name)
-    }
-    
-    pub fn from_str(name: &str) -> Result<Self, ValidationError> {
-        // validação...
-        Ok(UserName(name.to_string()))
-    }
-}
-
-// Uso menos ergonômico
-fn create_user(id: u32, name: &str) -> Result<User, ValidationError> {
-    Ok(User {
-        id: UserId::new(id),
-        name: UserName::from_str(name)?,
-    })
-}"""
+}""",
+            "benefits": [
+                "Follows Rust conventions",
+                "Works with generic code",
+                "Enables ? operator with different error types"
+            ]
         },
-        "string_handling": {
-            "principle": "Taking string arguments in Rust",
-            "description": "Use &str para parâmetros, String para ownership",
+        "try_from_for_fallible": {
+            "description": "Use TryFrom for fallible conversions",
             "good_example": """
-// Idiomático: aceita qualquer string-like type
-fn process_name(name: &str) -> String {
-    name.trim().to_lowercase()
-}
+use std::convert::TryFrom;
 
-// Flexível para diferentes tipos
-fn process_user_data(name: impl AsRef<str>, email: impl AsRef<str>) -> UserData {
-    UserData {
-        name: process_name(name.as_ref()),
-        email: email.as_ref().to_lowercase(),
-    }
-}
+#[derive(Debug)]
+pub struct PositiveNumber(u32);
 
-// Pode ser chamado com &str, String, Cow<str>, etc.
-let result1 = process_user_data("John Doe", "john@example.com");
-let result2 = process_user_data(owned_string, email_string);""",
-            "anti_pattern": """
-// Anti-padrão: força ownership desnecessário
-fn process_name(name: String) -> String {
-    name.trim().to_lowercase()
-}
-
-// Ou muito específico
-fn process_user_data(name: &String, email: &String) -> UserData {
-    UserData {
-        name: process_name(name.clone()), // clone desnecessário
-        email: email.to_lowercase(),
-    }
-}"""
-        }
-    }
+impl TryFrom<i32> for PositiveNumber {
+    type Error = &'static str;
     
-    # Padrão: Enums ao invés de Booleans
-    ENUMS_OVER_BOOLS_PATTERNS = {
-        "expressive_enums": {
-            "principle": "Rust Patterns: Enums Instead Of Booleans",
-            "description": "Use enums para expressar intenção, não booleans",
-            "good_example": """
-// Idiomático: enum expressivo
-#[derive(Debug, Clone, Copy)]
-pub enum ConnectionState {
-    Connected,
-    Disconnected,
-    Reconnecting,
-}
-
-#[derive(Debug, Clone, Copy)]
-pub enum SortOrder {
-    Ascending,
-    Descending,
-}
-
-// API clara e expressiva
-impl Database {
-    pub fn connect(&mut self) -> Result<(), Error> {
-        // lógica de conexão
-        self.state = ConnectionState::Connected;
-        Ok(())
-    }
-    
-    pub fn query_users(&self, order: SortOrder) -> Result<Vec<User>, Error> {
-        match order {
-            SortOrder::Ascending => self.query("SELECT * FROM users ORDER BY name ASC"),
-            SortOrder::Descending => self.query("SELECT * FROM users ORDER BY name DESC"),
-        }
-    }
-}
-
-// Uso claro
-db.query_users(SortOrder::Ascending)?;""",
-            "anti_pattern": """
-// Anti-padrão: boolean flags confusos
-impl Database {
-    pub fn connect(&mut self, auto_reconnect: bool) -> Result<(), Error> {
-        // O que significa auto_reconnect aqui?
-    }
-    
-    pub fn query_users(&self, ascending: bool) -> Result<Vec<User>, Error> {
-        if ascending {
-            self.query("SELECT * FROM users ORDER BY name ASC")
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        if value >= 0 {
+            Ok(PositiveNumber(value as u32))
         } else {
-            self.query("SELECT * FROM users ORDER BY name DESC")
+            Err("Number must be positive")
         }
     }
 }
 
-// Uso confuso
-db.query_users(true)?; // true significa o quê?"""
-        },
-        "state_machines": {
-            "description": "Use enums para state machines type-safe",
-            "good_example": """
-// State machine idiomático
-pub enum RequestState {
-    Pending,
-    InProgress { started_at: SystemTime },
-    Completed { result: String, duration: Duration },
-    Failed { error: String, retry_count: u32 },
-}
-
-impl RequestState {
-    pub fn start(self) -> Self {
-        match self {
-            RequestState::Pending => RequestState::InProgress { 
-                started_at: SystemTime::now() 
-            },
-            other => other, // Invalid transition, keep current state
-        }
-    }
-    
-    pub fn complete(self, result: String) -> Self {
-        match self {
-            RequestState::InProgress { started_at } => {
-                RequestState::Completed { 
-                    result, 
-                    duration: started_at.elapsed().unwrap_or_default() 
-                }
-            },
-            other => other,
-        }
-    }
+// Usage with ? operator
+fn process_number(input: i32) -> Result<PositiveNumber, Box<dyn std::error::Error>> {
+    let positive = PositiveNumber::try_from(input)?;
+    Ok(positive)
 }"""
         }
     }
     
-    # Padrão: Async Patterns Idiomáticos
-    ASYNC_PATTERNS = {
-        "ergonomic_async": {
-            "principle": "Prefer async/await over raw futures",
-            "description": "Use async/await para código assíncrono legível",
+    # Pattern: Ownership and Borrowing
+    OWNERSHIP_PATTERNS = {
+        "borrow_by_default": {
+            "description": "Take references by default, owned values when needed",
             "good_example": """
-use tokio::{fs, io::Result};
-use serde::{Deserialize, Serialize};
-
-#[derive(Deserialize, Serialize)]
-pub struct Config {
-    pub database_url: String,
-    pub port: u16,
+// Idiomatic: take references for read-only access
+fn process_data(data: &[String]) -> usize {
+    data.iter().map(|s| s.len()).sum()
 }
 
-// Idiomático: async/await clean
-pub async fn load_config(path: &str) -> Result<Config> {
-    let content = fs::read_to_string(path).await?;
-    let config: Config = toml::from_str(&content)
-        .map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidData, e))?;
-    Ok(config)
-}
-
-pub async fn start_server(config: Config) -> Result<()> {
-    let listener = tokio::net::TcpListener::bind(("0.0.0.0", config.port)).await?;
-    println!("Server listening on port {}", config.port);
-    
-    loop {
-        let (stream, addr) = listener.accept().await?;
-        println!("New connection from {}", addr);
-        
-        // Spawn concurrent handler
-        tokio::spawn(async move {
-            if let Err(e) = handle_connection(stream).await {
-                eprintln!("Error handling connection: {}", e);
-            }
-        });
-    }
-}""",
-            "anti_pattern": """
-// Anti-padrão: futures complexos
-use std::future::Future;
-use std::pin::Pin;
-
-pub fn load_config(path: String) -> Pin<Box<dyn Future<Output = Result<Config>> + Send>> {
-    Box::pin(async move {
-        let content = fs::read_to_string(path).await?;
-        // código complexo com futures manuais
-        Ok(config)
-    })
-}"""
-        },
-        "error_handling_async": {
-            "description": "Error handling ergonômico em contexts async",
-            "good_example": """
-use anyhow::{Context, Result};
-
-pub async fn process_requests(urls: Vec<String>) -> Result<Vec<Response>> {
-    let mut results = Vec::new();
-    
-    for url in urls {
-        let response = reqwest::get(&url)
-            .await
-            .with_context(|| format!("Failed to fetch URL: {}", url))?;
-            
-        let data = response
-            .json::<ResponseData>()
-            .await
-            .with_context(|| format!("Failed to parse response from: {}", url))?;
-            
-        results.push(data.into());
-    }
-    
-    Ok(results)
-}
-
-// Ou usando try_join para processamento paralelo
-pub async fn process_requests_parallel(urls: Vec<String>) -> Result<Vec<Response>> {
-    let futures: Vec<_> = urls.into_iter()
-        .map(|url| async move {
-            let response = reqwest::get(&url).await?;
-            let data: ResponseData = response.json().await?;
-            Ok::<Response, reqwest::Error>(data.into())
-        })
-        .collect();
-    
-    let results = futures::future::try_join_all(futures).await?;
-    Ok(results)
-}"""
-        }
-    }
-    
-    # Padrão: Traits e Generics Idiomáticos
-    TRAITS_GENERICS_PATTERNS = {
-        "flexible_apis": {
-            "principle": "Use generics and traits for flexible, reusable code",
-            "description": "Crie APIs que funcionam com múltiplos tipos",
-            "good_example": """
-use std::fmt::Display;
-use serde::Serialize;
-
-// Trait para logging flexível
-pub trait Logger {
-    fn log(&self, level: LogLevel, message: &str);
-}
-
-// Generic function que aceita qualquer logger
-pub fn process_items<T, L>(items: Vec<T>, logger: &L) -> Vec<String> 
-where
-    T: Display + Serialize,
-    L: Logger,
-{
-    let mut results = Vec::new();
-    
-    for (i, item) in items.iter().enumerate() {
-        logger.log(LogLevel::Info, &format!("Processing item {}: {}", i, item));
-        
-        let serialized = serde_json::to_string(item)
-            .unwrap_or_else(|e| {
-                logger.log(LogLevel::Error, &format!("Serialization failed: {}", e));
-                format!("Error: {}", e)
-            });
-            
-        results.push(serialized);
-    }
-    
-    logger.log(LogLevel::Info, &format!("Processed {} items", results.len()));
-    results
-}
-
-// Implementações específicas
-struct ConsoleLogger;
-
-impl Logger for ConsoleLogger {
-    fn log(&self, level: LogLevel, message: &str) {
-        println!("[{}] {}", level, message);
-    }
-}""",
-            "anti_pattern": """
-// Anti-padrão: código específico demais
-pub fn process_items_console(items: Vec<String>) -> Vec<String> {
-    let mut results = Vec::new();
-    
-    for (i, item) in items.iter().enumerate() {
-        println!("Processing item {}: {}", i, item); // hardcoded logging
-        results.push(item.clone()); // específico para String
-    }
-    
-    println!("Processed {} items", results.len());
-    results
-}
-
-pub fn process_items_file(items: Vec<i32>) -> Vec<String> {
-    // código duplicado para tipos diferentes
-}"""
-        },
-        "trait_bounds": {
-            "description": "Use trait bounds para APIs expressivas",
-            "good_example": """
-use std::hash::Hash;
-use std::collections::HashMap;
-
-// Bounds expressivos e úteis
-pub fn count_occurrences<T>(items: impl IntoIterator<Item = T>) -> HashMap<T, usize>
-where
-    T: Hash + Eq,
-{
-    let mut counts = HashMap::new();
-    for item in items {
-        *counts.entry(item).or_insert(0) += 1;
-    }
-    counts
-}
-
-// Trait object para dynamic dispatch quando necessário
-pub trait Drawable {
-    fn draw(&self, canvas: &mut Canvas);
-    fn area(&self) -> f64;
-}
-
-pub fn draw_shapes(shapes: &[Box<dyn Drawable>], canvas: &mut Canvas) {
-    let total_area: f64 = shapes.iter().map(|s| s.area()).sum();
-    println!("Drawing {} shapes with total area: {:.2}", shapes.len(), total_area);
-    
-    for shape in shapes {
-        shape.draw(canvas);
-    }
-}"""
-        }
-    }
-    
-    # Padrão: Iterators Idiomáticos
-    ITERATOR_PATTERNS = {
-        "functional_style": {
-            "principle": "Leverage iterator methods for concise code",
-            "description": "Use métodos de iterator para código funcional e eficiente",
-            "good_example": """
-use std::collections::HashMap;
-
-// Idiomático: iterator chains
-pub fn analyze_text(text: &str) -> TextAnalysis {
-    let words: Vec<&str> = text
-        .split_whitespace()
-        .filter(|word| !word.is_empty())
-        .collect();
-    
-    let word_count = words.len();
-    
-    let word_lengths: Vec<usize> = words
-        .iter()
-        .map(|word| word.len())
-        .collect();
-    
-    let average_length = word_lengths
-        .iter()
-        .sum::<usize>() as f64 / word_lengths.len() as f64;
-    
-    let word_frequency: HashMap<&str, usize> = words
-        .iter()
-        .fold(HashMap::new(), |mut acc, &word| {
-            *acc.entry(word).or_insert(0) += 1;
-            acc
-        });
-    
-    let unique_words = word_frequency.len();
-    
-    TextAnalysis {
-        word_count,
-        unique_words,
-        average_length,
-        most_common: word_frequency
-            .iter()
-            .max_by_key(|(_, &count)| count)
-            .map(|(&word, &count)| (word.to_string(), count)),
-    }
-}
-
-pub fn filter_and_process<T, F, U>(items: Vec<T>, predicate: F, processor: fn(T) -> U) -> Vec<U>
-where
-    F: Fn(&T) -> bool,
-{
-    items
-        .into_iter()
-        .filter(predicate)
-        .map(processor)
+// Take owned values when you need to store or transform
+fn collect_long_strings(data: Vec<String>) -> Vec<String> {
+    data.into_iter()
+        .filter(|s| s.len() > 10)
         .collect()
+}
+
+// Use Cow for flexibility
+use std::borrow::Cow;
+
+fn ensure_https(url: Cow<str>) -> Cow<str> {
+    if url.starts_with("https://") {
+        url
+    } else {
+        Cow::Owned(format!("https://{}", url))
+    }
 }""",
             "anti_pattern": """
-// Anti-padrão: loops imperativos desnecessários
-pub fn analyze_text(text: &str) -> TextAnalysis {
-    let mut words = Vec::new();
-    for word in text.split_whitespace() {
-        if !word.is_empty() {
-            words.push(word);
-        }
-    }
-    
-    let word_count = words.len();
-    
-    let mut word_lengths = Vec::new();
-    for word in &words {
-        word_lengths.push(word.len());
-    }
-    
-    let mut sum = 0;
-    for length in &word_lengths {
-        sum += length;
-    }
-    let average_length = sum as f64 / word_lengths.len() as f64;
-    
-    // etc... código muito verboso
-}"""
-        }
-    }
-    
-    # Padrão: API Design Guidelines
-    API_DESIGN_PATTERNS = {
-        "naming_conventions": {
-            "principle": "Follow Rust naming conventions",
-            "description": "Use snake_case para functions/variables, PascalCase para types",
+// Anti-pattern: always taking owned values
+fn process_data(data: Vec<String>) -> usize {
+    data.iter().map(|s| s.len()).sum()
+}""",
+            "benefits": [
+                "Reduces unnecessary allocations",
+                "Makes ownership clear",
+                "Enables zero-copy optimizations"
+            ]
+        },
+        "clone_when_needed": {
+            "description": "Clone explicitly and only when necessary",
             "good_example": """
-pub mod user_management {
-    use std::collections::HashMap;
-    
-    pub struct UserManager {
-        users: HashMap<UserId, User>,
+// Idiomatic: avoid cloning when possible
+fn process_users(users: &[User]) -> Vec<String> {
+    users.iter()
+        .map(|user| &user.name)
+        .cloned() // Only clone the strings we need
+        .collect()
+}
+
+// Use Rc/Arc for shared ownership
+use std::rc::Rc;
+
+fn share_data(data: Vec<String>) -> (Rc<Vec<String>>, Rc<Vec<String>>) {
+    let shared = Rc::new(data);
+    (shared.clone(), shared)
+}"""
+        }
     }
     
-    pub enum UserRole {
-        Admin,
-        Moderator,
-        RegularUser,
+    # Pattern: Enums Over Booleans
+    ENUM_PATTERNS = {
+        "expressive_enums": {
+            "description": "Use enums instead of boolean flags for better expressiveness",
+            "good_example": """
+// Idiomatic: expressive enum
+#[derive(Debug, Clone, Copy)]
+pub enum CachePolicy {
+    NoCache,
+    CacheForever,
+    CacheForDuration(std::time::Duration),
+}
+
+fn fetch_data(url: &str, policy: CachePolicy) -> Result<String> {
+    match policy {
+        CachePolicy::NoCache => fetch_fresh(url),
+        CachePolicy::CacheForever => fetch_cached_or_fresh(url, None),
+        CachePolicy::CacheForDuration(duration) => fetch_cached_or_fresh(url, Some(duration)),
+    }
+}
+
+// State machines with enums
+#[derive(Debug)]
+pub enum ConnectionState {
+    Disconnected,
+    Connecting { attempt: u32 },
+    Connected { since: std::time::Instant },
+    Failed { error: String },
+}""",
+            "anti_pattern": """
+// Anti-pattern: boolean flags
+fn fetch_data(url: &str, use_cache: bool, cache_forever: bool) -> Result<String> {
+    // Confusing combinations of boolean flags
+    if use_cache && cache_forever {
+        // ...
+    } else if use_cache && !cache_forever {
+        // ...
+    } else {
+        // ...
+    }
+}""",
+            "benefits": [
+                "Self-documenting code",
+                "Impossible to represent invalid states",
+                "Compiler-enforced exhaustive matching"
+            ]
+        },
+        "discriminated_unions": {
+            "description": "Use enums for discriminated unions",
+            "good_example": """
+// Idiomatic: rich data modeling with enums
+#[derive(Debug)]
+pub enum DatabaseConfig {
+    Sqlite { path: String },
+    Postgres { host: String, port: u16, database: String },
+    InMemory,
+}
+
+impl DatabaseConfig {
+    pub fn connection_string(&self) -> Option<String> {
+        match self {
+            DatabaseConfig::Sqlite { path } => Some(format!("sqlite://{}", path)),
+            DatabaseConfig::Postgres { host, port, database } => {
+                Some(format!("postgres://{}:{}/{}", host, port, database))
+            }
+            DatabaseConfig::InMemory => None,
+        }
+    }
+}"""
+        }
     }
     
-    impl UserManager {
-        pub fn new() -> Self {
-            Self {
-                users: HashMap::new(),
-            }
+    # Pattern: Async Patterns
+    ASYNC_PATTERNS = {
+        "async_await_idiomatic": {
+            "description": "Use async/await for asynchronous programming",
+            "good_example": """
+use tokio::time::{sleep, Duration};
+use std::future::Future;
+
+// Idiomatic: async functions
+async fn fetch_user(id: u32) -> Result<User, ApiError> {
+    let response = reqwest::get(&format!("https://api.example.com/users/{}", id)).await?;
+    let user = response.json().await?;
+    Ok(user)
+}
+
+// Concurrent operations
+async fn fetch_multiple_users(ids: &[u32]) -> Result<Vec<User>, ApiError> {
+    let futures = ids.iter().map(|&id| fetch_user(id));
+    let results = futures_util::future::try_join_all(futures).await?;
+    Ok(results)
+}
+
+// Stream processing
+use tokio_stream::{Stream, StreamExt};
+
+async fn process_user_stream<S>(stream: S) -> Result<Vec<ProcessedUser>, ProcessingError>
+where
+    S: Stream<Item = User>,
+{
+    stream
+        .map(process_user)
+        .buffer_unordered(10) // Process up to 10 concurrently
+        .try_collect()
+        .await
+}""",
+            "benefits": [
+                "Natural async programming model",
+                "Efficient resource utilization",
+                "Composable async operations"
+            ]
+        },
+        "cancellation_safety": {
+            "description": "Design async functions to be cancellation-safe",
+            "good_example": """
+// Idiomatic: cancellation-safe async function
+async fn save_data_safely(data: &Data, path: &Path) -> Result<(), SaveError> {
+    let temp_path = path.with_extension("tmp");
+    
+    // Write to temporary file first
+    tokio::fs::write(&temp_path, serde_json::to_string(data)?).await?;
+    
+    // Atomically move to final location
+    tokio::fs::rename(&temp_path, path).await?;
+    
+    Ok(())
+}
+
+// Use select! for timeout handling
+use tokio::time::timeout;
+
+async fn fetch_with_timeout(url: &str) -> Result<String, FetchError> {
+    timeout(Duration::from_secs(30), reqwest::get(url)).await
+        .map_err(|_| FetchError::Timeout)?
+        .text()
+        .await
+        .map_err(FetchError::Network)
+}"""
         }
-        
-        pub fn add_user(&mut self, user: User) -> Result<(), UserError> {
-            if self.users.contains_key(&user.id) {
-                return Err(UserError::UserExists);
-            }
-            self.users.insert(user.id, user);
-            Ok(())
+    }
+    
+    # Pattern: Traits and Generics
+    TRAIT_PATTERNS = {
+        "trait_bounds": {
+            "description": "Use trait bounds for flexible generic code",
+            "good_example": """
+// Idiomatic: trait bounds for generic functions
+fn serialize_to_string<T>(value: &T) -> Result<String, serde_json::Error>
+where
+    T: serde::Serialize,
+{
+    serde_json::to_string(value)
+}
+
+// Associated types for cleaner APIs
+trait Iterator {
+    type Item;
+    fn next(&mut self) -> Option<Self::Item>;
+}
+
+// Higher-order trait bounds
+fn process_items<I, F, R>(items: I, processor: F) -> Vec<R>
+where
+    I: IntoIterator,
+    F: Fn(I::Item) -> R,
+{
+    items.into_iter().map(processor).collect()
+}""",
+            "benefits": [
+                "Compile-time polymorphism",
+                "Zero-cost abstractions",
+                "Type-safe generic programming"
+            ]
+        },
+        "impl_trait": {
+            "description": "Use impl Trait for return types and parameters",
+            "good_example": """
+// Idiomatic: impl Trait for return types
+fn get_numbers() -> impl Iterator<Item = u32> {
+    (0..10).filter(|&x| x % 2 == 0)
+}
+
+// impl Trait for parameters
+fn process_items(items: impl IntoIterator<Item = String>) -> Vec<String> {
+    items.into_iter().map(|s| s.to_uppercase()).collect()
+}
+
+// Combined with async
+async fn fetch_users() -> impl Stream<Item = Result<User, ApiError>> {
+    // Return async stream
+    stream::iter(user_ids).then(|id| async move { fetch_user(id).await })
+}"""
         }
-        
-        pub fn find_user_by_email(&self, email: &str) -> Option<&User> {
-            self.users.values().find(|user| user.email == email)
-        }
-        
-        pub fn get_users_by_role(&self, role: UserRole) -> Vec<&User> {
-            self.users
-                .values()
-                .filter(|user| user.role == role)
-                .collect()
+    }
+    
+    # Pattern: Iterator Patterns
+    ITERATOR_PATTERNS = {
+        "iterator_over_loops": {
+            "description": "Prefer iterators over manual loops",
+            "good_example": """
+// Idiomatic: use iterators
+let even_squares: Vec<u32> = (0..10)
+    .filter(|&x| x % 2 == 0)
+    .map(|x| x * x)
+    .collect();
+
+// Chain operations naturally
+let result: Result<Vec<_>, _> = file_paths
+    .iter()
+    .map(|path| std::fs::read_to_string(path))
+    .collect();
+
+// Custom iterators
+struct Counter {
+    current: u32,
+    max: u32,
+}
+
+impl Counter {
+    fn new(max: u32) -> Counter {
+        Counter { current: 0, max }
+    }
+}
+
+impl Iterator for Counter {
+    type Item = u32;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.current < self.max {
+            let current = self.current;
+            self.current += 1;
+            Some(current)
+        } else {
+            None
         }
     }
 }""",
             "anti_pattern": """
-pub mod UserManagement { // PascalCase para módulo (incorreto)
-    pub struct userManager { // camelCase para struct (incorreto)
-        Users: HashMap<UserId, User>, // PascalCase para field (incorreto)
+// Anti-pattern: manual loops when iterators would be clearer
+let mut even_squares = Vec::new();
+for i in 0..10 {
+    if i % 2 == 0 {
+        even_squares.push(i * i);
+    }
+}""",
+            "benefits": [
+                "More expressive and functional style",
+                "Better composability",
+                "Potential performance benefits"
+            ]
+        }
     }
     
-    impl userManager {
-        pub fn AddUser(&mut self, User: User) -> Result<(), UserError> { // PascalCase para method (incorreto)
-            // implementation
-        }
-        
-        pub fn findUserByEmail(&self, Email: &str) -> Option<&User> { // camelCase para method (incorreto)
-            // implementation  
-        }
-    }    
-}"""
+    # Pattern: API Design Guidelines
+    API_DESIGN_PATTERNS = {
+        "rust_naming_conventions": {
+            "description": "Follow Rust naming conventions",
+            "good_example": """
+// Types: PascalCase
+pub struct UserConfig {}
+pub enum DatabaseType {}
+
+// Functions and variables: snake_case
+pub fn create_user_account() {}
+let user_name = "Alice";
+
+// Constants: SCREAMING_SNAKE_CASE
+pub const MAX_RETRY_ATTEMPTS: u32 = 3;
+
+// Modules: snake_case
+mod user_management {}
+
+// Traits: descriptive names, often ending in -able or -er
+pub trait Serializable {}
+pub trait EventHandler {}""",
+            "benefits": [
+                "Consistency with Rust ecosystem",
+                "Better readability",
+                "Follows community conventions"
+            ]
         },
         "builder_pattern": {
-            "description": "Use builder pattern para constructors complexos",
+            "description": "Use builder pattern for complex construction",
             "good_example": """
+// Idiomatic: builder pattern for complex types
 #[derive(Debug)]
-pub struct ServerConfig {
-    pub host: String,
-    pub port: u16,
-    pub max_connections: usize,
-    pub timeout: Duration,
-    pub tls_enabled: bool,
-    pub log_level: LogLevel,
+pub struct HttpClient {
+    base_url: String,
+    timeout: Duration,
+    headers: HashMap<String, String>,
+    retry_attempts: u32,
 }
 
-impl ServerConfig {
-    pub fn builder() -> ServerConfigBuilder {
-        ServerConfigBuilder::default()
-    }
+pub struct HttpClientBuilder {
+    base_url: Option<String>,
+    timeout: Duration,
+    headers: HashMap<String, String>,
+    retry_attempts: u32,
 }
 
-#[derive(Default)]
-pub struct ServerConfigBuilder {
-    host: Option<String>,
-    port: Option<u16>,
-    max_connections: Option<usize>,
-    timeout: Option<Duration>,
-    tls_enabled: bool,
-    log_level: Option<LogLevel>,
-}
-
-impl ServerConfigBuilder {
-    pub fn host(mut self, host: impl Into<String>) -> Self {
-        self.host = Some(host.into());
-        self
+impl HttpClientBuilder {
+    pub fn new() -> Self {
+        Self {
+            base_url: None,
+            timeout: Duration::from_secs(30),
+            headers: HashMap::new(),
+            retry_attempts: 3,
+        }
     }
     
-    pub fn port(mut self, port: u16) -> Self {
-        self.port = Some(port);
-        self
-    }
-    
-    pub fn max_connections(mut self, max: usize) -> Self {
-        self.max_connections = Some(max);
+    pub fn base_url(mut self, url: impl Into<String>) -> Self {
+        self.base_url = Some(url.into());
         self
     }
     
     pub fn timeout(mut self, timeout: Duration) -> Self {
-        self.timeout = Some(timeout);
+        self.timeout = timeout;
         self
     }
     
-    pub fn enable_tls(mut self) -> Self {
-        self.tls_enabled = true;
+    pub fn header(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
+        self.headers.insert(key.into(), value.into());
         self
     }
     
-    pub fn log_level(mut self, level: LogLevel) -> Self {
-        self.log_level = Some(level);
-        self
-    }
-    
-    pub fn build(self) -> Result<ServerConfig, ConfigError> {
-        Ok(ServerConfig {
-            host: self.host.unwrap_or_else(|| "localhost".to_string()),
-            port: self.port.unwrap_or(8080),
-            max_connections: self.max_connections.unwrap_or(100),
-            timeout: self.timeout.unwrap_or(Duration::from_secs(30)),
-            tls_enabled: self.tls_enabled,
-            log_level: self.log_level.unwrap_or(LogLevel::Info),
+    pub fn build(self) -> Result<HttpClient, BuilderError> {
+        let base_url = self.base_url.ok_or(BuilderError::MissingBaseUrl)?;
+        
+        Ok(HttpClient {
+            base_url,
+            timeout: self.timeout,
+            headers: self.headers,
+            retry_attempts: self.retry_attempts,
         })
     }
 }
 
-// Uso ergonômico
-let config = ServerConfig::builder()
-    .host("0.0.0.0")
-    .port(3000)
-    .max_connections(500)
-    .enable_tls()
-    .log_level(LogLevel::Debug)
+// Usage
+let client = HttpClient::builder()
+    .base_url("https://api.example.com")
+    .timeout(Duration::from_secs(60))
+    .header("User-Agent", "MyApp/1.0")
     .build()?;"""
         }
     }
     
-    # Padrão: Performance Idiomático
-    PERFORMANCE_PATTERNS = {
-        "zero_cost_abstractions": {
-            "principle": "Aim for zero-cost abstractions",
-            "description": "Use abstractions que não custam performance runtime",
+    # Pattern: Documentation Best Practices
+    DOCUMENTATION_PATTERNS = {
+        "doc_comments": {
+            "description": "Write comprehensive documentation",
             "good_example": """
-// Zero-cost iterator abstraction
-pub fn process_numbers(numbers: &[i32]) -> Vec<i32> {
-    numbers
-        .iter()
-        .filter(|&&x| x > 0)
-        .map(|&x| x * 2)
-        .collect()
+/// Represents a user in the system.
+///
+/// A user has a unique ID, name, and email address. Users can be
+/// created, updated, and deleted through the user management API.
+///
+/// # Examples
+///
+/// ```
+/// use myapp::User;
+///
+/// let user = User::new(1, "Alice", "alice@example.com")?;
+/// assert_eq!(user.name(), "Alice");
+/// ```
+///
+/// # Errors
+///
+/// This function will return an error if the email address is invalid.
+#[derive(Debug, Clone)]
+pub struct User {
+    id: u32,
+    name: String,
+    email: String,
 }
 
-// Generic zero-cost abstraction
-pub trait Processor<T> {
-    type Output;
-    fn process(&self, input: T) -> Self::Output;
-}
-
-pub fn batch_process<T, P>(items: Vec<T>, processor: P) -> Vec<P::Output>
-where
-    P: Processor<T>,
-{
-    items.into_iter().map(|item| processor.process(item)).collect()
-}
-
-// Newtype pattern for type safety sem overhead
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct UserId(u32);
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]  
-pub struct OrderId(u32);
-
-impl UserId {
-    pub fn new(id: u32) -> Self {
-        Self(id)
-    }
-    
-    pub fn get(self) -> u32 {
-        self.0
-    }
-}
-
-// Compile-time garantees sem runtime cost
-pub fn get_user_orders(user_id: UserId) -> Vec<Order> {
-    // Impossível passar OrderId por engano
-    query_orders_by_user(user_id.get())
-}""",
-            "anti_pattern": """
-// Anti-padrão: abstractions custosas
-pub fn process_numbers(numbers: &[i32]) -> Vec<i32> {
-    let mut result = Vec::new();
-    for i in 0..numbers.len() {
-        if numbers[i] > 0 {
-            result.push(numbers[i] * 2);
+impl User {
+    /// Creates a new user with the given ID, name, and email.
+    ///
+    /// # Arguments
+    ///
+    /// * `id` - The unique identifier for the user
+    /// * `name` - The user's display name
+    /// * `email` - The user's email address
+    ///
+    /// # Errors
+    ///
+    /// Returns [`UserError::InvalidEmail`] if the email format is invalid.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # use myapp::{User, UserError};
+    /// let user = User::new(1, "Alice", "alice@example.com")?;
+    /// # Ok::<(), UserError>(())
+    /// ```
+    pub fn new(id: u32, name: impl Into<String>, email: impl Into<String>) -> Result<Self, UserError> {
+        let email = email.into();
+        if !email.contains('@') {
+            return Err(UserError::InvalidEmail);
         }
+        
+        Ok(User {
+            id,
+            name: name.into(),
+            email,
+        })
     }
-    result
-}
-
-// Ou usando Box desnecessariamente
-pub fn process_with_callback(
-    numbers: &[i32], 
-    callback: Box<dyn Fn(i32) -> i32>
-) -> Vec<i32> {
-    numbers.iter().map(|&x| callback(x)).collect()
-}"""
-        },
-        "memory_efficiency": {
-            "description": "Otimize uso de memória com patterns idiomáticos",
-            "good_example": """
-use std::borrow::Cow;
-
-// Use Cow para evitar clones desnecessários
-pub fn normalize_string(input: &str) -> Cow<str> {
-    if needs_normalization(input) {
-        Cow::Owned(input.to_lowercase().replace(' ', "_"))
-    } else {
-        Cow::Borrowed(input)
-    }
-}
-
-// Pre-allocate quando souber o tamanho
-pub fn create_lookup_table(capacity_hint: usize) -> HashMap<String, Value> {
-    HashMap::with_capacity(capacity_hint)
-}
-
-// Use referencias quando possível
-pub fn analyze_logs(logs: &[LogEntry]) -> LogAnalysis {
-    let error_count = logs.iter().filter(|log| log.level == LogLevel::Error).count();
-    let warning_count = logs.iter().filter(|log| log.level == LogLevel::Warning).count();
-    
-    LogAnalysis {
-        total_entries: logs.len(),
-        error_count,
-        warning_count,
-        most_common_message: find_most_common_message(logs),
-    }
-}
-
-fn find_most_common_message(logs: &[LogEntry]) -> Option<String> {
-    let mut message_counts: HashMap<&str, usize> = HashMap::new();
-    
-    for log in logs {
-        *message_counts.entry(&log.message).or_insert(0) += 1;
-    }
-    
-    message_counts
-        .into_iter()
-        .max_by_key(|(_, count)| *count)
-        .map(|(message, _)| message.to_string())
-}"""
+}""",
+            "benefits": [
+                "Self-documenting code",
+                "Better IDE support",
+                "Testable documentation examples"
+            ]
         }
     }
 
 class RustIdiomaticAnalyzer:
-    """Analisador de código Rust idiomático baseado em mre/idiomatic-rust"""
+    """Rust code analyzer for idiomatic patterns"""
     
     def __init__(self):
         self.knowledge_base = RustIdiomaticKnowledgeBase()
     
     async def analyze_idiomatic_rust(self, code: str) -> IdiomaticAnalysisResult:
-        """Analisa código Rust para padrões idiomáticos"""
+        """Analyze Rust code for idiomatic patterns and anti-patterns"""
         
+        score = 50  # Base idiomaticity score
         category_scores = {}
-        idiomatic_patterns_found = []
-        anti_patterns_found = []
+        idiomatic_patterns = []
+        anti_patterns = []
         suggestions = []
         refactored_examples = {}
-        compliance_with_api_guidelines = {}
+        api_compliance = {}
         
-        # Análise de immutability
-        immutability_analysis = await self._analyze_immutability(code)
-        category_scores["immutability"] = immutability_analysis["score"]
-        idiomatic_patterns_found.extend(immutability_analysis["patterns"])
-        anti_patterns_found.extend(immutability_analysis["anti_patterns"])
-        suggestions.extend(immutability_analysis["suggestions"])
+        # Analyze immutability patterns
+        immutability_score = await self._analyze_immutability(code)
+        category_scores["immutability"] = immutability_score
+        score += (immutability_score - 50) * 0.2
         
-        # Análise de error handling
-        error_analysis = await self._analyze_error_handling(code)
-        category_scores["error_handling"] = error_analysis["score"]
-        idiomatic_patterns_found.extend(error_analysis["patterns"])
-        anti_patterns_found.extend(error_analysis["anti_patterns"])
-        suggestions.extend(error_analysis["suggestions"])
+        # Analyze error handling
+        error_score = await self._analyze_error_handling(code)
+        category_scores["error_handling"] = error_score
+        score += (error_score - 50) * 0.25
         
-        # Análise de type conversions
-        conversion_analysis = await self._analyze_type_conversions(code)
-        category_scores["type_conversions"] = conversion_analysis["score"]
-        idiomatic_patterns_found.extend(conversion_analysis["patterns"])
+        # Analyze type conversions
+        conversion_score = await self._analyze_type_conversions(code)
+        category_scores["type_conversions"] = conversion_score
+        score += (conversion_score - 50) * 0.15
         
-        # Análise de enums vs booleans
-        enum_analysis = await self._analyze_enums_over_bools(code)
-        category_scores["enums_over_bools"] = enum_analysis["score"]
-        idiomatic_patterns_found.extend(enum_analysis["patterns"])
-        anti_patterns_found.extend(enum_analysis["anti_patterns"])
+        # Analyze ownership patterns
+        ownership_score = await self._analyze_ownership(code)
+        category_scores["ownership"] = ownership_score
+        score += (ownership_score - 50) * 0.2
         
-        # Análise de async patterns
-        async_analysis = await self._analyze_async_patterns(code)
-        category_scores["async_patterns"] = async_analysis["score"]
-        idiomatic_patterns_found.extend(async_analysis["patterns"])
+        # Analyze enum usage
+        enum_score = await self._analyze_enum_usage(code)
+        category_scores["enum_usage"] = enum_score
+        score += (enum_score - 50) * 0.1
         
-        # Análise de API design
-        api_analysis = await self._analyze_api_design(code)
-        category_scores["api_design"] = api_analysis["score"]
-        compliance_with_api_guidelines = api_analysis["compliance"]
+        # Analyze async patterns
+        async_score = await self._analyze_async_patterns(code)
+        category_scores["async_patterns"] = async_score
+        score += (async_score - 50) * 0.1
         
-        # Calcular score geral
-        idiomaticity_score = await self._calculate_idiomaticity_score(category_scores)
+        # Generate suggestions and refactoring examples
+        suggestions.extend(await self._generate_suggestions(category_scores))
+        refactored_examples.update(await self._generate_refactoring_examples(code, category_scores))
         
-        # Gerar exemplos refatorados
-        refactored_examples = await self._generate_refactored_examples(code, anti_patterns_found)
+        # Check API guideline compliance
+        api_compliance.update(await self._check_api_guidelines(code))
+        
+        final_score = max(0, min(100, int(score)))
         
         return IdiomaticAnalysisResult(
             code=code,
-            idiomaticity_score=idiomaticity_score,
+            idiomaticity_score=final_score,
             category_scores=category_scores,
-            idiomatic_patterns_found=idiomatic_patterns_found,
-            anti_patterns_found=anti_patterns_found,
+            idiomatic_patterns_found=idiomatic_patterns,
+            anti_patterns_found=anti_patterns,
             suggestions=suggestions,
             refactored_examples=refactored_examples,
-            compliance_with_api_guidelines=compliance_with_api_guidelines
+            compliance_with_api_guidelines=api_compliance
         )
     
-    async def _analyze_immutability(self, code: str) -> Dict[str, Any]:
-        """Analisa padrões de immutability"""
-        score = 80  # Base score
-        patterns = []
-        anti_patterns = []
-        suggestions = []
+    async def _analyze_immutability(self, code: str) -> int:
+        """Analyze immutability patterns"""
+        score = 50
         
-        # Padrões positivos
-        if "let " in code and "let mut " not in code:
-            patterns.append("✅ Variables imutáveis por padrão")
+        # Count mut usage
+        mut_count = len(re.findall(r'\bmut\s+\w+', code))
+        total_bindings = len(re.findall(r'\blet\s+(?:mut\s+)?\w+', code))
+        
+        if total_bindings > 0:
+            mut_ratio = mut_count / total_bindings
+            if mut_ratio < 0.2:  # Less than 20% mutable
+                score += 20
+            elif mut_ratio > 0.5:  # More than 50% mutable
+                score -= 15
+        
+        # Check for immutable data structure usage
+        if any(pattern in code for pattern in ["Vec::new()", ".iter().map", ".iter().filter"]):
             score += 10
         
-        if ".iter()" in code:
-            patterns.append("✅ Uso de iterators imutáveis")
-            score += 5
+        # Check for builder patterns
+        if re.search(r'\.builder\(\)', code):
+            score += 10
         
-        if "const " in code or "static " in code:
-            patterns.append("✅ Constantes definidas apropriadamente")
-            score += 5
-        
-        # Anti-padrões
-        excessive_mut = code.count("let mut ")
-        total_let = code.count("let ")
-        if total_let > 0 and (excessive_mut / total_let) > 0.5:
-            anti_patterns.append("❌ Uso excessivo de mut - considere immutability")
-            score -= 15
-            suggestions.append("🔧 Reduza uso de 'mut' - use immutable por padrão")
-        
-        if ".clone()" in code and code.count(".clone()") > 3:
-            anti_patterns.append("❌ Muitos clones - revise ownership patterns")
-            score -= 10
-            suggestions.append("⚡ Use borrowing (&) ao invés de clone quando possível")
-        
-        return {
-            "score": max(0, min(100, score)),
-            "patterns": patterns,
-            "anti_patterns": anti_patterns,
-            "suggestions": suggestions
-        }
+        return min(100, max(0, score))
     
-    async def _analyze_error_handling(self, code: str) -> Dict[str, Any]:
-        """Analisa padrões idiomáticos de error handling"""
-        score = 70
-        patterns = []
-        anti_patterns = []
-        suggestions = []
+    async def _analyze_error_handling(self, code: str) -> int:
+        """Analyze error handling patterns"""
+        score = 50
         
-        # Padrões positivos
-        if "Result<" in code:
-            patterns.append("✅ Uso de Result<T, E> para errors")
+        # Check for Result usage
+        result_usage = len(re.findall(r'Result<[^>]+>', code))
+        if result_usage > 0:
             score += 15
         
-        if "?" in code and "Result<" in code:
-            patterns.append("✅ Uso do ? operator para propagação")
+        # Check for ? operator
+        question_marks = code.count('?')
+        if question_marks > 0:
             score += 10
         
-        if "thiserror::" in code or "#[derive(Error)]" in code:
-            patterns.append("✅ Custom error types com thiserror")
-            score += 10
-        
-        if "anyhow::" in code or ".with_context(" in code:
-            patterns.append("✅ Context preservation com anyhow")
-            score += 10
-        
-        # Anti-padrões
-        if ".unwrap()" in code:
-            anti_patterns.append("❌ Uso de .unwrap() pode causar panic")
-            score -= 20
-            suggestions.append("🛡️ Use ? operator ou pattern matching ao invés de .unwrap()")
-        
-        if ".expect(" not in code and ".unwrap()" in code:
-            anti_patterns.append("❌ Use .expect() com mensagem ao invés de .unwrap()")
-            score -= 10
-            suggestions.append("📝 Adicione mensagens descritivas com .expect()")
-        
-        if "panic!" in code:
-            anti_patterns.append("❌ panic! deve ser usado apenas para bugs irrecuperáveis")
-            score -= 15
-            suggestions.append("🔄 Considere retornar Result ao invés de panic!")
-        
-        return {
-            "score": max(0, min(100, score)),
-            "patterns": patterns,
-            "anti_patterns": anti_patterns,
-            "suggestions": suggestions
-        }
-    
-    async def _analyze_type_conversions(self, code: str) -> Dict[str, Any]:
-        """Analisa padrões de type conversions"""
-        score = 75
-        patterns = []
-        
-        if "impl From<" in code:
-            patterns.append("✅ Implementação de From trait para conversões")
-            score += 10
-        
-        if "impl TryFrom<" in code:
-            patterns.append("✅ TryFrom para conversões falíveis")
-            score += 10
-        
-        if ".into()" in code:
-            patterns.append("✅ Uso ergonômico de .into()")
-            score += 5
-        
-        if "impl AsRef<" in code or "AsRef<str>" in code:
-            patterns.append("✅ AsRef para APIs flexíveis")
-            score += 10
-        
-        return {
-            "score": max(0, min(100, score)),
-            "patterns": patterns,
-            "anti_patterns": [],
-            "suggestions": []
-        }
-    
-    async def _analyze_enums_over_bools(self, code: str) -> Dict[str, Any]:
-        """Analisa uso de enums ao invés de booleans"""
-        score = 80
-        patterns = []
-        anti_patterns = []
-        
-        if "enum " in code:
-            patterns.append("✅ Uso de enums para estados expressivos")
+        # Check for proper error types
+        if 'thiserror::Error' in code or '#[derive(Error)]' in code:
             score += 15
         
-        if "#[derive(" in code and "enum " in code:
-            patterns.append("✅ Derives apropriados para enums")
-            score += 5
+        # Penalize panic usage
+        panic_count = len(re.findall(r'panic!\(|\.expect\(|\.unwrap\(', code))
+        if panic_count > 0:
+            score -= panic_count * 5
         
-        # Anti-padrão: muitos booleans como parâmetros
-        bool_params = re.findall(r'fn\s+\w+\([^)]*bool[^)]*\)', code)
-        if len(bool_params) > 2:
-            anti_patterns.append("❌ Muitos parâmetros boolean - considere enums")
-            score -= 15
+        # Check for Option usage
+        option_usage = len(re.findall(r'Option<[^>]+>', code))
+        if option_usage > 0:
+            score += 10
         
-        return {
-            "score": max(0, min(100, score)),
-            "patterns": patterns,
-            "anti_patterns": anti_patterns,
-            "suggestions": []
-        }
+        return min(100, max(0, score))
     
-    async def _analyze_async_patterns(self, code: str) -> Dict[str, Any]:
-        """Analisa padrões async idiomáticos"""
-        score = 75
-        patterns = []
+    async def _analyze_type_conversions(self, code: str) -> int:
+        """Analyze type conversion patterns"""
+        score = 50
         
-        if "async fn" in code and ".await" in code:
-            patterns.append("✅ Uso de async/await")
+        # Check for From/Into trait implementations
+        if 'impl From<' in code or 'impl Into<' in code:
+            score += 20
+        
+        # Check for TryFrom usage
+        if 'impl TryFrom<' in code or 'TryFrom::try_from' in code:
+            score += 15
+        
+        # Check for proper conversion function usage
+        if any(pattern in code for pattern in ['.into()', '.from()', 'TryInto::try_into']):
             score += 10
         
-        if "tokio::" in code:
-            patterns.append("✅ Tokio runtime para async")
-            score += 10
-        
-        if "try_join" in code or "join!" in code:
-            patterns.append("✅ Concorrência estruturada")
-            score += 10
-        
-        if "spawn(" in code:
-            patterns.append("✅ Task spawning para concorrência")
-            score += 5
-        
-        return {
-            "score": max(0, min(100, score)),
-            "patterns": patterns,
-            "anti_patterns": [],
-            "suggestions": []
-        }
+        return min(100, max(0, score))
     
-    async def _analyze_api_design(self, code: str) -> Dict[str, Any]:
-        """Analisa conformidade com API guidelines"""
-        score = 80
-        compliance = {}
+    async def _analyze_ownership(self, code: str) -> int:
+        """Analyze ownership and borrowing patterns"""
+        score = 50
         
-        # Naming conventions
-        has_snake_case_functions = bool(re.search(r'fn\s+[a-z][a-z0-9_]*', code))
-        has_pascal_case_types = bool(re.search(r'(struct|enum)\s+[A-Z][A-Za-z0-9]*', code))
+        # Check for proper reference usage
+        ref_params = len(re.findall(r'&\w+', code))
+        owned_params = len(re.findall(r'fn \w+\([^)]*[^&]\w+:', code))
         
-        compliance["snake_case_functions"] = has_snake_case_functions
-        compliance["pascal_case_types"] = has_pascal_case_types
+        if ref_params > owned_params:
+            score += 15
         
-        if has_snake_case_functions:
-            score += 10
-        if has_pascal_case_types:
+        # Check for Cow usage
+        if 'Cow<' in code:
             score += 10
         
-        # Documentation
-        has_doc_comments = "///" in code
-        compliance["documentation"] = has_doc_comments
-        if has_doc_comments:
-            score += 5
+        # Check for Rc/Arc usage for shared ownership
+        if any(pattern in code for pattern in ['Rc<', 'Arc<']):
+            score += 10
         
-        return {
-            "score": max(0, min(100, score)),
-            "compliance": compliance,
-            "patterns": [],
-            "anti_patterns": [],
-            "suggestions": []
-        }
+        # Penalize unnecessary clones
+        clone_count = code.count('.clone()')
+        if clone_count > 3:
+            score -= (clone_count - 3) * 2
+        
+        return min(100, max(0, score))
     
-    async def _calculate_idiomaticity_score(self, category_scores: Dict[str, int]) -> int:
-        """Calcula score geral de idiomaticidade"""
-        if not category_scores:
-            return 0
+    async def _analyze_enum_usage(self, code: str) -> int:
+        """Analyze enum vs boolean usage"""
+        score = 50
         
-        # Peso das categorias
-        weights = {
-            "immutability": 0.2,
-            "error_handling": 0.25,
-            "type_conversions": 0.15,
-            "enums_over_bools": 0.1,
-            "async_patterns": 0.15,
-            "api_design": 0.15
-        }
+        # Check for enum definitions
+        enum_count = len(re.findall(r'enum \w+', code))
+        if enum_count > 0:
+            score += 15
         
-        weighted_sum = sum(
-            category_scores.get(category, 0) * weight
-            for category, weight in weights.items()
-        )
+        # Check for match expressions
+        match_count = len(re.findall(r'match \w+', code))
+        if match_count > 0:
+            score += 10
         
-        return int(weighted_sum)
+        # Penalize excessive boolean parameters
+        bool_params = len(re.findall(r'bool(?:,|\))', code))
+        if bool_params > 2:
+            score -= (bool_params - 2) * 5
+        
+        return min(100, max(0, score))
     
-    async def _generate_refactored_examples(self, code: str, anti_patterns: List[str]) -> Dict[str, str]:
-        """Gera exemplos refatorados baseados nos anti-patterns encontrados"""
+    async def _analyze_async_patterns(self, code: str) -> int:
+        """Analyze async/await patterns"""
+        score = 50
+        
+        # Check for proper async function usage
+        if 'async fn' in code:
+            score += 15
+        
+        # Check for .await usage
+        await_count = code.count('.await')
+        if await_count > 0:
+            score += 10
+        
+        # Check for proper error propagation in async
+        if 'async fn' in code and '?' in code:
+            score += 10
+        
+        # Check for concurrent operations
+        if any(pattern in code for pattern in ['join!', 'try_join!', 'future::join_all']):
+            score += 15
+        
+        return min(100, max(0, score))
+    
+    async def _generate_suggestions(self, category_scores: Dict[str, int]) -> List[str]:
+        """Generate improvement suggestions based on scores"""
+        suggestions = []
+        
+        if category_scores.get("error_handling", 50) < 70:
+            suggestions.append("🛡️ Use Result<T, E> instead of panicking for recoverable errors")
+            suggestions.append("❓ Use the ? operator for cleaner error propagation")
+        
+        if category_scores.get("immutability", 50) < 70:
+            suggestions.append("🔒 Prefer immutable bindings - only use 'mut' when necessary")
+            suggestions.append("🏗️ Consider using builder patterns for complex object construction")
+        
+        if category_scores.get("ownership", 50) < 70:
+            suggestions.append("📚 Take references (&T) by default, owned values (T) when needed")
+            suggestions.append("🐄 Consider using Cow<str> for flexible string handling")
+        
+        if category_scores.get("enum_usage", 50) < 70:
+            suggestions.append("🎭 Use enums instead of boolean flags for better expressiveness")
+            suggestions.append("🔀 Use match expressions for exhaustive pattern matching")
+        
+        return suggestions
+    
+    async def _generate_refactoring_examples(self, code: str, scores: Dict[str, int]) -> Dict[str, str]:
+        """Generate refactoring examples based on common patterns"""
         examples = {}
         
-        if any("unwrap" in pattern for pattern in anti_patterns):
+        # Error handling refactoring
+        if "unwrap()" in code or "expect(" in code:
             examples["error_handling"] = """
-// Antes (anti-padrão):
-let value = some_operation().unwrap();
+// Instead of:
+let data = fs::read_to_string(path).unwrap();
 
-// Depois (idiomático):
-let value = some_operation()
-    .expect("Operation should succeed in this context");
-
-// Ou melhor ainda:
-let value = match some_operation() {
-    Ok(val) => val,
-    Err(e) => {
-        log::error!("Operation failed: {}", e);
-        return Err(e.into());
-    }
-};"""
+// Use:
+let data = fs::read_to_string(path)?;
+// or
+let data = fs::read_to_string(path).map_err(|e| MyError::FileRead(e))?;
+"""
         
-        if any("mut" in pattern for pattern in anti_patterns):
+        # Immutability refactoring
+        if re.search(r'let mut \w+ = [^;]+;\s*(?!//)(?![^;]*=)', code):
             examples["immutability"] = """
-// Antes (anti-padrão):
-let mut data = vec![1, 2, 3];
-let mut result = Vec::new();
-for item in data {
-    result.push(item * 2);
-}
+// Instead of unnecessary mut:
+let mut data = Vec::new();
+data.push(1);
 
-// Depois (idiomático):
-let data = vec![1, 2, 3];
-let result: Vec<i32> = data
-    .into_iter()
-    .map(|item| item * 2)
-    .collect();"""
-        
-        if any("boolean" in pattern for pattern in anti_patterns):
-            examples["enums_over_bools"] = """
-// Antes (anti-padrão):
-fn connect(auto_retry: bool, secure: bool) -> Result<Connection> {
-    // confuso: o que cada boolean significa?
-}
-
-// Depois (idiomático):
-#[derive(Debug, Clone, Copy)]
-enum RetryPolicy { Auto, Manual }
-
-#[derive(Debug, Clone, Copy)]  
-enum ConnectionSecurity { Secure, Insecure }
-
-fn connect(retry: RetryPolicy, security: ConnectionSecurity) -> Result<Connection> {
-    // claro e expressivo
-}"""
+// Consider:
+let data = vec![1];
+// or use builder pattern for complex construction
+"""
         
         return examples
+    
+    async def _check_api_guidelines(self, code: str) -> Dict[str, bool]:
+        """Check compliance with Rust API guidelines"""
+        compliance = {}
+        
+        # Check naming conventions
+        has_snake_case_functions = bool(re.search(r'fn [a-z][a-z0-9_]*', code))
+        has_pascal_case_types = bool(re.search(r'struct [A-Z][A-Za-z0-9]*', code))
+        
+        compliance["proper_naming"] = has_snake_case_functions and has_pascal_case_types
+        compliance["uses_result_for_errors"] = "Result<" in code
+        compliance["has_documentation"] = "///" in code
+        compliance["uses_standard_traits"] = any(trait in code for trait in ["Debug", "Clone", "PartialEq"])
+        
+        return compliance
 
 class RustProjectGenerator:
-    """Gerador de projetos Rust idiomáticos"""
+    """Generate Rust projects following idiomatic patterns"""
     
     def __init__(self):
         self.knowledge_base = RustIdiomaticKnowledgeBase()
@@ -1311,548 +1066,405 @@ class RustProjectGenerator:
     async def generate_idiomatic_project(
         self,
         project_type: str,
-        features: List[str] = None,
-        complexity: RustComplexity = RustComplexity.INTERMEDIATE
+        features: Optional[List[str]] = None,
+        complexity: str = "intermediate"
     ) -> Dict[str, Any]:
-        """Gera projeto Rust seguindo padrões idiomáticos"""
+        """Generate complete idiomatic Rust project"""
         
         if features is None:
-            features = ["error-handling", "async", "serde"]
+            features = ["error_handling", "async", "serialization"]
         
-        templates = {
-            "library": self._generate_idiomatic_library,
-            "binary": self._generate_idiomatic_binary,
-            "web-api": self._generate_idiomatic_web_api,
-            "cli": self._generate_idiomatic_cli
+        project_templates = {
+            "library": self._generate_library_project,
+            "binary": self._generate_binary_project,
+            "web_api": self._generate_web_api_project,
+            "cli": self._generate_cli_project,
         }
         
-        if project_type not in templates:
+        if project_type not in project_templates:
             return {"error": f"Project type '{project_type}' not supported"}
         
-        return await templates[project_type](features, complexity)
+        return await project_templates[project_type](features, complexity)
     
-    async def _generate_idiomatic_library(self, features: List[str], complexity: RustComplexity) -> Dict[str, Any]:
-        """Gera biblioteca Rust idiomática"""
+    async def _generate_library_project(self, features: List[str], complexity: str) -> Dict[str, Any]:
+        """Generate idiomatic Rust library"""
         
-        cargo_toml = """[package]
-name = "my-idiomatic-lib"
+        cargo_toml = f"""[package]
+name = "my-rust-library"
 version = "0.1.0"
 edition = "2021"
-authors = ["Your Name <you@example.com>"]
-description = "An idiomatic Rust library following best practices"
+rust-version = "1.70"
+description = "An idiomatic Rust library"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/username/my-idiomatic-lib"
-keywords = ["rust", "idiomatic", "library"]
+repository = "https://github.com/user/my-rust-library"
+keywords = ["rust", "library"]
 categories = ["development-tools"]
-readme = "README.md"
 
 [dependencies]
-thiserror = "1.0"
-serde = { version = "1.0", features = ["derive"], optional = true }
-tokio = { version = "1.0", features = ["rt-multi-thread"], optional = true }
+{self._get_feature_dependencies(features)}
 
 [dev-dependencies]
 tokio-test = "0.4"
-criterion = "0.5"
+proptest = "1.0"
 
-[features]
-default = []
-serde = ["dep:serde"]
-async = ["dep:tokio"]
-
-[[bench]]
-name = "benchmarks"
-harness = false
-
-[profile.release]
-lto = true
-codegen-units = 1
-panic = "abort"
-strip = true
-
-[profile.dev]
-debug = true
+[[example]]
+name = "basic_usage"
+required-features = []
 """
         
-        lib_rs = """//! My Idiomatic Library
-//! 
-//! An idiomatic Rust library following best practices from:
-//! - rust-lang/api-guidelines
-//! - mre/idiomatic-rust  
-//! - blessed.rs recommendations
+        lib_rs = '''//! # My Rust Library
+//!
+//! An idiomatic Rust library demonstrating best practices.
+//!
+//! ## Examples
+//!
+//! ```rust
+//! use my_rust_library::Calculator;
+//!
+//! let calc = Calculator::new();
+//! let result = calc.add(2, 3)?;
+//! assert_eq!(result, 5);
+//! # Ok::<(), Box<dyn std::error::Error>>(())
+//! ```
 
-#![warn(missing_docs)]
-#![warn(clippy::all, clippy::pedantic)]
+#![deny(missing_docs)]
+#![warn(rust_2018_idioms, unused_lifetimes, unused_qualifications)]
 
-pub mod error;
-pub mod config;
+use std::fmt;
 
-pub use error::{Error, Result};
+pub use self::calculator::Calculator;
+pub use self::error::{Error, Result};
 
-/// Main library functionality following idiomatic patterns
-#[derive(Debug)]
-pub struct Library {
-    config: config::Config,
-}
+mod calculator;
+mod error;
 
-impl Library {
-    /// Creates a new library instance
-    /// 
-    /// # Errors
-    /// 
-    /// Returns error if configuration is invalid
-    pub fn new(config: config::Config) -> Result<Self> {
-        config.validate()?;
-        Ok(Self { config })
-    }
-    
-    /// Process data using idiomatic patterns
-    /// 
-    /// # Errors
-    /// 
-    /// Returns error if processing fails
-    pub async fn process(&self, data: &str) -> Result<String> {
-        if data.is_empty() {
-            return Err(Error::InvalidInput { 
-                reason: "Input cannot be empty".to_string() 
-            });
-        }
-        
-        // Idiomatic: immutable transformation
-        let processed = data
-            .lines()
-            .filter(|line| !line.trim().is_empty())
-            .map(|line| line.trim().to_uppercase())
-            .collect::<Vec<_>>()
-            .join("\\n");
-        
-        Ok(processed)
-    }
-    
-    /// Batch process multiple items idiomatically
-    pub fn batch_process<T>(&self, items: impl IntoIterator<Item = T>) -> Vec<ProcessedItem<T>>
-    where
-        T: Clone + std::fmt::Debug,
-    {
-        items
-            .into_iter()
-            .enumerate()
-            .map(|(index, item)| ProcessedItem {
-                index,
-                original: item.clone(),
-                processed_at: std::time::SystemTime::now(),
-                item,
-            })
-            .collect()
-    }
-}
-
-/// Represents a processed item with metadata
+/// Configuration for the library
 #[derive(Debug, Clone)]
-pub struct ProcessedItem<T> {
-    /// Index in the original batch
-    pub index: usize,
-    /// Original item reference
-    pub original: T,
-    /// Processing timestamp
-    pub processed_at: std::time::SystemTime,
-    /// The processed item
-    pub item: T,
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    
-    #[tokio::test]
-    async fn test_library_creation() -> Result<()> {
-        let config = config::Config::default();
-        let lib = Library::new(config)?;
-        
-        let result = lib.process("hello\\nworld").await?;
-        assert_eq!(result, "HELLO\\nWORLD");
-        
-        Ok(())
-    }
-    
-    #[test]
-    fn test_batch_processing() {
-        let config = config::Config::default();
-        let lib = Library::new(config).unwrap();
-        
-        let items = vec!["a", "b", "c"];
-        let processed = lib.batch_process(items);
-        
-        assert_eq!(processed.len(), 3);
-        assert_eq!(processed[0].index, 0);
-        assert_eq!(processed[0].original, "a");
-    }
-}
-"""
-        
-        error_rs = """//! Idiomatic error handling using thiserror
-
-use thiserror::Error;
-
-/// Main error type following idiomatic patterns
-#[derive(Error, Debug)]
-pub enum Error {
-    /// IO operation failed
-    #[error("IO error: {0}")]
-    Io(#[from] std::io::Error),
-    
-    /// Configuration is invalid
-    #[error("Configuration error: {message}")]
-    Config { 
-        /// Specific error message
-        message: String 
-    },
-    
-    /// Input validation failed
-    #[error("Invalid input: {reason}")]
-    InvalidInput { 
-        /// Reason for validation failure
-        reason: String 
-    },
-    
-    /// Processing operation failed
-    #[error("Processing failed: {operation} - {reason}")]
-    Processing { 
-        /// Which operation failed
-        operation: String,
-        /// Why it failed
-        reason: String 
-    },
-}
-
-/// Result type alias following Rust conventions
-pub type Result<T> = std::result::Result<T, Error>;
-
-impl Error {
-    /// Create a configuration error
-    pub fn config(message: impl Into<String>) -> Self {
-        Self::Config { 
-            message: message.into() 
-        }
-    }
-    
-    /// Create an input validation error
-    pub fn invalid_input(reason: impl Into<String>) -> Self {
-        Self::InvalidInput { 
-            reason: reason.into() 
-        }
-    }
-    
-    /// Create a processing error
-    pub fn processing(operation: impl Into<String>, reason: impl Into<String>) -> Self {
-        Self::Processing { 
-            operation: operation.into(),
-            reason: reason.into() 
-        }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    
-    #[test]
-    fn test_error_creation() {
-        let err = Error::config("Invalid port");
-        assert!(matches!(err, Error::Config { .. }));
-        
-        let err = Error::invalid_input("Empty string");
-        assert!(matches!(err, Error::InvalidInput { .. }));
-    }
-    
-    #[test]
-    fn test_error_display() {
-        let err = Error::config("Invalid configuration");
-        assert_eq!(err.to_string(), "Configuration error: Invalid configuration");
-    }
-}
-"""
-        
-        config_rs = """//! Configuration module following idiomatic patterns
-
-use crate::{Error, Result};
-use std::path::Path;
-
-/// Application configuration using builder pattern
-#[derive(Debug, Clone, PartialEq)]
 pub struct Config {
-    /// Application name
-    pub app_name: String,
-    /// Debug mode enabled
-    pub debug: bool,  
-    /// Maximum items to process
-    pub max_items: usize,
-    /// Processing timeout in seconds
-    pub timeout_secs: u64,
+    /// Maximum precision for calculations
+    pub precision: u32,
+    /// Whether to enable debugging
+    pub debug: bool,
 }
 
 impl Default for Config {
     fn default() -> Self {
         Self {
-            app_name: "my-idiomatic-lib".to_string(),
+            precision: 10,
             debug: false,
-            max_items: 1000,
-            timeout_secs: 30,
         }
     }
 }
 
 impl Config {
-    /// Create a new configuration builder
+    /// Creates a new configuration builder
     pub fn builder() -> ConfigBuilder {
         ConfigBuilder::default()
     }
-    
-    /// Load configuration from file
-    /// 
-    /// # Errors
-    /// 
-    /// Returns error if file cannot be read or parsed
-    pub fn from_file(path: impl AsRef<Path>) -> Result<Self> {
-        let content = std::fs::read_to_string(path)
-            .map_err(Error::from)?;
-        
-        let config: Config = toml::from_str(&content)
-            .map_err(|e| Error::config(format!("Failed to parse config: {}", e)))?;
-        
-        config.validate()?;
-        Ok(config)
-    }
-    
-    /// Validate configuration
-    /// 
-    /// # Errors
-    /// 
-    /// Returns error if configuration is invalid
-    pub fn validate(&self) -> Result<()> {
-        if self.app_name.is_empty() {
-            return Err(Error::config("App name cannot be empty"));
-        }
-        
-        if self.max_items == 0 {
-            return Err(Error::config("Max items must be greater than 0"));
-        }
-        
-        if self.timeout_secs == 0 {
-            return Err(Error::config("Timeout must be greater than 0"));
-        }
-        
-        Ok(())
-    }
 }
 
-/// Builder for idiomatic configuration construction
-#[derive(Default)]
+/// Builder for creating configurations
+#[derive(Debug, Default)]
 pub struct ConfigBuilder {
-    app_name: Option<String>,
+    precision: Option<u32>,
     debug: bool,
-    max_items: Option<usize>,
-    timeout_secs: Option<u64>,
 }
 
 impl ConfigBuilder {
-    /// Set application name
-    pub fn app_name(mut self, name: impl Into<String>) -> Self {
-        self.app_name = Some(name.into());
+    /// Sets the precision
+    pub fn precision(mut self, precision: u32) -> Self {
+        self.precision = Some(precision);
         self
     }
     
-    /// Enable debug mode
+    /// Enables debug mode
     pub fn debug(mut self) -> Self {
         self.debug = true;
         self
     }
     
-    /// Set maximum items to process
-    pub fn max_items(mut self, max: usize) -> Self {
-        self.max_items = Some(max);
-        self
-    }
-    
-    /// Set timeout in seconds
-    pub fn timeout_secs(mut self, secs: u64) -> Self {
-        self.timeout_secs = Some(secs);
-        self
-    }
-    
-    /// Build the configuration
-    /// 
-    /// # Errors
-    /// 
-    /// Returns error if configuration is invalid
-    pub fn build(self) -> Result<Config> {
-        let config = Config {
-            app_name: self.app_name.unwrap_or_else(|| "my-app".to_string()),
+    /// Builds the configuration
+    pub fn build(self) -> Config {
+        Config {
+            precision: self.precision.unwrap_or(10),
             debug: self.debug,
-            max_items: self.max_items.unwrap_or(1000),
-            timeout_secs: self.timeout_secs.unwrap_or(30),
-        };
-        
-        config.validate()?;
-        Ok(config)
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
-    fn test_default_config() {
-        let config = Config::default();
-        assert!(config.validate().is_ok());
-    }
-    
-    #[test]
-    fn test_builder_pattern() -> Result<()> {
+    fn test_config_builder() {
         let config = Config::builder()
-            .app_name("test-app")
+            .precision(20)
             .debug()
-            .max_items(500)
-            .timeout_secs(60)
-            .build()?;
-        
-        assert_eq!(config.app_name, "test-app");
+            .build();
+            
+        assert_eq!(config.precision, 20);
         assert!(config.debug);
-        assert_eq!(config.max_items, 500);
-        assert_eq!(config.timeout_secs, 60);
-        
-        Ok(())
-    }
-    
-    #[test]
-    fn test_validation() {
-        let invalid_config = Config {
-            app_name: "".to_string(),
-            debug: false,
-            max_items: 0,
-            timeout_secs: 0,
-        };
-        
-        assert!(invalid_config.validate().is_err());
     }
 }
-"""
+'''
+        
+        error_rs = '''//! Error types for the library
+
+use std::fmt;
+
+/// The main error type for this library
+#[derive(Debug, Clone)]
+pub enum Error {
+    /// Invalid input was provided
+    InvalidInput {
+        /// Description of what was invalid
+        message: String,
+    },
+    /// Calculation overflow occurred
+    Overflow,
+    /// Division by zero attempted
+    DivisionByZero,
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Error::InvalidInput { message } => write!(f, "Invalid input: {}", message),
+            Error::Overflow => write!(f, "Calculation overflow"),
+            Error::DivisionByZero => write!(f, "Division by zero"),
+        }
+    }
+}
+
+impl std::error::Error for Error {}
+
+/// A specialized Result type for this library
+pub type Result<T> = std::result::Result<T, Error>;
+
+impl From<std::num::ParseIntError> for Error {
+    fn from(_: std::num::ParseIntError) -> Self {
+        Error::InvalidInput {
+            message: "Failed to parse integer".to_string(),
+        }
+    }
+}
+'''
+        
+        calculator_rs = '''//! Calculator implementation
+
+use crate::{Config, Error, Result};
+
+/// A calculator that performs arithmetic operations
+#[derive(Debug)]
+pub struct Calculator {
+    config: Config,
+}
+
+impl Calculator {
+    /// Creates a new calculator with default configuration
+    pub fn new() -> Self {
+        Self::with_config(Config::default())
+    }
+    
+    /// Creates a calculator with the given configuration
+    pub fn with_config(config: Config) -> Self {
+        Self { config }
+    }
+    
+    /// Adds two numbers
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use my_rust_library::Calculator;
+    /// let calc = Calculator::new();
+    /// let result = calc.add(2, 3)?;
+    /// assert_eq!(result, 5);
+    /// # Ok::<(), my_rust_library::Error>(())
+    /// ```
+    pub fn add(&self, a: i64, b: i64) -> Result<i64> {
+        a.checked_add(b).ok_or(Error::Overflow)
+    }
+    
+    /// Subtracts two numbers
+    pub fn subtract(&self, a: i64, b: i64) -> Result<i64> {
+        a.checked_sub(b).ok_or(Error::Overflow)
+    }
+    
+    /// Multiplies two numbers
+    pub fn multiply(&self, a: i64, b: i64) -> Result<i64> {
+        a.checked_mul(b).ok_or(Error::Overflow)
+    }
+    
+    /// Divides two numbers
+    pub fn divide(&self, a: i64, b: i64) -> Result<f64> {
+        if b == 0 {
+            return Err(Error::DivisionByZero);
+        }
+        Ok(a as f64 / b as f64)
+    }
+}
+
+impl Default for Calculator {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add() {
+        let calc = Calculator::new();
+        assert_eq!(calc.add(2, 3).unwrap(), 5);
+    }
+
+    #[test]
+    fn test_add_overflow() {
+        let calc = Calculator::new();
+        let result = calc.add(i64::MAX, 1);
+        assert!(matches!(result, Err(Error::Overflow)));
+    }
+
+    #[test]
+    fn test_divide_by_zero() {
+        let calc = Calculator::new();
+        let result = calc.divide(10, 0);
+        assert!(matches!(result, Err(Error::DivisionByZero)));
+    }
+}
+'''
         
         return {
-            "project_type": "idiomatic_library",
+            "project_type": "library",
             "files": {
                 "Cargo.toml": cargo_toml,
                 "src/lib.rs": lib_rs,
                 "src/error.rs": error_rs,
-                "src/config.rs": config_rs,
-                "README.md": """# My Idiomatic Rust Library
+                "src/calculator.rs": calculator_rs,
+                "README.md": self._generate_readme("library"),
+                ".gitignore": self._generate_gitignore(),
+            },
+            "idiomatic_patterns_used": [
+                "✅ Comprehensive error handling with custom Error types",
+                "✅ Builder pattern for complex configuration",
+                "✅ Result<T, E> for fallible operations",
+                "✅ Proper documentation with examples",
+                "✅ Following Rust naming conventions",
+                "✅ Using #![deny(missing_docs)] for documentation completeness",
+                "✅ Implementing standard traits (Debug, Clone, Default)",
+                "✅ Checked arithmetic to prevent overflow"
+            ],
+            "api_guidelines_compliance": [
+                "📚 C-SMART: Smart constructor patterns",
+                "🛡️ C-GOOD-ERR: Good error messages",
+                "📖 C-EXAMPLE: Documentation includes examples",
+                "🏗️ C-BUILDER: Builder pattern for complex types",
+                "🔧 C-CONV-TRAITS: Implements standard conversion traits"
+            ],
+            "next_steps": [
+                "cargo build # Build the library",
+                "cargo test # Run all tests",  
+                "cargo doc --open # Generate and view documentation",
+                "cargo clippy # Run linter",
+                "cargo fmt # Format code"
+            ]
+        }
+    
+    def _get_feature_dependencies(self, features: List[str]) -> str:
+        """Generate dependencies based on features"""
+        deps = []
+        
+        if "async" in features:
+            deps.append('tokio = { version = "1.0", features = ["full"] }')
+        
+        if "serialization" in features:
+            deps.append('serde = { version = "1.0", features = ["derive"] }')
+            deps.append('serde_json = "1.0"')
+        
+        if "error_handling" in features:
+            deps.append('thiserror = "1.0"')
+            deps.append('anyhow = "1.0"')
+        
+        return "\n".join(deps)
+    
+    def _generate_readme(self, project_type: str) -> str:
+        return f"""# My Rust {project_type.title()}
 
-An idiomatic Rust library following best practices from:
-- [rust-lang/api-guidelines](https://rust-lang.github.io/api-guidelines/)
-- [mre/idiomatic-rust](https://github.com/mre/idiomatic-rust)
-- [blessed.rs](https://blessed.rs/) recommendations
+An idiomatic Rust {project_type} following best practices and API guidelines.
 
 ## Features
 
-- 🦀 **Idiomatic Rust**: Follows official API guidelines
-- 🛡️ **Error Handling**: Comprehensive error types with thiserror
-- ⚡ **Performance**: Zero-cost abstractions and efficient iterators
-- 🔧 **Builder Pattern**: Ergonomic configuration construction
-- 📚 **Documentation**: Comprehensive docs with examples
-- 🧪 **Testing**: Unit tests and benchmarks included
+- 🦀 **Idiomatic Rust**: Follows rust-lang/api-guidelines
+- 🛡️ **Robust Error Handling**: Custom error types with detailed messages  
+- 📚 **Comprehensive Documentation**: Examples and detailed API docs
+- 🧪 **Well Tested**: Unit tests and property-based testing
+- ⚡ **Performance**: Zero-cost abstractions and efficient algorithms
 
 ## Usage
 
 ```rust
-use my_idiomatic_lib::{Library, Config, Result};
+use my_rust_library::Calculator;
 
-#[tokio::main]
-async fn main() -> Result<()> {
-    let config = Config::builder()
-        .app_name("my-app")
-        .debug()
-        .max_items(1000)
-        .build()?;
-    
-    let lib = Library::new(config)?;
-    let result = lib.process("hello\\nworld").await?;
-    
-    println!("Processed: {}", result);
-    Ok(())
-}
+let calc = Calculator::new();
+let result = calc.add(2, 3)?;
+assert_eq!(result, 5);
+```
+
+## Development
+
+This project follows Rust idiomatic patterns from:
+- [rust-lang/api-guidelines](https://rust-lang.github.io/api-guidelines/)
+- [mre/idiomatic-rust](https://github.com/mre/idiomatic-rust)
+
+### Commands
+
+```bash
+cargo build          # Build the project
+cargo test           # Run tests
+cargo clippy         # Lint code
+cargo fmt           # Format code
+cargo doc --open    # Generate and view docs
 ```
 
 ## Contributing
 
-Please follow Rust idioms and API guidelines when contributing.
-""",
-                "LICENSE": "MIT OR Apache-2.0 license text here",
-                ".gitignore": """# Generated by Cargo
-/target/
+Please ensure your code follows the established patterns and passes all checks.
+"""
+    
+    def _generate_gitignore(self) -> str:
+        return """/target/
 Cargo.lock
-
-# IDE
+.env
+.DS_Store
+*.log
 .vscode/
 .idea/
-
-# OS
-.DS_Store
-Thumbs.db
-""",
-            },
-            "idiomatic_patterns_used": [
-                "✅ Immutability by default",
-                "✅ Result-based error handling with thiserror", 
-                "✅ Builder pattern for complex construction",
-                "✅ Iterator chains for functional style",
-                "✅ Comprehensive documentation with examples",
-                "✅ From/Into traits for type conversions",
-                "✅ API guidelines compliance (naming, structure)",
-                "✅ Zero-cost abstractions with generics"
-            ],
-            "structure": """
-my-idiomatic-lib/
-├── Cargo.toml          # Package configuration with idiomatic metadata
-├── src/
-│   ├── lib.rs          # Library root with comprehensive docs
-│   ├── error.rs        # Idiomatic error handling with thiserror
-│   └── config.rs       # Builder pattern configuration
-├── tests/              # Integration tests
-├── benches/            # Performance benchmarks
-├── examples/           # Usage examples
-├── README.md           # Comprehensive documentation
-└── LICENSE             # MIT OR Apache-2.0 dual license
-""",
-            "next_steps": [
-                "cargo build --release # Build with optimizations",
-                "cargo test # Run all tests", 
-                "cargo clippy # Run linter for idiomatic suggestions",
-                "cargo doc --open # Generate and view documentation",
-                "cargo bench # Run performance benchmarks"
-            ]
-        }
+"""
 
 # ================================
-# FERRAMENTAS MCP IDIOMÁTICAS
+# RUST MCP TOOLS
 # ================================
 
 @mcp.tool()
-async def rust_analyze_idiomatic_code(code: str) -> Dict[str, Any]:
+async def analyze_idiomatic_rust(code: str) -> Dict[str, Any]:
     """
-    Analisa código Rust para padrões idiomáticos baseado em mre/idiomatic-rust.
+    Analyzes Rust code for idiomatic patterns based on mre/idiomatic-rust.
     
     Args:
-        code: Código Rust para análise
+        code: Rust code for analysis
         
     Returns:
-        Análise completa com score de idiomaticidade e sugestões
+        Complete analysis with idiomaticity score and suggestions
     """
     try:
         analyzer = RustIdiomaticAnalyzer()
         analysis = await analyzer.analyze_idiomatic_rust(code)
         
-        logger.info(f"Analyzed Rust code for idiomatic patterns - score: {analysis.idiomaticity_score}")
+        logger.info(f"Analyzed Rust code - idiomaticity score: {analysis.idiomaticity_score}")
         
         return {
             "idiomaticity_score": analysis.idiomaticity_score,
@@ -1861,50 +1473,43 @@ async def rust_analyze_idiomatic_code(code: str) -> Dict[str, Any]:
             "anti_patterns_found": analysis.anti_patterns_found,
             "suggestions": analysis.suggestions,
             "refactored_examples": analysis.refactored_examples,
-            "compliance_with_api_guidelines": analysis.compliance_with_api_guidelines,
-            "analysis_categories": [
-                "immutability", "error_handling", "type_conversions",
-                "enums_over_bools", "async_patterns", "api_design"
-            ]
+            "api_guidelines_compliance": analysis.compliance_with_api_guidelines,
+            "overall_grade": (
+                "Excellent" if analysis.idiomaticity_score >= 90 else
+                "Good" if analysis.idiomaticity_score >= 75 else
+                "Needs Improvement" if analysis.idiomaticity_score >= 60 else
+                "Poor"
+            )
         }
         
     except Exception as e:
-        logger.error(f"Error analyzing idiomatic Rust: {str(e)}")
+        logger.error(f"Error analyzing Rust code: {str(e)}")
         raise
 
 @mcp.tool()
-async def rust_generate_idiomatic_project(
+async def generate_idiomatic_project(
     project_type: str,
     features: Optional[List[str]] = None,
     complexity: str = "intermediate"
 ) -> Dict[str, Any]:
     """
-    Gera projeto Rust idiomático seguindo mre/idiomatic-rust patterns.
+    Generates idiomatic Rust project following mre/idiomatic-rust patterns.
     
     Args:
-        project_type: Tipo do projeto (library, binary, web-api, cli)
-        features: Lista de features desejadas
-        complexity: Nível de complexidade (beginner, intermediate, advanced)
+        project_type: Project type (library, binary, web-api, cli)
+        features: List of desired features
+        complexity: Complexity level (beginner, intermediate, advanced)
         
     Returns:
-        Estrutura completa do projeto com código idiomático
+        Complete project structure with idiomatic code
     """
     try:
         generator = RustProjectGenerator()
         
-        # Converter string para enum
-        complexity_enum = RustComplexity.INTERMEDIATE
-        if complexity == "beginner":
-            complexity_enum = RustComplexity.BEGINNER
-        elif complexity == "advanced":
-            complexity_enum = RustComplexity.ADVANCED
-        elif complexity == "expert":
-            complexity_enum = RustComplexity.EXPERT
-        
         result = await generator.generate_idiomatic_project(
             project_type=project_type,
             features=features,
-            complexity=complexity_enum
+            complexity=complexity
         )
         
         logger.info(f"Generated idiomatic Rust project: {project_type}")
@@ -1912,19 +1517,19 @@ async def rust_generate_idiomatic_project(
         return result
         
     except Exception as e:
-        logger.error(f"Error generating idiomatic project: {str(e)}")
+        logger.error(f"Error generating Rust project: {str(e)}")
         raise
 
 @mcp.tool()
-async def rust_get_idiomatic_patterns(category: str = "all") -> Dict[str, Any]:
+async def get_idiomatic_patterns(category: str = "all") -> Dict[str, Any]:
     """
-    Retorna padrões idiomáticos Rust por categoria baseado em mre/idiomatic-rust.
+    Returns idiomatic Rust patterns by category based on mre/idiomatic-rust.
     
     Args:
-        category: Categoria específica ou "all" para todas
+        category: Specific category or "all" for all categories
         
     Returns:
-        Padrões idiomáticos com exemplos práticos
+        Idiomatic patterns with practical examples
     """
     try:
         knowledge_base = RustIdiomaticKnowledgeBase()
@@ -1933,27 +1538,28 @@ async def rust_get_idiomatic_patterns(category: str = "all") -> Dict[str, Any]:
             "immutability": knowledge_base.IMMUTABILITY_PATTERNS,
             "error_handling": knowledge_base.ERROR_HANDLING_PATTERNS,
             "type_conversions": knowledge_base.TYPE_CONVERSION_PATTERNS,
-            "enums_over_bools": knowledge_base.ENUMS_OVER_BOOLS_PATTERNS,
+            "ownership": knowledge_base.OWNERSHIP_PATTERNS,
+            "enum_patterns": knowledge_base.ENUM_PATTERNS,
             "async_patterns": knowledge_base.ASYNC_PATTERNS,
-            "traits_generics": knowledge_base.TRAITS_GENERICS_PATTERNS,
-            "iterators": knowledge_base.ITERATOR_PATTERNS,
+            "trait_patterns": knowledge_base.TRAIT_PATTERNS,
+            "iterator_patterns": knowledge_base.ITERATOR_PATTERNS,
             "api_design": knowledge_base.API_DESIGN_PATTERNS,
-            "performance": knowledge_base.PERFORMANCE_PATTERNS
+            "documentation": knowledge_base.DOCUMENTATION_PATTERNS,
         }
         
         if category == "all":
             return {
                 "source": "mre/idiomatic-rust + rust-lang/api-guidelines",
+                "version": knowledge_base.VERSION,
+                "edition": knowledge_base.EDITION,
                 "categories": categories,
-                "principles": [
-                    "Aim for immutability by default",
-                    "Return Result instead of panicking",
-                    "Use From/Into for convenient conversions", 
-                    "Prefer enums over boolean flags",
-                    "Leverage iterator methods for concise code",
-                    "Use generics and traits for flexible APIs",
-                    "Follow Rust naming conventions",
-                    "Aim for zero-cost abstractions"
+                "key_principles": [
+                    "Immutability by default",
+                    "Explicit error handling with Result/Option",
+                    "Zero-cost abstractions",
+                    "Memory safety without garbage collection",
+                    "Concurrent programming without data races",
+                    "Trait-based generics for flexibility"
                 ]
             }
         
@@ -1963,7 +1569,7 @@ async def rust_get_idiomatic_patterns(category: str = "all") -> Dict[str, Any]:
         return {
             "category": category,
             "patterns": categories[category],
-            "source": "mre/idiomatic-rust repository"
+            "source": "mre/idiomatic-rust patterns collection"
         }
         
     except Exception as e:
@@ -1971,149 +1577,161 @@ async def rust_get_idiomatic_patterns(category: str = "all") -> Dict[str, Any]:
         raise
 
 @mcp.tool()
-async def rust_refactor_to_idiomatic(
+async def refactor_to_idiomatic(
     code: str,
     focus_areas: Optional[List[str]] = None
 ) -> Dict[str, Any]:
     """
-    Refatora código Rust para seguir padrões idiomáticos.
+    Refactors Rust code to follow idiomatic patterns.
     
     Args:
-        code: Código Rust original
-        focus_areas: Áreas específicas para refatoração
+        code: Original Rust code
+        focus_areas: Specific areas to focus refactoring on
         
     Returns:
-        Código refatorado com explicações das mudanças
+        Refactored code with explanations of changes
     """
     try:
         if focus_areas is None:
-            focus_areas = ["immutability", "error_handling", "iterators", "api_design"]
+            focus_areas = ["error_handling", "immutability", "ownership", "type_safety"]
         
-        # Análise inicial
+        # Analyze original code
         analyzer = RustIdiomaticAnalyzer()
-        analysis = await analyzer.analyze_idiomatic_rust(code)
+        original_analysis = await analyzer.analyze_idiomatic_rust(code)
         
         refactored_code = code
         changes_made = []
         
-        # Refatorações baseadas no foco
-        if "immutability" in focus_areas:
-            # Remover mut desnecessários
-            if "let mut " in refactored_code:
-                # Simplificação: marcar para revisão
+        # Apply refactoring based on focus areas
+        if "error_handling" in focus_areas:
+            # Replace unwrap() with proper error handling
+            if ".unwrap()" in refactored_code:
+                refactored_code = refactored_code.replace(".unwrap()", "?")
+                changes_made.append("🛡️ Replaced .unwrap() calls with ? operator for better error propagation")
+            
+            # Add Result return types where missing
+            if "-> Result<" not in refactored_code and "?" in refactored_code:
                 refactored_code = re.sub(
-                    r'let mut (\w+) = ([^;]+);(\s*//.*)?',
-                    r'let \1 = \2; // TODO: Review if mut is needed\3',
+                    r'fn (\w+)\([^)]*\) {',
+                    r'fn \1([^)]*) -> Result<(), Box<dyn std::error::Error>> {',
                     refactored_code
                 )
-                changes_made.append("🔧 Marked unnecessary mut for review")
+                changes_made.append("📋 Added Result return type for functions using ? operator")
         
-        if "error_handling" in focus_areas:
-            # Substituir unwrap por expect ou ?
-            refactored_code = re.sub(
-                r'\.unwrap\(\)',
-                '.expect("TODO: Add meaningful error message")',
-                refactored_code
-            )
-            if ".expect(" in refactored_code:
-                changes_made.append("🛡️ Replaced .unwrap() with .expect() for better error messages")
+        if "immutability" in focus_areas:
+            # Suggest removing unnecessary mut
+            mut_suggestions = []
+            for match in re.finditer(r'let mut (\w+) = ([^;]+);(?!\s*\1\s*=)', refactored_code):
+                var_name = match.group(1)
+                if not re.search(f'{var_name}\\s*=', refactored_code[match.end():]):
+                    mut_suggestions.append(f"Consider removing 'mut' from '{var_name}' if it's not modified")
+            
+            if mut_suggestions:
+                changes_made.extend([f"🔒 {suggestion}" for suggestion in mut_suggestions])
         
-        if "iterators" in focus_areas:
-            # Sugerir uso de iterators (marcação)
-            if "for " in refactored_code and ".collect()" not in refactored_code:
-                refactored_code += "\n// TODO: Consider using iterator methods (.map, .filter, .collect) for functional style"
-                changes_made.append("⚡ Suggested iterator methods for functional style")
+        if "ownership" in focus_areas:
+            # Suggest taking references instead of owned values
+            if re.search(r'fn \w+\([^)]*\w+: String', refactored_code):
+                changes_made.append("📚 Consider taking &str instead of String for parameters that don't need ownership")
+            
+            if re.search(r'fn \w+\([^)]*\w+: Vec<', refactored_code):
+                changes_made.append("📚 Consider taking &[T] instead of Vec<T> for parameters that only read")
+        
+        # Analyze refactored code
+        refactored_analysis = await analyzer.analyze_idiomatic_rust(refactored_code)
         
         return {
             "original_code": code,
             "refactored_code": refactored_code,
             "changes_made": changes_made,
-            "original_idiomaticity_score": analysis.idiomaticity_score,
-            "idiomatic_principles_applied": [
+            "original_score": original_analysis.idiomaticity_score,
+            "refactored_score": refactored_analysis.idiomaticity_score,
+            "improvement": refactored_analysis.idiomaticity_score - original_analysis.idiomaticity_score,
+            "patterns_applied": [
+                "Ergonomic error handling with ?",
                 "Immutability by default",
-                "Ergonomic error handling", 
-                "Functional programming with iterators",
-                "API design guidelines compliance"
+                "Optimal ownership and borrowing",
+                "Type safety improvements"
             ],
-            "suggestions": analysis.suggestions
+            "suggestions": refactored_analysis.suggestions
         }
         
     except Exception as e:
-        logger.error(f"Error refactoring to idiomatic Rust: {str(e)}")
+        logger.error(f"Error refactoring Rust code: {str(e)}")
         raise
 
 @mcp.tool()
-async def rust_get_api_guidelines() -> Dict[str, Any]:
+async def get_rust_api_guidelines() -> Dict[str, Any]:
     """
-    Retorna diretrizes de API do Rust oficial (rust-lang/api-guidelines).
+    Returns official Rust API guidelines (rust-lang/api-guidelines).
     
     Returns:
-        Diretrizes organizadas por categoria
+        Guidelines organized by category
     """
     try:
         return {
+            "title": "Rust API Guidelines (rust-lang/api-guidelines)",
             "source": "https://rust-lang.github.io/api-guidelines/",
             "categories": {
                 "naming": {
-                    "description": "Convenções de nomenclatura",
-                    "guidelines": [
-                        "Use snake_case for functions and variables",
-                        "Use PascalCase for types and traits", 
-                        "Use SCREAMING_SNAKE_CASE for constants",
-                        "Use descriptive names that explain purpose"
-                    ]
+                    "C-CASE": "Follow Rust naming conventions",
+                    "C-WORD-ORDER": "Use consistent word order in names",
+                    "C-FEATURE": "Names use a consistent vocabulary",
                 },
                 "interoperability": {
-                    "description": "Interoperabilidade entre crates",
-                    "guidelines": [
-                        "Use standard traits when possible",
-                        "Implement Display and Debug for public types",
-                        "Use From/Into for type conversions",
-                        "Support serde when appropriate"
-                    ]
+                    "C-COMMON-TRAITS": "Types eagerly implement common traits",
+                    "C-CONV-TRAITS": "Conversions use the standard traits From, AsRef, AsMut",
+                    "C-COLLECT": "Collections implement FromIterator and Extend",
                 },
-                "type_safety": {
-                    "description": "Segurança de tipos",
-                    "guidelines": [
-                        "Use newtype pattern for type safety",
-                        "Make impossible states unrepresentable",
-                        "Use enums instead of boolean flags",
-                        "Leverage the type system for invariants"
-                    ]
-                },
-                "error_handling": {
-                    "description": "Tratamento de erros",
-                    "guidelines": [
-                        "Return Result for recoverable errors",
-                        "Use thiserror for error types",
-                        "Provide meaningful error messages",
-                        "Support error chaining with From"
-                    ]
+                "macros": {
+                    "C-EVOCATIVE": "Item names are evocative of their functionality", 
+                    "C-MACRO-VIS": "Public macros document visibility rules",
                 },
                 "documentation": {
-                    "description": "Documentação",
-                    "guidelines": [
-                        "Document all public APIs",
-                        "Include examples in documentation",
-                        "Use doc tests to verify examples",
-                        "Explain errors and edge cases"
-                    ]
+                    "C-EXAMPLE": "Examples use ?, not try!, not unwrap",
+                    "C-QUESTION-MARK": "Examples use ?, not try!, not unwrap",
+                    "C-FAILURE": "Function docs include error conditions in \"Errors\" section",
+                },
+                "predictability": {
+                    "C-SMART-PTR": "Smart pointers do not add inherent methods",
+                    "C-CONV-SPECIFIC": "Conversions live on the most specific type involved",
+                    "C-GENERIC": "Functions expose intermediate results to avoid duplicate work",
                 },
                 "flexibility": {
-                    "description": "Flexibilidade de API",
-                    "guidelines": [
-                        "Accept borrowed types in parameters",
-                        "Use generics for reusable code",
-                        "Provide both owned and borrowed variants",
-                        "Use trait objects for dynamic dispatch"
-                    ]
+                    "C-INTERMEDIATE": "Caller decides where to copy and place data",
+                    "C-CALLER-CONTROL": "Functions minimize assumptions about parameters by using generics",
+                    "C-ACCEPT": "Traits are object-safe if they may be useful as trait objects",
+                },
+                "type_safety": {
+                    "C-NEWTYPE": "Newtypes provide static distinctions",
+                    "C-CUSTOM-TYPE": "Arguments potentially involvingside effects use custom types",
+                    "C-BITFLAG": "Bitflags are represented by a newtype",
+                },
+                "dependability": {
+                    "C-VALIDATE": "Destructors never fail",
+                    "C-DTOR-FAIL": "Destructors that may block have alternatives",
+                    "C-DTOR-BLOCK": "Destructors never block",
+                },
+                "debuggability": {
+                    "C-DEBUG": "All public types implement Debug",
+                    "C-DEBUG-NONEMPTY": "Debug representations are never empty",
+                },
+                "future_proofing": {
+                    "C-SEALED": "Sealed traits protect against downstream implementations",
+                    "C-STRUCT-PRIVATE": "Structs have private fields",
+                    "C-NEWTYPE-HIDE": "Newtypes encapsulate implementation details",
+                },
+                "necessities": {
+                    "C-STABLE": "Public dependencies of a stable crate are stable",
+                    "C-PERMISSIVE": "Crate and its dependencies have a permissive license",
                 }
             },
             "key_principles": [
-                "APIs should be easy to use correctly",
-                "APIs should be hard to use incorrectly", 
-                "APIs should be consistent with std library",
-                "APIs should compose well with other APIs"
+                "Make the right thing easy and the wrong thing hard",
+                "APIs should be unsurprising",
+                "APIs should be flexible and composable",
+                "APIs should use types to prevent errors",
+                "Documentation should be comprehensive and include examples"
             ]
         }
         
@@ -2121,55 +1739,57 @@ async def rust_get_api_guidelines() -> Dict[str, Any]:
         logger.error(f"Error getting API guidelines: {str(e)}")
         raise
 
-# ================================  
-# RECURSOS ADICIONAIS
+# ================================
+# MCP RESOURCES
 # ================================
 
 @mcp.resource(uri="guide://rust-idiomatic-development")
-async def get_idiomatic_development_guide() -> str:
-    """Guia completo de desenvolvimento Rust idiomático"""
+async def get_rust_idiomatic_guide() -> str:
+    """Complete Rust idiomatic development guide"""
     return json.dumps({
-        "title": "Guia de Desenvolvimento Rust Idiomático 2025",
+        "title": "Rust Idiomatic Development Guide 2025",
         "based_on": [
-            "mre/idiomatic-rust repository",
-            "rust-lang/api-guidelines",
-            "blessed.rs recommendations"
+            "mre/idiomatic-rust patterns collection",
+            "rust-lang/api-guidelines official guidelines",
+            "blessed.rs community recommendations"
         ],
         "sections": {
-            "immutability": "Immutability by default - use mut apenas quando necessário",
-            "error_handling": "Result-based error handling com thiserror/anyhow",
-            "type_conversions": "From/Into traits para conversões ergonômicas",
-            "enums_over_bools": "Enums expressivos ao invés de boolean flags",
-            "async_patterns": "Async/await idiomático com Tokio",
-            "traits_generics": "Traits e generics para APIs flexíveis",
-            "iterators": "Iterator methods para estilo funcional",
-            "api_design": "API design seguindo rust-lang guidelines",
-            "performance": "Zero-cost abstractions e otimizações"
+            "immutability": "Immutability by default and smart mutability",
+            "error_handling": "Ergonomic error handling with Result and Option",
+            "type_conversions": "From/Into traits and TryFrom patterns",
+            "ownership": "Ownership, borrowing, and zero-copy techniques", 
+            "enum_patterns": "Expressive enums and pattern matching",
+            "async_patterns": "Modern async/await and concurrency patterns",
+            "trait_patterns": "Traits, generics, and associated types",
+            "iterator_patterns": "Functional programming with iterators",
+            "api_design": "API design following rust-lang guidelines",
+            "documentation": "Comprehensive documentation with examples"
         },
-        "key_resources": {
-            "idiomatic_rust": "https://github.com/mre/idiomatic-rust",
-            "api_guidelines": "https://rust-lang.github.io/api-guidelines/",
-            "blessed_rs": "https://blessed.rs/",
-            "cheats_rs": "https://cheats.rs/",
-            "rust_by_example": "https://doc.rust-lang.org/rust-by-example/"
+        "key_crates": {
+            "thiserror": "Ergonomic error handling",
+            "serde": "Serialization and deserialization",
+            "tokio": "Async runtime and utilities",
+            "rayon": "Data parallelism",
+            "clap": "Command line argument parsing"
         },
         "features": {
-            "code_analysis": "Análise de idiomaticidade com scoring detalhado",
-            "project_generation": "Geração de projetos seguindo best practices",
-            "refactoring": "Refatoração automática para padrões idiomáticos", 
-            "pattern_library": "Biblioteca completa de padrões idiomáticos",
-            "api_compliance": "Verificação de conformidade com API guidelines"
+            "code_analysis": "Deep analysis of Rust code for idiomatic patterns",
+            "project_generation": "Generate complete idiomatic projects",
+            "pattern_library": "Comprehensive idiomatic patterns collection",
+            "refactoring": "Automatic refactoring to idiomatic Rust",
+            "api_compliance": "rust-lang/api-guidelines compliance checking"
         }
     }, indent=2)
 
 # ================================
-# INICIALIZAÇÃO DO SERVIDOR  
+# SERVER INITIALIZATION
 # ================================
 
 if __name__ == "__main__":
-    logger.info("Starting Rust Idiomatic MCP Server")
-    logger.info("Based on: mre/idiomatic-rust + rust-lang/api-guidelines")
-    logger.info("Features: Idiomatic Analysis | Project Generation | Refactoring | API Guidelines")
+    logger.info("🦀 Rust Idiomatic Patterns MCP Server starting...")
+    logger.info("📚 Specialized in idiomatic Rust development following mre/idiomatic-rust")
+    logger.info("✅ Based on: rust-lang/api-guidelines + mre/idiomatic-rust + blessed.rs")
+    logger.info("🔧 Features: Code Analysis | Project Generation | Pattern Library | Refactoring")
     
-    # Executar o servidor MCP
+    # Run the MCP server
     mcp.run()

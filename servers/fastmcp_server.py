@@ -195,12 +195,12 @@ BEST_PRACTICES = {
 
 # Keywords for prompt analysis
 KEYWORDS = {
-    "tools": ["@mcp.tool", "tool", "ferramenta", "função", "ação", "comando"],
-    "resources": ["@mcp.resource", "resource", "recurso", "dados", "informação"],
-    "transport": ["stdio", "http", "sse", "streamable", "transporte", "protocolo"],
-    "security": ["auth", "oauth", "security", "segurança", "autenticação", "validação"],
-    "scalability": ["redis", "scale", "escala", "distribuído", "performance"],
-    "business": ["objective", "objetivo", "propósito", "negócio", "problema", "usuário"]
+    "tools": ["@mcp.tool", "tool", "function", "action", "command"],
+    "resources": ["@mcp.resource", "resource", "data", "information"],
+    "transport": ["stdio", "http", "sse", "streamable", "transport", "protocol"],
+    "security": ["auth", "oauth", "security", "authentication", "validation"],
+    "scalability": ["redis", "scale", "distributed", "performance"],
+    "business": ["objective", "purpose", "business", "problem", "user"]
 }
 
 
@@ -239,7 +239,7 @@ async def fastmcp_analyze_mcp_prompt(
         weaknesses.append("Prompt is too brief and lacks detail")
         recommendations.append("Expand prompt with more specific requirements")
 
-    if any(word in prompt_lower for word in ["objective", "objetivo", "purpose", "propósito"]):
+    if any(word in prompt_lower for word in ["objective", "purpose"]):
         score += 10
         strengths.append("Clear objective or purpose is defined")
     else:
@@ -301,7 +301,7 @@ async def fastmcp_analyze_mcp_prompt(
         recommendations.append(
             "Consider scalability requirements for production use")
 
-    if any(word in prompt_lower for word in ["async", "assíncrono", "await"]):
+    if any(word in prompt_lower for word in ["async", "asynchronous", "await"]):
         score += 5
         strengths.append("Mentions asynchronous processing")
 
@@ -317,7 +317,7 @@ async def fastmcp_analyze_mcp_prompt(
         recommendations.append(
             "Explain the business problem this server will solve")
 
-    if any(word in prompt_lower for word in ["example", "exemplo", "usage", "uso"]):
+    if any(word in prompt_lower for word in ["example", "usage"]):
         score += 5
         strengths.append("Includes usage examples")
     else:
@@ -361,8 +361,7 @@ async def fastmcp_suggest_prompt_improvements(
     improved_sections = []
 
     # Context and purpose section
-    if ("criar" in original_prompt.lower() and "servidor" in original_prompt.lower()) or \
-       ("create" in original_prompt.lower() and "server" in original_prompt.lower()):
+    if ("create" in original_prompt.lower() and "server" in original_prompt.lower()):
         purpose_section = """## Context and Objective
 I need to create an MCP server with FastMCP in Python that [DESCRIBE SPECIFIC PURPOSE].
 
@@ -466,47 +465,47 @@ async def fastmcp_validate_requirements(
         "suggestions": []
     }
 
-    # Checklist de requisitos essenciais
+    # Essential requirements checklist
     essential_checklist = {
-        "purpose_defined": "propósito" in requirements.lower() or "objetivo" in requirements.lower(),
-        "tools_specified": "ferramenta" in requirements.lower() or "tool" in requirements.lower(),
-        "data_types_defined": "tipo" in requirements.lower() or "type" in requirements.lower(),
-        "error_handling": "erro" in requirements.lower() or "exceção" in requirements.lower(),
-        "examples_included": "exemplo" in requirements.lower(),
-        "async_considered": "async" in requirements.lower() or "assíncrono" in requirements.lower()
+        "purpose_defined": "purpose" in requirements.lower() or "objective" in requirements.lower(),
+        "tools_specified": "tool" in requirements.lower() or "function" in requirements.lower(),
+        "data_types_defined": "type" in requirements.lower() or "data type" in requirements.lower(),
+        "error_handling": "error" in requirements.lower() or "exception" in requirements.lower(),
+        "examples_included": "example" in requirements.lower(),
+        "async_considered": "async" in requirements.lower() or "asynchronous" in requirements.lower()
     }
 
-    # Calcular completude
+    # Calculate completeness
     checked_items = sum(essential_checklist.values())
     validation_results["completeness_score"] = (
         checked_items / len(essential_checklist)) * 100
 
-    # Identificar problemas
+    # Identify issues
     for requirement, is_present in essential_checklist.items():
         if not is_present:
             validation_results["missing_requirements"].append(requirement)
             validation_results["issues"].append(
-                f"Requisito ausente: {requirement}")
+                f"Missing requirement: {requirement}")
 
-    # Validar se há requisitos suficientes
+    # Validate if there are sufficient requirements
     if validation_results["completeness_score"] < 60:
         validation_results["is_valid"] = False
         validation_results["suggestions"].append(
-            "Adicione mais detalhes aos requisitos. Use o template sugerido pela ferramenta de melhorias."
+            "Add more details to requirements. Use the template suggested by the improvement tool."
         )
 
-    # Verificar requisitos de produção se mencionados
-    if "produção" in requirements.lower() or "production" in requirements.lower():
+    # Check production requirements if mentioned
+    if "production" in requirements.lower():
         production_checks = {
-            "security": any(word in requirements.lower() for word in ["segurança", "autenticação"]),
-            "scalability": any(word in requirements.lower() for word in ["escala", "redis", "estado"]),
-            "monitoring": any(word in requirements.lower() for word in ["log", "métrica", "observabilidade"])
+            "security": any(word in requirements.lower() for word in ["security", "authentication"]),
+            "scalability": any(word in requirements.lower() for word in ["scale", "redis", "state"]),
+            "monitoring": any(word in requirements.lower() for word in ["log", "metrics", "observability"])
         }
 
         for check, is_present in production_checks.items():
             if not is_present:
                 validation_results["suggestions"].append(
-                    f"Para produção, considere adicionar requisitos de {check}"
+                    f"For production, consider adding {check} requirements"
                 )
 
     if ctx:

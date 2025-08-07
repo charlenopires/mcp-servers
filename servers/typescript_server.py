@@ -609,9 +609,6 @@ analysis_engine = TypeScriptAnalysisEngine()
 # MCP TOOLS - MAIN API ENDPOINTS
 # ================================
 
-# Initialize the analyzer engine
-_analyzer_engine = TypeScriptAnalysisEngine()
-
 @mcp.tool()
 async def typescript_analyze_code_advanced(
     code: str,
@@ -652,7 +649,7 @@ async def typescript_analyze_code_advanced(
                 except ValueError:
                     logger.warning(f"Unknown focus area: {area}")
         
-        result = await _analyzer_engine.analyze_code(code, focus_enums or None)
+        result = await analysis_engine.analyze_code(code, focus_enums or None)
         
         logger.info(f"Analysis completed with score: {result.overall_score}")
         
@@ -780,7 +777,7 @@ async def typescript_generate_clean_architecture(
         Dict with complete project structure, example code, and setup instructions
     """
     try:
-        return await _analyzer_engine.generate_clean_architecture_project(
+        return await analysis_engine.generate_clean_architecture_project(
             project_name, domain_context, include_testing, include_docker
         )
     except Exception as e:
@@ -823,7 +820,7 @@ async def typescript_refactor_to_modern(
                 except ValueError:
                     continue
         
-        return await _analyzer_engine.refactor_to_modern_patterns(
+        return await analysis_engine.refactor_to_modern_patterns(
             legacy_code, target_version, focus_enums or None
         )
         

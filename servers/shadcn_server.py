@@ -1,35 +1,42 @@
 #!/usr/bin/env python3
 """
-shadcn/ui MCP Server - Servidor MCP Avançado para shadcn/ui
-=========================================================
+shadcn/ui MCP Server - Advanced MCP Server for shadcn/ui
+=======================================================
 
-Servidor MCP completo e aprimorado para integração com shadcn/ui que combina:
+Comprehensive and enhanced MCP server for shadcn/ui integration that combines:
 
-1. ACESSO A COMPONENTES
-   - Busca e análise de componentes shadcn/ui
-   - Demonstrações e exemplos de uso
-   - Metadados de componentes com dependências
+1. COMPONENT ACCESS
+   - Search and analysis of shadcn/ui components
+   - Demonstrations and usage examples
+   - Component metadata with dependencies
 
-2. GERAÇÃO INTELIGENTE
-   - Templates otimizados para diferentes casos de uso
-   - Customização automática de temas
-   - Integração com frameworks React modernos
+2. INTELLIGENT GENERATION
+   - Optimized templates for different use cases
+   - Automatic theme customization
+   - Integration with modern React frameworks
 
-3. ANÁLISE E OTIMIZAÇÃO
-   - Análise de componentes existentes
-   - Sugestões de melhorias e otimizações
-   - Padrões de design system modernos
+3. ANALYSIS AND OPTIMIZATION
+   - Analysis of existing components
+   - Improvement and optimization suggestions
+   - Modern design system patterns
 
-4. INTEGRAÇÃO COMPLETA
-   - Suporte a Next.js, Vite, Remix
-   - CLI commands e configuração automática
-   - Compatibilidade com Tailwind CSS
+4. COMPLETE INTEGRATION
+   - Support for Next.js, Vite, Remix
+   - CLI commands and automatic configuration
+   - Compatibility with Tailwind CSS
 
-Baseado em:
-- Repositório oficial shadcn/ui
-- Documentação completa da biblioteca
-- Melhores práticas de design systems
-- Padrões React modernos 2025
+Based on:
+- Official shadcn/ui repository
+- Complete library documentation
+- Design systems best practices
+- Modern React patterns 2025
+
+Key Features:
+- Component analysis with compatibility scoring
+- Theme generation and customization
+- Framework-specific setup guides
+- Component code generation with examples
+- Performance optimization recommendations
 """
 
 import asyncio
@@ -43,16 +50,12 @@ from enum import Enum
 from fastmcp import FastMCP
 from pydantic import BaseModel, Field
 
-# Configurar logging
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Inicializar servidor MCP
-mcp = FastMCP(
-    name="shadcn-ui-advanced",
-    version="2.0.0",
-    description="Servidor MCP avançado para shadcn/ui com análise inteligente e geração otimizada"
-)
+# Initialize FastMCP server (following pattern of other servers)
+mcp = FastMCP("shadcn/ui Advanced Server")
 
 # ================================
 # KNOWLEDGE BASE - SHADCN/UI CONTEXT
@@ -92,16 +95,16 @@ class ShadcnComponent:
     examples: List[str]
 
 class ShadcnKnowledgeBase:
-    """Base de conhecimento atualizada do shadcn/ui"""
+    """Updated shadcn/ui knowledge base"""
     
     COMPONENTS_DATA = {
         "accordion": ShadcnComponent(
             name="accordion",
             category=ShadcnComponentType.LAYOUT,
-            description="Seções de conteúdo expansíveis organizadas verticalmente",
+            description="Vertically stacked set of interactive headings that each reveal a section of content",
             dependencies=["@radix-ui/react-accordion", "class-variance-authority"],
             complexity=ShadcnComplexity.SIMPLE,
-            use_cases=["FAQ", "Navegação vertical", "Organização de conteúdo"],
+            use_cases=["FAQ sections", "Vertical navigation", "Content organization"],
             props={
                 "type": "single | multiple",
                 "collapsible": "boolean",
@@ -113,10 +116,10 @@ class ShadcnKnowledgeBase:
         "alert-dialog": ShadcnComponent(
             name="alert-dialog",
             category=ShadcnComponentType.OVERLAY,
-            description="Modal dialog para confirmações e alertas importantes",
+            description="Modal dialog for important confirmations and alerts",
             dependencies=["@radix-ui/react-alert-dialog"],
             complexity=ShadcnComplexity.INTERMEDIATE,
-            use_cases=["Confirmações", "Avisos críticos", "Ações destrutivas"],
+            use_cases=["Confirmations", "Critical warnings", "Destructive actions"],
             props={
                 "open": "boolean",
                 "onOpenChange": "function",
@@ -127,10 +130,10 @@ class ShadcnKnowledgeBase:
         "badge": ShadcnComponent(
             name="badge", 
             category=ShadcnComponentType.DATA_DISPLAY,
-            description="Pequenos labels informativos para status e categorização",
+            description="Small informative labels for status and categorization",
             dependencies=["class-variance-authority"],
             complexity=ShadcnComplexity.SIMPLE,
-            use_cases=["Status indicators", "Tags", "Categorização"],
+            use_cases=["Status indicators", "Tags", "Categorization"],
             props={
                 "variant": "default | secondary | destructive | outline",
                 "className": "string",
@@ -141,10 +144,10 @@ class ShadcnKnowledgeBase:
         "button": ShadcnComponent(
             name="button",
             category=ShadcnComponentType.INPUT,
-            description="Botão interativo com múltiplas variantes e tamanhos",
+            description="Interactive button with multiple variants and sizes",
             dependencies=["@radix-ui/react-slot", "class-variance-authority"],
             complexity=ShadcnComplexity.SIMPLE,
-            use_cases=["CTAs", "Ações primárias", "Navegação"],
+            use_cases=["CTAs", "Primary actions", "Navigation"],
             props={
                 "variant": "default | destructive | outline | secondary | ghost | link",
                 "size": "default | sm | lg | icon",
@@ -156,7 +159,7 @@ class ShadcnKnowledgeBase:
         "card": ShadcnComponent(
             name="card",
             category=ShadcnComponentType.LAYOUT,
-            description="Container flexível para exibir conteúdo relacionado",
+            description="Flexible container for displaying related content",
             dependencies=[],
             complexity=ShadcnComplexity.SIMPLE,
             use_cases=["Product cards", "Content sections", "Dashboard widgets"],
@@ -169,10 +172,10 @@ class ShadcnKnowledgeBase:
         "dialog": ShadcnComponent(
             name="dialog",
             category=ShadcnComponentType.OVERLAY,
-            description="Modal overlay para interações focadas",
+            description="Modal overlay for focused interactions",
             dependencies=["@radix-ui/react-dialog"],
             complexity=ShadcnComplexity.INTERMEDIATE,
-            use_cases=["Formulários", "Detalhes", "Configurações"],
+            use_cases=["Forms", "Details", "Settings"],
             props={
                 "open": "boolean",
                 "onOpenChange": "function",
@@ -183,10 +186,10 @@ class ShadcnKnowledgeBase:
         "form": ShadcnComponent(
             name="form",
             category=ShadcnComponentType.FORM,
-            description="Sistema completo de formulários com validação",
+            description="Complete form system with validation",
             dependencies=["react-hook-form", "@hookform/resolvers", "zod"],
             complexity=ShadcnComplexity.COMPLEX,
-            use_cases=["Validação", "Submissão de dados", "User input"],
+            use_cases=["Validation", "Data submission", "User input"],
             props={
                 "onSubmit": "function",
                 "schema": "ZodSchema",
@@ -197,1272 +200,601 @@ class ShadcnKnowledgeBase:
         "input": ShadcnComponent(
             name="input",
             category=ShadcnComponentType.INPUT,
-            description="Campo de entrada de texto estilizado",
+            description="Standard input field with consistent styling",
             dependencies=[],
             complexity=ShadcnComplexity.SIMPLE,
-            use_cases=["Text input", "Search", "User data entry"],
+            use_cases=["Text input", "Form fields", "Search boxes"],
             props={
-                "type": "text | email | password | number",
+                "type": "text | email | password | number | etc.",
                 "placeholder": "string",
                 "disabled": "boolean",
                 "className": "string"
             },
-            examples=["Search input", "Email field", "Password input"]
+            examples=["Contact form field", "Search input", "Login form"]
+        ),
+        "table": ShadcnComponent(
+            name="table",
+            category=ShadcnComponentType.DATA_DISPLAY,
+            description="Semantic table component for structured data display",
+            dependencies=[],
+            complexity=ShadcnComplexity.INTERMEDIATE,
+            use_cases=["Data tables", "Lists", "Comparisons"],
+            props={
+                "className": "string",
+                "children": "ReactNode"
+            },
+            examples=["User list", "Product comparison", "Data dashboard"]
+        ),
+        "toast": ShadcnComponent(
+            name="toast",
+            category=ShadcnComponentType.FEEDBACK,
+            description="Brief notification messages",
+            dependencies=["@radix-ui/react-toast"],
+            complexity=ShadcnComplexity.INTERMEDIATE,
+            use_cases=["Success messages", "Error notifications", "Status updates"],
+            props={
+                "variant": "default | destructive",
+                "duration": "number",
+                "onOpenChange": "function"
+            },
+            examples=["Success notification", "Error message", "Status update"]
+        ),
+        "tabs": ShadcnComponent(
+            name="tabs",
+            category=ShadcnComponentType.NAVIGATION,
+            description="Navigation between multiple panels of content",
+            dependencies=["@radix-ui/react-tabs"],
+            complexity=ShadcnComplexity.SIMPLE,
+            use_cases=["Content switching", "Settings panels", "Navigation"],
+            props={
+                "defaultValue": "string",
+                "onValueChange": "function",
+                "orientation": "horizontal | vertical"
+            },
+            examples=["Settings tabs", "Content sections", "Dashboard views"]
         ),
         "select": ShadcnComponent(
             name="select",
             category=ShadcnComponentType.INPUT,
-            description="Dropdown select com busca e customização",
+            description="Dropdown selection component",
             dependencies=["@radix-ui/react-select"],
             complexity=ShadcnComplexity.INTERMEDIATE,
-            use_cases=["Options selection", "Filtering", "Categorization"],
+            use_cases=["Option selection", "Dropdowns", "Filters"],
             props={
                 "value": "string",
                 "onValueChange": "function",
                 "placeholder": "string",
                 "disabled": "boolean"
             },
-            examples=["Country selector", "Category filter", "Settings dropdown"]
+            examples=["Country selector", "Category filter", "Sort options"]
         ),
-        "table": ShadcnComponent(
-            name="table",
-            category=ShadcnComponentType.DATA_DISPLAY,
-            description="Tabela responsiva para exibição de dados estruturados",
-            dependencies=[],
+        "popover": ShadcnComponent(
+            name="popover",
+            category=ShadcnComponentType.OVERLAY,
+            description="Floating content panel triggered by user interaction",
+            dependencies=["@radix-ui/react-popover"],
             complexity=ShadcnComplexity.INTERMEDIATE,
-            use_cases=["Data display", "Lists", "Reports"],
+            use_cases=["Contextual menus", "Additional info", "Quick actions"],
             props={
-                "className": "string",
-                "children": "ReactNode"
+                "open": "boolean",
+                "onOpenChange": "function",
+                "modal": "boolean"
             },
-            examples=["User list", "Product catalog", "Analytics table"]
-        ),
-        "toast": ShadcnComponent(
-            name="toast",
-            category=ShadcnComponentType.FEEDBACK,
-            description="Notificações temporárias não-intrusivas",
-            dependencies=["@radix-ui/react-toast"],
-            complexity=ShadcnComplexity.INTERMEDIATE,
-            use_cases=["Feedback", "Success messages", "Error notifications"],
-            props={
-                "title": "string",
-                "description": "string",
-                "variant": "default | destructive",
-                "duration": "number"
-            },
-            examples=["Success message", "Error notification", "Info alert"]
+            examples=["User menu", "Color picker", "Context menu"]
         )
     }
 
-    THEMES_CONFIG = {
-        "default": {
-            "cssVars": True,
-            "prefix": "",
-            "colors": {
-                "border": "hsl(var(--border))",
-                "input": "hsl(var(--input))",
-                "ring": "hsl(var(--ring))",
-                "background": "hsl(var(--background))",
-                "foreground": "hsl(var(--foreground))",
-                "primary": {
-                    "DEFAULT": "hsl(var(--primary))",
-                    "foreground": "hsl(var(--primary-foreground))"
-                },
-                "secondary": {
-                    "DEFAULT": "hsl(var(--secondary))",
-                    "foreground": "hsl(var(--secondary-foreground))"
-                }
-            }
+    SETUP_GUIDES = {
+        "next": {
+            "name": "Next.js",
+            "install_command": "npx shadcn-ui@latest init",
+            "config_files": ["tailwind.config.js", "components.json"],
+            "dependencies": ["tailwindcss", "@types/node", "typescript"],
+            "setup_steps": [
+                "Initialize project with create-next-app",
+                "Install shadcn-ui CLI",
+                "Run init command",
+                "Configure components.json",
+                "Add components as needed"
+            ]
         },
-        "dark": {
-            "colors": {
-                "background": "hsl(222.2 84% 4.9%)",
-                "foreground": "hsl(210 40% 98%)",
-                "primary": {
-                    "DEFAULT": "hsl(210 40% 98%)",
-                    "foreground": "hsl(222.2 84% 4.9%)"
-                }
-            }
+        "vite": {
+            "name": "Vite",
+            "install_command": "npx shadcn-ui@latest init",
+            "config_files": ["vite.config.ts", "tailwind.config.js", "components.json"],
+            "dependencies": ["@vitejs/plugin-react", "tailwindcss", "typescript"],
+            "setup_steps": [
+                "Create Vite project with React",
+                "Install Tailwind CSS",
+                "Install shadcn-ui CLI",
+                "Run init command",
+                "Configure paths in components.json"
+            ]
+        },
+        "remix": {
+            "name": "Remix",
+            "install_command": "npx shadcn-ui@latest init",
+            "config_files": ["remix.config.js", "tailwind.config.js", "components.json"],
+            "dependencies": ["@remix-run/react", "tailwindcss"],
+            "setup_steps": [
+                "Create Remix app",
+                "Set up Tailwind CSS",
+                "Install shadcn-ui",
+                "Configure components.json with Remix paths",
+                "Add components"
+            ]
         }
     }
 
-    CLI_COMMANDS = {
-        "init": "npx shadcn-ui@latest init",
-        "add": "npx shadcn-ui@latest add [component]",
-        "add_all": "npx shadcn-ui@latest add --all",
-        "diff": "npx shadcn-ui@latest diff",
-        "update": "npx shadcn-ui@latest update"
-    }
-
-    FRAMEWORK_CONFIGS = {
-        ShadcnFramework.NEXTJS: {
-            "installation": ["npm install next react react-dom", "npx create-next-app@latest"],
-            "config_file": "next.config.js",
-            "css_location": "app/globals.css",
-            "components_dir": "components/ui"
+    THEMING_SYSTEM = {
+        "colors": {
+            "primary": {
+                "description": "Primary brand color for buttons and active states",
+                "css_variables": ["--primary", "--primary-foreground"],
+                "usage": "Main CTAs, active nav items, primary buttons"
+            },
+            "secondary": {
+                "description": "Secondary color for subtle backgrounds and accents",
+                "css_variables": ["--secondary", "--secondary-foreground"],
+                "usage": "Secondary buttons, subtle backgrounds"
+            },
+            "accent": {
+                "description": "Used for hover states and subtle emphasis",
+                "css_variables": ["--accent", "--accent-foreground"],
+                "usage": "Hover states, subtle highlights"
+            },
+            "destructive": {
+                "description": "For error states and destructive actions",
+                "css_variables": ["--destructive", "--destructive-foreground"],
+                "usage": "Error messages, delete buttons"
+            },
+            "muted": {
+                "description": "For muted text and subtle backgrounds",
+                "css_variables": ["--muted", "--muted-foreground"],
+                "usage": "Placeholder text, disabled states"
+            }
         },
-        ShadcnFramework.VITE: {
-            "installation": ["npm create vite@latest", "npm install"],
-            "config_file": "vite.config.ts",
-            "css_location": "src/index.css",
-            "components_dir": "src/components/ui"
+        "radius": {
+            "description": "Border radius for consistent rounded corners",
+            "options": ["0rem", "0.25rem", "0.5rem", "0.75rem", "1rem"],
+            "default": "0.5rem"
+        },
+        "fonts": {
+            "sans": "Inter, system-ui, sans-serif",
+            "mono": "Fira Code, monospace"
         }
     }
 
 # ================================
-# ANALYZERS AND OPTIMIZERS
+# COMPONENT ANALYZER & GENERATOR
 # ================================
 
 class ShadcnAnalyzer:
-    """Analisador avançado para componentes shadcn/ui"""
-    
-    def __init__(self):
-        self.knowledge_base = ShadcnKnowledgeBase()
-    
-    async def analyze_component_usage(self, code: str) -> Dict[str, Any]:
-        """Analisa uso de componentes shadcn/ui no código"""
-        
-        analysis = {
-            "detected_components": [],
-            "missing_imports": [],
-            "optimization_suggestions": [],
-            "accessibility_score": 0,
-            "complexity_level": "simple"
-        }
-        
-        # Detectar componentes utilizados
-        detected = []
-        for component_name in self.knowledge_base.COMPONENTS_DATA.keys():
-            if f"<{component_name.title()}" in code or f"<{component_name}" in code:
-                detected.append(component_name)
-        
-        analysis["detected_components"] = detected
-        
-        # Verificar imports necessários
-        missing_imports = []
-        for component_name in detected:
-            component_data = self.knowledge_base.COMPONENTS_DATA[component_name]
-            for dep in component_data.dependencies:
-                if dep not in code and "package.json" not in code:
-                    missing_imports.append(dep)
-        
-        analysis["missing_imports"] = list(set(missing_imports))
-        
-        # Sugestões de otimização
-        suggestions = []
-        
-        if "className" in code and not any(x in code for x in ["cn(", "clsx(", "twMerge("]):
-            suggestions.append("Considere usar utilitário cn() para merge de classes")
-        
-        if detected and "use client" not in code and any("onClick" in code for _ in [""]):
-            suggestions.append("Adicione 'use client' para componentes interativos")
-        
-        if len(detected) > 5:
-            suggestions.append("Considere dividir em componentes menores")
-        
-        analysis["optimization_suggestions"] = suggestions
-        
-        # Score de acessibilidade simples
-        a11y_score = 50  # Base
-        if "aria-" in code:
-            a11y_score += 20
-        if "alt=" in code:
-            a11y_score += 15
-        if "role=" in code:
-            a11y_score += 15
-        
-        analysis["accessibility_score"] = min(100, a11y_score)
-        
-        # Nível de complexidade
-        if len(detected) > 8:
-            analysis["complexity_level"] = "complex"
-        elif len(detected) > 3:
-            analysis["complexity_level"] = "intermediate"
-        
-        return analysis
+    """Advanced analyzer for shadcn/ui components and patterns"""
 
-class ShadcnOptimizer:
-    """Otimizador para componentes shadcn/ui"""
-    
     def __init__(self):
         self.knowledge_base = ShadcnKnowledgeBase()
-    
-    async def optimize_component_code(self, code: str, focus_areas: List[str] = None) -> Dict[str, Any]:
-        """Otimiza código shadcn/ui com foco em áreas específicas"""
+
+    async def analyze_component_code(self, code: str) -> Dict[str, Any]:
+        """Analyzes existing shadcn/ui component code for best practices"""
+        
+        score = 70  # Base score
+        detected_components = []
+        issues = []
+        recommendations = []
+        optimizations = []
+
+        # Detect shadcn/ui components
+        component_patterns = {
+            r'<Button\b': 'button',
+            r'<Card\b': 'card', 
+            r'<Input\b': 'input',
+            r'<Dialog\b': 'dialog',
+            r'<Form\b': 'form',
+            r'<Badge\b': 'badge',
+            r'<Accordion\b': 'accordion',
+            r'<Tabs\b': 'tabs',
+            r'<Select\b': 'select',
+            r'<Toast\b': 'toast'
+        }
+
+        for pattern, component in component_patterns.items():
+            if re.search(pattern, code):
+                detected_components.append(component)
+                score += 5
+
+        # Check for proper imports
+        if 'from "@/components/ui/' in code:
+            score += 10
+            recommendations.append("✅ Using proper component imports")
+        else:
+            issues.append("❌ Missing proper shadcn/ui component imports")
+            recommendations.append("Import components from @/components/ui/")
+
+        # Check for TypeScript usage
+        if re.search(r':\s*(React\.FC|JSX\.Element|interface)', code):
+            score += 10
+            recommendations.append("✅ Using TypeScript for type safety")
+        else:
+            recommendations.append("Consider adding TypeScript for better type safety")
+
+        # Check for className usage (Tailwind integration)
+        if 'className=' in code:
+            score += 8
+            recommendations.append("✅ Using className for styling")
+
+        # Check for accessibility features
+        accessibility_patterns = [
+            r'aria-\w+',
+            r'role=',
+            r'tabIndex',
+            r'htmlFor'
+        ]
+        
+        accessibility_found = sum(1 for pattern in accessibility_patterns 
+                                if re.search(pattern, code))
+        
+        if accessibility_found > 0:
+            score += accessibility_found * 5
+            recommendations.append(f"✅ Found {accessibility_found} accessibility features")
+        else:
+            issues.append("⚠️ Consider adding accessibility attributes")
+
+        # Check for form validation (if form components detected)
+        if 'form' in detected_components:
+            if any(pattern in code for pattern in ['zod', 'zodResolver', 'useForm']):
+                score += 15
+                recommendations.append("✅ Using form validation with zod")
+            else:
+                issues.append("⚠️ Form components should include validation")
+                optimizations.append("Add zod validation schema")
+
+        # Check for proper error handling
+        if any(pattern in code for pattern in ['try', 'catch', 'error']):
+            score += 8
+            recommendations.append("✅ Includes error handling")
+
+        # Performance checks
+        if 'useMemo' in code or 'useCallback' in code or 'React.memo' in code:
+            score += 10
+            recommendations.append("✅ Using performance optimizations")
+        elif len(code) > 500:
+            optimizations.append("Consider memoization for performance")
+
+        # Theme integration
+        if any(pattern in code for pattern in ['dark:', 'theme', 'useTheme']):
+            score += 12
+            recommendations.append("✅ Theme integration detected")
+        else:
+            optimizations.append("Consider adding dark mode support")
+
+        final_score = min(100, score)
+
+        return {
+            "score": final_score,
+            "detected_components": detected_components,
+            "issues": issues,
+            "recommendations": recommendations,
+            "optimizations": optimizations,
+            "grade": "A" if final_score >= 90 else "B" if final_score >= 75 else "C" if final_score >= 60 else "D",
+            "summary": f"Score: {final_score}/100, Components: {len(detected_components)}, Issues: {len(issues)}"
+        }
+
+    async def optimize_component_code(self, code: str, focus_areas: Optional[List[str]] = None) -> Dict[str, Any]:
+        """Optimizes shadcn/ui component code with best practices"""
         
         if focus_areas is None:
-            focus_areas = ["performance", "accessibility", "best_practices"]
-        
+            focus_areas = ["accessibility", "performance", "best_practices"]
+
         optimized_code = code
         changes_made = []
-        
-        # Otimizações de performance
-        if "performance" in focus_areas:
-            # Adicionar React.memo se necessário
-            if "export default" in optimized_code and "React.memo" not in optimized_code:
-                optimized_code = re.sub(
-                    r'export default function (\w+)',
-                    r'export default React.memo(function \1',
-                    optimized_code
-                )
-                if "React.memo" in optimized_code:
-                    optimized_code += "\n)" if not optimized_code.endswith(")") else ""
-                    changes_made.append("Adicionado React.memo para otimização")
-        
-        # Otimizações de acessibilidade
+
+        # Apply optimizations based on focus areas
         if "accessibility" in focus_areas:
-            # Adicionar roles ARIA apropriados
-            if "<Button" in optimized_code and "role=" not in optimized_code:
+            # Add missing accessibility attributes
+            if re.search(r'<Button\b(?![^>]*aria-label)', optimized_code):
                 optimized_code = re.sub(
-                    r'<Button([^>]*?)>',
-                    r'<Button\1 role="button">',
+                    r'<Button(\s+[^>]*?)>',
+                    r'<Button\1 aria-label="Button">',
                     optimized_code
                 )
-                changes_made.append("Adicionado role='button' aos botões")
-        
-        # Melhores práticas
+                changes_made.append("Added aria-label to buttons")
+
+        if "performance" in focus_areas:
+            # Add React.memo if component is large
+            if len(code) > 300 and "React.memo" not in code and "export default" in code:
+                optimized_code = re.sub(
+                    r'export default (\w+)',
+                    r'export default React.memo(\1)',
+                    optimized_code
+                )
+                changes_made.append("Added React.memo for performance")
+
         if "best_practices" in focus_areas:
-            # Adicionar cn() utility
-            if "className=" in optimized_code and "cn(" not in optimized_code:
-                import_addition = 'import { cn } from "@/lib/utils"\n'
-                if import_addition not in optimized_code:
-                    optimized_code = import_addition + optimized_code
-                
-                optimized_code = re.sub(
-                    r'className="([^"]*)"',
-                    r'className={cn("\1")}',
-                    optimized_code
-                )
-                changes_made.append("Adicionado utilitário cn() para classes")
-        
+            # Add proper TypeScript types if missing
+            if "props" in code and ":" not in code:
+                changes_made.append("Consider adding TypeScript interface for props")
+
         return {
             "original_code": code,
             "optimized_code": optimized_code,
             "changes_made": changes_made,
-            "performance_improvements": [c for c in changes_made if "performance" in c.lower() or "memo" in c.lower()],
-            "accessibility_improvements": [c for c in changes_made if "accessibility" in c.lower() or "aria" in c.lower() or "role" in c.lower()]
+            "focus_areas": focus_areas
         }
 
-class ShadcnGenerator:
-    """Gerador inteligente de componentes shadcn/ui"""
-    
-    def __init__(self):
-        self.knowledge_base = ShadcnKnowledgeBase()
-    
-    async def generate_component(
-        self,
-        component_type: str,
-        use_case: str = "",
-        framework: ShadcnFramework = ShadcnFramework.NEXTJS,
-        theme: str = "default",
-        include_examples: bool = True
-    ) -> Dict[str, Any]:
-        """Gera componente shadcn/ui otimizado"""
+    async def generate_component_example(self, component_name: str, use_case: str, framework: str = "next") -> Dict[str, Any]:
+        """Generates optimized component examples"""
         
-        if component_type not in self.knowledge_base.COMPONENTS_DATA:
-            return {"error": f"Componente '{component_type}' não encontrado"}
-        
-        component_data = self.knowledge_base.COMPONENTS_DATA[component_type]
-        
-        # Templates base para diferentes componentes
-        templates = {
-            "button": self._generate_button_template,
-            "card": self._generate_card_template,
-            "form": self._generate_form_template,
-            "dialog": self._generate_dialog_template,
-            "table": self._generate_table_template,
-            "select": self._generate_select_template,
-            "input": self._generate_input_template,
-            "badge": self._generate_badge_template,
-            "accordion": self._generate_accordion_template,
-            "toast": self._generate_toast_template
-        }
-        
-        if component_type in templates:
-            component_code = await templates[component_type](use_case, framework)
-        else:
-            component_code = await self._generate_generic_template(component_type, use_case)
-        
-        # Gerar exemplo de uso
-        usage_example = await self._generate_usage_example(component_type, use_case)
-        
-        # Gerar configuração necessária
-        setup_instructions = await self._generate_setup_instructions(component_type, framework)
-        
-        return {
-            "component_type": component_type,
-            "component_code": component_code,
-            "usage_example": usage_example,
-            "setup_instructions": setup_instructions,
-            "dependencies": component_data.dependencies,
-            "props": component_data.props,
-            "complexity": component_data.complexity.value,
-            "framework": framework.value
-        }
-    
-    async def _generate_button_template(self, use_case: str, framework: ShadcnFramework) -> str:
-        """Gera template de botão otimizado"""
-        return f'''import {{ Button }} from "@/components/ui/button"
-import {{ cn }} from "@/lib/utils"
+        if component_name not in self.knowledge_base.COMPONENTS_DATA:
+            return {"error": f"Component '{component_name}' not found in knowledge base"}
 
-interface CustomButtonProps {{
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link"
-  size?: "default" | "sm" | "lg" | "icon"
-  loading?: boolean
-  children: React.ReactNode
-  className?: string
-  onClick?: () => void
-}}
+        component = self.knowledge_base.COMPONENTS_DATA[component_name]
+        
+        # Generate component code based on use case
+        examples = {
+            "button": {
+                "contact_form": '''import { Button } from "@/components/ui/button"
 
-export default function CustomButton({{
-  variant = "default",
-  size = "default", 
-  loading = false,
-  children,
-  className,
-  onClick,
-  ...props
-}}: CustomButtonProps) {{
+export function ContactButton() {
   return (
-    <Button
-      variant={{variant}}
-      size={{size}}
-      disabled={{loading}}
-      className={{cn(
-        "transition-all duration-200",
-        loading && "opacity-50 cursor-not-allowed",
-        className
-      )}}
-      onClick={{onClick}}
-      {{...props}}
+    <Button 
+      variant="default" 
+      size="default"
+      className="w-full"
+      aria-label="Send message"
     >
-      {{loading ? (
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-          Carregando...
-        </div>
-      ) : (
-        children
-      )}}
+      Send Message
     </Button>
   )
-}}'''
-    
-    async def _generate_card_template(self, use_case: str, framework: ShadcnFramework) -> str:
-        """Gera template de card otimizado"""
-        return f'''import {{ Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }} from "@/components/ui/card"
-import {{ Button }} from "@/components/ui/button"
-import {{ cn }} from "@/lib/utils"
+}''',
+                "cta": '''import { Button } from "@/components/ui/button"
+import { ArrowRight } from "lucide-react"
 
-interface CustomCardProps {{
-  title: string
-  description?: string
-  children?: React.ReactNode
-  footer?: React.ReactNode
-  className?: string
-  variant?: "default" | "outline" | "ghost"
-}}
-
-export default function CustomCard({{
-  title,
-  description,
-  children,
-  footer,
-  className,
-  variant = "default",
-  ...props
-}}: CustomCardProps) {{
+export function CTAButton() {
   return (
-    <Card 
-      className={{cn(
-        "w-full transition-all duration-200 hover:shadow-lg",
-        variant === "outline" && "border-2",
-        variant === "ghost" && "border-none shadow-none",
-        className
-      )}}
-      {{...props}}
+    <Button 
+      variant="default" 
+      size="lg"
+      className="group"
     >
+      Get Started
+      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+    </Button>
+  )
+}'''
+            },
+            "card": {
+                "product": '''import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+
+export function ProductCard({ product }: { product: Product }) {
+  return (
+    <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold">
-          {{title}}
-        </CardTitle>
-        {{description && (
-          <CardDescription className="text-muted-foreground">
-            {{description}}
-          </CardDescription>
-        )}}
+        <div className="flex items-center justify-between">
+          <CardTitle>{product.name}</CardTitle>
+          <Badge variant="secondary">{product.category}</Badge>
+        </div>
+        <CardDescription>{product.description}</CardDescription>
       </CardHeader>
-      
-      {{children && (
-        <CardContent>
-          {{children}}
-        </CardContent>
-      )}}
-      
-      {{footer && (
-        <CardFooter className="pt-6">
-          {{footer}}
-        </CardFooter>
-      )}}
+      <CardContent>
+        <div className="flex items-center justify-between">
+          <span className="text-2xl font-bold">${product.price}</span>
+          <span className="text-sm text-muted-foreground">In stock: {product.stock}</span>
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button className="w-full">Add to Cart</Button>
+      </CardFooter>
     </Card>
   )
-}}'''
-    
-    async def _generate_form_template(self, use_case: str, framework: ShadcnFramework) -> str:
-        """Gera template de formulário completo"""
-        return f'''import {{ useForm }} from "react-hook-form"
-import {{ zodResolver }} from "@hookform/resolvers/zod"
-import * as z from "zod"
-import {{ Button }} from "@/components/ui/button"
-import {{ Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage }} from "@/components/ui/form"
-import {{ Input }} from "@/components/ui/input"
-import {{ toast }} from "@/components/ui/use-toast"
+}''',
+                "dashboard": '''import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-const formSchema = z.object({{
-  email: z.string().email({{
-    message: "Por favor, insira um email válido.",
-  }}),
-  name: z.string().min(2, {{
-    message: "Nome deve ter pelo menos 2 caracteres.",
-  }}),
-  message: z.string().min(10, {{
-    message: "Mensagem deve ter pelo menos 10 caracteres.",
-  }}),
-}})
+export function MetricCard({ title, value, description, trend }: MetricCardProps) {
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">
+          {title}
+        </CardTitle>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          className="h-4 w-4 text-muted-foreground"
+        >
+          <path d="M12 2v20m9-9H3" />
+        </svg>
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{value}</div>
+        <p className="text-xs text-muted-foreground">
+          {description}
+        </p>
+      </CardContent>
+    </Card>
+  )
+}'''
+            },
+            "form": {
+                "contact": '''import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 
-interface CustomFormProps {{
-  onSubmit?: (values: z.infer<typeof formSchema>) => void
-  submitText?: string
-  className?: string
-}}
+const formSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters."),
+  email: z.string().email("Please enter a valid email address."),
+  message: z.string().min(10, "Message must be at least 10 characters."),
+})
 
-export default function CustomForm({{
-  onSubmit,
-  submitText = "Enviar",
-  className
-}}: CustomFormProps) {{
-  const form = useForm<z.infer<typeof formSchema>>({{
+export function ContactForm() {
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {{
-      email: "",
+    defaultValues: {
       name: "",
+      email: "",
       message: "",
-    }},
-  }})
+    },
+  })
 
-  async function handleSubmit(values: z.infer<typeof formSchema>) {{
-    try {{
-      if (onSubmit) {{
-        await onSubmit(values)
-      }}
-      
-      toast({{
-        title: "Sucesso!",
-        description: "Formulário enviado com sucesso.",
-      }})
-      
-      form.reset()
-    }} catch (error) {{
-      toast({{
-        title: "Erro",
-        description: "Ocorreu um erro ao enviar o formulário.",
-        variant: "destructive",
-      }})
-    }}
-  }}
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values)
+  }
 
   return (
-    <Form {{...form}}>
-      <form onSubmit={{form.handleSubmit(handleSubmit)}} className={{className}}>
-        <div className="space-y-6">
-          <FormField
-            control={{form.control}}
-            name="name"
-            render={{({{ field }}) => (
-              <FormItem>
-                <FormLabel>Nome</FormLabel>
-                <FormControl>
-                  <Input placeholder="Seu nome completo" {{...field}} />
-                </FormControl>
-                <FormDescription>
-                  Como você gostaria de ser chamado?
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}}
-          />
-          
-          <FormField
-            control={{form.control}}
-            name="email"
-            render={{({{ field }}) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="email" 
-                    placeholder="seu@email.com" 
-                    {{...field}} 
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}}
-          />
-          
-          <FormField
-            control={{form.control}}
-            name="message"
-            render={{({{ field }}) => (
-              <FormItem>
-                <FormLabel>Mensagem</FormLabel>
-                <FormControl>
-                  <textarea
-                    className="min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    placeholder="Sua mensagem..."
-                    {{...field}}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}}
-          />
-        </div>
-        
-        <Button 
-          type="submit" 
-          className="w-full mt-6"
-          disabled={{form.formState.isSubmitting}}
-        >
-          {{form.formState.isSubmitting ? "Enviando..." : submitText}}
-        </Button>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Your name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="your@email.com" type="email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="message"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Message</FormLabel>
+              <FormControl>
+                <Textarea 
+                  placeholder="Your message here..."
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>
+                Tell us how we can help you.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" className="w-full">Send Message</Button>
       </form>
     </Form>
   )
-}}'''
-    
-    async def _generate_dialog_template(self, use_case: str, framework: ShadcnFramework) -> str:
-        """Gera template de dialog"""
-        return '''import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
-
-interface CustomDialogProps {
-  trigger: React.ReactNode
-  title: string
-  description?: string
-  children: React.ReactNode
-  onConfirm?: () => void
-  onCancel?: () => void
-  confirmText?: string
-  cancelText?: string
-}
-
-export default function CustomDialog({
-  trigger,
-  title,
-  description,
-  children,
-  onConfirm,
-  onCancel,
-  confirmText = "Confirmar",
-  cancelText = "Cancelar"
-}: CustomDialogProps) {
-  const [open, setOpen] = useState(false)
-
-  const handleConfirm = () => {
-    if (onConfirm) {
-      onConfirm()
-    }
-    setOpen(false)
-  }
-
-  const handleCancel = () => {
-    if (onCancel) {
-      onCancel()
-    }
-    setOpen(false)
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger}
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          {description && (
-            <DialogDescription>
-              {description}
-            </DialogDescription>
-          )}
-        </DialogHeader>
-        
-        <div className="py-4">
-          {children}
-        </div>
-        
-        <DialogFooter>
-          <Button variant="outline" onClick={handleCancel}>
-            {cancelText}
-          </Button>
-          <Button onClick={handleConfirm}>
-            {confirmText}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  )
 }'''
-    
-    async def _generate_table_template(self, use_case: str, framework: ShadcnFramework) -> str:
-        """Gera template de tabela"""
-        return '''import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-
-interface TableData {
-  id: string
-  [key: string]: any
-}
-
-interface CustomTableProps<T extends TableData> {
-  data: T[]
-  columns: {
-    key: keyof T
-    label: string
-    render?: (value: any, row: T) => React.ReactNode
-  }[]
-  caption?: string
-  onRowClick?: (row: T) => void
-  className?: string
-}
-
-export default function CustomTable<T extends TableData>({
-  data,
-  columns,
-  caption,
-  onRowClick,
-  className
-}: CustomTableProps<T>) {
-  return (
-    <div className={`rounded-md border ${className}`}>
-      <Table>
-        {caption && <TableCaption>{caption}</TableCaption>}
-        
-        <TableHeader>
-          <TableRow>
-            {columns.map((column) => (
-              <TableHead key={String(column.key)}>
-                {column.label}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        
-        <TableBody>
-          {data.map((row) => (
-            <TableRow 
-              key={row.id}
-              className={onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}
-              onClick={() => onRowClick?.(row)}
-            >
-              {columns.map((column) => (
-                <TableCell key={String(column.key)}>
-                  {column.render 
-                    ? column.render(row[column.key], row)
-                    : String(row[column.key])
-                  }
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-        
-        {data.length === 0 && (
-          <TableBody>
-            <TableRow>
-              <TableCell 
-                colSpan={columns.length} 
-                className="h-24 text-center text-muted-foreground"
-              >
-                Nenhum resultado encontrado.
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        )}
-      </Table>
-    </div>
-  )
-}'''
-    
-    async def _generate_select_template(self, use_case: str, framework: ShadcnFramework) -> str:
-        """Gera template de select"""
-        return '''import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-
-interface SelectOption {
-  value: string
-  label: string
-  disabled?: boolean
-}
-
-interface CustomSelectProps {
-  options: SelectOption[]
-  placeholder?: string
-  value?: string
-  onValueChange?: (value: string) => void
-  disabled?: boolean
-  className?: string
-  label?: string
-  description?: string
-  error?: string
-}
-
-export default function CustomSelect({
-  options,
-  placeholder = "Selecione uma opção...",
-  value,
-  onValueChange,
-  disabled = false,
-  className,
-  label,
-  description,
-  error
-}: CustomSelectProps) {
-  return (
-    <FormItem className={className}>
-      {label && <FormLabel>{label}</FormLabel>}
-      <Select 
-        value={value} 
-        onValueChange={onValueChange}
-        disabled={disabled}
-      >
-        <FormControl>
-          <SelectTrigger>
-            <SelectValue placeholder={placeholder} />
-          </SelectTrigger>
-        </FormControl>
-        <SelectContent>
-          {options.map((option) => (
-            <SelectItem 
-              key={option.value} 
-              value={option.value}
-              disabled={option.disabled}
-            >
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {description && (
-        <FormDescription>
-          {description}
-        </FormDescription>
-      )}
-      {error && <FormMessage>{error}</FormMessage>}
-    </FormItem>
-  )
-}'''
-    
-    async def _generate_input_template(self, use_case: str, framework: ShadcnFramework) -> str:
-        """Gera template de input"""
-        return '''import { Input } from "@/components/ui/input"
-import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { cn } from "@/lib/utils"
-import { forwardRef } from "react"
-
-interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string
-  description?: string
-  error?: string
-  leftIcon?: React.ReactNode
-  rightIcon?: React.ReactNode
-}
-
-const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(({
-  label,
-  description,
-  error,
-  leftIcon,
-  rightIcon,
-  className,
-  ...props
-}, ref) => {
-  return (
-    <FormItem>
-      {label && <FormLabel>{label}</FormLabel>}
-      <FormControl>
-        <div className="relative">
-          {leftIcon && (
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-              {leftIcon}
-            </div>
-          )}
-          <Input
-            ref={ref}
-            className={cn(
-              leftIcon && "pl-10",
-              rightIcon && "pr-10",
-              error && "border-destructive",
-              className
-            )}
-            {...props}
-          />
-          {rightIcon && (
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-              {rightIcon}
-            </div>
-          )}
-        </div>
-      </FormControl>
-      {description && (
-        <FormDescription>
-          {description}
-        </FormDescription>
-      )}
-      {error && <FormMessage>{error}</FormMessage>}
-    </FormItem>
-  )
-})
-
-CustomInput.displayName = "CustomInput"
-
-export default CustomInput'''
-    
-    async def _generate_badge_template(self, use_case: str, framework: ShadcnFramework) -> str:
-        """Gera template de badge"""
-        return '''import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
-import { cva, type VariantProps } from "class-variance-authority"
-
-const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-  {
-    variants: {
-      variant: {
-        default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
-        success: "border-transparent bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300",
-        warning: "border-transparent bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900 dark:text-yellow-300",
-        info: "border-transparent bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300",
-      },
-      size: {
-        default: "px-2.5 py-0.5 text-xs",
-        sm: "px-2 py-0.5 text-xs",
-        lg: "px-3 py-1 text-sm",
-      }
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  }
-)
-
-interface CustomBadgeProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {
-  children: React.ReactNode
-  icon?: React.ReactNode
-}
-
-export default function CustomBadge({
-  children,
-  variant,
-  size,
-  icon,
-  className,
-  ...props
-}: CustomBadgeProps) {
-  return (
-    <Badge
-      className={cn(badgeVariants({ variant, size }), className)}
-      {...props}
-    >
-      {icon && <span className="mr-1">{icon}</span>}
-      {children}
-    </Badge>
-  )
-}'''
-    
-    async def _generate_accordion_template(self, use_case: str, framework: ShadcnFramework) -> str:
-        """Gera template de accordion"""
-        return '''import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-
-interface AccordionItemData {
-  id: string
-  title: string
-  content: React.ReactNode
-  disabled?: boolean
-}
-
-interface CustomAccordionProps {
-  items: AccordionItemData[]
-  type?: "single" | "multiple"
-  collapsible?: boolean
-  defaultValue?: string | string[]
-  className?: string
-}
-
-export default function CustomAccordion({
-  items,
-  type = "single",
-  collapsible = true,
-  defaultValue,
-  className
-}: CustomAccordionProps) {
-  return (
-    <Accordion 
-      type={type}
-      collapsible={type === "single" ? collapsible : undefined}
-      defaultValue={defaultValue}
-      className={className}
-    >
-      {items.map((item) => (
-        <AccordionItem 
-          key={item.id} 
-          value={item.id}
-          disabled={item.disabled}
-        >
-          <AccordionTrigger className="text-left">
-            {item.title}
-          </AccordionTrigger>
-          <AccordionContent>
-            {item.content}
-          </AccordionContent>
-        </AccordionItem>
-      ))}
-    </Accordion>
-  )
-}'''
-    
-    async def _generate_toast_template(self, use_case: str, framework: ShadcnFramework) -> str:
-        """Gera template de toast"""
-        return '''import { toast } from "@/components/ui/use-toast"
-import { Button } from "@/components/ui/button"
-import { CheckCircle, AlertCircle, Info, AlertTriangle } from "lucide-react"
-
-interface ToastOptions {
-  title: string
-  description?: string
-  duration?: number
-  action?: {
-    altText: string
-    label: string
-    onClick: () => void
-  }
-}
-
-export const showToast = {
-  success: ({ title, description, duration = 5000, action }: ToastOptions) => {
-    toast({
-      title: (
-        <div className="flex items-center gap-2">
-          <CheckCircle className="h-4 w-4 text-green-600" />
-          {title}
-        </div>
-      ),
-      description,
-      duration,
-      action: action ? (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={action.onClick}
-          aria-label={action.altText}
-        >
-          {action.label}
-        </Button>
-      ) : undefined,
-    })
-  },
-  
-  error: ({ title, description, duration = 5000, action }: ToastOptions) => {
-    toast({
-      title: (
-        <div className="flex items-center gap-2">
-          <AlertCircle className="h-4 w-4 text-red-600" />
-          {title}
-        </div>
-      ),
-      description,
-      duration,
-      variant: "destructive",
-      action: action ? (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={action.onClick}
-          aria-label={action.altText}
-        >
-          {action.label}
-        </Button>
-      ) : undefined,
-    })
-  },
-  
-  warning: ({ title, description, duration = 5000, action }: ToastOptions) => {
-    toast({
-      title: (
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4 text-yellow-600" />
-          {title}
-        </div>
-      ),
-      description,
-      duration,
-      action: action ? (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={action.onClick}
-          aria-label={action.altText}
-        >
-          {action.label}
-        </Button>
-      ) : undefined,
-    })
-  },
-  
-  info: ({ title, description, duration = 5000, action }: ToastOptions) => {
-    toast({
-      title: (
-        <div className="flex items-center gap-2">
-          <Info className="h-4 w-4 text-blue-600" />
-          {title}
-        </div>
-      ),
-      description,
-      duration,
-      action: action ? (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={action.onClick}
-          aria-label={action.altText}
-        >
-          {action.label}
-        </Button>
-      ) : undefined,
-    })
-  }
-}
-
-// Hook para uso simplificado
-export function useToast() {
-  return showToast
-}'''
-    
-    async def _generate_generic_template(self, component_type: str, use_case: str) -> str:
-        """Gera template genérico para componentes não específicos"""
-        return f'''import {{ {component_type.title()} }} from "@/components/ui/{component_type}"
-import {{ cn }} from "@/lib/utils"
-
-interface Custom{component_type.title()}Props {{
-  children?: React.ReactNode
-  className?: string
-}}
-
-export default function Custom{component_type.title()}({{
-  children,
-  className,
-  ...props
-}}: Custom{component_type.title()}Props) {{
-  return (
-    <{component_type.title()}
-      className={{cn("", className)}}
-      {{...props}}
-    >
-      {{children}}
-    </{component_type.title()}>
-  )
-}}'''
-    
-    async def _generate_usage_example(self, component_type: str, use_case: str) -> str:
-        """Gera exemplo de uso do componente"""
-        
-        examples = {
-            "button": '''// Exemplo de uso do CustomButton
-import CustomButton from "./CustomButton"
-
-export default function Page() {
-  const handleClick = () => {
-    console.log("Botão clicado!")
-  }
-
-  return (
-    <div className="p-4 space-y-4">
-      <CustomButton onClick={handleClick}>
-        Botão Padrão
-      </CustomButton>
-      
-      <CustomButton variant="destructive" loading={true}>
-        Excluir Item
-      </CustomButton>
-      
-      <CustomButton variant="outline" size="sm">
-        Botão Pequeno
-      </CustomButton>
-    </div>
-  )
-}''',
-            "card": '''// Exemplo de uso do CustomCard
-import CustomCard from "./CustomCard"
-import { Button } from "@/components/ui/button"
-
-export default function Page() {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-      <CustomCard
-        title="Produto Incrível"
-        description="Descrição detalhada do produto"
-        footer={
-          <Button className="w-full">
-            Comprar Agora
-          </Button>
+            }
         }
-      >
-        <p>Conteúdo adicional do card aqui.</p>
-      </CustomCard>
-    </div>
-  )
-}''',
-            "form": '''// Exemplo de uso do CustomForm
-import CustomForm from "./CustomForm"
 
-export default function Page() {
-  const handleSubmit = async (values) => {
-    console.log("Dados do formulário:", values)
-    // Enviar para API
-  }
+        # Get example code
+        component_examples = examples.get(component_name, {})
+        example_code = component_examples.get(use_case, f"// Example for {component_name} - {use_case} not implemented yet")
 
-  return (
-    <div className="max-w-md mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Entre em Contato</h1>
-      <CustomForm 
-        onSubmit={handleSubmit}
-        submitText="Enviar Mensagem"
-      />
-    </div>
-  )
-}'''
-        }
-        
-        return examples.get(component_type, f'''// Exemplo de uso do Custom{component_type.title()}
-import Custom{component_type.title()} from "./Custom{component_type.title()}"
+        # Generate installation instructions
+        installation_cmd = f"npx shadcn-ui@latest add {component_name}"
+        if component.dependencies:
+            additional_deps = " ".join(component.dependencies)
+            installation_cmd += f" && npm install {additional_deps}"
 
-export default function Page() {{
-  return (
-    <div className="p-4">
-      <Custom{component_type.title()}>
-        Conteúdo do componente
-      </Custom{component_type.title()}>
-    </div>
-  )
-}}''')
-    
-    async def _generate_setup_instructions(self, component_type: str, framework: ShadcnFramework) -> Dict[str, Any]:
-        """Gera instruções de configuração"""
-        
-        component_data = self.knowledge_base.COMPONENTS_DATA.get(component_type)
-        if not component_data:
-            return {"error": "Componente não encontrado"}
-        
-        framework_config = self.knowledge_base.FRAMEWORK_CONFIGS.get(framework, {})
-        
         return {
-            "installation": {
-                "cli_command": f"npx shadcn-ui@latest add {component_type}",
-                "dependencies": component_data.dependencies,
-                "manual_install": f"npm install {' '.join(component_data.dependencies)}" if component_data.dependencies else "Nenhuma dependência adicional"
-            },
-            "framework_setup": framework_config,
-            "required_files": [
-                f"components/ui/{component_type}.tsx",
-                "lib/utils.ts",
-                "tailwind.config.js"
-            ],
-            "css_variables": self.knowledge_base.THEMES_CONFIG["default"]["colors"] if component_type in ["button", "card", "input"] else {}
+            "component_name": component_name,
+            "use_case": use_case,
+            "framework": framework,
+            "code": example_code,
+            "installation": installation_cmd,
+            "dependencies": component.dependencies,
+            "complexity": component.complexity.value,
+            "category": component.category.value,
+            "props": component.props,
+            "description": component.description
         }
 
 # ================================
-# FERRAMENTAS MCP
+# MCP TOOLS
 # ================================
 
 @mcp.tool()
-async def shadcn_analyze_component(code: str) -> Dict[str, Any]:
+async def analyze_shadcn_component(code: str) -> Dict[str, Any]:
     """
-    Analisa código que usa componentes shadcn/ui e fornece insights detalhados.
+    Analyzes code that uses shadcn/ui components and provides detailed insights.
     
     Args:
-        code: Código React que utiliza componentes shadcn/ui
+        code: React code that utilizes shadcn/ui components
         
     Returns:
-        Análise completa com detecção de componentes, otimizações e sugestões
+        Complete analysis with component detection, optimizations and suggestions
     """
     try:
         analyzer = ShadcnAnalyzer()
-        analysis = await analyzer.analyze_component_usage(code)
+        analysis = await analyzer.analyze_component_code(code)
         
-        logger.info(f"Analyzed shadcn components - detected: {len(analysis['detected_components'])}")
+        logger.info(f"shadcn/ui component analyzed - score: {analysis['score']}, components: {len(analysis['detected_components'])}")
         
         return analysis
-        
+
     except Exception as e:
         logger.error(f"Error analyzing shadcn component: {str(e)}")
         raise
 
 @mcp.tool()
-async def shadcn_optimize_component(
+async def optimize_shadcn_component(
     code: str,
     focus_areas: Optional[List[str]] = None
 ) -> Dict[str, Any]:
     """
-    Otimiza código shadcn/ui aplicando melhores práticas e padrões modernos.
+    Optimizes shadcn/ui code applying best practices and modern patterns.
     
     Args:
-        code: Código React com componentes shadcn/ui
-        focus_areas: Áreas de foco para otimização (performance, accessibility, best_practices)
+        code: React code with shadcn/ui components
+        focus_areas: Focus areas for optimization (performance, accessibility, best_practices)
         
     Returns:
-        Código otimizado com explicação das mudanças aplicadas
+        Optimized code with explanation of applied changes
     """
     try:
-        optimizer = ShadcnOptimizer()
-        optimization = await optimizer.optimize_component_code(code, focus_areas)
+        analyzer = ShadcnAnalyzer()
+        optimization = await analyzer.optimize_component_code(code, focus_areas)
         
-        logger.info(f"Optimized shadcn component - changes: {len(optimization['changes_made'])}")
+        logger.info(f"shadcn/ui component optimized - changes: {len(optimization['changes_made'])}")
         
         return optimization
-        
+
     except Exception as e:
         logger.error(f"Error optimizing shadcn component: {str(e)}")
         raise
 
 @mcp.tool()
-async def shadcn_generate_component(
+async def generate_shadcn_component(
     component_type: str,
     use_case: str = "",
     framework: str = "next",
@@ -1470,349 +802,396 @@ async def shadcn_generate_component(
     include_examples: bool = True
 ) -> Dict[str, Any]:
     """
-    Gera componente shadcn/ui otimizado e pronto para uso.
+    Generates optimized and ready-to-use shadcn/ui component.
     
     Args:
-        component_type: Tipo do componente (button, card, form, dialog, etc.)
-        use_case: Caso de uso específico para customização
-        framework: Framework alvo (next, vite, remix, astro)
-        theme: Tema a ser aplicado (default, dark)
-        include_examples: Incluir exemplos de uso
+        component_type: Component type (button, card, form, dialog, etc.)
+        use_case: Specific use case for customization
+        framework: Target framework (next, vite, remix, astro)
+        theme: Theme to apply (default, dark)
+        include_examples: Include usage examples
         
     Returns:
-        Código completo do componente com exemplos e configuração
+        Complete component code with examples and configuration
     """
     try:
-        generator = ShadcnGenerator()
+        analyzer = ShadcnAnalyzer()
         
-        # Converter string para enum
-        framework_enum = ShadcnFramework.NEXTJS
-        if framework in ["vite"]:
-            framework_enum = ShadcnFramework.VITE
-        elif framework in ["remix"]:
-            framework_enum = ShadcnFramework.REMIX
-        elif framework in ["astro"]:
-            framework_enum = ShadcnFramework.ASTRO
-        elif framework in ["react-router", "router"]:
-            framework_enum = ShadcnFramework.ROUTER
+        # Generate component example
+        result = await analyzer.generate_component_example(component_type, use_case, framework)
         
-        result = await generator.generate_component(
-            component_type=component_type,
-            use_case=use_case,
-            framework=framework_enum,
-            theme=theme,
-            include_examples=include_examples
-        )
+        if "error" in result:
+            return result
         
-        logger.info(f"Generated shadcn component: {component_type} for {framework}")
+        # Add theme-specific modifications if needed
+        if theme == "dark":
+            result["theme_notes"] = [
+                "Component includes dark mode support via dark: classes",
+                "Ensure your app has dark mode provider configured",
+                "Use 'dark' class on html element to activate dark theme"
+            ]
+        
+        # Add framework-specific setup if needed
+        framework_setup = ShadcnKnowledgeBase.SETUP_GUIDES.get(framework, {})
+        if framework_setup:
+            result["framework_setup"] = framework_setup
+        
+        logger.info(f"Generated shadcn/ui component: {component_type} for {use_case}")
         
         return result
-        
+
     except Exception as e:
         logger.error(f"Error generating shadcn component: {str(e)}")
         raise
 
 @mcp.tool()
-async def shadcn_get_component_info(component_name: str = "") -> Dict[str, Any]:
+async def get_shadcn_component_info(component_name: str = "") -> Dict[str, Any]:
     """
-    Obtém informações detalhadas sobre componentes shadcn/ui disponíveis.
+    Gets detailed information about available shadcn/ui components.
     
     Args:
-        component_name: Nome específico do componente (opcional)
+        component_name: Specific component name (optional)
         
     Returns:
-        Informações completas sobre componente(s) shadcn/ui
+        Complete information about shadcn/ui component(s)
     """
     try:
         knowledge_base = ShadcnKnowledgeBase()
         
-        if not component_name:
-            # Retorna lista de todos os componentes
+        if component_name:
+            if component_name in knowledge_base.COMPONENTS_DATA:
+                component = knowledge_base.COMPONENTS_DATA[component_name]
+                return {
+                    "name": component.name,
+                    "category": component.category.value,
+                    "description": component.description,
+                    "dependencies": component.dependencies,
+                    "complexity": component.complexity.value,
+                    "use_cases": component.use_cases,
+                    "props": component.props,
+                    "examples": component.examples,
+                    "installation": f"npx shadcn-ui@latest add {component.name}"
+                }
+            else:
+                return {"error": f"Component '{component_name}' not found"}
+        else:
+            # Return all components organized by category
+            components_by_category = {}
+            for comp_name, component in knowledge_base.COMPONENTS_DATA.items():
+                category = component.category.value
+                if category not in components_by_category:
+                    components_by_category[category] = []
+                
+                components_by_category[category].append({
+                    "name": component.name,
+                    "description": component.description,
+                    "complexity": component.complexity.value,
+                    "use_cases": component.use_cases[:3]  # First 3 use cases
+                })
+            
             return {
-                "available_components": list(knowledge_base.COMPONENTS_DATA.keys()),
-                "components_by_category": {
-                    category.value: [
-                        name for name, comp in knowledge_base.COMPONENTS_DATA.items()
-                        if comp.category == category
-                    ]
-                    for category in ShadcnComponentType
-                },
-                "total_components": len(knowledge_base.COMPONENTS_DATA)
+                "total_components": len(knowledge_base.COMPONENTS_DATA),
+                "components_by_category": components_by_category,
+                "available_frameworks": list(knowledge_base.SETUP_GUIDES.keys())
+            }
+
+    except Exception as e:
+        logger.error(f"Error getting component info: {str(e)}")
+        raise
+
+@mcp.tool()
+async def get_shadcn_setup_guide(framework: str = "next") -> Dict[str, Any]:
+    """
+    Provides complete setup guide for shadcn/ui with different frameworks.
+    
+    Args:
+        framework: Target framework (next, vite, remix, astro, react-router)
+        
+    Returns:
+        Complete installation and configuration guide
+    """
+    try:
+        knowledge_base = ShadcnKnowledgeBase()
+        
+        if framework not in knowledge_base.SETUP_GUIDES:
+            return {
+                "error": f"Framework '{framework}' not supported",
+                "available_frameworks": list(knowledge_base.SETUP_GUIDES.keys())
             }
         
-        if component_name not in knowledge_base.COMPONENTS_DATA:
-            return {"error": f"Componente '{component_name}' não encontrado"}
+        setup_guide = knowledge_base.SETUP_GUIDES[framework]
         
-        component = knowledge_base.COMPONENTS_DATA[component_name]
+        # Generate complete setup instructions
+        setup_instructions = f"""
+# shadcn/ui Setup Guide for {setup_guide['name']}
+
+## Prerequisites
+- Node.js 18+ installed
+- {setup_guide['name']} project created
+
+## Installation Steps
+
+1. **Install dependencies:**
+   ```bash
+   npm install {' '.join(setup_guide['dependencies'])}
+   ```
+
+2. **Initialize shadcn/ui:**
+   ```bash
+   {setup_guide['install_command']}
+   ```
+
+3. **Configure your project:**
+   - Update {', '.join(setup_guide['config_files'])}
+   - Set up proper paths in components.json
+
+4. **Add components:**
+   ```bash
+   npx shadcn-ui@latest add button
+   npx shadcn-ui@latest add card
+   npx shadcn-ui@latest add input
+   ```
+
+## Configuration Files
+
+### components.json
+```json
+{{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "default",
+  "rsc": {framework == "next"},
+  "tsx": true,
+  "tailwind": {{
+    "config": "tailwind.config.js",
+    "css": "app/globals.css",
+    "baseColor": "slate",
+    "cssVariables": true
+  }},
+  "aliases": {{
+    "components": "@/components",
+    "utils": "@/lib/utils"
+  }}
+}}
+```
+
+### Global CSS (globals.css)
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {{
+  :root {{
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 47.4% 11.2%;
+    --radius: 0.5rem;
+  }}
+ 
+  .dark {{
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }}
+}}
+```
+
+## Framework-Specific Notes
+"""
+        
+        # Add framework-specific steps
+        framework_notes = {
+            "next": "- Enable RSC support in components.json\n- Import components in app/ directory\n- Use 'use client' directive for interactive components",
+            "vite": "- Configure path aliases in vite.config.ts\n- Import components in src/ directory\n- Ensure proper TypeScript configuration",
+            "remix": "- Configure Tailwind in remix.config.js\n- Use appropriate import paths\n- Handle client-side components properly"
+        }
+        
+        setup_instructions += framework_notes.get(framework, "")
         
         return {
-            "name": component.name,
-            "category": component.category.value,
-            "description": component.description,
-            "dependencies": component.dependencies,
-            "complexity": component.complexity.value,
-            "use_cases": component.use_cases,
-            "props": component.props,
-            "examples": component.examples,
-            "cli_install": f"npx shadcn-ui@latest add {component_name}"
-        }
-        
-    except Exception as e:
-        logger.error(f"Error getting shadcn component info: {str(e)}")
-        raise
-
-@mcp.tool()
-async def shadcn_get_setup_guide(framework: str = "next") -> Dict[str, Any]:
-    """
-    Fornece guia completo de configuração do shadcn/ui para diferentes frameworks.
-    
-    Args:
-        framework: Framework alvo (next, vite, remix, astro, react-router)
-        
-    Returns:
-        Guia completo de instalação e configuração
-    """
-    try:
-        knowledge_base = ShadcnKnowledgeBase()
-        
-        # Converter string para enum
-        framework_enum = ShadcnFramework.NEXTJS
-        if framework in ["vite"]:
-            framework_enum = ShadcnFramework.VITE
-        elif framework in ["remix"]:
-            framework_enum = ShadcnFramework.REMIX
-        elif framework in ["astro"]:
-            framework_enum = ShadcnFramework.ASTRO
-        elif framework in ["react-router", "router"]:
-            framework_enum = ShadcnFramework.ROUTER
-        
-        framework_config = knowledge_base.FRAMEWORK_CONFIGS.get(framework_enum, {})
-        
-        setup_guide = {
             "framework": framework,
-            "installation_steps": [
-                "1. Instalar dependências do framework",
-                "2. Configurar Tailwind CSS",
-                "3. Inicializar shadcn/ui",
-                "4. Configurar tema e CSS variables",
-                "5. Adicionar componentes necessários"
-            ],
-            "commands": {
-                "init": "npx shadcn-ui@latest init",
-                "add_component": "npx shadcn-ui@latest add [component-name]",
-                "add_all": "npx shadcn-ui@latest add --all"
-            },
-            "required_files": {
-                "components.json": "Configuração dos componentes",
-                "lib/utils.ts": "Utilitários (cn function)",
-                f"{framework_config.get('css_location', 'globals.css')}": "CSS com variables do tema",
-                "tailwind.config.js": "Configuração do Tailwind"
-            },
-            "framework_specific": framework_config,
-            "theme_configuration": knowledge_base.THEMES_CONFIG,
+            "setup_guide": setup_guide,
+            "setup_instructions": setup_instructions,
             "next_steps": [
-                "Personalizar tema no CSS",
-                "Configurar dark mode",
-                "Adicionar componentes necessários",
-                "Configurar TypeScript paths",
-                "Testar componentes básicos"
+                "Add your first components",
+                "Customize theme colors",
+                "Set up dark mode",
+                "Configure your design system"
             ]
         }
-        
-        logger.info(f"Generated setup guide for {framework}")
-        
-        return setup_guide
-        
+
     except Exception as e:
-        logger.error(f"Error generating setup guide: {str(e)}")
+        logger.error(f"Error getting setup guide: {str(e)}")
         raise
 
 @mcp.tool()
-async def shadcn_create_theme(
+async def create_shadcn_theme(
     primary_color: str = "#000000",
     secondary_color: str = "#f1f5f9",
     accent_color: str = "#0ea5e9",
     theme_name: str = "custom"
 ) -> Dict[str, Any]:
     """
-    Cria tema personalizado para shadcn/ui com cores especificadas.
+    Creates custom theme for shadcn/ui with specified colors.
     
     Args:
-        primary_color: Cor primária em hexadecimal
-        secondary_color: Cor secundária em hexadecimal  
-        accent_color: Cor de destaque em hexadecimal
-        theme_name: Nome do tema personalizado
+        primary_color: Primary color in hexadecimal
+        secondary_color: Secondary color in hexadecimal  
+        accent_color: Accent color in hexadecimal
+        theme_name: Custom theme name
         
     Returns:
-        CSS do tema personalizado e configurações
+        Custom theme CSS and configuration
     """
     try:
-        # Converter hex para HSL (implementação simplificada)
-        def hex_to_hsl(hex_color: str) -> str:
-            # Remove # se presente
+        # Helper function to convert hex to HSL
+        def hex_to_hsl(hex_color):
+            # Remove # if present
             hex_color = hex_color.lstrip('#')
             
-            # Converte para RGB
+            # Convert to RGB
             r = int(hex_color[0:2], 16) / 255
             g = int(hex_color[2:4], 16) / 255
             b = int(hex_color[4:6], 16) / 255
             
-            # Simples aproximação HSL (para exemplo)
             max_val = max(r, g, b)
             min_val = min(r, g, b)
+            diff = max_val - min_val
             
-            h, s, l = 0, 0, (max_val + min_val) / 2
+            # Lightness
+            l = (max_val + min_val) / 2
             
-            if max_val == min_val:
-                h = s = 0  # achromatic
+            if diff == 0:
+                h = s = 0
             else:
-                d = max_val - min_val
-                s = d / (2 - max_val - min_val) if l > 0.5 else d / (max_val + min_val)
+                # Saturation
+                s = diff / (2 - max_val - min_val) if l > 0.5 else diff / (max_val + min_val)
                 
+                # Hue
                 if max_val == r:
-                    h = (g - b) / d + (6 if g < b else 0)
+                    h = (g - b) / diff + (6 if g < b else 0)
                 elif max_val == g:
-                    h = (b - r) / d + 2
-                elif max_val == b:
-                    h = (r - g) / d + 4
+                    h = (b - r) / diff + 2
+                else:
+                    h = (r - g) / diff + 4
                 h /= 6
             
-            return f"{h*360:.1f} {s*100:.1f}% {l*100:.1f}%"
-        
+            return f"{round(h * 360)} {round(s * 100)}% {round(l * 100)}%"
+
+        # Convert colors to HSL
         primary_hsl = hex_to_hsl(primary_color)
         secondary_hsl = hex_to_hsl(secondary_color)
         accent_hsl = hex_to_hsl(accent_color)
-        
-        theme_css = f'''/* {theme_name.title()} Theme for shadcn/ui */
+
+        # Generate theme CSS
+        theme_css = f"""
+/* {theme_name} Theme for shadcn/ui */
 @layer base {{
-  :root {{
+  .theme-{theme_name.lower()} {{
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --foreground: {primary_hsl};
     --primary: {primary_hsl};
     --primary-foreground: 210 40% 98%;
     --secondary: {secondary_hsl};
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --secondary-foreground: {primary_hsl};
     --accent: {accent_hsl};
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
+    --muted: {secondary_hsl};
+    --muted-foreground: 215.4 16.3% 46.9%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: {primary_hsl};
+    --ring: {accent_hsl};
     --radius: 0.5rem;
   }}
-
-  .dark {{
+  
+  .dark .theme-{theme_name.lower()} {{
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
     --primary: {primary_hsl};
-    --primary-foreground: 222.2 84% 4.9%;
+    --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
     --accent: {accent_hsl};
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: {primary_hsl};
+    --ring: {accent_hsl};
   }}
-}}'''
-        
-        tailwind_config = f'''/** @type {{import('tailwindcss').Config}} */
-const config = {{
-  darkMode: ["class"],
-  content: [
-    './pages/**/*.{{ts,tsx}}',
-    './components/**/*.{{ts,tsx}}',
-    './app/**/*.{{ts,tsx}}',
-    './src/**/*.{{ts,tsx}}',
-  ],
-  prefix: "",
-  theme: {{
-    container: {{
-      center: true,
-      padding: "2rem",
-      screens: {{
-        "2xl": "1400px",
-      }},
-    }},
-    extend: {{
-      colors: {{
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {{
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        }},
-        secondary: {{
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        }},
-        destructive: {{
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        }},
-        muted: {{
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        }},
-        accent: {{
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        }},
-        popover: {{
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        }},
-        card: {{
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        }},
-      }},
-      borderRadius: {{
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      }},
-      keyframes: {{
-        "accordion-down": {{
-          from: {{ height: "0" }},
-          to: {{ height: "var(--radix-accordion-content-height)" }},
-        }},
-        "accordion-up": {{
-          from: {{ height: "var(--radix-accordion-content-height)" }},
-          to: {{ height: "0" }},
-        }},
-      }},
-      animation: {{
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-      }},
-    }},
-  }},
-  plugins: [require("tailwindcss-animate")],
-}};
+}}
+"""
 
-export default config;'''
-        
-        logger.info(f"Created custom theme: {theme_name}")
-        
+        # Usage instructions
+        usage_instructions = f"""
+# How to use your {theme_name} theme
+
+## 1. Add the CSS to your globals.css file
+Add the generated CSS variables to your main CSS file.
+
+## 2. Apply the theme class
+Add the theme class to your root element:
+```jsx
+<div className="theme-{theme_name.lower()}">
+  {{/* Your app content */}}
+</div>
+```
+
+## 3. Use with dark mode
+The theme automatically supports dark mode:
+```jsx
+<div className="theme-{theme_name.lower()} dark">
+  {{/* Dark mode content */}}
+</div>
+```
+
+## 4. Update components.json (optional)
+```json
+{{
+  "themes": [
+    {{
+      "name": "{theme_name.lower()}",
+      "label": "{theme_name.title()}",
+      "activeColor": {{
+        "light": "{primary_color}",
+        "dark": "{primary_color}"
+      }}
+    }}
+  ]
+}}
+```
+"""
+
+        logger.info(f"Created custom shadcn/ui theme: {theme_name}")
+
         return {
             "theme_name": theme_name,
             "colors": {
@@ -1820,181 +1199,172 @@ export default config;'''
                 "secondary": secondary_color,
                 "accent": accent_color
             },
-            "css_variables": theme_css,
-            "tailwind_config": tailwind_config,
-            "installation_steps": [
-                "1. Substitua o conteúdo do seu globals.css com o CSS fornecido",
-                "2. Atualize seu tailwind.config.js com a configuração fornecida", 
-                "3. Instale tailwindcss-animate: npm install tailwindcss-animate",
-                "4. Reinicie seu servidor de desenvolvimento"
-            ],
-            "preview_components": [
-                f'<Button className="bg-[{primary_color}]">Primary Button</Button>',
-                f'<Badge className="bg-[{accent_color}]">Accent Badge</Badge>',
-                f'<Card className="border-[{secondary_color}]">Themed Card</Card>'
-            ]
+            "theme_css": theme_css,
+            "usage_instructions": usage_instructions,
+            "theme_class": f"theme-{theme_name.lower()}",
+            "css_variables": {
+                "primary": primary_hsl,
+                "secondary": secondary_hsl,
+                "accent": accent_hsl
+            }
         }
-        
+
     except Exception as e:
-        logger.error(f"Error creating shadcn theme: {str(e)}")
+        logger.error(f"Error creating custom theme: {str(e)}")
         raise
 
 @mcp.tool()
-async def shadcn_get_best_practices() -> Dict[str, Any]:
+async def get_shadcn_best_practices() -> Dict[str, Any]:
     """
-    Retorna guia de melhores práticas para uso do shadcn/ui.
+    Returns best practices guide for using shadcn/ui.
     
     Returns:
-        Guia completo com padrões recomendados, estrutura de projeto e dicas
+        Complete guide with recommended patterns, project structure and tips
     """
     try:
-        return {
+        best_practices = {
             "project_structure": {
                 "recommended": [
-                    "components/ui/ - Componentes shadcn/ui",
-                    "components/custom/ - Componentes customizados", 
-                    "lib/utils.ts - Utilitários (cn function)",
-                    "hooks/ - Custom hooks",
-                    "types/ - Definições TypeScript"
+                    "components/ui/ - shadcn/ui components",
+                    "components/common/ - shared custom components", 
+                    "components/forms/ - form-specific components",
+                    "lib/utils.ts - utility functions",
+                    "hooks/ - custom React hooks",
+                    "types/ - TypeScript type definitions"
                 ],
-                "organization": "Separe componentes base (ui) dos customizados"
+                "example": """
+src/
+├── components/
+│   ├── ui/           # shadcn/ui components
+│   ├── common/       # shared components
+│   └── forms/        # form components
+├── lib/
+│   ├── utils.ts      # utilities
+│   └── validations.ts # zod schemas
+├── hooks/            # custom hooks
+└── types/            # TypeScript types
+"""
             },
-            
             "component_patterns": {
-                "composition": "Use compound components para flexibilidade",
-                "props": "Tipagem forte com TypeScript interfaces",
-                "styling": "Use cn() utility para merge de classes",
-                "variants": "Use class-variance-authority para variants consistentes"
+                "compound_components": "Use compound patterns for complex components like Card.Header, Card.Content",
+                "composition": "Compose complex UIs from simple shadcn/ui primitives",
+                "customization": "Extend components through className prop and CSS variables",
+                "accessibility": "Leverage built-in accessibility features from Radix UI"
             },
-            
             "styling_guidelines": {
-                "css_variables": "Use CSS variables para temas consistentes",
-                "dark_mode": "Implemente dark mode com class strategy",
-                "customization": "Customize no components.json, não nos arquivos de componente",
-                "responsive": "Mobile-first approach com Tailwind breakpoints"
+                "css_variables": "Use CSS variables for theming and customization",
+                "tailwind_integration": "Combine shadcn/ui with custom Tailwind classes",
+                "dark_mode": "Implement dark mode using CSS variables and dark: prefix",
+                "responsive_design": "Use Tailwind responsive prefixes with shadcn/ui components"
             },
-            
-            "performance_tips": [
-                "Use React.memo para componentes puros",
-                "Lazy load componentes pesados com React.lazy",
-                "Otimize re-renders com useCallback e useMemo",
-                "Use code splitting por rotas/features"
-            ],
-            
-            "accessibility_checklist": [
-                "Mantenha estrutura semântica HTML",
-                "Use roles ARIA apropriados",
-                "Garanta contraste mínimo de cores",
-                "Teste navegação por teclado",
-                "Adicione labels apropriados",
-                "Use focus indicators claros"
-            ],
-            
-            "form_patterns": {
-                "validation": "React Hook Form + Zod para type-safe validation",
-                "error_handling": "Consistent error display com FormMessage",
-                "loading_states": "Disable forms durante submission",
-                "accessibility": "Proper form labeling e error association"
+            "performance_tips": {
+                "tree_shaking": "Import only the components you need",
+                "code_splitting": "Use dynamic imports for heavy components",
+                "memoization": "Memoize expensive computations in custom components",
+                "bundle_analysis": "Regularly analyze your bundle size"
             },
-            
-            "theming_strategy": {
-                "design_tokens": "Use CSS custom properties para design tokens",
-                "consistency": "Mantenha paleta de cores limitada e consistente",
-                "customization": "Extend tema via tailwind.config.js",
-                "testing": "Teste todos os estados em light/dark mode"
+            "form_handling": {
+                "validation": "Use zod with react-hook-form for type-safe validation",
+                "error_handling": "Implement proper error states and messages",
+                "accessibility": "Ensure forms are keyboard navigable and screen reader friendly",
+                "user_experience": "Provide real-time validation feedback"
             },
-            
-            "common_patterns": {
-                "data_display": "Table + Pagination para datasets grandes",
-                "navigation": "NavigationMenu para hierarquias complexas", 
-                "feedback": "Toast para notificações não-intrusivas",
-                "overlays": "Dialog para ações focadas, AlertDialog para confirmações"
+            "testing_strategies": {
+                "unit_tests": "Test component logic and interactions",
+                "integration_tests": "Test form submissions and user flows",
+                "accessibility_tests": "Use @testing-library/jest-dom for a11y assertions",
+                "visual_regression": "Consider visual testing for consistent UI"
             },
-            
-            "do_dont": {
-                "do": [
-                    "Use TypeScript para type safety",
-                    "Implemente dark mode desde o início",
-                    "Teste acessibilidade regularmente",
-                    "Mantenha componentes pequenos e focados",
-                    "Use compound components para flexibilidade"
-                ],
-                "dont": [
-                    "Não modifique componentes ui/ diretamente",
-                    "Não use !important para override styles",
-                    "Não ignore warnings de acessibilidade",
-                    "Não crie muitas variants sem necessidade",
-                    "Não esqueça de testar em diferentes devices"
-                ]
+            "deployment_considerations": {
+                "css_optimization": "Ensure Tailwind CSS is properly purged",
+                "font_loading": "Optimize web font loading strategies",
+                "bundle_size": "Monitor and optimize JavaScript bundle size",
+                "cdn_usage": "Consider CDN for better performance"
             }
         }
-        
+
+        tips_and_tricks = [
+            "Use the shadcn/ui CLI for easy component updates",
+            "Customize theme colors through CSS variables",
+            "Leverage Radix UI's compound component patterns",
+            "Create wrapper components for commonly used variants",
+            "Use TypeScript interfaces for consistent prop types",
+            "Implement proper loading and error states",
+            "Test components with different color schemes",
+            "Document your custom component variants"
+        ]
+
+        common_pitfalls = [
+            "Not updating components when shadcn/ui releases updates",
+            "Overriding styles instead of using CSS variables",
+            "Ignoring accessibility features provided by Radix UI",
+            "Not testing dark mode variants",
+            "Hardcoding colors instead of using theme variables",
+            "Missing proper TypeScript types for custom props"
+        ]
+
+        return {
+            "best_practices": best_practices,
+            "tips_and_tricks": tips_and_tricks,
+            "common_pitfalls": common_pitfalls,
+            "recommended_tools": {
+                "development": ["TypeScript", "Tailwind CSS", "ESLint", "Prettier"],
+                "forms": ["react-hook-form", "zod", "@hookform/resolvers"],
+                "testing": ["@testing-library/react", "jest", "@testing-library/jest-dom"],
+                "styling": ["tailwindcss-animate", "class-variance-authority"]
+            },
+            "resources": {
+                "official_docs": "https://ui.shadcn.com",
+                "radix_ui_docs": "https://www.radix-ui.com",
+                "tailwind_docs": "https://tailwindcss.com",
+                "react_hook_form": "https://react-hook-form.com"
+            }
+        }
+
     except Exception as e:
         logger.error(f"Error getting best practices: {str(e)}")
         raise
 
 # ================================
-# RECURSOS ADICIONAIS
+# MCP RESOURCES
 # ================================
 
-@mcp.resource(uri="guide://shadcn-ui-complete")
-async def get_shadcn_complete_guide() -> str:
-    """Guia completo do shadcn/ui"""
-    return json.dumps({
-        "title": "Guia Completo shadcn/ui - Servidor MCP Avançado",
-        "sections": {
-            "component_analysis": "Análise inteligente de componentes shadcn/ui",
-            "code_optimization": "Otimização automática com melhores práticas",
-            "component_generation": "Geração de componentes customizados",
-            "theme_creation": "Criação de temas personalizados",
-            "setup_automation": "Configuração automatizada por framework",
-            "best_practices": "Padrões e práticas recomendadas"
-        },
-        "features": {
-            "intelligent_analysis": "Detecção automática de componentes e dependências",
-            "optimization_engine": "Engine de otimização para performance e a11y",
-            "template_generation": "Templates otimizados para casos de uso específicos",
-            "theme_generator": "Gerador de temas com suporte a dark mode",
-            "multi_framework": "Suporte a Next.js, Vite, Remix, Astro",
-            "best_practices_integration": "Integração automática de melhores práticas"
-        }
-    }, indent=2)
-
-@mcp.resource(uri="templates://shadcn-components")
-async def get_shadcn_templates() -> str:
-    """Templates de componentes shadcn/ui"""
+@mcp.resource(uri="shadcn://components")
+async def get_shadcn_components_resource() -> str:
+    """Complete shadcn/ui components reference"""
     knowledge_base = ShadcnKnowledgeBase()
     
-    templates = {
-        "components": {
-            name: {
-                "description": comp.description,
-                "category": comp.category.value,
-                "complexity": comp.complexity.value,
-                "use_cases": comp.use_cases,
-                "install_command": f"npx shadcn-ui@latest add {name}"
-            }
-            for name, comp in knowledge_base.COMPONENTS_DATA.items()
-        },
-        "categories": {
-            category.value: [
-                name for name, comp in knowledge_base.COMPONENTS_DATA.items()
-                if comp.category == category
-            ]
-            for category in ShadcnComponentType
+    components_data = {}
+    for name, component in knowledge_base.COMPONENTS_DATA.items():
+        components_data[name] = {
+            "name": component.name,
+            "category": component.category.value,
+            "description": component.description,
+            "complexity": component.complexity.value,
+            "dependencies": component.dependencies,
+            "use_cases": component.use_cases,
+            "props": component.props,
+            "examples": component.examples
         }
-    }
     
-    return json.dumps(templates, indent=2)
+    return json.dumps({
+        "total_components": len(components_data),
+        "components": components_data,
+        "categories": list(set(comp["category"] for comp in components_data.values()))
+    }, indent=2)
+
+@mcp.resource(uri="shadcn://themes")
+async def get_shadcn_themes_resource() -> str:
+    """shadcn/ui theming system guide"""
+    return json.dumps(ShadcnKnowledgeBase.THEMING_SYSTEM, indent=2)
 
 # ================================
-# INICIALIZAÇÃO DO SERVIDOR
+# SERVER INITIALIZATION
 # ================================
 
 if __name__ == "__main__":
-    logger.info("Starting shadcn/ui Advanced MCP Server")
-    logger.info("Features: Component Analysis | Code Optimization | Intelligent Generation")
-    logger.info("Based on: Official shadcn/ui documentation + Modern React patterns")
-    
-    # Executar o servidor MCP
+    logger.info("🚀 shadcn/ui Advanced MCP Server starting...")
+    logger.info("🎨 Component analysis, generation, and optimization")
+    logger.info("🔧 Theme customization and framework integration") 
+    logger.info("📚 Complete shadcn/ui knowledge base and best practices")
     mcp.run()

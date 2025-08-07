@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Script para executar servidores MCP - Wrapper para main.py
-# Este script agora utiliza o main.py como backend principal
+# MCP Servers execution script - Wrapper for main.py
+# This script now uses main.py as the primary backend
 
-# Cores para output
+# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -12,70 +12,69 @@ PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-# Diretório do projeto
+# Project directory
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Verificar se uv está instalado
+# Check if uv is installed
 check_uv() {
     if ! command -v uv &> /dev/null; then
-        echo -e "${RED}❌ Erro: 'uv' não está instalado${NC}"
-        echo -e "${YELLOW}💡 Instale com: curl -LsSf https://astral.sh/uv/install.sh | sh${NC}"
+        echo -e "${RED}❌ Error: 'uv' is not installed${NC}"
+        echo -e "${YELLOW}💡 Install with: curl -LsSf https://astral.sh/uv/install.sh | sh${NC}"
         exit 1
     fi
 }
 
-# Verificar se Python está disponível
+# Check if Python is available
 check_python() {
     if ! command -v python3 &> /dev/null; then
-        echo -e "${RED}❌ Erro: Python 3 não encontrado${NC}"
+        echo -e "${RED}❌ Error: Python 3 not found${NC}"
         exit 1
     fi
 }
 
-# Função para exibir banner
+# Function to display banner
 show_banner() {
     echo -e "${CYAN}"
     echo "╔══════════════════════════════════════════════════════════════╗"
-    echo "║                    🚀 LAUNCHER MCP SERVERS                   ║"
-    echo "║              Gerenciador de Servidores MCP v2.0              ║"
+    echo "║                    🚀 MCP SERVERS LAUNCHER                   ║"
+    echo "║                MCP Servers Manager v2.0                      ║"
     echo "║                    Powered by main.py                        ║"
-    echo "║                10/11 Servidores Funcionais                   ║"
+    echo "║                  11/11 Functional Servers                    ║"
     echo "╚══════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
 }
 
-# Função para mostrar menu interativo
+# Function to show interactive menu
 show_interactive_menu() {
-    echo -e "${YELLOW}🎯 Selecione uma opção:${NC}"
+    echo -e "${YELLOW}🎯 Select an option:${NC}"
     echo ""
-    echo -e "${CYAN}📊 INFORMAÇÕES:${NC}"
-    echo -e "${GREEN} 1${NC}) 📋 Listar todos os servidores disponíveis"
-    echo -e "${GREEN} 2${NC}) 📊 Status detalhado dos servidores"
+    echo -e "${CYAN}📊 INFORMATION:${NC}"
+    echo -e "${GREEN} 1${NC}) 📋 List all available servers"
+    echo -e "${GREEN} 2${NC}) 📊 Detailed server status"
     echo ""
-    echo -e "${CYAN}🚀 EXECUÇÃO:${NC}"
-    echo -e "${GREEN} 3${NC}) 🚀 Executar TODOS os servidores (modo desenvolvimento)"
-    echo -e "${GREEN} 4${NC}) 🔍 Servidor MCP (Análise de prompts MCP)"
-    echo -e "${GREEN} 5${NC}) ✏️  Servidor Prompt (Engenharia de prompts)"
-    echo -e "${GREEN} 6${NC}) 🎨 Servidor Tailwind CSS v4.1"
-    echo -e "${GREEN} 7${NC}) ⚡ Servidor FastMCP (Alta performance)"
-    echo -e "${GREEN} 8${NC}) ⚛️  Servidor React Optimizer"
-    echo -e "${GREEN} 9${NC}) 🧩 Servidor shadcn/ui Advanced (NOVO!)"
-    echo -e "${GREEN}10${NC}) ⚛️  Servidor React 19 (Server Components + Actions)"
-    echo -e "${GREEN}11${NC}) 🦀 Servidor Rust Idiomatic (mre/idiomatic-rust patterns)"
-    echo -e "${GREEN}12${NC}) 🌐 Servidor Axum (tokio-rs web framework + magic patterns)"
-    echo -e "${GREEN}13${NC}) 🐳 Servidor Docker (Otimização e boas práticas de containerização)"
-    echo -e "${GREEN}14${NC}) 🐍 Servidor Python (Análise de código e paradigmas modernos)"
-    echo -e "${GREEN}15${NC}) 📘 Servidor TypeScript (Análise avançada e Clean Architecture)"
+    echo -e "${CYAN}🚀 EXECUTION:${NC}"
+    echo -e "${GREEN} 3${NC}) 🚀 Run ALL servers (development mode)"
+    echo -e "${GREEN} 4${NC}) 🔍 MCP Server (MCP prompt analysis)"
+    echo -e "${GREEN} 5${NC}) ✏️  Prompt Server (Prompt engineering)"
+    echo -e "${GREEN} 6${NC}) 🎨 Tailwind CSS Server v4.1"
+    echo -e "${GREEN} 7${NC}) ⚡ FastMCP Server (High performance)"
+    echo -e "${GREEN} 8${NC}) ⚛️  React Unified Server (Analysis + Optimization + React 19)"
+    echo -e "${GREEN} 9${NC}) 📘 TypeScript Server (Advanced analysis and Clean Architecture)"
+    echo -e "${GREEN}10${NC}) 🧩 shadcn/ui Advanced Server"
+    echo -e "${GREEN}11${NC}) 🦀 Rust Idiomatic Server (mre/idiomatic-rust patterns)"
+    echo -e "${GREEN}12${NC}) 🌐 Axum Server (tokio-rs web framework + magic patterns)"
+    echo -e "${GREEN}13${NC}) 🐳 Docker Server (Optimization and containerization best practices)"
+    echo -e "${GREEN}14${NC}) 🐍 Python Server (Code analysis and modern paradigms)"
     echo ""
-    echo -e "${GREEN} 0${NC}) ❌ Sair"
+    echo -e "${GREEN} 0${NC}) ❌ Exit"
     echo ""
-    echo -e -n "${BLUE}Digite sua opção (0-15): ${NC}"
+    echo -e -n "${BLUE}Enter your option (0-14): ${NC}"
     
     read -r choice
     
     case $choice in
         1)
-            echo -e "\n${CYAN}📋 Listando servidores disponíveis...${NC}\n"
+            echo -e "\n${CYAN}📋 Listing available servers...${NC}\n"
             uv run python main.py list
             ;;
         2)
@@ -83,121 +82,122 @@ show_interactive_menu() {
             show_server_status
             ;;
         3)
-            echo -e "\n${GREEN}🚀 Iniciando TODOS os servidores...${NC}\n"
+            echo -e "\n${GREEN}🚀 Starting ALL servers...${NC}\n"
             uv run python main.py all --dev
             ;;
         4)
-            echo -e "\n${GREEN}🔍 Iniciando Servidor MCP...${NC}\n"
+            echo -e "\n${GREEN}🔍 Starting MCP Server...${NC}\n"
             uv run python main.py mcp
             ;;
         5)
-            echo -e "\n${GREEN}✏️ Iniciando Servidor Prompt...${NC}\n"
+            echo -e "\n${GREEN}✏️ Starting Prompt Server...${NC}\n"
             uv run python main.py prompt
             ;;
         6)
-            echo -e "\n${GREEN}🎨 Iniciando Servidor Tailwind CSS...${NC}\n"
+            echo -e "\n${GREEN}🎨 Starting Tailwind CSS Server...${NC}\n"
             uv run python main.py tailwind
             ;;
         7)
-            echo -e "\n${GREEN}⚡ Iniciando Servidor FastMCP...${NC}\n"
+            echo -e "\n${GREEN}⚡ Starting FastMCP Server...${NC}\n"
             uv run python main.py fastmcp
             ;;
         8)
-            echo -e "\n${GREEN}⚛️ Iniciando Servidor React Optimizer...${NC}\n"
-            uv run python main.py react_optimizer
-            ;;
-        9)
-            echo -e "\n${GREEN}🧩 Iniciando Servidor shadcn/ui Advanced...${NC}\n"
-            uv run python main.py shadcn
-            ;;
-        10)
-            echo -e "\n${GREEN}⚛️ Iniciando Servidor React 19...${NC}\n"
+            echo -e "\n${GREEN}⚛️ Starting React Unified Server...${NC}\n"
             uv run python main.py react
             ;;
+        9)
+            echo -e "\n${GREEN}📘 Starting TypeScript Server...${NC}\n"
+            uv run python main.py typescript
+            ;;
+        10)
+            echo -e "\n${GREEN}🧩 Starting shadcn/ui Advanced Server...${NC}\n"
+            uv run python main.py shadcn
+            ;;
         11)
-            echo -e "\n${GREEN}🦀 Iniciando Servidor Rust Idiomatic...${NC}\n"
+            echo -e "\n${GREEN}🦀 Starting Rust Idiomatic Server...${NC}\n"
             uv run python main.py rust
             ;;
         12)
-            echo -e "\n${GREEN}🌐 Iniciando Servidor Axum...${NC}\n"
+            echo -e "\n${GREEN}🌐 Starting Axum Server...${NC}\n"
             uv run python main.py axum
             ;;
         13)
-            echo -e "\n${GREEN}🐳 Iniciando Servidor Docker...${NC}\n"
+            echo -e "\n${GREEN}🐳 Starting Docker Server...${NC}\n"
             uv run python main.py docker
             ;;
         14)
-            echo -e "\n${GREEN}🐍 Iniciando Servidor Python...${NC}\n"
+            echo -e "\n${GREEN}🐍 Starting Python Server...${NC}\n"
             uv run python main.py python
             ;;
-        15)
-            echo -e "\n${GREEN}📘 Iniciando Servidor TypeScript...${NC}\n"
-            uv run python main.py typescript
-            ;;
         0)
-            echo -e "\n${GREEN}👋 Até logo!${NC}"
+            echo -e "\n${GREEN}👋 Goodbye!${NC}"
             exit 0
             ;;
         *)
-            echo -e "\n${RED}❌ Opção inválida. Escolha entre 0-15.${NC}"
+            echo -e "\n${RED}❌ Invalid option. Choose between 0-15.${NC}"
             ;;
     esac
 }
 
-# Função para mostrar status dos servidores
+# Function to show server status
 show_server_status() {
-    echo -e "${CYAN}📊 Status dos Servidores MCP:${NC}"
+    echo -e "${CYAN}📊 MCP Servers Status:${NC}"
     echo ""
     
-    declare -A server_status=(
-        ["mcp"]="✅ FUNCIONAL - Análise de prompts MCP com pontuação 1-10"
-        ["prompt"]="✅ FUNCIONAL - Engenharia de prompts com frameworks CRISPE/RACE"
-        ["tailwind"]="✅ FUNCIONAL - Tailwind CSS v4.1 com engine Oxide (Rust)"
-        ["fastmcp"]="✅ FUNCIONAL - FastMCP 2.0 plataforma completa + MCP Inspector"
-        ["react_optimizer"]="✅ FUNCIONAL - Análise e otimização React + UI/UX 2025"
-        ["shadcn"]="✅ FUNCIONAL - shadcn/ui Advanced com análise inteligente"
-        ["react"]="✅ FUNCIONAL - React 19 com Server Components e Actions"
-        ["rust"]="✅ FUNCIONAL - Rust Idiomatic seguindo mre/idiomatic-rust patterns"
-        ["axum"]="✅ FUNCIONAL - Axum web framework com tokio-rs + magic patterns"
-        ["docker"]="✅ FUNCIONAL - Docker containerização com security best practices"
-        ["python"]="✅ FUNCIONAL - Python desenvolvimento com paradigmas modernos (OOP/Functional/Async)"
-        ["typescript"]="✅ FUNCIONAL - TypeScript moderno com Clean Architecture e SOLID principles"
-    )
+    # Server status descriptions
+    get_server_status() {
+        case $1 in
+            "mcp") echo "✅ FUNCTIONAL - MCP prompt analysis with 1-10 scoring" ;;
+            "prompt") echo "✅ FUNCTIONAL - Prompt engineering with CRISPE/RACE frameworks" ;;
+            "tailwind") echo "✅ FUNCTIONAL - Tailwind CSS v4.1 with Oxide engine (Rust)" ;;
+            "fastmcp") echo "✅ FUNCTIONAL - FastMCP 2.0 complete platform + MCP Inspector" ;;
+            "react") echo "✅ FUNCTIONAL - Unified React server: analysis, optimization, React 19 + UI/UX 2025" ;;
+            "typescript") echo "✅ FUNCTIONAL - Modern TypeScript with Clean Architecture and SOLID principles" ;;
+            "shadcn") echo "✅ FUNCTIONAL - shadcn/ui Advanced with intelligent analysis" ;;
+            "rust") echo "✅ FUNCTIONAL - Rust Idiomatic following mre/idiomatic-rust patterns" ;;
+            "axum") echo "✅ FUNCTIONAL - Axum web framework with tokio-rs + magic patterns" ;;
+            "docker") echo "✅ FUNCTIONAL - Docker containerization with security best practices" ;;
+            "python") echo "✅ FUNCTIONAL - Python development with modern paradigms (OOP/Functional/Async)" ;;
+            *) echo "❌ Unknown server" ;;
+        esac
+    }
     
-    declare -A server_ports=(
-        ["mcp"]="3000"
-        ["prompt"]="3001"
-        ["tailwind"]="3002"
-        ["fastmcp"]="3003"
-        ["react"]="3004"
-        ["typescript"]="3005"
-        ["react_optimizer"]="3006"
-        ["shadcn"]="3007"
-        ["rust"]="3008"
-        ["axum"]="3009"
-        ["docker"]="3010"
-        ["python"]="3011"
-        ["typescript"]="3005"
-    )
+    # Server ports
+    get_server_port() {
+        case $1 in
+            "mcp") echo "3000" ;;
+            "prompt") echo "3001" ;;
+            "tailwind") echo "3002" ;;
+            "fastmcp") echo "3003" ;;
+            "react") echo "3004" ;;
+            "typescript") echo "3005" ;;
+            "shadcn") echo "3006" ;;
+            "rust") echo "3007" ;;
+            "axum") echo "3008" ;;
+            "docker") echo "3009" ;;
+            "python") echo "3010" ;;
+            *) echo "????" ;;
+        esac
+    }
     
-    for server in mcp prompt tailwind fastmcp react_optimizer shadcn react rust axum docker python typescript; do
-        status=${server_status[$server]}
-        port=${server_ports[$server]}
-        echo -e "  ${GREEN}$server${NC} (porta $port): $status"
+    for server in mcp prompt tailwind fastmcp react typescript shadcn rust axum docker python; do
+        status=$(get_server_status "$server")
+        port=$(get_server_port "$server")
+        echo -e "  ${GREEN}$server${NC} (port $port): $status"
     done
     
     echo ""
-    echo -e "${YELLOW}📈 Estatísticas:${NC}"
-    echo -e "  • Servidores funcionais: ${GREEN}12/12${NC} (100%)"
-    echo -e "  • Em desenvolvimento: ${YELLOW}0/12${NC} (0%)"
+    echo -e "${YELLOW}📈 Statistics:${NC}"
+    echo -e "  • Functional servers: ${GREEN}11/11${NC} (100%)"
+    echo -e "  • In development: ${YELLOW}0/11${NC} (0%)"
     echo -e "  • Framework: ${BLUE}FastMCP 2.0 + Python 3.12+${NC}"
-    echo -e "  • Gerenciador: ${PURPLE}uv (ultrafast package manager)${NC}"
+    echo -e "  • Manager: ${PURPLE}uv (ultrafast package manager)${NC}"
     echo ""
-    echo -e "${CYAN}🆕 Últimas Atualizações:${NC}"
-    echo -e "  • Tailwind CSS v4.1 (engine Oxide/Rust)"
+    echo -e "${CYAN}🆕 Latest Updates:${NC}"
+    echo -e "  • Tailwind CSS v4.1 (Oxide/Rust engine)"
     echo -e "  • FastMCP 2.0 (MCP Inspector + deployment tools)"
-    echo -e "  • React 19 (Server Components + Actions estáveis)"
-    echo -e "  • shadcn/ui Advanced (análise inteligente)"
+    echo -e "  • React 19 (Server Components + stable Actions)"
+    echo -e "  • shadcn/ui Advanced (intelligent analysis)"
     echo -e "  • Rust Idiomatic (mre/idiomatic-rust patterns)"
     echo -e "  • Axum Web Framework (tokio-rs + magic patterns)"
     echo -e "  • Docker Optimizer (security best practices + multi-stage)"
@@ -221,7 +221,6 @@ show_help() {
     echo -e "  ${GREEN}prompt${NC}         - Servidor de Prompts (Engenharia de prompts)"
     echo -e "  ${GREEN}tailwind${NC}       - Servidor Tailwind CSS v4.1"
     echo -e "  ${GREEN}fastmcp${NC}        - Servidor FastMCP (Alta performance)"
-    echo -e "  ${GREEN}react_optimizer${NC} - Servidor React Optimizer"
     echo -e "  ${GREEN}shadcn${NC}         - Servidor shadcn/ui Advanced (NOVO!)"
     echo -e "  ${GREEN}react${NC}          - Servidor React 19 (Server Components + Actions)"
     echo -e "  ${GREEN}rust${NC}           - Servidor Rust Idiomatic (mre/idiomatic-rust patterns)"
@@ -282,7 +281,7 @@ main() {
         "status")
             show_server_status
             ;;
-        "all"|"mcp"|"prompt"|"tailwind"|"fastmcp"|"react"|"typescript"|"react_optimizer"|"shadcn"|"rust"|"axum"|"docker"|"python")
+        "all"|"mcp"|"prompt"|"tailwind"|"fastmcp"|"react"|"typescript"|"shadcn"|"rust"|"axum"|"docker"|"python")
             echo -e "${GREEN}🚀 Iniciando servidor(es)...${NC}"
             echo ""
             

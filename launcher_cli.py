@@ -101,21 +101,12 @@ SERVERS_CONFIG = {
         "module": "servers.react_server", 
         "status": "functional"
     },
-    "react_optimizer": {
-        "name": "React Optimizer Server",
-        "description": "React code analysis and AI prompt optimization",
-        "emoji": "🚀",
-        "category": "Frontend",
-        "port": 3006,
-        "module": "servers.react_optimizer_server",
-        "status": "functional"
-    },
     "shadcn": {
         "name": "shadcn/ui Server",
         "description": "Advanced shadcn/ui component development",
         "emoji": "🧩",
         "category": "Frontend",
-        "port": 3007,
+        "port": 3006,
         "module": "servers.shadcn_server",
         "status": "functional"
     },
@@ -124,7 +115,7 @@ SERVERS_CONFIG = {
         "description": "Idiomatic Rust development patterns",
         "emoji": "🦀",
         "category": "Backend",
-        "port": 3008,
+        "port": 3007,
         "module": "servers.rust_server",
         "status": "functional"
     },
@@ -133,7 +124,7 @@ SERVERS_CONFIG = {
         "description": "Axum web development with tokio",
         "emoji": "🌐",
         "category": "Backend",
-        "port": 3009,
+        "port": 3008,
         "module": "servers.axum_server",
         "status": "functional"
     },
@@ -142,7 +133,7 @@ SERVERS_CONFIG = {
         "description": "Docker containerization with security best practices",
         "emoji": "🐳",
         "category": "DevOps",
-        "port": 3010,
+        "port": 3009,
         "module": "servers.docker_optimizer_server",
         "status": "functional"
     },
@@ -153,7 +144,16 @@ SERVERS_CONFIG = {
         "category": "Backend",
         "port": 3005,
         "module": "servers.typescript_server",
-        "status": "development"
+        "status": "functional"
+    },
+    "python": {
+        "name": "Python Development Optimizer",
+        "description": "Python code analysis and modern paradigms",
+        "emoji": "🐍",
+        "category": "Backend",
+        "port": 3011,
+        "module": "servers.python_optimizer_server", 
+        "status": "functional"
     }
 }
 
@@ -178,7 +178,7 @@ class MCPLauncherCLI:
         banner_panel = Panel.fit(
             "[bold blue]🚀 MCP SERVERS LAUNCHER CLI[/bold blue]\n"
             "[dim]Interactive Multi-Server Selection Interface[/dim]\n"
-            "[green]10/11 Servers Available[/green] • [yellow]Powered by FastMCP 2.0[/yellow]",
+            "[green]11/11 Servers Available[/green] • [yellow]Powered by FastMCP 2.0[/yellow]",
             title="[bold cyan]Welcome[/bold cyan]",
             border_style="blue",
             padding=(1, 2)
@@ -203,6 +203,7 @@ class MCPLauncherCLI:
         console.print()
         
         table = Table(show_header=True, header_style="bold magenta")
+        table.add_column("#", style="bold blue", no_wrap=True, width=3)
         table.add_column("Server", style="cyan", no_wrap=True)
         table.add_column("Name", style="white") 
         table.add_column("Category", style="yellow")
@@ -211,7 +212,7 @@ class MCPLauncherCLI:
         
         validation_results = self.validate_server_files()
         
-        for server_id, config in SERVERS_CONFIG.items():
+        for idx, (server_id, config) in enumerate(SERVERS_CONFIG.items(), 1):
             status_color = "green" if validation_results[server_id] else "red"
             status_text = "✅ Available" if validation_results[server_id] else "❌ Not Found"
             
@@ -220,6 +221,7 @@ class MCPLauncherCLI:
                 status_text = "🚧 Development"
                 
             table.add_row(
+                str(idx),
                 f"{config['emoji']} {server_id}",
                 config['name'],
                 config['category'],
@@ -491,16 +493,21 @@ class MCPLauncherCLI:
         
         # Show running servers info
         info_table = Table(show_header=True, header_style="bold green")
+        info_table.add_column("#", style="bold blue", no_wrap=True, width=3)
         info_table.add_column("Server") 
         info_table.add_column("Port")
         info_table.add_column("PID")
         info_table.add_column("Status")
+        
+        # Create a mapping of server_id to index for consistent numbering
+        server_order = {server_id: idx for idx, server_id in enumerate(SERVERS_CONFIG.keys(), 1)}
         
         for server_id in server_ids:
             config = SERVERS_CONFIG[server_id]
             process = self.running_servers.get(server_id)
             if process:
                 info_table.add_row(
+                    str(server_order.get(server_id, "?")),
                     f"{config['emoji']} {config['name']}",
                     str(config['port']),
                     str(process.pid),
