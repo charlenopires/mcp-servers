@@ -47,7 +47,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Any, Tuple, Union
 from enum import Enum
 import logging
-from fastmcp import FastMCP
+from fastmcp import FastMCP, Context
 from pydantic import BaseModel, Field
 
 # Configure logging
@@ -55,7 +55,20 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Initialize FastMCP server (following pattern of other servers)
-mcp = FastMCP("React Unified Development Server")
+mcp = FastMCP(
+    name="React Unified Development Server",
+    instructions="""Complete MCP server for modern React development with React 19 features, AI tool optimization, and UI/UX 2025 trends.
+
+This server provides comprehensive React development support:
+- Code analysis with quality scoring and optimization suggestions
+- React 19 features (Server Components, Actions, use hook)
+- AI tool prompt optimization (v0.dev, Cursor, Visual Copilot)
+- UI/UX 2025 trends (glassmorphism, micro-animations, dark mode)
+- Component template generation with TypeScript
+
+Use these tools for modern React development workflows.""",
+    version="3.0.0"
+)
 
 # ================================
 # UNIFIED KNOWLEDGE BASE
@@ -542,11 +555,12 @@ def analyze_prompt_quality(prompt: str) -> Dict[str, Any]:
 # MCP TOOLS - UNIFIED FUNCTIONALITY
 # ================================
 
-@mcp.tool()
+@mcp.tool(tags=["analysis", "scoring", "code-quality"])
 async def analyze_react_code(
     code: str,
     component_type: str = "component",
-    include_trends: bool = True
+    include_trends: bool = True,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Comprehensive React code analysis combining quality scoring, React 19 features,
@@ -613,10 +627,11 @@ async def analyze_react_code(
         ]
     }
 
-@mcp.tool()
+@mcp.tool(tags=["optimization", "refactoring", "react19"])
 async def optimize_react_code(
     code: str,
-    focus_areas: Optional[List[str]] = None
+    focus_areas: Optional[List[str]] = None,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Optimize React code applying React 19 features, modern patterns, 
@@ -693,8 +708,8 @@ async def optimize_react_code(
         ]
     }
 
-@mcp.tool()
-async def analyze_react_prompt(prompt: str) -> Dict[str, Any]:
+@mcp.tool(tags=["prompt-analysis", "quality", "ai-tools"])
+async def analyze_react_prompt(prompt: str, ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Analyze a React development prompt for quality, completeness, and optimization opportunities.
     Combines prompt analysis with React 19 and UI/UX 2025 awareness.
@@ -744,13 +759,14 @@ async def analyze_react_prompt(prompt: str) -> Dict[str, Any]:
         ]
     }
 
-@mcp.tool()
+@mcp.tool(tags=["prompt-optimization", "ai-tools", "generation"])
 async def optimize_react_prompt(
     prompt: str,
     target_ai_tool: str = "generic",
     component_type: str = "component",
     include_react19: bool = True,
-    include_trends: bool = True
+    include_trends: bool = True,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Transform a basic React prompt into a comprehensive, AI-optimized prompt with
@@ -877,13 +893,14 @@ async def optimize_react_prompt(
         }
     }
 
-@mcp.tool()
+@mcp.tool(tags=["templates", "components", "generation"])
 async def generate_component_template(
     component_type: str,
     complexity: str = "intermediate",
     include_react19: bool = True,
     include_trends: bool = True,
-    target_ai_tool: str = "generic"
+    target_ai_tool: str = "generic",
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Generate optimized prompt templates for different React component types with
@@ -1118,8 +1135,8 @@ async def generate_component_template(
         ]
     }
 
-@mcp.tool()
-async def get_react_trends_2025() -> Dict[str, Any]:
+@mcp.tool(tags=["trends", "ui-ux-2025", "reference"])
+async def get_react_trends_2025(ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Get comprehensive React and UI/UX trends for 2025 with implementation guidance.
     
@@ -1209,8 +1226,8 @@ function ContactForm() {
         ]
     }
 
-@mcp.tool()
-async def validate_react_requirements(requirements: str) -> Dict[str, Any]:
+@mcp.tool(tags=["validation", "requirements", "best-practices"])
+async def validate_react_requirements(requirements: str, ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Validate React project requirements against modern development standards,
     React 19 features, and UI/UX 2025 best practices.
@@ -1364,8 +1381,8 @@ async def validate_react_requirements(requirements: str) -> Dict[str, Any]:
         "compliance_summary": f"{met_requirements}/{total_items} requirements met ({overall_score:.1f}%)"
     }
 
-@mcp.tool()
-async def get_unified_server_info() -> Dict[str, Any]:
+@mcp.tool(tags=["info", "documentation", "reference"])
+async def get_unified_server_info(ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Get comprehensive information about the unified React server capabilities.
     
@@ -1513,6 +1530,403 @@ async def get_unified_server_info() -> Dict[str, Any]:
     }
 
 # ================================
+# MCP PROMPTS
+# ================================
+
+
+@mcp.prompt()
+async def create_react19_component(
+    component_name: str,
+    features: List[str] = [],
+    use_server_component: bool = False
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to create a component with React 19 features.
+
+    Args:
+        component_name: Name of the component to create
+        features: React 19 features to use (actions, use_hook, ref_prop)
+        use_server_component: Whether to create a Server Component
+    """
+    default_features = ["actions", "use_hook", "ref_prop"]
+    feature_list = features if features else default_features
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in React 19 development.
+
+React 19 key features:
+1. **Actions**: New form action pattern for async operations
+   - Automatic pending state management
+   - Optimistic updates with useOptimistic
+   - useFormState for form state handling
+
+2. **Server Components**: Components that render on server
+   - 'use server' directive for server-only code
+   - Direct database/API access
+   - Reduced client bundle size
+
+3. **'use' hook**: For consuming async resources
+   - Suspense-native data fetching
+   - Promise unwrapping in components
+   - Context consumption with use()
+
+4. **Ref as prop**: No more forwardRef
+   - Pass ref directly as prop
+   - Cleaner component APIs
+   - Better TypeScript support
+
+Best practices:
+- Use TypeScript with strict typing
+- Implement proper error boundaries
+- Add loading states with Suspense
+- Follow accessibility guidelines"""
+        },
+        {
+            "role": "user",
+            "content": f"""Create a React 19 component: {component_name}
+
+Component type: {'Server Component' if use_server_component else 'Client Component'}
+React 19 features to use: {', '.join(feature_list)}
+
+Requirements:
+1. Use TypeScript with proper interfaces
+2. Implement the specified React 19 features
+3. {'Add "use server" directive' if use_server_component else 'Add "use client" directive if needed'}
+4. Include error handling and loading states
+5. Add comprehensive JSDoc comments
+6. Follow accessibility best practices
+7. Include usage example
+8. Add unit test example"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def optimize_for_v0_dev(
+    component_description: str,
+    styling: str = "tailwind",
+    include_variants: bool = True
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt optimized for v0.dev.
+
+    Args:
+        component_description: Description of component to create
+        styling: Styling approach (tailwind, css-modules)
+        include_variants: Include component variants
+    """
+    return [
+        {
+            "role": "system",
+            "content": """You are optimizing prompts for v0.dev by Vercel.
+
+v0.dev optimization guidelines:
+1. **Be specific**: Include exact layout, spacing, colors
+2. **Use Tailwind**: Specify exact Tailwind classes
+3. **Component hierarchy**: Define parent-child relationships
+4. **Responsive design**: Include breakpoint behaviors
+5. **Interactions**: Specify hover, focus, active states
+6. **Accessibility**: Include ARIA labels and roles
+
+Effective v0.dev prompt structure:
+- Start with component purpose
+- Define visual appearance in detail
+- Specify interactions and states
+- Include responsive behavior
+- Add accessibility requirements"""
+        },
+        {
+            "role": "user",
+            "content": f"""Optimize this prompt for v0.dev:
+
+Component: {component_description}
+Styling: {styling}
+Include variants: {'Yes - create multiple variants' if include_variants else 'No - single version'}
+
+Create an optimized v0.dev prompt that includes:
+1. Specific layout with Tailwind classes
+2. Exact color palette and typography
+3. Spacing and sizing specifications
+4. Hover, focus, and active states
+5. Responsive breakpoints (mobile, tablet, desktop)
+6. Accessibility features (ARIA, keyboard navigation)
+7. Component variants if requested
+8. Animation/transition specifications"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def optimize_for_cursor(
+    task_description: str,
+    file_structure: str = "feature-based",
+    include_tests: bool = True
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt optimized for Cursor AI.
+
+    Args:
+        task_description: Description of development task
+        file_structure: Organization pattern (feature-based, type-based)
+        include_tests: Include test file generation
+    """
+    return [
+        {
+            "role": "system",
+            "content": """You are optimizing prompts for Cursor AI editor.
+
+Cursor AI optimization guidelines:
+1. **Context-aware**: Reference existing code patterns
+2. **File structure**: Specify exact file paths and names
+3. **Incremental**: Break into small, focused changes
+4. **Naming conventions**: Be explicit about naming patterns
+5. **Documentation**: Include inline comments and JSDoc
+
+Effective Cursor prompt structure:
+- Start with current file context
+- Define exact changes needed
+- Specify affected files
+- Include testing requirements
+- Add documentation standards"""
+        },
+        {
+            "role": "user",
+            "content": f"""Optimize this prompt for Cursor AI:
+
+Task: {task_description}
+File structure: {file_structure}
+Include tests: {'Yes' if include_tests else 'No'}
+
+Create an optimized Cursor prompt that includes:
+1. Clear file path specifications
+2. Exact code modifications needed
+3. Naming conventions to follow
+4. Import/export patterns
+5. TypeScript types and interfaces
+6. {'Test file specifications' if include_tests else 'Skip test specifications'}
+7. Inline documentation requirements
+8. Error handling patterns"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def design_server_component(
+    component_purpose: str,
+    data_source: str = "database",
+    caching_strategy: str = "default"
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to design a React Server Component.
+
+    Args:
+        component_purpose: What the Server Component should do
+        data_source: Where data comes from (database, api, filesystem)
+        caching_strategy: Caching approach (default, force-cache, no-store)
+    """
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in React Server Components.
+
+Server Component principles:
+1. **Server-only**: Runs exclusively on server
+2. **Direct data access**: Database, filesystem, APIs
+3. **No client state**: Cannot use useState, useEffect
+4. **Async support**: Can be async functions
+5. **Composition**: Combine with Client Components
+
+Server Component patterns:
+```tsx
+// Server Component (default in app directory)
+async function UserProfile({ userId }: { userId: string }) {
+  const user = await db.user.findUnique({ where: { id: userId } });
+  return <div>{user.name}</div>;
+}
+
+// With Client Component child
+async function Dashboard() {
+  const data = await fetchDashboardData();
+  return (
+    <div>
+      <ServerHeader />
+      <ClientInteractiveChart data={data} />
+    </div>
+  );
+}
+```
+
+Best practices:
+- Keep Server Components at page/layout level
+- Pass data down to Client Components
+- Use streaming for better UX
+- Implement proper error boundaries"""
+        },
+        {
+            "role": "user",
+            "content": f"""Design a React Server Component for: {component_purpose}
+
+Data source: {data_source}
+Caching strategy: {caching_strategy}
+
+Requirements:
+1. Implement as async Server Component
+2. Fetch data directly from {data_source}
+3. Apply {caching_strategy} caching strategy
+4. Handle loading states with Suspense
+5. Implement error boundary handling
+6. Compose with Client Components where needed
+7. Optimize for streaming
+8. Include TypeScript types"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def implement_form_action(
+    form_purpose: str,
+    fields: List[str] = [],
+    include_optimistic: bool = True
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to implement a form with React 19 Actions.
+
+    Args:
+        form_purpose: Purpose of the form
+        fields: Form fields needed
+        include_optimistic: Include optimistic updates
+    """
+    default_fields = ["name", "email", "message"]
+    field_list = fields if fields else default_fields
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in React 19 form handling with Actions.
+
+React 19 Form Actions:
+1. **form action**: Pass server action to form
+2. **useFormState**: Track form state with action
+3. **useFormStatus**: Get pending state in children
+4. **useOptimistic**: Optimistic UI updates
+
+Form Action pattern:
+```tsx
+'use server'
+async function submitForm(prevState, formData: FormData) {
+  const data = Object.fromEntries(formData);
+  const result = await saveToDatabase(data);
+  return { success: true, data: result };
+}
+
+'use client'
+function ContactForm() {
+  const [state, formAction] = useFormState(submitForm, null);
+
+  return (
+    <form action={formAction}>
+      <input name="email" required />
+      <SubmitButton />
+      {state?.success && <p>Submitted!</p>}
+    </form>
+  );
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return <button disabled={pending}>{pending ? 'Submitting...' : 'Submit'}</button>;
+}
+```"""
+        },
+        {
+            "role": "user",
+            "content": f"""Implement a form with React 19 Actions for: {form_purpose}
+
+Form fields: {', '.join(field_list)}
+Include optimistic updates: {'Yes' if include_optimistic else 'No'}
+
+Requirements:
+1. Create server action with 'use server'
+2. Implement form with useFormState
+3. Add SubmitButton with useFormStatus
+4. {'Implement useOptimistic for instant feedback' if include_optimistic else 'Skip optimistic updates'}
+5. Add proper validation
+6. Handle success and error states
+7. Include accessibility features
+8. Add TypeScript types for form data"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def apply_ui_ux_2025_trends(
+    component_code: str = "",
+    trends_to_apply: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to apply UI/UX 2025 trends to a component.
+
+    Args:
+        component_code: Existing component code (optional)
+        trends_to_apply: Specific trends to apply
+    """
+    default_trends = ["dark_mode", "glassmorphism", "micro_animations", "accessibility"]
+    trends = trends_to_apply if trends_to_apply else default_trends
+
+    trend_descriptions = {
+        "dark_mode": "Dark mode as primary theme with light mode option",
+        "glassmorphism": "Frosted glass effects with backdrop-blur",
+        "micro_animations": "Subtle hover/focus animations and transitions",
+        "accessibility": "WCAG AA compliance with proper ARIA",
+        "3d_elements": "Depth and layering with 3D transforms",
+        "variable_fonts": "Dynamic typography with variable fonts"
+    }
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in UI/UX design trends for 2025.
+
+UI/UX 2025 Trends:
+1. **Dark Mode First**: Primary dark theme, light as secondary
+2. **Glassmorphism**: Frosted glass with backdrop-blur, transparency
+3. **Micro-animations**: Subtle feedback animations (0.2-0.3s)
+4. **Accessibility First**: WCAG AA, keyboard nav, screen readers
+5. **3D Elements**: Depth, parallax, layered interfaces
+6. **Variable Fonts**: Responsive typography, weight animations
+
+Implementation patterns:
+- Use CSS custom properties for theming
+- Apply backdrop-blur and subtle borders
+- Use Framer Motion or CSS transitions
+- Include prefers-reduced-motion support
+- Add proper focus indicators"""
+        },
+        {
+            "role": "user",
+            "content": f"""Apply UI/UX 2025 trends to {'this component' if component_code else 'a new component'}:
+
+{f"```tsx{chr(10)}{component_code}{chr(10)}```" if component_code else "Create a modern component with the following trends:"}
+
+Trends to apply:
+{chr(10).join(f"- {trend}: {trend_descriptions.get(trend, trend)}" for trend in trends)}
+
+Requirements:
+1. Implement each specified trend
+2. Use CSS custom properties for theming
+3. Add smooth transitions (0.2-0.3s)
+4. Include prefers-reduced-motion support
+5. Ensure WCAG AA accessibility
+6. Use modern CSS features (backdrop-blur, etc.)
+7. Add proper focus states
+8. Include dark/light mode toggle"""
+        }
+    ]
+
+
+# ================================
 # SERVER STARTUP
 # ================================
 
@@ -1522,4 +1936,11 @@ if __name__ == "__main__":
     logger.info("🔧 Features: Code analysis, prompt optimization, component templates, trends integration")
     logger.info("🎯 AI Tools: v0.dev, Cursor, Visual Copilot optimization support")
     logger.info("📈 Capabilities: React 19 Actions, Server Components, UI/UX 2025 trends, accessibility-first")
+    logger.info("\n📝 Available prompts:")
+    logger.info("  - create_react19_component: Create components with React 19 features")
+    logger.info("  - optimize_for_v0_dev: Optimize prompts for v0.dev")
+    logger.info("  - optimize_for_cursor: Optimize prompts for Cursor AI")
+    logger.info("  - design_server_component: Design React Server Components")
+    logger.info("  - implement_form_action: Implement forms with Actions")
+    logger.info("  - apply_ui_ux_2025_trends: Apply UI/UX 2025 trends")
     mcp.run()

@@ -1,240 +1,244 @@
 #!/usr/bin/env python3
 """
-Testes unitários para o servidor Analisador de Prompts MCP.
+Unit tests for the MCP Prompt Analyzer server.
 """
 
-from servers.mcp_server import AnalisadorPromptMCP, AnalisePrompt, RelatorioValidacao
 import pytest
 import sys
-import os
 from pathlib import Path
 
-# Adicionar o diretório raiz ao path para importar os servidores
+# Add project root to path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
+from servers.mcp_server import MCPPromptAnalyzer, PromptAnalysis, ValidationReport
 
-class TestAnalisadorPromptMCP:
-    """Testes para a classe AnalisadorPromptMCP"""
+
+class TestMCPPromptAnalyzer:
+    """Tests for the MCPPromptAnalyzer class"""
 
     @pytest.fixture
-    def analisador(self):
-        """Fixture para criar uma instância do analisador"""
-        return AnalisadorPromptMCP()
+    def analyzer(self):
+        """Fixture to create an analyzer instance"""
+        return MCPPromptAnalyzer()
 
-    def test_analisador_inicializacao(self, analisador):
-        """Testar inicialização do analisador"""
-        assert analisador is not None
-        assert hasattr(analisador, 'melhores_praticas')
-        assert hasattr(analisador, 'padroes_positivos')
-        assert hasattr(analisador, 'padroes_negativos')
+    def test_analyzer_initialization(self, analyzer):
+        """Test analyzer initialization"""
+        assert analyzer is not None
+        assert hasattr(analyzer, 'best_practices')
+        assert hasattr(analyzer, 'positive_patterns')
+        assert hasattr(analyzer, 'negative_patterns')
 
-    def test_prompt_ruim(self, analisador):
-        """Testar análise de prompt de baixa qualidade"""
-        prompt = "Faça um servidor MCP simples"
-        resultado = analisador.analisar_prompt(prompt)
+    def test_poor_prompt(self, analyzer):
+        """Test analysis of poor quality prompt"""
+        prompt = "Make a simple MCP server"
+        result = analyzer.analyze_prompt(prompt)
 
-        assert isinstance(resultado, AnalisePrompt)
-        assert 1 <= resultado.pontuacao <= 4
-        # Permitir que pontos_fracos seja vazio se há recomendações
-        assert len(resultado.pontos_fracos) > 0 or len(
-            resultado.recomendacoes) > 0
-        assert len(resultado.elementos_ausentes) > 0
+        assert isinstance(result, PromptAnalysis)
+        assert 1 <= result.score <= 4
+        # Allow weaknesses to be empty if there are recommendations
+        assert len(result.weaknesses) > 0 or len(result.recommendations) > 0
+        assert len(result.missing_elements) > 0
 
-    def test_prompt_medio(self, analisador):
-        """Testar análise de prompt de qualidade média"""
-        prompt = "Crie um servidor MCP com ferramentas para operações de arquivo incluindo tratamento de erros"
-        resultado = analisador.analisar_prompt(prompt)
+    def test_medium_prompt(self, analyzer):
+        """Test analysis of medium quality prompt"""
+        prompt = "Create an MCP server with tools for file operations including error handling"
+        result = analyzer.analyze_prompt(prompt)
 
-        assert isinstance(resultado, AnalisePrompt)
-        assert 4 <= resultado.pontuacao <= 7
-        assert len(resultado.pontos_fortes) > 0
-        assert len(resultado.recomendacoes) > 0
+        assert isinstance(result, PromptAnalysis)
+        assert 4 <= result.score <= 7
+        assert len(result.strengths) > 0
+        assert len(result.recommendations) > 0
 
-    def test_prompt_bom(self, analisador):
-        """Testar análise de prompt de alta qualidade"""
-        prompt = """Crie um servidor MCP para operações de arquivo com os seguintes requisitos:
-        - Ferramentas para ler, escrever e listar arquivos
-        - Tratamento abrangente de erros e validação
-        - Medidas de segurança incluindo sanitização de entrada
-        - Definições claras de schema para todas as entradas/saídas
-        - Documentação e exemplos de uso
-        - Estratégia de teste
-        - Considerações de performance
-        - Usa protocolo de transporte stdio"""
+    def test_good_prompt(self, analyzer):
+        """Test analysis of high quality prompt"""
+        prompt = """Create an MCP server for file operations with the following requirements:
+        - Tools for reading, writing and listing files
+        - Comprehensive error handling and validation
+        - Security measures including input sanitization
+        - Clear schema definitions for all inputs/outputs
+        - Documentation and usage examples
+        - Testing strategy
+        - Performance considerations
+        - Uses stdio transport protocol"""
 
-        resultado = analisador.analisar_prompt(prompt)
+        result = analyzer.analyze_prompt(prompt)
 
-        assert isinstance(resultado, AnalisePrompt)
-        assert 7 <= resultado.pontuacao <= 10
-        assert len(resultado.pontos_fortes) > 0
-        assert resultado.alinhamento_melhores_praticas['tratamento_erros'] is True
-        assert resultado.alinhamento_melhores_praticas['consideracoes_seguranca'] is True
+        assert isinstance(result, PromptAnalysis)
+        assert 7 <= result.score <= 10
+        assert len(result.strengths) > 0
+        assert result.best_practices_alignment['error_handling'] is True
+        assert result.best_practices_alignment['security_considerations'] is True
 
-    def test_campos_resultado(self, analisador):
-        """Testar se todos os campos do resultado estão presentes"""
-        prompt = "Teste básico"
-        resultado = analisador.analisar_prompt(prompt)
+    def test_result_fields(self, analyzer):
+        """Test if all result fields are present"""
+        prompt = "Basic test"
+        result = analyzer.analyze_prompt(prompt)
 
-        assert hasattr(resultado, 'pontuacao')
-        assert hasattr(resultado, 'pontos_fortes')
-        assert hasattr(resultado, 'pontos_fracos')
-        assert hasattr(resultado, 'recomendacoes')
-        assert hasattr(resultado, 'alinhamento_melhores_praticas')
-        assert hasattr(resultado, 'elementos_ausentes')
+        assert hasattr(result, 'score')
+        assert hasattr(result, 'strengths')
+        assert hasattr(result, 'weaknesses')
+        assert hasattr(result, 'recommendations')
+        assert hasattr(result, 'best_practices_alignment')
+        assert hasattr(result, 'missing_elements')
 
-        assert isinstance(resultado.pontuacao, int)
-        assert isinstance(resultado.pontos_fortes, list)
-        assert isinstance(resultado.pontos_fracos, list)
-        assert isinstance(resultado.recomendacoes, list)
-        assert isinstance(resultado.alinhamento_melhores_praticas, dict)
-        assert isinstance(resultado.elementos_ausentes, list)
+        assert isinstance(result.score, int)
+        assert isinstance(result.strengths, list)
+        assert isinstance(result.weaknesses, list)
+        assert isinstance(result.recommendations, list)
+        assert isinstance(result.best_practices_alignment, dict)
+        assert isinstance(result.missing_elements, list)
 
-    def test_pontuacao_range(self, analisador):
-        """Testar se a pontuação está sempre no range correto (1-10)"""
-        prompts_teste = [
+    def test_score_range(self, analyzer):
+        """Test if score is always in correct range (1-10)"""
+        test_prompts = [
             "",
             "abc",
-            "Servidor MCP muito básico",
-            "Servidor MCP completo com segurança, testes, documentação, tratamento de erros",
-            "x" * 1000  # Prompt muito longo
+            "Very basic MCP server",
+            "Complete MCP server with security, tests, documentation, error handling",
+            "x" * 1000  # Very long prompt
         ]
 
-        for prompt in prompts_teste:
-            resultado = analisador.analisar_prompt(prompt)
-            assert 1 <= resultado.pontuacao <= 10
+        for prompt in test_prompts:
+            result = analyzer.analyze_prompt(prompt)
+            assert 1 <= result.score <= 10
 
 
-class TestValidacaoRequisitos:
-    """Testes para validação de requisitos MCP"""
+class TestRequirementsValidation:
+    """Tests for MCP requirements validation"""
 
-    def test_validacao_aprovada(self):
-        """Testar validação com requisitos que devem passar"""
-        from servers.mcp_server import validar_requisitos_mcp
+    @pytest.mark.asyncio
+    async def test_validation_approved(self):
+        """Test validation with requirements that should pass"""
+        from servers.mcp_server import mcp_validate_requirements
 
-        requisitos = """Criar servidor MCP com:
-        - Tratamento de erros robusto
-        - Considerações de segurança
-        - Documentação completa
-        - Testes abrangentes
-        - Validação de schema
+        requirements = """Create MCP server with:
+        - Robust error handling
+        - Security considerations
+        - Complete documentation
+        - Comprehensive tests
+        - Schema validation
         """
 
-        resultado = validar_requisitos_mcp(requisitos)
+        # Access underlying function via .fn attribute
+        result = await mcp_validate_requirements.fn(requirements)
 
-        assert isinstance(resultado, dict)
-        assert 'pontuacao_geral' in resultado
-        assert 'validacao_aprovada' in resultado
-        assert 'problemas_criticos' in resultado
-        assert 'avisos' in resultado
-        assert isinstance(resultado['problemas_criticos'], list)
-        assert isinstance(resultado['avisos'], list)
+        assert isinstance(result, dict)
+        assert 'overall_score' in result
+        assert 'validation_passed' in result
+        assert 'critical_issues' in result
+        assert 'warnings' in result
+        assert isinstance(result['critical_issues'], list)
+        assert isinstance(result['warnings'], list)
 
-    def test_validacao_rejeitada(self):
-        """Testar validação com requisitos insuficientes"""
-        from servers.mcp_server import validar_requisitos_mcp
+    @pytest.mark.asyncio
+    async def test_validation_rejected(self):
+        """Test validation with insufficient requirements"""
+        from servers.mcp_server import mcp_validate_requirements
 
-        requisitos = "Faça um servidor básico"
-        resultado = validar_requisitos_mcp(requisitos)
+        requirements = "Make a basic server"
+        # Access underlying function via .fn attribute
+        result = await mcp_validate_requirements.fn(requirements)
 
-        assert isinstance(resultado, dict)
-        assert resultado['pontuacao_geral'] < 7
-        assert resultado['validacao_aprovada'] is False
-        assert len(resultado['problemas_criticos']) > 0
+        assert isinstance(result, dict)
+        assert result['overall_score'] < 7
+        assert result['validation_passed'] is False
+        assert len(result['critical_issues']) > 0
 
 
-class TestIntegracaoFerramentas:
-    """Testes de integração para as ferramentas MCP"""
+class TestToolIntegration:
+    """Integration tests for MCP tools"""
 
-    def test_analisar_prompt_ferramenta(self):
-        """Testar a ferramenta de análise de prompt"""
-        from servers.mcp_server import mcp_analyze_server_prompt
+    @pytest.mark.asyncio
+    async def test_analyze_prompt_tool(self):
+        """Test the prompt analysis tool"""
+        from servers.mcp_server import mcp_analyze_server_prompt, PromptAnalysis
 
-        prompt = "Criar servidor MCP com operações de arquivo"
-        resultado = mcp_analyze_server_prompt(prompt)
+        prompt = "Create MCP server with file operations"
+        # Access underlying function via .fn attribute
+        result = await mcp_analyze_server_prompt.fn(prompt)
 
-        assert isinstance(resultado, AnalisePrompt)
-        assert resultado.pontuacao >= 1
+        # Result is a PromptAnalysis object
+        assert isinstance(result, PromptAnalysis)
+        assert result.score >= 1
 
-    def test_melhorar_prompt_ferramenta(self):
-        """Testar a ferramenta de melhoria de prompt"""
-        # Teste mock já que a função pode não estar implementada
+    def test_improve_prompt_tool_mock(self):
+        """Test the prompt improvement tool (mock)"""
         from unittest.mock import Mock
 
-        mock_melhorar = Mock()
-        mock_melhorar.return_value = {
-            "prompt_original": "Fazer servidor simples",
-            "prompt_melhorado": "Crie um servidor MCP específico com requisitos claros",
-            "melhorias_feitas": ["Especificidade", "Clareza"]
+        mock_improve = Mock()
+        mock_improve.return_value = {
+            "original_prompt": "Make simple server",
+            "improved_prompt": "Create a specific MCP server with clear requirements",
+            "improvements_made": ["Specificity", "Clarity"]
         }
 
-        prompt = "Fazer servidor simples"
-        resultado = mock_melhorar(prompt)
+        prompt = "Make simple server"
+        result = mock_improve(prompt)
 
-        assert isinstance(resultado, dict)
-        assert 'prompt_original' in resultado
-        assert 'prompt_melhorado' in resultado
-        assert 'melhorias_feitas' in resultado
-        assert len(resultado['melhorias_feitas']) > 0
+        assert isinstance(result, dict)
+        assert 'original_prompt' in result
+        assert 'improved_prompt' in result
+        assert 'improvements_made' in result
+        assert len(result['improvements_made']) > 0
 
 
 def main():
-    """Função principal para execução manual dos testes"""
-    print("🧪 Executando testes do MCP Server...")
+    """Main function for manual test execution"""
+    print("Running MCP Server tests...")
     print("=" * 50)
 
-    # Executar alguns testes básicos manualmente
-    analisador = AnalisadorPromptMCP()
+    # Run some basic tests manually
+    analyzer = MCPPromptAnalyzer()
 
-    casos_teste = [
+    test_cases = [
         {
-            "nome": "Prompt Ruim",
-            "prompt": "Faça um servidor MCP simples",
-            "faixa_pontuacao_esperada": (1, 4)
+            "name": "Poor Prompt",
+            "prompt": "Make a simple MCP server",
+            "expected_score_range": (1, 4)
         },
         {
-            "nome": "Prompt Médio",
-            "prompt": "Crie um servidor MCP com ferramentas para operações de arquivo incluindo tratamento de erros",
-            "faixa_pontuacao_esperada": (4, 7)
+            "name": "Medium Prompt",
+            "prompt": "Create an MCP server with tools for file operations including error handling",
+            "expected_score_range": (4, 7)
         },
         {
-            "nome": "Prompt Bom",
-            "prompt": """Crie um servidor MCP para operações de arquivo com os seguintes requisitos:
-            - Ferramentas para ler, escrever e listar arquivos
-            - Tratamento abrangente de erros e validação
-            - Medidas de segurança incluindo sanitização de entrada
-            - Definições claras de schema para todas as entradas/saídas
-            - Documentação e exemplos de uso
-            - Estratégia de teste
-            - Considerações de performance
-            - Usa protocolo de transporte stdio""",
-            "faixa_pontuacao_esperada": (7, 10)
+            "name": "Good Prompt",
+            "prompt": """Create an MCP server for file operations with the following requirements:
+            - Tools for reading, writing and listing files
+            - Comprehensive error handling and validation
+            - Security measures including input sanitization
+            - Clear schema definitions for all inputs/outputs
+            - Documentation and usage examples
+            - Testing strategy
+            - Performance considerations
+            - Uses stdio transport protocol""",
+            "expected_score_range": (7, 10)
         }
     ]
 
-    for caso_teste in casos_teste:
-        print(f"\n📝 Teste: {caso_teste['nome']}")
-        print(f"Prompt: {caso_teste['prompt'][:100]}...")
+    for test_case in test_cases:
+        print(f"\nTest: {test_case['name']}")
+        print(f"Prompt: {test_case['prompt'][:100]}...")
 
-        analise = analisador.analisar_prompt(caso_teste['prompt'])
+        analysis = analyzer.analyze_prompt(test_case['prompt'])
 
-        print(f"✅ Pontuação: {analise.pontuacao}/10")
-        print(f"📊 Faixa esperada: {caso_teste['faixa_pontuacao_esperada']}")
+        print(f"Score: {analysis.score}/10")
+        print(f"Expected range: {test_case['expected_score_range']}")
 
-        # Verificar se está na faixa esperada
-        min_esp, max_esp = caso_teste['faixa_pontuacao_esperada']
-        pontuacao = int(analise.pontuacao) if isinstance(
-            analise.pontuacao, str) else analise.pontuacao
-        if min_esp <= pontuacao <= max_esp:
-            print("✅ PASSOU")
+        # Check if within expected range
+        min_expected, max_expected = test_case['expected_score_range']
+        score = int(analysis.score) if isinstance(analysis.score, str) else analysis.score
+        if min_expected <= score <= max_expected:
+            print("PASSED")
         else:
-            print("❌ FALHOU")
+            print("FAILED")
 
-        print(f"💪 Pontos fortes: {len(analise.pontos_fortes)}")
-        print(f"⚠️  Pontos fracos: {len(analise.pontos_fracos)}")
-        print(f"💡 Recomendações: {len(analise.recomendacoes)}")
+        print(f"Strengths: {len(analysis.strengths)}")
+        print(f"Weaknesses: {len(analysis.weaknesses)}")
+        print(f"Recommendations: {len(analysis.recommendations)}")
 
-    print(f"\n🎉 Testes concluídos!")
+    print(f"\nTests completed!")
 
 
 if __name__ == "__main__":

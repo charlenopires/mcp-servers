@@ -16,18 +16,24 @@ from fastmcp import FastMCP, Context
 
 # FastMCP server initialization
 mcp = FastMCP(
-    name="FastMCP Server 2.0 - Advanced MCP Development Platform",
-    description="Complete FastMCP 2.0 server for MCP server development, analysis and optimization",
-    instructions="""FastMCP 2.0 is a comprehensive platform that offers:
-    - Rapid MCP server development with Pythonic interface
-    - Advanced prompt quality analysis for MCP servers
-    - Optimized templates following FastMCP 2.0 best practices
-    - Integrated debugging and inspection tools (MCP Inspector)
-    - Support for authentication, deployment and server composition
-    - Automatic server generation from REST APIs
-    - Testing tools and integration with major AI platforms
-    Use the tools to make the most of the FastMCP 2.0 ecosystem.""",
-    version="2.0.0"
+    name="FastMCP Server - Advanced MCP Development Platform",
+    instructions="""Complete FastMCP server for MCP server development, analysis and optimization.
+
+FastMCP is a comprehensive platform that offers:
+- Rapid MCP server development with Pythonic interface
+- Decorators that return original functions for easy testing
+- Context injection in tools, resources, and prompts
+- Server composition with mount() and import_server()
+- Lifespan management with async context managers
+- FileSystemProvider for automatic component discovery
+- Multiple transport options (stdio, http, sse)
+- Proxy servers with FastMCP.as_proxy()
+- Automatic server generation from OpenAPI/FastAPI
+- Component-level authorization with JWT/OAuth 2.1
+- Testing tools and integration with major AI platforms
+
+Use the tools to make the most of the FastMCP ecosystem.""",
+    version="3.0.0"
 )
 
 # Structured logging configuration
@@ -92,41 +98,91 @@ class MCPRequirement(BaseModel):
         default_factory=list, description="Required external APIs")
 
 
-# FastMCP 2.0 Context and Best Practices
-FASTMCP_2_0_CONTEXT = {
-    "version": "2.0.0",
+# FastMCP 3.0 Context and Best Practices
+FASTMCP_3_0_CONTEXT = {
+    "version": "3.0.0",
     "features": {
         "core": [
-            "High-level Pythonic interface with decorators",
-            "Built-in MCP Inspector for debugging and testing",
-            "Comprehensive deployment tools and auth systems",
-            "Server proxying and composition capabilities",
-            "Dynamic tool rewriting and REST API generation",
-            "Integration with major AI platforms (Claude, GPT, etc.)"
+            "Decorators return original functions for direct testing",
+            "Context injection in tools, resources, and prompts (ctx: Context)",
+            "Component-level authorization with auth=require_auth or auth=require_scopes()",
+            "Server composition with mount() and namespaces",
+            "Lifespan management with async context managers",
+            "FileSystemProvider for automatic component discovery",
+            "Multiple transport options: stdio, http, sse",
+            "Proxy servers with FastMCP.as_proxy()",
+            "Automatic generation from OpenAPI/FastAPI specs"
         ],
         "development": [
-            "Fast development with minimal boilerplate code",
+            "Direct function testing without MCP client setup",
+            "Progress reporting with ctx.report_progress()",
+            "Logging with ctx.info(), ctx.debug(), ctx.warning()",
+            "Tags and metadata for tool organization",
             "Type hints and Pydantic model integration",
-            "Async/await native support throughout",
-            "Automatic protocol handling and content types",
-            "Built-in error management and validation"
+            "Async/await native support throughout"
+        ],
+        "composition": [
+            "mount(server, namespace='prefix') for modular architecture",
+            "import_server() for static component import",
+            "Namespace prefixing for tools: 'namespace_tool_name'",
+            "Namespace prefixing for resources: 'scheme://namespace/path'",
+            "Cross-server tool discovery and invocation"
         ],
         "production": [
-            "Authentication systems (OAuth 2.1, JWT)",
-            "Deployment tools for various platforms",
+            "JWT authentication with JWTVerifier",
+            "OAuth 2.1 integration",
+            "Component-level scopes with require_scopes()",
+            "HTTP transport with configurable host/port",
             "Health checks and monitoring integration",
-            "Rate limiting and security features",
-            "Scalability patterns and connection pooling"
+            "Rate limiting and security features"
         ]
     },
-    "evolution_from_1_0": {
-        "v1_0": "Basic server building capabilities (now part of official MCP SDK)",
-        "v2_0": "Complete ecosystem: clients, auth, deployment, integrations, testing, production patterns"
+    "evolution": {
+        "v1_0": "Basic server building (now in official MCP SDK)",
+        "v2_0": "Complete ecosystem: clients, auth, deployment, testing",
+        "v3_0": "Testability, composition, lifespan, component authorization"
     },
     "installation": {
         "recommended": "uv add fastmcp",
         "pip": "pip install fastmcp",
-        "requirements": "Python 3.8+, type hints support"
+        "requirements": "Python 3.10+, type hints support"
+    },
+    "patterns": {
+        "context_injection": """
+@mcp.tool()
+async def my_tool(param: str, ctx: Context) -> str:
+    await ctx.info("Processing...")
+    await ctx.report_progress(0.5, "Halfway done")
+    return result
+""",
+        "lifespan": """
+@asynccontextmanager
+async def lifespan(mcp: FastMCP):
+    db = await Database.connect()
+    yield {"db": db}
+    await db.disconnect()
+
+mcp = FastMCP("Server", lifespan=lifespan)
+""",
+        "composition": """
+main = FastMCP("Main")
+sub = FastMCP("Sub")
+
+@sub.tool()
+def hello(): return "hi"
+
+main.mount(sub, namespace="sub")
+# Tool accessible as "sub_hello"
+""",
+        "authorization": """
+from fastmcp.server.auth import require_auth, require_scopes
+
+@mcp.tool(auth=require_auth)
+def protected_tool(): ...
+
+@mcp.resource("data://secret", auth=require_scopes("read"))
+def secret_data(): ...
+"""
     }
 }
 
@@ -207,7 +263,7 @@ KEYWORDS = {
 # Prompt analysis tools
 
 
-@mcp.tool()
+@mcp.tool(tags=["analysis", "validation", "scoring"])
 async def fastmcp_analyze_mcp_prompt(
     prompt: str,
     ctx: Optional[Context] = None
@@ -338,7 +394,7 @@ async def fastmcp_analyze_mcp_prompt(
 # Prompt optimization tools
 
 
-@mcp.tool()
+@mcp.tool(tags=["optimization", "improvement", "suggestions"])
 async def fastmcp_suggest_prompt_improvements(
     original_prompt: str,
     focus_area: Optional[str] = None,
@@ -444,7 +500,7 @@ result = await client.call_tool("tool_name", {
 # Validation tools
 
 
-@mcp.tool()
+@mcp.tool(tags=["validation", "requirements", "checklist"])
 async def fastmcp_validate_requirements(
     requirements: str,
     ctx: Optional[Context] = None
@@ -518,7 +574,7 @@ async def fastmcp_validate_requirements(
 # Template generation tools
 
 
-@mcp.tool()
+@mcp.tool(tags=["generation", "templates", "server-creation"])
 async def fastmcp_generate_server_template(
     server_type: str,
     name: str,
@@ -544,9 +600,10 @@ async def fastmcp_generate_server_template(
 Create an MCP server with FastMCP in Python for {description}.
 
 ## Technical Specifications
-- **Framework**: FastMCP 2.0+
-- **Python**: 3.8+
+- **Framework**: FastMCP 3.0+
+- **Python**: 3.10+
 - **Style**: Pythonic, with type hints and detailed docstrings
+- **Features**: Context injection, tags, lifespan management
 """
 
     # Specific templates by type
@@ -1119,6 +1176,190 @@ async def create_server_prompt(
     return [
         {"role": "user", "content": "\n".join(prompt_parts)}
     ]
+
+@mcp.prompt("design_server_composition")
+async def design_server_composition_prompt(
+    main_server_purpose: str,
+    sub_servers: List[str],
+    shared_state: bool = False
+) -> List[Dict[str, str]]:
+    """
+    Generate prompt for designing MCP server composition with mount().
+
+    Args:
+        main_server_purpose: Purpose of the main orchestrating server
+        sub_servers: List of sub-server names/purposes to compose
+        shared_state: Whether servers need to share state
+
+    Returns:
+        List of messages for designing server composition
+    """
+    sub_servers_text = "\n".join([f"- {s}" for s in sub_servers])
+    state_text = """
+### Shared State
+- Use lifespan to initialize shared resources
+- Pass context through lifespan_context
+- Consider Redis for distributed state""" if shared_state else ""
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in FastMCP 3.0 server composition.
+
+Your expertise includes:
+- Designing modular server architectures with mount()
+- Namespace management for avoiding tool/resource conflicts
+- Lifespan coordination between composed servers
+- State sharing patterns between mounted servers
+- Cross-server communication patterns"""
+        },
+        {
+            "role": "user",
+            "content": f"""Design a composed MCP server architecture.
+
+## Main Server Purpose
+{main_server_purpose}
+
+## Sub-Servers to Compose
+{sub_servers_text}
+{state_text}
+
+## Requirements
+- Use FastMCP 3.0 mount() for composition
+- Define clear namespaces for each sub-server
+- Handle lifespan properly for all servers
+- Ensure tools are discoverable with proper naming
+
+## Expected Output
+1. Architecture diagram (text-based)
+2. Main server code with mount() calls
+3. Sub-server interfaces
+4. Namespace conventions
+5. State sharing strategy (if applicable)"""
+        }
+    ]
+
+
+@mcp.prompt("create_authenticated_server")
+async def create_authenticated_server_prompt(
+    server_purpose: str,
+    auth_type: str = "jwt",
+    scopes: List[str] = None
+) -> List[Dict[str, str]]:
+    """
+    Generate prompt for creating an authenticated MCP server.
+
+    Args:
+        server_purpose: What the server should do
+        auth_type: Authentication type (jwt, oauth)
+        scopes: List of authorization scopes needed
+
+    Returns:
+        List of messages for creating authenticated server
+    """
+    scopes_text = ", ".join(scopes) if scopes else "read, write, admin"
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in FastMCP 3.0 authentication and authorization.
+
+Your expertise includes:
+- JWT authentication with JWTVerifier
+- OAuth 2.1 integration patterns
+- Component-level authorization with require_auth and require_scopes
+- Secure token handling and validation
+- Role-based access control (RBAC) implementation"""
+        },
+        {
+            "role": "user",
+            "content": f"""Create an authenticated MCP server with FastMCP 3.0.
+
+## Server Purpose
+{server_purpose}
+
+## Authentication Requirements
+- **Type**: {auth_type.upper()}
+- **Scopes**: {scopes_text}
+
+## Security Requirements
+- Implement component-level authorization
+- Use auth=require_auth for protected tools
+- Use auth=require_scopes() for scope-based access
+- Handle authentication errors gracefully
+- Never expose tokens in logs
+
+## Expected Output
+1. Server initialization with auth configuration
+2. Protected tools with appropriate decorators
+3. Public tools (if any)
+4. Token verification setup
+5. Error handling for auth failures
+6. Usage example with authentication"""
+        }
+    ]
+
+
+@mcp.prompt("generate_from_openapi")
+async def generate_from_openapi_prompt(
+    api_description: str,
+    openapi_url: str = "",
+    selected_endpoints: List[str] = None
+) -> List[Dict[str, str]]:
+    """
+    Generate prompt for creating MCP server from OpenAPI specification.
+
+    Args:
+        api_description: Description of the API to wrap
+        openapi_url: URL to OpenAPI spec (optional)
+        selected_endpoints: Specific endpoints to include (optional)
+
+    Returns:
+        List of messages for generating server from OpenAPI
+    """
+    endpoints_text = "\n".join([f"- {e}" for e in selected_endpoints]) if selected_endpoints else "All endpoints"
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in generating FastMCP servers from OpenAPI specifications.
+
+Your expertise includes:
+- Parsing OpenAPI 3.0/3.1 specifications
+- Using FastMCP.from_openapi() for automatic generation
+- Customizing generated tools and resources
+- Handling authentication from OpenAPI securitySchemes
+- Mapping OpenAPI operations to MCP tools"""
+        },
+        {
+            "role": "user",
+            "content": f"""Generate an MCP server from an OpenAPI specification.
+
+## API Description
+{api_description}
+
+## OpenAPI Source
+{openapi_url if openapi_url else "[Provide OpenAPI spec inline or URL]"}
+
+## Endpoints to Include
+{endpoints_text}
+
+## Requirements
+- Use FastMCP.from_openapi() when applicable
+- Map each endpoint to an appropriate MCP tool
+- Preserve parameter types and validation
+- Handle authentication from securitySchemes
+- Add proper error handling for API calls
+
+## Expected Output
+1. Analysis of OpenAPI spec
+2. Generated MCP server code
+3. Tool mappings for each endpoint
+4. Authentication configuration
+5. Usage examples for key tools"""
+        }
+    ]
+
 
 # Server initialization function
 

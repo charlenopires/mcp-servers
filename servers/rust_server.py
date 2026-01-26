@@ -22,7 +22,7 @@ import logging
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Any, Tuple, Union
 from enum import Enum
-from fastmcp import FastMCP
+from fastmcp import FastMCP, Context
 from pydantic import BaseModel, Field
 
 # Configure logging
@@ -30,7 +30,20 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Initialize FastMCP server (following pattern of other servers)
-mcp = FastMCP("Rust Idiomatic Patterns Server")
+mcp = FastMCP(
+    name="Rust Idiomatic Patterns Server",
+    instructions="""Advanced MCP server for idiomatic Rust development based on mre/idiomatic-rust and rust-lang/api-guidelines.
+
+This server provides Rust development expertise:
+- Code analysis for idiomatic patterns (immutability, error handling, ownership)
+- Project generation following API guidelines
+- Refactoring to idiomatic Rust patterns
+- Pattern library from mre/idiomatic-rust repository
+- API guidelines compliance checking
+
+Use these tools to write clean, idiomatic Rust code.""",
+    version="3.0.0"
+)
 
 # ================================
 # RUST IDIOMATIC PATTERNS & KNOWLEDGE BASE
@@ -1449,8 +1462,8 @@ Cargo.lock
 # RUST MCP TOOLS
 # ================================
 
-@mcp.tool()
-async def analyze_idiomatic_rust(code: str) -> Dict[str, Any]:
+@mcp.tool(tags=["analysis", "idiomatic", "scoring"])
+async def analyze_idiomatic_rust(code: str, ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Analyzes Rust code for idiomatic patterns based on mre/idiomatic-rust.
     
@@ -1486,11 +1499,12 @@ async def analyze_idiomatic_rust(code: str) -> Dict[str, Any]:
         logger.error(f"Error analyzing Rust code: {str(e)}")
         raise
 
-@mcp.tool()
+@mcp.tool(tags=["generation", "project", "templates"])
 async def generate_idiomatic_project(
     project_type: str,
     features: Optional[List[str]] = None,
-    complexity: str = "intermediate"
+    complexity: str = "intermediate",
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Generates idiomatic Rust project following mre/idiomatic-rust patterns.
@@ -1520,8 +1534,8 @@ async def generate_idiomatic_project(
         logger.error(f"Error generating Rust project: {str(e)}")
         raise
 
-@mcp.tool()
-async def get_idiomatic_patterns(category: str = "all") -> Dict[str, Any]:
+@mcp.tool(tags=["patterns", "reference", "documentation"])
+async def get_idiomatic_patterns(category: str = "all", ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Returns idiomatic Rust patterns by category based on mre/idiomatic-rust.
     
@@ -1576,10 +1590,11 @@ async def get_idiomatic_patterns(category: str = "all") -> Dict[str, Any]:
         logger.error(f"Error getting idiomatic patterns: {str(e)}")
         raise
 
-@mcp.tool()
+@mcp.tool(tags=["refactoring", "improvement", "optimization"])
 async def refactor_to_idiomatic(
     code: str,
-    focus_areas: Optional[List[str]] = None
+    focus_areas: Optional[List[str]] = None,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Refactors Rust code to follow idiomatic patterns.
@@ -1660,8 +1675,8 @@ async def refactor_to_idiomatic(
         logger.error(f"Error refactoring Rust code: {str(e)}")
         raise
 
-@mcp.tool()
-async def get_rust_api_guidelines() -> Dict[str, Any]:
+@mcp.tool(tags=["api-guidelines", "best-practices", "reference"])
+async def get_rust_api_guidelines(ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Returns official Rust API guidelines (rust-lang/api-guidelines).
     
@@ -1740,6 +1755,353 @@ async def get_rust_api_guidelines() -> Dict[str, Any]:
         raise
 
 # ================================
+# MCP PROMPTS
+# ================================
+
+
+@mcp.prompt()
+async def refactor_rust_to_idiomatic(
+    code: str,
+    focus_areas: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to refactor Rust code to idiomatic patterns.
+
+    Args:
+        code: Rust code to refactor
+        focus_areas: Areas to focus on (error_handling, ownership, immutability, etc.)
+    """
+    default_areas = ["error_handling", "ownership", "immutability", "type_safety"]
+    areas = focus_areas if focus_areas else default_areas
+
+    return [
+        {
+            "role": "system",
+            "content": """You are a Rust expert specializing in idiomatic code patterns.
+
+Key idiomatic Rust principles:
+1. **Immutability by default**: Use `let` instead of `let mut` unless mutation is needed
+2. **Error handling**: Use Result<T, E> instead of panicking, propagate with ?
+3. **Ownership**: Take references (&T) by default, owned values when needed
+4. **Type conversions**: Use From/Into traits, TryFrom for fallible conversions
+5. **Enums over booleans**: Use expressive enums for state machines
+6. **Iterators over loops**: Use .iter().map().filter().collect()
+7. **Builder pattern**: For complex type construction
+8. **Newtype pattern**: For type-safe wrappers
+
+Anti-patterns to avoid:
+- .unwrap() and .expect() in library code
+- Unnecessary .clone() calls
+- Excessive mut bindings
+- Boolean flags instead of enums
+- Manual loops instead of iterators"""
+        },
+        {
+            "role": "user",
+            "content": f"""Refactor this Rust code to be more idiomatic:
+
+```rust
+{code}
+```
+
+Focus areas: {', '.join(areas)}
+
+Requirements:
+1. Identify and fix anti-patterns
+2. Apply idiomatic Rust patterns
+3. Use proper error handling with Result/Option
+4. Optimize ownership and borrowing
+5. Add appropriate documentation
+6. Explain each change made
+7. Show before/after comparison"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def design_rust_api(
+    api_purpose: str,
+    entities: List[str] = [],
+    operations: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to design a Rust API following api-guidelines.
+
+    Args:
+        api_purpose: Purpose of the API
+        entities: Main entities/types in the API
+        operations: Operations the API should support
+    """
+    default_entities = ["Config", "Client", "Error"]
+    entities_list = entities if entities else default_entities
+
+    default_operations = ["create", "read", "update", "delete"]
+    ops_list = operations if operations else default_operations
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in Rust API design following rust-lang/api-guidelines.
+
+Key API Guidelines:
+1. **Naming (C-CASE)**: snake_case for functions, PascalCase for types, SCREAMING_CASE for constants
+2. **Common Traits (C-COMMON-TRAITS)**: Implement Debug, Clone, PartialEq where appropriate
+3. **Conversions (C-CONV-TRAITS)**: Use From/Into, AsRef/AsMut, TryFrom/TryInto
+4. **Documentation (C-EXAMPLE)**: Include examples using ? not unwrap()
+5. **Errors (C-FAILURE)**: Document error conditions, use custom error types
+6. **Flexibility (C-GENERIC)**: Use generics and impl Trait for flexibility
+7. **Type Safety (C-NEWTYPE)**: Use newtypes for type-safe distinctions
+8. **Builder Pattern**: For types with many optional parameters
+
+Design principles:
+- Make the right thing easy, wrong thing hard
+- APIs should be unsurprising
+- Flexible and composable
+- Use types to prevent errors
+- Comprehensive documentation"""
+        },
+        {
+            "role": "user",
+            "content": f"""Design a Rust API for: {api_purpose}
+
+Main entities: {', '.join(entities_list)}
+Operations: {', '.join(ops_list)}
+
+Requirements:
+1. Define public API with proper visibility
+2. Create custom error types with thiserror
+3. Use builder pattern for complex configuration
+4. Implement common traits (Debug, Clone, etc.)
+5. Add comprehensive documentation with examples
+6. Use Result<T, E> for fallible operations
+7. Apply newtype pattern for type safety
+8. Include module organization structure"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def implement_error_handling(
+    error_scenarios: List[str] = [],
+    use_thiserror: bool = True,
+    recoverable: bool = True
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to implement proper Rust error handling.
+
+    Args:
+        error_scenarios: Types of errors to handle
+        use_thiserror: Whether to use thiserror crate
+        recoverable: Whether errors should be recoverable
+    """
+    default_scenarios = ["io", "parsing", "validation", "network"]
+    scenarios = error_scenarios if error_scenarios else default_scenarios
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in Rust error handling patterns.
+
+Error handling strategies:
+1. **Custom Error Types**: Define domain-specific errors
+2. **thiserror**: For library error types with #[derive(Error)]
+3. **anyhow**: For application-level error handling
+4. **Result<T, E>**: For all fallible operations
+5. **Option<T>**: For values that may not exist
+6. **? operator**: For ergonomic error propagation
+
+Error type patterns:
+```rust
+#[derive(Debug, thiserror::Error)]
+pub enum MyError {
+    #[error("IO error: {0}")]
+    Io(#[from] std::io::Error),
+
+    #[error("Parse error: {message}")]
+    Parse { message: String },
+
+    #[error("Validation failed: {field}")]
+    Validation { field: String },
+}
+```
+
+Best practices:
+- Never panic in library code
+- Provide context with error chains
+- Make errors actionable
+- Use From trait for error conversion
+- Document all error conditions"""
+        },
+        {
+            "role": "user",
+            "content": f"""Implement error handling for these scenarios:
+
+Error types: {', '.join(scenarios)}
+Use thiserror: {'Yes' if use_thiserror else 'No - use manual implementation'}
+Recoverable: {'Yes - provide recovery strategies' if recoverable else 'No - fatal errors'}
+
+Requirements:
+1. Define comprehensive error enum
+2. Implement Display and Error traits
+3. Add From implementations for conversion
+4. Create helper functions for common errors
+5. Show usage examples with ? operator
+6. Include error context/chaining
+7. Document error handling patterns
+8. Provide recovery strategies where applicable"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def create_async_rust(
+    async_operations: List[str] = [],
+    runtime: str = "tokio",
+    concurrency_pattern: str = "concurrent"
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to create idiomatic async Rust code.
+
+    Args:
+        async_operations: Types of async operations needed
+        runtime: Async runtime (tokio, async-std)
+        concurrency_pattern: Concurrency pattern (concurrent, sequential, streaming)
+    """
+    default_ops = ["http_request", "file_io", "database"]
+    operations = async_operations if async_operations else default_ops
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in async Rust programming.
+
+Async Rust patterns:
+1. **async fn**: Define async functions that return impl Future
+2. **.await**: Await futures at yield points
+3. **? operator**: Works with async for error propagation
+4. **tokio::spawn**: Spawn concurrent tasks
+5. **join!**: Await multiple futures concurrently
+6. **select!**: Race multiple futures
+7. **Streams**: Async iterators for data processing
+
+Concurrency patterns:
+```rust
+// Concurrent execution
+let (result1, result2) = tokio::join!(
+    fetch_data_1(),
+    fetch_data_2()
+);
+
+// Concurrent with error handling
+let results = futures::future::try_join_all(
+    urls.iter().map(|url| fetch_url(url))
+).await?;
+
+// Stream processing
+stream
+    .map(|item| process(item))
+    .buffer_unordered(10)
+    .try_collect()
+    .await?
+```
+
+Best practices:
+- Use async/await over manual Future implementations
+- Prefer structured concurrency with join!/select!
+- Handle cancellation properly
+- Use timeouts for network operations
+- Consider backpressure in streams"""
+        },
+        {
+            "role": "user",
+            "content": f"""Create async Rust code for these operations:
+
+Operations: {', '.join(operations)}
+Runtime: {runtime}
+Concurrency pattern: {concurrency_pattern}
+
+Requirements:
+1. Define async functions with proper signatures
+2. Use {runtime} runtime appropriately
+3. Implement {concurrency_pattern} execution pattern
+4. Handle errors with Result and ?
+5. Add timeouts where appropriate
+6. Include cancellation handling
+7. Show stream processing if applicable
+8. Add documentation and examples"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def apply_ownership_patterns(
+    code: str = "",
+    use_case: str = "general"
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to apply proper ownership patterns in Rust.
+
+    Args:
+        code: Existing code to analyze (optional)
+        use_case: Use case (general, performance, shared_state, concurrent)
+    """
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in Rust ownership and borrowing patterns.
+
+Ownership patterns:
+1. **Take references by default**: &T for read, &mut T for write
+2. **Owned values when storing**: Vec<String> not Vec<&str> for collections
+3. **Cow<str>**: When you might need to modify borrowed data
+4. **Arc/Rc**: For shared ownership (Arc for threads, Rc for single-thread)
+5. **Clone when needed**: Be explicit about copies
+6. **Into<T>**: Accept owned or convertible values
+
+Function signature patterns:
+```rust
+// Read-only access - take reference
+fn process(data: &[String]) -> usize { ... }
+
+// Need ownership - take owned value
+fn consume(data: Vec<String>) -> Vec<String> { ... }
+
+// Flexible input - use Into
+fn create(name: impl Into<String>) -> User { ... }
+
+// Maybe modify - use Cow
+fn normalize(text: Cow<str>) -> Cow<str> { ... }
+
+// Shared state - use Arc
+fn share(data: Arc<Data>) -> Handle { ... }
+```
+
+Anti-patterns to avoid:
+- Taking String when &str would work
+- Unnecessary .clone() calls
+- Returning references to local data
+- Holding references longer than needed"""
+        },
+        {
+            "role": "user",
+            "content": f"""Apply proper ownership patterns for this use case: {use_case}
+
+{f"Existing code to analyze:{chr(10)}```rust{chr(10)}{code}{chr(10)}```" if code else "Create examples for common scenarios"}
+
+Requirements:
+1. Analyze or demonstrate ownership patterns
+2. Show when to use references vs owned values
+3. Demonstrate Cow<T> usage
+4. Show Arc/Rc for shared ownership
+5. Optimize for {'performance' if use_case == 'performance' else 'clarity'}
+6. Avoid unnecessary allocations
+7. Handle lifetime annotations if needed
+8. Include before/after examples"""
+        }
+    ]
+
+
+# ================================
 # MCP RESOURCES
 # ================================
 
@@ -1790,6 +2152,12 @@ if __name__ == "__main__":
     logger.info("📚 Specialized in idiomatic Rust development following mre/idiomatic-rust")
     logger.info("✅ Based on: rust-lang/api-guidelines + mre/idiomatic-rust + blessed.rs")
     logger.info("🔧 Features: Code Analysis | Project Generation | Pattern Library | Refactoring")
-    
+    logger.info("\n📝 Available prompts:")
+    logger.info("  - refactor_rust_to_idiomatic: Refactor code to idiomatic patterns")
+    logger.info("  - design_rust_api: Design API following api-guidelines")
+    logger.info("  - implement_error_handling: Implement proper error handling")
+    logger.info("  - create_async_rust: Create idiomatic async code")
+    logger.info("  - apply_ownership_patterns: Apply ownership patterns correctly")
+
     # Run the MCP server
     mcp.run()

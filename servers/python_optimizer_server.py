@@ -22,15 +22,48 @@ import re
 from enum import Enum
 from typing import Any
 
-from fastmcp import FastMCP
+from typing import Optional
+
+from fastmcp import FastMCP, Context
 from pydantic import BaseModel, Field
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Initialize MCP server (following pattern of other servers)
-mcp = FastMCP("Python Development Optimizer")
+# Initialize MCP server
+mcp = FastMCP(
+    name="Python Development Optimizer Server",
+    instructions="""Advanced MCP server for optimizing Python development with comprehensive paradigm support.
+
+Supported paradigms:
+- Object-Oriented Programming (OOP) with SOLID principles
+- Functional Programming with immutability and composability
+- Asynchronous Programming with modern async/await patterns
+- Hybrid approaches combining multiple paradigms
+
+Features:
+- Python prompt analysis with quality scoring
+- Automatic prompt enhancement with paradigm-specific patterns
+- Code validation against PEP 8 and best practices
+- Template generation for all paradigms
+- Refactoring suggestions with concrete examples
+
+Use these tools for:
+- analyze_python_prompt: Analyze prompts for quality and paradigm detection
+- enhance_python_prompt: Transform prompts into comprehensive specifications
+- validate_python_code: Validate code against PEP 8 and best practices
+- generate_python_template: Generate code templates for any paradigm
+- suggest_refactoring: Get refactoring suggestions with examples
+
+Use these prompts for:
+- design_python_architecture: Design module structure and architecture
+- refactor_python_code: Modernize legacy Python code
+- apply_paradigm: Apply specific paradigm patterns to code
+- add_type_hints: Add comprehensive type annotations
+- create_async_service: Create async services with proper patterns""",
+    version="3.0.0"
+)
 
 # ================================
 # PYTHON PARADIGMS & ENUMS
@@ -424,9 +457,9 @@ def extract_type_hint_coverage(code: str) -> float:
 # ================================
 
 
-@mcp.tool()
+@mcp.tool(tags=["analysis", "prompt", "paradigm"])
 async def analyze_python_prompt(
-    prompt: str, check_paradigm: bool = True
+    prompt: str, check_paradigm: bool = True, ctx: Optional[Context] = None
 ) -> dict[str, Any]:
     """
     Analyze a Python code creation prompt for quality and completeness.
@@ -575,13 +608,14 @@ async def analyze_python_prompt(
     }
 
 
-@mcp.tool()
+@mcp.tool(tags=["enhancement", "generation", "paradigm"])
 async def enhance_python_prompt(
     prompt: str,
     paradigm: str | None = None,
     complexity: str = "intermediate",
     include_tests: bool = True,
     include_examples: bool = True,
+    ctx: Optional[Context] = None,
 ) -> dict[str, Any]:
     """
     Enhance a Python prompt with best practices and modern patterns.
@@ -788,9 +822,9 @@ async def enhance_python_prompt(
     return result.model_dump()
 
 
-@mcp.tool()
+@mcp.tool(tags=["validation", "code-quality", "pep8"])
 async def validate_python_code(
-    code: str, check_paradigm: bool = True, strict_mode: bool = False
+    code: str, check_paradigm: bool = True, strict_mode: bool = False, ctx: Optional[Context] = None
 ) -> dict[str, Any]:
     """
     Validate Python code against modern best practices and standards.
@@ -916,12 +950,13 @@ async def validate_python_code(
     return validation.model_dump()
 
 
-@mcp.tool()
+@mcp.tool(tags=["generation", "template", "paradigm"])
 async def generate_python_template(
     description: str,
     paradigm: str = "oop",
     include_tests: bool = True,
     include_main: bool = True,
+    ctx: Optional[Context] = None,
 ) -> dict[str, Any]:
     """
     Generate Python code template based on description and paradigm.
@@ -1004,11 +1039,12 @@ async def generate_python_template(
     return templates
 
 
-@mcp.tool()
+@mcp.tool(tags=["refactoring", "optimization", "clean-code"])
 async def suggest_refactoring(
     code: str,
     target_paradigm: str | None = None,
     focus_areas: list[str] | None = None,
+    ctx: Optional[Context] = None,
 ) -> dict[str, Any]:
     """
     Suggest refactoring improvements for Python code.
@@ -1940,11 +1976,315 @@ async def get_paradigm_guide(paradigm: str) -> str:
 
 
 # ================================
+# MCP PROMPTS - FastMCP 3.0
+# ================================
+
+
+@mcp.prompt()
+async def design_python_architecture(
+    project_type: str = "web_api",
+    paradigm: str = "oop",
+    modules: list[str] = [],
+) -> list[dict[str, str]]:
+    """Generate guidance for designing Python module structure and architecture."""
+    modules_list = ", ".join(modules) if modules else "core, services, models, utils"
+    return [
+        {
+            "role": "system",
+            "content": """You are a Python architecture expert specializing in clean, maintainable codebases.
+
+Your expertise includes:
+- Clean Architecture and Hexagonal Architecture
+- Domain-Driven Design (DDD) patterns
+- SOLID principles application in Python
+- Module organization and dependency management
+- Configuration management (Pydantic Settings, dynaconf)
+- Dependency injection patterns
+
+Architecture principles:
+- Separate concerns into layers (domain, application, infrastructure)
+- Use abstractions at boundaries (protocols/ABCs)
+- Keep domain logic pure and testable
+- Follow the dependency rule (inner layers don't know outer layers)
+- Use explicit dependencies (no hidden global state)"""
+        },
+        {
+            "role": "user",
+            "content": f"""Design Python architecture for a {project_type} project.
+
+Target paradigm: {paradigm}
+Modules to include: {modules_list}
+
+Requirements:
+1. Define clear module boundaries and responsibilities
+2. Design the package/module structure
+3. Identify interfaces between modules
+4. Plan dependency injection strategy
+5. Set up configuration management
+6. Design error handling strategy
+
+Provide:
+- Complete directory structure with explanations
+- Module interface definitions (protocols/ABCs)
+- Dependency flow diagram
+- Configuration setup
+- Example code showing module interaction"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def refactor_python_code(
+    current_issues: list[str] = [],
+    target_version: str = "3.12",
+    preserve_api: bool = True,
+) -> list[dict[str, str]]:
+    """Generate guidance for modernizing legacy Python code to current best practices."""
+    issues = ", ".join(current_issues) if current_issues else "general modernization needed"
+    return [
+        {
+            "role": "system",
+            "content": """You are a Python modernization expert helping upgrade legacy code.
+
+Your expertise includes:
+- Python 3.10+ features (match statements, type union syntax)
+- Python 3.11+ features (ExceptionGroup, tomllib, Self type)
+- Python 3.12+ features (type parameter syntax, f-string improvements)
+- Migration from legacy patterns to modern idioms
+- Type hint modernization (TypedDict, Protocol, ParamSpec)
+- Async/await migration patterns
+
+Modernization priorities:
+- Replace old-style formatting with f-strings
+- Add comprehensive type hints
+- Use dataclasses or Pydantic models
+- Replace manual context managers with contextlib
+- Use pathlib instead of os.path
+- Apply structural pattern matching where beneficial"""
+        },
+        {
+            "role": "user",
+            "content": f"""Refactor Python code to modern standards.
+
+Current issues: {issues}
+Target Python version: {target_version}
+Preserve existing API: {preserve_api}
+
+Requirements:
+1. Identify legacy patterns needing modernization
+2. Apply Python {target_version} features appropriately
+3. Add comprehensive type hints
+4. Improve error handling with modern patterns
+5. Enhance testability
+6. Maintain backward compatibility if required
+
+Provide:
+- Refactored code with detailed comments
+- Migration checklist for each change
+- Type hint additions explained
+- Testing strategy for refactored code
+- Breaking changes documentation (if any)"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def apply_paradigm(
+    target_paradigm: str = "oop",
+    code_description: str = "",
+    complexity: str = "intermediate",
+) -> list[dict[str, str]]:
+    """Generate guidance for applying specific programming paradigm patterns to code."""
+    return [
+        {
+            "role": "system",
+            "content": f"""You are a Python paradigm expert specializing in {target_paradigm} patterns.
+
+Paradigm-specific expertise:
+
+OOP (Object-Oriented):
+- SOLID principles (Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion)
+- Design patterns (Factory, Strategy, Observer, Decorator, Repository)
+- Proper inheritance vs composition
+- Abstract base classes and protocols
+
+Functional:
+- Pure functions and immutability
+- Higher-order functions and closures
+- functools (reduce, partial, lru_cache)
+- itertools for lazy evaluation
+- Pattern matching with match/case
+
+Async:
+- asyncio event loop and tasks
+- Proper async context managers
+- Concurrent execution patterns (gather, wait, as_completed)
+- Async generators and iterators
+- Error handling in async code
+
+Hybrid:
+- Combining paradigms appropriately
+- Functional core, imperative shell
+- Async with OOP patterns"""
+        },
+        {
+            "role": "user",
+            "content": f"""Apply {target_paradigm} paradigm to Python code.
+
+Code purpose: {code_description if code_description else "[Describe what the code should do]"}
+Complexity level: {complexity}
+
+Requirements:
+1. Design using {target_paradigm} principles
+2. Apply appropriate design patterns
+3. Ensure clean, maintainable structure
+4. Include comprehensive type hints
+5. Add proper documentation
+6. Provide testing strategy
+
+Provide:
+- Complete code implementation
+- Pattern explanations
+- Alternative approaches considered
+- Testing examples
+- Extension points for future development"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def add_type_hints(
+    strict_mode: bool = True,
+    include_docstrings: bool = True,
+    use_modern_syntax: bool = True,
+) -> list[dict[str, str]]:
+    """Generate guidance for adding comprehensive type annotations to Python code."""
+    return [
+        {
+            "role": "system",
+            "content": f"""You are a Python typing expert adding comprehensive type annotations.
+
+Your expertise includes:
+- Standard library types (list, dict, tuple, set with generics)
+- typing module (Union, Optional, Literal, TypedDict, Protocol)
+- Modern syntax (Python 3.10+ union with |, Python 3.12 type parameter syntax)
+- Generic types and TypeVars
+- Protocol for structural subtyping
+- ParamSpec and Concatenate for decorators
+- Self type for return type annotations
+- Overload for multiple signatures
+
+Type hint best practices:
+- Use concrete types over Any where possible
+- Prefer Protocol over ABC for duck typing
+- Use TypedDict for dictionary schemas
+- Apply Literal for fixed string/int values
+- Use Final for constants
+- Add type: ignore comments sparingly with explanation
+
+Modern syntax (Python 3.12+):
+- `def func[T](x: T) -> T:` instead of TypeVar
+- `type Point = tuple[int, int]` for type aliases
+- `class Container[T]:` for generic classes"""
+        },
+        {
+            "role": "user",
+            "content": f"""Add comprehensive type hints to Python code.
+
+Configuration:
+- Strict mode (no implicit Any): {strict_mode}
+- Include docstrings: {include_docstrings}
+- Use modern Python 3.12+ syntax: {use_modern_syntax}
+
+Requirements:
+1. Add type hints to all function signatures
+2. Type all class attributes and instance variables
+3. Use appropriate generic types
+4. Add Protocol definitions for interfaces
+5. Include TypedDict for dictionary structures
+6. Handle Optional/None properly
+
+Provide:
+- Fully typed code
+- Type alias definitions where helpful
+- Protocol definitions for interfaces
+- mypy configuration recommendations
+- Explanation of complex type expressions"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def create_async_service(
+    service_type: str = "api_client",
+    features: list[str] = [],
+    use_asyncio: bool = True,
+) -> list[dict[str, str]]:
+    """Generate guidance for creating async services with proper patterns."""
+    features_list = ", ".join(features) if features else "error handling, retries, connection pooling"
+    return [
+        {
+            "role": "system",
+            "content": """You are an async Python expert creating production-ready async services.
+
+Your expertise includes:
+- asyncio fundamentals (event loop, tasks, futures)
+- Async context managers and generators
+- Connection pooling (aiohttp, httpx, asyncpg)
+- Proper error handling in async code
+- Cancellation and timeout handling
+- Structured concurrency patterns (TaskGroup in 3.11+)
+- Rate limiting and backoff strategies
+
+Async best practices:
+- Use async context managers for resource management
+- Implement proper cancellation handling
+- Use TaskGroup for managing concurrent operations
+- Handle exceptions in gather with return_exceptions
+- Implement graceful shutdown
+- Use asyncio.timeout for operation timeouts
+- Avoid blocking calls in async code"""
+        },
+        {
+            "role": "user",
+            "content": f"""Create an async {service_type} service.
+
+Required features: {features_list}
+Use asyncio: {use_asyncio}
+
+Requirements:
+1. Implement proper async/await patterns
+2. Add connection pooling if applicable
+3. Include error handling with retries
+4. Support cancellation and timeouts
+5. Implement graceful shutdown
+6. Add comprehensive type hints
+
+Provide:
+- Complete async service implementation
+- Context manager for lifecycle management
+- Error handling strategy
+- Retry and backoff logic
+- Usage examples
+- Testing patterns for async code"""
+        }
+    ]
+
+
+# ================================
 # SERVER STARTUP
 # ================================
 
 if __name__ == "__main__":
-    logger.info("🚀 Starting Python Development Optimizer MCP Server")
+    logger.info("Python Development Optimizer MCP Server starting...")
     logger.info("Supported paradigms: OOP, Functional, Async, Hybrid")
-    logger.info("Features: Code analysis, prompt enhancement, template generation")
+    logger.info("Features: Code analysis, prompt enhancement, template generation, refactoring")
+    logger.info("New in 3.0: Context injection, MCP Prompts, Tags for discovery")
+    logger.info("")
+    logger.info("Available MCP Prompts:")
+    logger.info("  - design_python_architecture: Design module structure and architecture")
+    logger.info("  - refactor_python_code: Modernize legacy Python code")
+    logger.info("  - apply_paradigm: Apply specific paradigm patterns (OOP/Functional/Async)")
+    logger.info("  - add_type_hints: Add comprehensive type annotations")
+    logger.info("  - create_async_service: Create async services with proper patterns")
     mcp.run()

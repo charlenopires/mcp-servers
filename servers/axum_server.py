@@ -22,7 +22,7 @@ import logging
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Any, Tuple, Union
 from enum import Enum
-from fastmcp import FastMCP
+from fastmcp import FastMCP, Context
 from pydantic import BaseModel, Field
 
 # Configure logging
@@ -30,7 +30,20 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Initialize FastMCP server (following pattern of other servers)
-mcp = FastMCP("Axum Web Framework Server")
+mcp = FastMCP(
+    name="Axum Web Framework Server",
+    instructions="""Advanced MCP server for modern web development with Axum framework.
+
+This server provides Axum web framework expertise:
+- Code analysis following official Axum patterns
+- Routing, handlers, middleware, and extractor optimization
+- Tower ecosystem integration and error handling
+- State management and testing patterns
+- Rust magic patterns for advanced metaprogramming
+
+Use these tools to build high-performance async web services.""",
+    version="3.0.0"
+)
 
 # ================================
 # AXUM KNOWLEDGE BASE & PATTERNS
@@ -1824,8 +1837,8 @@ Cargo.lock
 # AXUM MCP TOOLS
 # ================================
 
-@mcp.tool()
-async def analyze_axum_code(code: str) -> Dict[str, Any]:
+@mcp.tool(tags=["analysis", "scoring", "best-practices"])
+async def analyze_axum_code(code: str, ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Analyzes Axum code following official best practices and magic patterns.
     
@@ -1863,12 +1876,13 @@ async def analyze_axum_code(code: str) -> Dict[str, Any]:
         logger.error(f"Error analyzing Axum code: {str(e)}")
         raise
 
-@mcp.tool()
+@mcp.tool(tags=["generation", "project", "templates"])
 async def generate_axum_project(
     project_type: str,
     features: Optional[List[str]] = None,
     include_database: bool = True,
-    include_auth: bool = True
+    include_auth: bool = True,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Generates complete Axum project following modern patterns.
@@ -1900,8 +1914,8 @@ async def generate_axum_project(
         logger.error(f"Error generating Axum project: {str(e)}")
         raise
 
-@mcp.tool()
-async def get_axum_patterns(category: str = "all") -> Dict[str, Any]:
+@mcp.tool(tags=["patterns", "reference", "documentation"])
+async def get_axum_patterns(category: str = "all", ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Returns Axum patterns by category with practical examples.
     
@@ -1955,10 +1969,11 @@ async def get_axum_patterns(category: str = "all") -> Dict[str, Any]:
         logger.error(f"Error getting Axum patterns: {str(e)}")
         raise
 
-@mcp.tool()
+@mcp.tool(tags=["optimization", "handlers", "refactoring"])
 async def optimize_axum_handler(
     handler_code: str,
-    focus_areas: Optional[List[str]] = None
+    focus_areas: Optional[List[str]] = None,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Optimizes Axum handler applying best practices and magic patterns.
@@ -2022,8 +2037,8 @@ async def optimize_axum_handler(
         logger.error(f"Error optimizing Axum handler: {str(e)}")
         raise
 
-@mcp.tool()
-async def get_axum_magic_patterns() -> Dict[str, Any]:
+@mcp.tool(tags=["magic-patterns", "metaprogramming", "advanced"])
+async def get_axum_magic_patterns(ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Returns Axum magic patterns based on rust-magic-patterns.
     
@@ -2055,10 +2070,11 @@ async def get_axum_magic_patterns() -> Dict[str, Any]:
         logger.error(f"Error getting magic patterns: {str(e)}")
         raise
 
-@mcp.tool()
+@mcp.tool(tags=["middleware", "tower", "generation"])
 async def create_axum_middleware(
     middleware_type: str,
-    functionality: str
+    functionality: str,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Creates custom middleware for Axum.
@@ -2220,6 +2236,375 @@ let app = Router::new()
         raise
 
 # ================================
+# MCP PROMPTS
+# ================================
+
+
+@mcp.prompt()
+async def design_axum_api(
+    api_purpose: str,
+    endpoints: List[str] = [],
+    features: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to design a complete API with Axum.
+
+    Args:
+        api_purpose: Purpose of the API
+        endpoints: List of required endpoints
+        features: Additional features (auth, database, caching, etc.)
+    """
+    default_endpoints = ["/users", "/posts", "/health"]
+    endpoint_list = endpoints if endpoints else default_endpoints
+
+    default_features = ["authentication", "error handling", "validation"]
+    feature_list = features if features else default_features
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in designing web APIs with Axum.
+
+Axum API design principles:
+1. **RESTful routing**: Use proper HTTP methods and resource paths
+2. **Type-safe handlers**: Use typed extractors (Path, Query, Json, State)
+3. **Error handling**: Custom error types with IntoResponse
+4. **Middleware**: Tower ecosystem for cross-cutting concerns
+5. **State management**: Shared state with Arc and State extractor
+6. **Documentation**: OpenAPI/Swagger integration
+7. **Testing**: Integration tests with axum-test
+
+API structure best practices:
+- Organize routes with nest() for modules
+- Use versioned API paths (/api/v1/...)
+- Implement proper error responses
+- Add health check endpoints
+- Use middleware for logging, auth, CORS"""
+        },
+        {
+            "role": "user",
+            "content": f"""Design an API with Axum for: {api_purpose}
+
+Required endpoints: {', '.join(endpoint_list)}
+Features: {', '.join(feature_list)}
+
+Requirements:
+1. Define complete routing structure with Router
+2. Create typed handler signatures
+3. Implement custom error types with IntoResponse
+4. Set up middleware stack (logging, CORS, auth)
+5. Configure shared application state
+6. Add request validation patterns
+7. Include response types and serialization
+8. Provide integration test examples"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def create_axum_handler(
+    handler_purpose: str,
+    extractors: List[str] = [],
+    response_type: str = "Json"
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to create an optimized Axum handler.
+
+    Args:
+        handler_purpose: What the handler should do
+        extractors: Extractors to use (Path, Query, Json, State, etc.)
+        response_type: Type of response (Json, StatusCode, Html, etc.)
+    """
+    default_extractors = ["State", "Json"]
+    extractor_list = extractors if extractors else default_extractors
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in writing Axum handlers.
+
+Handler best practices:
+1. **Async functions**: All handlers should be async
+2. **Typed extractors**: Use proper extractors for type safety
+3. **Result return type**: Return Result<T, E> for error handling
+4. **Extractor order**: Order matters - body extractors must be last
+5. **Response types**: Use IntoResponse or specific types
+
+Extractor patterns:
+- Path(id): Path<u32> - Extract from URL path
+- Query(params): Query<Params> - Extract query parameters
+- Json(body): Json<Body> - Extract JSON body
+- State(state): State<AppState> - Access shared state
+- HeaderMap - Access HTTP headers
+
+Error handling:
+- Return Result<T, AppError>
+- AppError implements IntoResponse
+- Use ? operator for propagation
+- Provide meaningful error messages"""
+        },
+        {
+            "role": "user",
+            "content": f"""Create an Axum handler for: {handler_purpose}
+
+Extractors to use: {', '.join(extractor_list)}
+Response type: {response_type}
+
+Requirements:
+1. Define async handler function
+2. Use typed extractors with proper order
+3. Return Result<{response_type}<T>, AppError>
+4. Implement input validation
+5. Add proper error handling
+6. Include documentation comments
+7. Show usage in router
+8. Add unit test example"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def implement_middleware_stack(
+    middleware_needs: List[str] = [],
+    custom_middleware: str = ""
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to implement a middleware stack for Axum.
+
+    Args:
+        middleware_needs: Types of middleware needed (auth, logging, cors, rate-limit)
+        custom_middleware: Description of custom middleware if needed
+    """
+    default_needs = ["logging", "cors", "auth", "timeout"]
+    needs = middleware_needs if middleware_needs else default_needs
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in Tower middleware and Axum.
+
+Tower middleware ecosystem:
+1. **tower**: Core middleware abstractions
+2. **tower-http**: HTTP-specific middleware
+3. **axum::middleware**: Axum-specific helpers
+
+Common middleware layers:
+- TraceLayer: Request tracing and logging
+- CorsLayer: Cross-Origin Resource Sharing
+- TimeoutLayer: Request timeouts
+- RateLimitLayer: Rate limiting
+- CompressionLayer: Response compression
+
+Middleware patterns:
+```rust
+ServiceBuilder::new()
+    .layer(TraceLayer::new_for_http())
+    .layer(TimeoutLayer::new(Duration::from_secs(30)))
+    .layer(CorsLayer::permissive())
+    .layer(middleware::from_fn(custom_middleware))
+```
+
+Custom middleware with from_fn:
+```rust
+async fn custom_middleware(
+    req: Request,
+    next: Next,
+) -> Result<Response, StatusCode> {
+    // Before request
+    let response = next.run(req).await;
+    // After request
+    Ok(response)
+}
+```"""
+        },
+        {
+            "role": "user",
+            "content": f"""Implement a middleware stack for Axum with:
+
+Required middleware: {', '.join(needs)}
+{f"Custom middleware: {custom_middleware}" if custom_middleware else ""}
+
+Requirements:
+1. Use ServiceBuilder for middleware composition
+2. Configure each middleware appropriately
+3. Set proper ordering (order matters!)
+4. Handle middleware errors with HandleErrorLayer
+5. Add tracing/logging integration
+6. Implement custom middleware if needed
+7. Show how to apply to specific routes vs globally
+8. Include testing examples"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def setup_state_management(
+    state_components: List[str] = [],
+    shared_resources: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to set up state management in Axum.
+
+    Args:
+        state_components: Components in app state (config, services, etc.)
+        shared_resources: Shared resources (database, cache, etc.)
+    """
+    default_components = ["config", "database", "cache"]
+    components = state_components if state_components else default_components
+
+    default_resources = ["PostgreSQL pool", "Redis connection"]
+    resources = shared_resources if shared_resources else default_resources
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in Axum state management.
+
+State management patterns:
+1. **AppState struct**: Central state container
+2. **State extractor**: Access state in handlers
+3. **Extension**: Per-request state
+4. **Arc wrapping**: For shared ownership
+
+AppState design:
+```rust
+#[derive(Clone)]
+struct AppState {
+    db: PgPool,              // Database pool
+    cache: Arc<Cache>,       // Shared cache
+    config: AppConfig,       // Configuration
+    services: Arc<Services>, // Business services
+}
+
+impl AppState {
+    async fn new() -> Result<Self> {
+        let db = create_db_pool().await?;
+        let cache = Arc::new(Cache::new());
+        let config = AppConfig::from_env();
+        let services = Arc::new(Services::new(db.clone()));
+
+        Ok(Self { db, cache, config, services })
+    }
+}
+```
+
+State access in handlers:
+```rust
+async fn handler(State(state): State<AppState>) -> Result<Json<T>, AppError> {
+    let data = state.services.get_data().await?;
+    Ok(Json(data))
+}
+```"""
+        },
+        {
+            "role": "user",
+            "content": f"""Set up state management for Axum with:
+
+State components: {', '.join(components)}
+Shared resources: {', '.join(resources)}
+
+Requirements:
+1. Design AppState struct with proper Clone
+2. Use Arc for shared mutable state
+3. Initialize resources properly
+4. Handle initialization errors
+5. Configure with environment variables
+6. Show State extractor usage
+7. Add Extension for per-request data
+8. Include shutdown/cleanup handling"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def handle_errors_gracefully(
+    error_scenarios: List[str] = [],
+    include_recovery: bool = True
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to implement graceful error handling in Axum.
+
+    Args:
+        error_scenarios: Types of errors to handle
+        include_recovery: Whether to include recovery strategies
+    """
+    default_scenarios = ["database", "validation", "auth", "not_found", "internal"]
+    scenarios = error_scenarios if error_scenarios else default_scenarios
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in Axum error handling.
+
+Error handling principles:
+1. **Custom error types**: Define domain-specific errors
+2. **IntoResponse**: Convert errors to HTTP responses
+3. **thiserror**: Derive Error trait easily
+4. **HandleErrorLayer**: Handle middleware errors
+
+Error type pattern:
+```rust
+#[derive(Error, Debug)]
+pub enum AppError {
+    #[error("Database error: {0}")]
+    Database(#[from] sqlx::Error),
+
+    #[error("Validation: {message}")]
+    Validation { message: String },
+
+    #[error("Not found: {resource}")]
+    NotFound { resource: String },
+
+    #[error("Unauthorized")]
+    Unauthorized,
+}
+
+impl IntoResponse for AppError {
+    fn into_response(self) -> Response {
+        let (status, message) = match &self {
+            AppError::Database(_) => (StatusCode::INTERNAL_SERVER_ERROR, "Database error"),
+            AppError::Validation { message } => (StatusCode::BAD_REQUEST, message.as_str()),
+            AppError::NotFound { .. } => (StatusCode::NOT_FOUND, "Not found"),
+            AppError::Unauthorized => (StatusCode::UNAUTHORIZED, "Unauthorized"),
+        };
+
+        (status, Json(json!({"error": message}))).into_response()
+    }
+}
+```
+
+HandleErrorLayer for middleware:
+```rust
+.layer(HandleErrorLayer::new(|error: BoxError| async move {
+    if error.is::<tower::timeout::error::Elapsed>() {
+        Ok(StatusCode::REQUEST_TIMEOUT)
+    } else {
+        Err((StatusCode::INTERNAL_SERVER_ERROR, "Internal error"))
+    }
+}))
+```"""
+        },
+        {
+            "role": "user",
+            "content": f"""Implement graceful error handling for Axum with:
+
+Error scenarios: {', '.join(scenarios)}
+Include recovery strategies: {'Yes' if include_recovery else 'No'}
+
+Requirements:
+1. Define comprehensive AppError enum
+2. Implement IntoResponse with proper status codes
+3. Use thiserror for Error trait
+4. Add From implementations for conversion
+5. Include HandleErrorLayer for middleware
+6. Log errors appropriately
+7. Return structured JSON error responses
+8. {'Add retry and recovery patterns' if include_recovery else 'Focus on error responses'}"""
+        }
+    ]
+
+
+# ================================
 # ADDITIONAL RESOURCES
 # ================================
 
@@ -2270,6 +2655,12 @@ if __name__ == "__main__":
     logger.info("🚀 Specialized in modern async web development with type safety")
     logger.info("📚 Based on: tokio-rs/axum + docs.rs/axum + alexpusch/rust-magic-patterns")
     logger.info("🔧 Features: Code Analysis | Project Generation | Magic Patterns | Middleware Creation")
-    
+    logger.info("\n📝 Available prompts:")
+    logger.info("  - design_axum_api: Design complete API with Axum")
+    logger.info("  - create_axum_handler: Create optimized handlers")
+    logger.info("  - implement_middleware_stack: Implement middleware stack")
+    logger.info("  - setup_state_management: Configure state management")
+    logger.info("  - handle_errors_gracefully: Implement error handling")
+
     # Run the MCP server
     mcp.run()

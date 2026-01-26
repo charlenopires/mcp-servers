@@ -21,7 +21,7 @@ import logging
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Any, Tuple, Union
 from enum import Enum
-from fastmcp import FastMCP
+from fastmcp import FastMCP, Context
 from pydantic import BaseModel, Field
 
 # Configure logging
@@ -29,7 +29,20 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Initialize MCP server (following pattern of working servers)
-mcp = FastMCP("TypeScript Analysis Server")
+mcp = FastMCP(
+    name="TypeScript Analysis Server",
+    instructions="""Advanced MCP server for modern TypeScript development with Clean Architecture and SOLID principles.
+
+This server provides TypeScript development expertise:
+- Code analysis with multi-dimensional scoring
+- Clean Architecture project generation
+- TypeScript 5.x features (satisfies, template literals, utility types)
+- SOLID principles application
+- Modern refactoring patterns
+
+Use these tools for type-safe, maintainable TypeScript code.""",
+    version="3.0.0"
+)
 
 # ================================
 # TYPESCRIPT 2025 ENUMS & MODELS
@@ -609,10 +622,11 @@ analysis_engine = TypeScriptAnalysisEngine()
 # MCP TOOLS - MAIN API ENDPOINTS
 # ================================
 
-@mcp.tool()
+@mcp.tool(tags=["analysis", "scoring", "code-quality"])
 async def typescript_analyze_code_advanced(
     code: str,
-    focus_areas: Optional[List[str]] = None
+    focus_areas: Optional[List[str]] = None,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Analyzes TypeScript code for modern patterns and best practices with multi-dimensional scoring.
@@ -672,8 +686,8 @@ async def typescript_analyze_code_advanced(
         logger.error(f"Error analyzing TypeScript code: {e}")
         raise
 
-@mcp.tool()
-async def typescript_analyze_prompt(prompt: str) -> Dict[str, Any]:
+@mcp.tool(tags=["prompt-analysis", "quality", "validation"])
+async def typescript_analyze_prompt(prompt: str, ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Analyzes a prompt for TypeScript code generation and provides quality assessment.
     
@@ -750,12 +764,13 @@ async def typescript_analyze_prompt(prompt: str) -> Dict[str, Any]:
         logger.error(f"Error analyzing TypeScript prompt: {e}")
         raise
 
-@mcp.tool()
+@mcp.tool(tags=["generation", "architecture", "project"])
 async def typescript_generate_clean_architecture(
     project_name: str,
     domain_context: str,
     include_testing: bool = True,
-    include_docker: bool = False
+    include_docker: bool = False,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Generates a complete Clean Architecture TypeScript project structure with modern patterns.
@@ -784,11 +799,12 @@ async def typescript_generate_clean_architecture(
         logger.error(f"Error generating Clean Architecture project: {e}")
         raise
 
-@mcp.tool()  
+@mcp.tool(tags=["refactoring", "modernization", "migration"])
 async def typescript_refactor_to_modern(
     legacy_code: str,
     target_version: str = "5.3",
-    focus_areas: Optional[List[str]] = None
+    focus_areas: Optional[List[str]] = None,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Refactors legacy TypeScript code to modern patterns and features.
@@ -828,10 +844,11 @@ async def typescript_refactor_to_modern(
         logger.error(f"Error refactoring TypeScript code: {e}")
         raise
 
-@mcp.tool()
+@mcp.tool(tags=["best-practices", "patterns", "reference"])
 async def typescript_get_best_practices(
     category: str = "all",
-    complexity_level: str = "intermediate"
+    complexity_level: str = "intermediate",
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Retrieves comprehensive TypeScript best practices for 2025.
@@ -948,9 +965,451 @@ type UserEndpoint = ApiEndpoint<'POST', 'users'>; // 'post /api/v1/users' ''',
         raise
 
 # ================================
+# MCP PROMPTS
+# ================================
+
+
+@mcp.prompt()
+async def design_clean_architecture(
+    domain: str,
+    entities: List[str] = [],
+    use_cases: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to design a Clean Architecture TypeScript project.
+
+    Args:
+        domain: Business domain (e-commerce, user-management, etc.)
+        entities: Domain entities to include
+        use_cases: Use cases/business operations
+    """
+    default_entities = ["User", "Entity", "ValueObject"]
+    entity_list = entities if entities else default_entities
+
+    default_use_cases = ["create", "update", "delete", "list"]
+    use_case_list = use_cases if use_cases else default_use_cases
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in Clean Architecture with TypeScript.
+
+Clean Architecture layers:
+1. **Domain Layer**: Entities, Value Objects, Domain Events
+   - Pure business logic, no dependencies
+   - Immutable data structures
+   - Rich domain model patterns
+
+2. **Application Layer**: Use Cases, DTOs, Ports
+   - Business operations orchestration
+   - Input/Output ports (interfaces)
+   - Application-specific business rules
+
+3. **Infrastructure Layer**: Adapters, Repositories, External Services
+   - Database implementations
+   - API clients, messaging
+   - Framework integrations
+
+4. **Presentation Layer**: Controllers, Presenters, Views
+   - HTTP handlers, CLI commands
+   - Request/Response mapping
+   - Validation at boundaries
+
+Key principles:
+- Dependency Rule: Inner layers don't know outer layers
+- Ports & Adapters: Define interfaces in application layer
+- Dependency Injection: Wire dependencies at composition root"""
+        },
+        {
+            "role": "user",
+            "content": f"""Design a Clean Architecture TypeScript project for: {domain}
+
+Domain entities: {', '.join(entity_list)}
+Use cases: {', '.join(use_case_list)}
+
+Requirements:
+1. Define domain layer with entities and value objects
+2. Create application layer with use cases and ports
+3. Design infrastructure layer with adapters
+4. Set up presentation layer with controllers
+5. Include dependency injection configuration
+6. Add proper TypeScript interfaces throughout
+7. Implement error handling with Result pattern
+8. Include folder structure and file organization"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def modernize_typescript(
+    current_version: str = "4.x",
+    target_version: str = "5.3",
+    features_to_adopt: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to modernize TypeScript code to latest version.
+
+    Args:
+        current_version: Current TypeScript version
+        target_version: Target TypeScript version
+        features_to_adopt: Specific features to adopt
+    """
+    default_features = ["satisfies", "template_literals", "const_type_parameters"]
+    features = features_to_adopt if features_to_adopt else default_features
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in TypeScript 5.x features.
+
+TypeScript 5.x key features:
+1. **satisfies operator**: Type validation without altering inference
+   ```typescript
+   const config = { ... } satisfies Config;
+   ```
+
+2. **const type parameters**: Preserve literal types in generics
+   ```typescript
+   function routes<const T extends string[]>(paths: T) { ... }
+   ```
+
+3. **Template literal discriminants**: Use in discriminated unions
+   ```typescript
+   type Event = { type: `user_${string}` } | { type: `order_${string}` };
+   ```
+
+4. **Decorators (Stage 3)**: Native decorator support
+   ```typescript
+   @logged
+   class Service { ... }
+   ```
+
+5. **verbatimModuleSyntax**: Explicit type imports
+   ```typescript
+   import type { User } from './types';
+   ```
+
+Migration best practices:
+- Enable strict mode incrementally
+- Use satisfies for config objects
+- Prefer const type parameters for routes/configs
+- Adopt template literal types for type-safe strings"""
+        },
+        {
+            "role": "user",
+            "content": f"""Modernize TypeScript code from {current_version} to {target_version}.
+
+Features to adopt: {', '.join(features)}
+
+Requirements:
+1. Identify opportunities for TypeScript 5.x features
+2. Apply satisfies operator where appropriate
+3. Use const type parameters for literals
+4. Implement template literal types
+5. Add verbatimModuleSyntax support
+6. Enable stricter type checking
+7. Provide migration examples
+8. Include tsconfig.json updates"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def apply_solid_principles(
+    code: str = "",
+    principle_focus: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to apply SOLID principles to TypeScript code.
+
+    Args:
+        code: Existing code to refactor (optional)
+        principle_focus: Specific principles to focus on
+    """
+    all_principles = ["SRP", "OCP", "LSP", "ISP", "DIP"]
+    principles = principle_focus if principle_focus else all_principles
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in SOLID principles with TypeScript.
+
+SOLID Principles:
+1. **SRP (Single Responsibility)**: One reason to change
+   - Split classes by responsibility
+   - Use composition over inheritance
+   - Separate concerns clearly
+
+2. **OCP (Open/Closed)**: Open for extension, closed for modification
+   - Use interfaces and abstract classes
+   - Strategy pattern for variations
+   - Plugin architectures
+
+3. **LSP (Liskov Substitution)**: Subtypes must be substitutable
+   - Proper inheritance hierarchies
+   - Contract-preserving overrides
+   - Avoid violating preconditions/postconditions
+
+4. **ISP (Interface Segregation)**: Specific interfaces over general
+   - Small, focused interfaces
+   - Role interfaces pattern
+   - Avoid interface pollution
+
+5. **DIP (Dependency Inversion)**: Depend on abstractions
+   - Inject dependencies via interfaces
+   - Inversion of Control containers
+   - High-level modules define interfaces"""
+        },
+        {
+            "role": "user",
+            "content": f"""Apply SOLID principles to {'this code' if code else 'a TypeScript design'}:
+
+{f"```typescript{chr(10)}{code}{chr(10)}```" if code else "Create examples demonstrating SOLID principles"}
+
+Principles to focus on: {', '.join(principles)}
+
+Requirements:
+1. Analyze current design for violations
+2. Apply each specified principle
+3. Show before/after code examples
+4. Explain the improvements made
+5. Use TypeScript interfaces effectively
+6. Implement dependency injection
+7. Add proper abstractions
+8. Demonstrate testability improvements"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def create_type_safe_api(
+    api_type: str = "rest",
+    endpoints: List[str] = [],
+    include_validation: bool = True
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to create a type-safe API with TypeScript.
+
+    Args:
+        api_type: Type of API (rest, graphql, trpc)
+        endpoints: API endpoints to create
+        include_validation: Include runtime validation
+    """
+    default_endpoints = ["/users", "/posts", "/comments"]
+    endpoint_list = endpoints if endpoints else default_endpoints
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in type-safe API design with TypeScript.
+
+Type-safe API patterns:
+1. **Shared types**: Define types used by both client and server
+2. **Zod schemas**: Runtime validation with type inference
+3. **Contract-first**: Define API contract, generate types
+4. **End-to-end safety**: Types flow from DB to client
+
+Implementation approaches:
+- tRPC: End-to-end type safety without schema
+- OpenAPI + TypeScript: Generate types from spec
+- Zod: Schema-first with inferred types
+
+Example patterns:
+```typescript
+// Zod schema with type inference
+const UserSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1),
+  email: z.string().email(),
+});
+
+type User = z.infer<typeof UserSchema>;
+
+// Type-safe route handler
+async function createUser(input: z.infer<typeof CreateUserSchema>) {
+  const validated = CreateUserSchema.parse(input);
+  return await db.user.create(validated);
+}
+```"""
+        },
+        {
+            "role": "user",
+            "content": f"""Create a type-safe {api_type.upper()} API with TypeScript.
+
+Endpoints: {', '.join(endpoint_list)}
+Include runtime validation: {'Yes with Zod' if include_validation else 'No'}
+
+Requirements:
+1. Define shared type definitions
+2. {'Create Zod schemas for validation' if include_validation else 'Use TypeScript interfaces'}
+3. Implement type-safe route handlers
+4. Add request/response type safety
+5. Include error handling types
+6. Ensure client-server type consistency
+7. Add proper documentation
+8. Include API testing examples"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def implement_result_pattern(
+    error_scenarios: List[str] = [],
+    include_railway: bool = True
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to implement the Result pattern for error handling.
+
+    Args:
+        error_scenarios: Types of errors to handle
+        include_railway: Include Railway Oriented Programming
+    """
+    default_scenarios = ["validation", "not_found", "unauthorized", "internal"]
+    scenarios = error_scenarios if error_scenarios else default_scenarios
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in functional error handling with TypeScript.
+
+Result pattern:
+```typescript
+type Result<T, E = Error> =
+  | { success: true; data: T }
+  | { success: false; error: E };
+
+// Usage
+function divide(a: number, b: number): Result<number, string> {
+  if (b === 0) return { success: false, error: 'Division by zero' };
+  return { success: true, data: a / b };
+}
+```
+
+Railway Oriented Programming:
+```typescript
+class Result<T, E> {
+  map<U>(fn: (value: T) => U): Result<U, E> { ... }
+  flatMap<U>(fn: (value: T) => Result<U, E>): Result<U, E> { ... }
+  mapError<F>(fn: (error: E) => F): Result<T, F> { ... }
+}
+
+// Chain operations
+const result = getUserById(id)
+  .flatMap(user => validateUser(user))
+  .flatMap(user => updateUser(user))
+  .map(user => toDTO(user));
+```
+
+Benefits:
+- Explicit error handling
+- Type-safe error propagation
+- Composable operations
+- No thrown exceptions"""
+        },
+        {
+            "role": "user",
+            "content": f"""Implement the Result pattern for TypeScript error handling.
+
+Error scenarios: {', '.join(scenarios)}
+Include Railway Oriented Programming: {'Yes' if include_railway else 'No'}
+
+Requirements:
+1. Define Result type with discriminated union
+2. Create error types for each scenario
+3. {'Implement Result class with map/flatMap' if include_railway else 'Use simple Result type'}
+4. Add helper functions (ok, err, isOk, isErr)
+5. Show usage in service layer
+6. Include async Result handling
+7. Add proper TypeScript generics
+8. Demonstrate error transformation"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def generate_utility_types(
+    use_case: str = "general",
+    base_types: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to create custom utility types.
+
+    Args:
+        use_case: Use case for utility types (api, forms, state)
+        base_types: Base types to create utilities for
+    """
+    default_types = ["User", "Product", "Order"]
+    types = base_types if base_types else default_types
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in TypeScript utility types.
+
+Built-in utility types:
+- Partial<T>, Required<T>, Readonly<T>
+- Pick<T, K>, Omit<T, K>
+- Record<K, T>, Extract<T, U>, Exclude<T, U>
+- NonNullable<T>, ReturnType<T>, Parameters<T>
+
+Advanced patterns:
+```typescript
+// Deep Partial
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+
+// Mutable from Readonly
+type Mutable<T> = { -readonly [P in keyof T]: T[P] };
+
+// Optional keys
+type OptionalKeys<T> = {
+  [K in keyof T]-?: {} extends Pick<T, K> ? K : never
+}[keyof T];
+
+// Path type for nested access
+type Path<T, K extends keyof T> = K extends string
+  ? T[K] extends Record<string, any>
+    ? K | `${K}.${Path<T[K], keyof T[K]>}`
+    : K
+  : never;
+```
+
+Use cases:
+- API: DTO types, response wrappers
+- Forms: Form state, validation types
+- State: Immutable types, action types"""
+        },
+        {
+            "role": "user",
+            "content": f"""Generate custom utility types for: {use_case}
+
+Base types to create utilities for: {', '.join(types)}
+
+Requirements:
+1. Create DeepPartial and DeepRequired
+2. Implement type-safe paths for nested access
+3. Add DTO transformation types
+4. Create form state utility types
+5. Implement conditional utility types
+6. Add documentation for each type
+7. Show practical usage examples
+8. Include type tests"""
+        }
+    ]
+
+
+# ================================
 # SERVER STARTUP
 # ================================
 
 if __name__ == "__main__":
     logger.info("TypeScript Advanced MCP Server starting...")
+    logger.info("📝 Available prompts:")
+    logger.info("  - design_clean_architecture: Design Clean Architecture projects")
+    logger.info("  - modernize_typescript: Modernize to TypeScript 5.x")
+    logger.info("  - apply_solid_principles: Apply SOLID principles")
+    logger.info("  - create_type_safe_api: Create type-safe APIs")
+    logger.info("  - implement_result_pattern: Implement Result pattern")
+    logger.info("  - generate_utility_types: Generate custom utility types")
     mcp.run()

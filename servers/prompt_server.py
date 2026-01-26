@@ -4,13 +4,26 @@ Implements advanced prompt engineering techniques for optimizing queries
 """
 
 from typing import Dict, List, Optional, Any
-from fastmcp import FastMCP
+from fastmcp import FastMCP, Context
 from pydantic import BaseModel
 import re
 from enum import Enum
 
 # Initialize the MCP server
-mcp = FastMCP("Prompt Engineering Best Practices Assistant")
+mcp = FastMCP(
+    name="Prompt Engineering Best Practices Assistant",
+    instructions="""Advanced prompt engineering server with optimization techniques and frameworks.
+
+This server provides comprehensive prompt engineering capabilities:
+- Optimize prompts using best practices (CRISPE, RACE, TRACE frameworks)
+- Apply advanced reasoning techniques (Chain-of-Thought, ReAct, Tree of Thoughts)
+- Analyze prompt quality and provide actionable feedback
+- Check for biases and suggest mitigations
+- Model-specific optimizations for Claude, GPT-4, Gemini
+
+Use these tools to craft better prompts for any AI model.""",
+    version="3.0.0"
+)
 
 
 class TaskType(Enum):
@@ -298,13 +311,14 @@ class PromptEngineer:
 engineer = PromptEngineer()
 
 
-@mcp.tool()
+@mcp.tool(tags=["optimization", "best-practices", "enhancement"])
 async def prompt_optimize_generic(
     prompt: str,
     task_type: Optional[str] = None,
     target_audience: Optional[str] = None,
     desired_length: Optional[str] = None,
-    tone: Optional[str] = None
+    tone: Optional[str] = None,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Optimizes a prompt by applying prompt engineering best practices
@@ -338,8 +352,8 @@ async def prompt_optimize_generic(
     }
 
 
-@mcp.tool()
-async def prompt_analyze_generic(prompt: str) -> Dict[str, Any]:
+@mcp.tool(tags=["analysis", "scoring", "quality"])
+async def prompt_analyze_generic(prompt: str, ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Analyzes a prompt and provides feedback on its quality
 
@@ -420,8 +434,8 @@ async def prompt_analyze_generic(prompt: str) -> Dict[str, Any]:
     return analysis
 
 
-@mcp.tool()
-async def prompt_suggest_framework(task_description: str) -> Dict[str, Any]:
+@mcp.tool(tags=["frameworks", "suggestions", "structure"])
+async def prompt_suggest_framework(task_description: str, ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Suggests the best prompt framework for a specific task
 
@@ -482,10 +496,11 @@ async def prompt_suggest_framework(task_description: str) -> Dict[str, Any]:
     }
 
 
-@mcp.tool()
+@mcp.tool(tags=["techniques", "reasoning", "advanced"])
 async def prompt_apply_technique(
     prompt: str,
-    technique: str = "chain_of_thought"
+    technique: str = "chain_of_thought",
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Applies advanced reasoning techniques to the prompt
@@ -535,8 +550,8 @@ async def prompt_apply_technique(
     }
 
 
-@mcp.tool()
-async def prompt_check_bias(prompt: str) -> Dict[str, Any]:
+@mcp.tool(tags=["bias-check", "ethics", "inclusive"])
+async def prompt_check_bias(prompt: str, ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Checks for potential biases in the prompt and suggests mitigations
 
@@ -606,6 +621,231 @@ async def prompt_check_bias(prompt: str) -> Dict[str, Any]:
             "Specify contexts when relevant"
         ]
     }
+
+# MCP Prompts for prompt engineering guidance
+
+@mcp.prompt("optimize_for_model")
+async def optimize_for_model_prompt(
+    prompt: str,
+    model: str = "claude",
+    task_type: str = "general"
+) -> List[Dict[str, str]]:
+    """
+    Generate prompt optimized for a specific AI model.
+
+    Args:
+        prompt: The prompt to optimize
+        model: Target model (claude, gpt4, gemini)
+        task_type: Type of task (general, code, creative, analysis)
+    """
+    model_tips = {
+        "claude": "Claude responds well to clear context, structured requests, and explicit role assignments. Use XML tags for complex structures.",
+        "gpt4": "GPT-4 benefits from system messages, clear formatting, and step-by-step instructions. Use markdown for structure.",
+        "gemini": "Gemini works well with concise prompts, clear objectives, and multimodal context when available."
+    }
+
+    return [
+        {
+            "role": "system",
+            "content": f"""You are a prompt optimization expert for {model.upper()}.
+{model_tips.get(model, "Apply general prompt engineering best practices.")}
+
+Optimize prompts following model-specific patterns while maintaining clarity and effectiveness."""
+        },
+        {
+            "role": "user",
+            "content": f"""Optimize this prompt for {model.upper()}:
+
+Original prompt: {prompt}
+Task type: {task_type}
+
+Provide:
+1. Optimized prompt
+2. Techniques applied
+3. Expected improvements
+4. Model-specific tips"""
+        }
+    ]
+
+
+@mcp.prompt("chain_of_thought_builder")
+async def chain_of_thought_builder_prompt(
+    problem: str,
+    complexity: str = "medium",
+    steps: int = 5
+) -> List[Dict[str, str]]:
+    """
+    Build a structured Chain-of-Thought prompt.
+
+    Args:
+        problem: The problem to solve
+        complexity: Complexity level (simple, medium, complex)
+        steps: Number of reasoning steps
+    """
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in Chain-of-Thought (CoT) prompting.
+Create structured reasoning prompts that guide the model through logical steps.
+Include explicit thinking markers and verification steps."""
+        },
+        {
+            "role": "user",
+            "content": f"""Create a {steps}-step Chain-of-Thought prompt for:
+
+Problem: {problem}
+Complexity: {complexity}
+
+Structure the prompt with:
+1. Problem restatement
+2. Key information extraction
+3. {steps} reasoning steps with explicit markers
+4. Solution synthesis
+5. Verification step
+
+Output the complete CoT prompt ready for use."""
+        }
+    ]
+
+
+@mcp.prompt("few_shot_generator")
+async def few_shot_generator_prompt(
+    task: str,
+    num_examples: int = 3,
+    input_type: str = "text",
+    output_type: str = "text"
+) -> List[Dict[str, str]]:
+    """
+    Generate few-shot examples for a given task.
+
+    Args:
+        task: Description of the task
+        num_examples: Number of examples to generate
+        input_type: Type of input (text, code, json)
+        output_type: Type of output (text, code, json)
+    """
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert at creating effective few-shot examples.
+Generate diverse, representative examples that clearly demonstrate the task pattern.
+Ensure examples cover edge cases and common variations."""
+        },
+        {
+            "role": "user",
+            "content": f"""Generate {num_examples} few-shot examples for this task:
+
+Task: {task}
+Input type: {input_type}
+Output type: {output_type}
+
+For each example provide:
+- Input
+- Expected output
+- Brief explanation of why this is a good example
+
+Then provide the complete prompt template with examples included."""
+        }
+    ]
+
+
+@mcp.prompt("apply_framework")
+async def apply_framework_prompt(
+    requirement: str,
+    framework: str = "CRISPE"
+) -> List[Dict[str, str]]:
+    """
+    Apply a specific prompt framework to a requirement.
+
+    Args:
+        requirement: What the prompt needs to accomplish
+        framework: Framework to apply (CRISPE, RACE, TRACE, CORE, COAST)
+    """
+    frameworks_structure = {
+        "CRISPE": ["Capacity/Role", "Insight", "Statement", "Personality", "Experiment"],
+        "RACE": ["Role", "Action", "Context", "Expectation"],
+        "TRACE": ["Task", "Request", "Action", "Context", "Example"],
+        "CORE": ["Context", "Objective", "Role", "Example"],
+        "COAST": ["Context", "Objective", "Actions", "Scenario", "Task"]
+    }
+
+    components = frameworks_structure.get(framework, frameworks_structure["CRISPE"])
+    components_text = "\n".join([f"- {c}" for c in components])
+
+    return [
+        {
+            "role": "system",
+            "content": f"""You are an expert in the {framework} prompt framework.
+Apply the framework systematically to create effective, structured prompts.
+
+Framework components:
+{components_text}"""
+        },
+        {
+            "role": "user",
+            "content": f"""Apply the {framework} framework to this requirement:
+
+{requirement}
+
+Provide:
+1. Each framework component filled in
+2. The complete structured prompt
+3. Tips for using this framework effectively
+4. When to use {framework} vs other frameworks"""
+        }
+    ]
+
+
+@mcp.prompt("create_system_prompt")
+async def create_system_prompt(
+    agent_role: str,
+    capabilities: List[str],
+    constraints: List[str] = None,
+    tone: str = "professional"
+) -> List[Dict[str, str]]:
+    """
+    Create an optimized system prompt for an AI agent.
+
+    Args:
+        agent_role: The role the agent should play
+        capabilities: List of capabilities the agent should have
+        constraints: List of constraints or limitations
+        tone: Desired tone (professional, friendly, technical)
+    """
+    capabilities_text = "\n".join([f"- {c}" for c in capabilities])
+    constraints_text = "\n".join([f"- {c}" for c in constraints]) if constraints else "None specified"
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert at creating effective system prompts for AI agents.
+Design prompts that clearly define role, capabilities, and behavior.
+Follow best practices for agent instruction design."""
+        },
+        {
+            "role": "user",
+            "content": f"""Create a comprehensive system prompt for this agent:
+
+## Role
+{agent_role}
+
+## Capabilities
+{capabilities_text}
+
+## Constraints
+{constraints_text}
+
+## Tone
+{tone}
+
+Provide:
+1. Complete system prompt
+2. Example conversation starters
+3. Edge case handling instructions
+4. Evaluation criteria for good responses"""
+        }
+    ]
+
 
 # Configuration and initialization
 if __name__ == "__main__":

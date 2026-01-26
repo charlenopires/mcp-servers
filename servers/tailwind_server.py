@@ -4,12 +4,26 @@ MCP server for Tailwind CSS v4.1 prompt contextualization
 Helps generate updated code with new Tailwind CSS features
 """
 
-from fastmcp import FastMCP
-from typing import Dict, Any, List
+from fastmcp import FastMCP, Context
+from typing import Dict, Any, List, Optional
 import json
 
 # Initialize MCP server
-mcp = FastMCP("Assistant for TailwindCSS v4.1 Context Prompts")
+mcp = FastMCP(
+    name="Tailwind CSS v4.1 Assistant",
+    instructions="""Contextualizes prompts and generates code with Tailwind CSS v4.1 features.
+
+This server provides Tailwind CSS v4.1 expertise:
+- CSS-first configuration with @theme, @source, @utility directives
+- New utilities: text-shadow, mask gradients, overflow-wrap
+- New variants: user-valid, user-invalid, noscript, inverted-colors
+- Container queries built-in (no plugin needed)
+- OKLCH color palette for wider gamut
+- Performance: 3.5x faster full builds, 8x faster incremental
+
+Use these tools to build modern UIs with Tailwind v4.1.""",
+    version="3.0.0"
+)
 
 # Knowledge base about Tailwind CSS v4.1
 TAILWIND_V4_CONTEXT = {
@@ -142,8 +156,8 @@ CODE_TEMPLATES = {
 }
 
 
-@mcp.tool()
-async def tailwind_contextualize_prompt(prompt: str) -> Dict[str, Any]:
+@mcp.tool(tags=["contextualization", "prompts", "v4"])
+async def tailwind_contextualize_prompt(prompt: str, ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Contextualizes a Tailwind CSS prompt with v4.1 information
 
@@ -241,8 +255,8 @@ async def tailwind_contextualize_prompt(prompt: str) -> Dict[str, Any]:
     }
 
 
-@mcp.tool()
-async def tailwind_get_v4_info(feature: str = "") -> Dict[str, Any]:
+@mcp.tool(tags=["documentation", "features", "info"])
+async def tailwind_get_v4_info(feature: str = "", ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Gets specific information about Tailwind CSS v4.1 features
 
@@ -302,10 +316,11 @@ async def tailwind_get_v4_info(feature: str = "") -> Dict[str, Any]:
     return feature_info
 
 
-@mcp.tool()
+@mcp.tool(tags=["generation", "components", "code"])
 async def tailwind_generate_v4_code(
     component_type: str,
-    requirements: str = ""
+    requirements: str = "",
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Generates Tailwind CSS v4.1 code based on component type
@@ -459,7 +474,7 @@ async def tailwind_generate_v4_code(
     }
 
 
-@mcp.tool()
+@mcp.tool(tags=["documentation", "reference", "v4"])
 async def tailwind_get_v4_docs() -> Dict[str, Any]:
     """
     Returns summarized documentation for Tailwind CSS v4.1
@@ -474,7 +489,7 @@ async def tailwind_get_v4_docs() -> Dict[str, Any]:
     }
 
 
-@mcp.tool()
+@mcp.tool(tags=["examples", "templates", "code"])
 async def tailwind_get_v4_examples() -> Dict[str, Any]:
     """
     Returns code examples for Tailwind CSS v4.1
@@ -487,6 +502,348 @@ async def tailwind_get_v4_examples() -> Dict[str, Any]:
         "content": CODE_TEMPLATES,
         "format": "application/json"
     }
+
+# MCP Prompts for Tailwind CSS v4.1
+
+
+@mcp.prompt()
+async def migrate_to_v4(
+    current_config: str = "",
+    framework: str = "vite"
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to migrate Tailwind v3 configuration to v4.
+
+    Args:
+        current_config: Current tailwind.config.js content (optional)
+        framework: Target framework (vite, next, remix, astro)
+    """
+    framework_specifics = {
+        "vite": "PostCSS with @tailwindcss/postcss",
+        "next": "Next.js built-in PostCSS or @tailwindcss/postcss",
+        "remix": "PostCSS with remix-specific setup",
+        "astro": "Astro integration @astrojs/tailwind or PostCSS"
+    }
+
+    return [
+        {
+            "role": "system",
+            "content": """You are a Tailwind CSS migration expert specializing in v3 to v4 upgrades.
+
+Key migration changes:
+1. Configuration moves from tailwind.config.js to CSS file
+2. Use @import "tailwindcss"; instead of @tailwind directives
+3. Theme values use @theme inline { } directive
+4. Content paths use @source directive
+5. Plugins use @plugin directive
+6. Colors now use OKLCH color space
+7. Container queries are built-in (no plugin needed)
+
+Follow these best practices:
+- Preserve all custom theme values
+- Convert JavaScript config to CSS @theme syntax
+- Update any deprecated utilities
+- Test with incremental builds for performance"""
+        },
+        {
+            "role": "user",
+            "content": f"""Migrate this Tailwind CSS v3 configuration to v4.1:
+
+Framework: {framework}
+Setup: {framework_specifics.get(framework, 'PostCSS')}
+
+{f"Current config:{chr(10)}{current_config}" if current_config else "Create a fresh v4.1 CSS configuration"}
+
+Requirements:
+1. Convert to CSS-first configuration
+2. Use @theme for custom values
+3. Use @source for content paths
+4. Include migration notes for any breaking changes
+5. Provide the complete CSS file structure"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def design_component(
+    component_type: str,
+    features: List[str] = [],
+    responsive: bool = True,
+    dark_mode: bool = True
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to design a component with Tailwind v4.1 features.
+
+    Args:
+        component_type: Type of component (card, hero, form, modal, etc.)
+        features: Specific v4.1 features to use
+        responsive: Include responsive design
+        dark_mode: Include dark mode support
+    """
+    v4_features_list = [
+        "text-shadow utilities",
+        "mask gradients",
+        "user-valid/user-invalid variants",
+        "noscript variant",
+        "colored drop-shadows",
+        "wrap-anywhere utility",
+        "container queries (@container)",
+        "field-sizing-content"
+    ]
+
+    features_to_use = features if features else v4_features_list[:4]
+
+    return [
+        {
+            "role": "system",
+            "content": f"""You are a UI developer expert in Tailwind CSS v4.1.
+
+Available v4.1 features:
+- text-shadow-* (2xs, xs, sm, base, lg, xl) with color support
+- mask-* for gradient masks (mask-b-from-*, mask-t-to-*)
+- user-valid:/user-invalid: for form validation after interaction
+- noscript: variant for no-JavaScript fallbacks
+- drop-shadow-{{color}}/{{opacity}} for colored shadows
+- wrap-anywhere for intelligent text wrapping
+- @container queries (built-in, no plugin)
+- field-sizing-content for auto-sizing inputs
+- inverted-colors: for accessibility
+- details-content: for <details> elements
+
+Design principles:
+- Semantic HTML structure
+- Accessibility (WCAG AA)
+- Progressive enhancement
+- Mobile-first responsive design
+- Performance-conscious (minimal classes)"""
+        },
+        {
+            "role": "user",
+            "content": f"""Create a {component_type} component using Tailwind CSS v4.1.
+
+Features to incorporate: {', '.join(features_to_use)}
+Responsive design: {'Yes - mobile-first with breakpoints' if responsive else 'Desktop only'}
+Dark mode: {'Yes - use dark: variant' if dark_mode else 'No'}
+
+Requirements:
+1. Use modern v4.1 utilities where appropriate
+2. Include hover/focus states
+3. Add appropriate ARIA attributes
+4. Comment which v4.1 features are being used
+5. Provide both the HTML and any custom CSS needed"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def create_theme(
+    brand_colors: Dict[str, str] = {},
+    typography_scale: str = "default",
+    spacing_scale: str = "default"
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to create a custom theme with @theme directive.
+
+    Args:
+        brand_colors: Dictionary of brand colors (primary, secondary, etc.)
+        typography_scale: Typography scale (compact, default, relaxed)
+        spacing_scale: Spacing scale (tight, default, loose)
+    """
+    default_colors = {
+        "primary": "#3b82f6",
+        "secondary": "#6366f1",
+        "accent": "#f59e0b",
+        "neutral": "#6b7280"
+    }
+
+    colors = brand_colors if brand_colors else default_colors
+
+    return [
+        {
+            "role": "system",
+            "content": """You are a design systems expert specializing in Tailwind CSS v4.1 theming.
+
+Tailwind v4.1 @theme directive features:
+- Define CSS variables directly in CSS
+- Variables follow --{category}-{name} pattern
+- Support for OKLCH colors (wider gamut)
+- Theme values become utility classes automatically
+- Can extend or override default theme
+
+Theme variable categories:
+- --color-* for colors
+- --font-* for font families
+- --text-* for font sizes
+- --spacing-* for spacing scale
+- --radius-* for border radius
+- --shadow-* for box shadows
+- --container-* for container sizes
+
+Best practices:
+- Use semantic color names (primary, secondary, surface)
+- Define color scales (50-950)
+- Include dark mode variants
+- Document design tokens"""
+        },
+        {
+            "role": "user",
+            "content": f"""Create a custom Tailwind CSS v4.1 theme configuration.
+
+Brand colors:
+{chr(10).join(f'- {name}: {value}' for name, value in colors.items())}
+
+Typography: {typography_scale}
+Spacing: {spacing_scale}
+
+Requirements:
+1. Use @theme inline {{ }} directive
+2. Define color scales for each brand color (50-950)
+3. Include semantic color tokens (background, foreground, border)
+4. Add dark mode color variants
+5. Create custom shadow definitions
+6. Document the design system
+7. Provide usage examples for the custom utilities"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def optimize_classes(
+    html_code: str,
+    optimization_goals: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to optimize and consolidate Tailwind classes.
+
+    Args:
+        html_code: HTML code with Tailwind classes to optimize
+        optimization_goals: Specific goals (performance, readability, v4-upgrade)
+    """
+    goals = optimization_goals if optimization_goals else [
+        "reduce class count",
+        "use v4.1 utilities",
+        "improve readability"
+    ]
+
+    return [
+        {
+            "role": "system",
+            "content": """You are a Tailwind CSS optimization expert.
+
+Optimization strategies:
+1. **Consolidate utilities**: Replace multiple utilities with newer combined ones
+2. **Use @apply**: For repeated patterns, create @utility definitions
+3. **Leverage v4.1 features**:
+   - text-shadow instead of custom CSS
+   - mask utilities instead of complex gradients
+   - user-valid/invalid instead of JS-based validation styles
+4. **Remove redundant classes**: Identify overridden or unused utilities
+5. **Group related classes**: Organize by layout, spacing, typography, color
+6. **Use arbitrary values sparingly**: Prefer theme values
+
+V4.1 replacements:
+- Custom text shadows → text-shadow-*
+- Complex gradient masks → mask-*
+- JS validation styling → user-valid:/user-invalid:
+- overflow-wrap: anywhere → wrap-anywhere
+- Custom drop shadows → drop-shadow-{color}/{opacity}
+
+@utility pattern:
+@utility card-base {
+  @apply bg-white rounded-xl shadow-lg p-6;
+}"""
+        },
+        {
+            "role": "user",
+            "content": f"""Optimize this Tailwind CSS code for v4.1:
+
+```html
+{html_code}
+```
+
+Optimization goals: {', '.join(goals)}
+
+Requirements:
+1. Identify opportunities for v4.1 utility upgrades
+2. Suggest @utility definitions for repeated patterns
+3. Remove redundant or overridden classes
+4. Improve class organization and readability
+5. Provide before/after comparison
+6. Note any deprecated utilities that need updating"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def setup_project(
+    framework: str = "vite",
+    features: List[str] = [],
+    plugins: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to set up a new project with Tailwind CSS v4.
+
+    Args:
+        framework: Target framework (vite, next, remix, astro, react-router)
+        features: Additional features (forms, typography, dark-mode)
+        plugins: Tailwind plugins to include
+    """
+    framework_commands = {
+        "vite": "npm create vite@latest my-app -- --template react-ts",
+        "next": "npx create-next-app@latest my-app",
+        "remix": "npx create-remix@latest my-app",
+        "astro": "npm create astro@latest my-app",
+        "react-router": "npx create-react-router@latest my-app"
+    }
+
+    default_features = ["dark mode", "responsive design", "CSS variables"]
+    default_plugins = ["@tailwindcss/forms", "@tailwindcss/typography"]
+
+    return [
+        {
+            "role": "system",
+            "content": """You are a frontend setup expert specializing in Tailwind CSS v4.1 projects.
+
+Tailwind CSS v4.1 setup requirements:
+1. Install: npm install tailwindcss @tailwindcss/postcss
+2. PostCSS config with @tailwindcss/postcss plugin
+3. Main CSS file with @import "tailwindcss";
+4. @source directive for content paths
+5. @theme for custom configuration
+
+Framework-specific notes:
+- Vite: postcss.config.js with @tailwindcss/postcss
+- Next.js: Can use built-in PostCSS or @tailwindcss/postcss
+- Remix: PostCSS setup similar to Vite
+- Astro: @astrojs/tailwind integration or PostCSS
+
+Best practices:
+- Organize CSS with layers (@layer base, components, utilities)
+- Use CSS nesting (native support in v4)
+- Set up IDE extensions (Tailwind CSS IntelliSense)
+- Configure Prettier with prettier-plugin-tailwindcss"""
+        },
+        {
+            "role": "user",
+            "content": f"""Set up a new {framework} project with Tailwind CSS v4.1.
+
+Framework command: {framework_commands.get(framework, 'npm create vite@latest')}
+
+Features to include: {', '.join(features if features else default_features)}
+Plugins: {', '.join(plugins if plugins else default_plugins)}
+
+Requirements:
+1. Provide step-by-step installation commands
+2. Show complete postcss.config.js configuration
+3. Create the main CSS file with proper structure
+4. Include @source paths for the framework
+5. Add @theme with basic customization
+6. Configure VS Code settings for IntelliSense
+7. Set up Prettier configuration
+8. Provide a starter component demonstrating v4.1 features"""
+        }
+    ]
+
 
 # Helper functions
 
@@ -543,5 +900,11 @@ if __name__ == "__main__":
     print("  - tailwind_generate_v4_code: Generates code with new features")
     print("  - tailwind_get_v4_docs: Gets summarized Tailwind CSS v4.1 documentation")
     print("  - tailwind_get_v4_examples: Gets Tailwind CSS v4.1 code examples")
+    print("\n📝 Available prompts:")
+    print("  - migrate_to_v4: Migrate from Tailwind v3 to v4")
+    print("  - design_component: Design components with v4.1 features")
+    print("  - create_theme: Create custom theme with @theme directive")
+    print("  - optimize_classes: Optimize and consolidate Tailwind classes")
+    print("  - setup_project: Set up new project with Tailwind CSS v4")
 
     mcp.run()

@@ -31,15 +31,45 @@ import logging
 from enum import Enum
 from typing import Any
 
-from fastmcp import FastMCP
+from typing import Optional
+
+from fastmcp import FastMCP, Context
 from pydantic import BaseModel, Field
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Initialize FastMCP server (following pattern of other servers)
-mcp = FastMCP("Docker Optimizer Server")
+# Initialize FastMCP server
+mcp = FastMCP(
+    name="Docker Optimizer Server",
+    instructions="""Advanced MCP server for Docker containerization analysis, optimization,
+and best practices implementation following 2025 container security standards.
+
+Features:
+- Docker prompt analysis with 0-100 scoring system
+- Automatic prompt enhancement with production-ready specifications
+- Security best practices: non-root users, minimal images, vulnerability scanning
+- Multi-stage optimization: intelligent layer caching and size reduction
+- Complete configuration generation: Dockerfile + docker-compose + .dockerignore
+- Docker Compose orchestration with modern Compose Specification
+
+Use these tools for:
+- docker_analyze_prompt: Analyze Docker creation prompts for quality
+- docker_enhance_prompt: Transform basic prompts into production-ready specs
+- docker_validate_compose: Validate docker-compose.yml files
+- docker_validate_dockerfile: Validate Dockerfile against best practices
+- docker_generate_compose_config: Generate Docker Compose configurations
+- docker_generate_config: Generate complete Docker configuration
+
+Use these prompts for:
+- optimize_dockerfile: Get guidance on optimizing existing Dockerfiles
+- design_compose_stack: Design multi-service Docker Compose stacks
+- implement_multi_stage: Implement multi-stage builds for size reduction
+- harden_security: Apply security hardening to containers
+- setup_production_ready: Configure containers for production deployment""",
+    version="3.0.0"
+)
 
 # ================================
 # ENUMS & TYPES
@@ -178,8 +208,8 @@ APP_TEMPLATES = {
 # MCP TOOLS
 # ================================
 
-@mcp.tool()
-async def docker_analyze_prompt(prompt: str) -> dict[str, Any]:
+@mcp.tool(tags=["analysis", "prompt", "scoring"])
+async def docker_analyze_prompt(prompt: str, ctx: Optional[Context] = None) -> dict[str, Any]:
     """
     Analyze a Docker creation prompt and provide detailed feedback with scoring.
 
@@ -318,12 +348,13 @@ async def docker_analyze_prompt(prompt: str) -> dict[str, Any]:
         "grade": "A" if score >= 90 else "B" if score >= 75 else "C" if score >= 60 else "D",
     }
 
-@mcp.tool()
+@mcp.tool(tags=["enhancement", "generation", "production"])
 async def docker_enhance_prompt(
     prompt: str,
     app_type: str | None = None,
     include_compose: bool = True,
     production_ready: bool = True,
+    ctx: Optional[Context] = None,
 ) -> dict[str, Any]:
     """
     Enhance a Docker prompt with comprehensive best practices and production-ready specifications.
@@ -439,11 +470,12 @@ async def docker_enhance_prompt(
         "dockerfile_syntax_version": "1.7"
     }
 
-@mcp.tool()
+@mcp.tool(tags=["validation", "compose", "security"])
 async def docker_validate_compose(
     compose_content: str,
     check_security: bool = True,
-    check_performance: bool = True
+    check_performance: bool = True,
+    ctx: Optional[Context] = None,
 ) -> dict[str, Any]:
     """
     Validate a docker-compose.yml file against modern best practices and Compose Specification.
@@ -603,8 +635,8 @@ async def docker_validate_compose(
         "compose_specification_compliant": "name" in compose_data and "version" not in compose_data
     }
 
-@mcp.tool()
-async def docker_validate_dockerfile(dockerfile_content: str) -> dict[str, Any]:
+@mcp.tool(tags=["validation", "dockerfile", "security"])
+async def docker_validate_dockerfile(dockerfile_content: str, ctx: Optional[Context] = None) -> dict[str, Any]:
     """
     Validate an existing Dockerfile against 2025 security and optimization best practices.
 
@@ -716,13 +748,14 @@ async def docker_validate_dockerfile(dockerfile_content: str) -> dict[str, Any]:
         "runs_as_non_root": has_user
     }
 
-@mcp.tool()
+@mcp.tool(tags=["generation", "compose", "production"])
 async def docker_generate_compose_config(
     app_type: str,
     services: list[str] | None = None,
     environment: str = "production",
     include_volumes: bool = True,
     include_networks: bool = True,
+    ctx: Optional[Context] = None,
 ) -> dict[str, Any]:
     """
     Generate comprehensive Docker Compose configuration with modern Compose Specification.
@@ -1027,11 +1060,12 @@ async def docker_generate_compose_config(
         "compose_version": "3.9+"
     }
 
-@mcp.tool()
+@mcp.tool(tags=["generation", "complete", "production"])
 async def docker_generate_config(
     project_description: str,
     app_type: str,
-    features: list[str] | None = None
+    features: list[str] | None = None,
+    ctx: Optional[Context] = None,
 ) -> dict[str, Any]:
     """
     Generate complete Docker configuration based on project requirements.
@@ -1874,10 +1908,287 @@ def estimate_image_size(app_type: str) -> str:
     }
     return sizes.get(app_type, "~100MB") + " (optimized multi-stage build)"
 
+# ================================
+# MCP PROMPTS - FastMCP 3.0
+# ================================
+
+@mcp.prompt()
+async def optimize_dockerfile(
+    current_dockerfile: str = "",
+    app_type: str = "python",
+    target_size: str = "minimal",
+) -> list[dict[str, str]]:
+    """Generate guidance for optimizing existing Dockerfiles with multi-stage builds and best practices."""
+    return [
+        {
+            "role": "system",
+            "content": """You are a Docker optimization expert specializing in 2025 container best practices.
+
+Your expertise includes:
+- Multi-stage builds for 60-80% size reduction
+- Layer caching strategies for faster builds
+- Security hardening (non-root users, minimal images)
+- BuildKit features (--mount=type=cache, --mount=type=secret)
+- Distroless and scratch images for minimal attack surface
+- OCI-compliant metadata and labels
+
+Apply these optimization patterns:
+- Order COPY commands: dependencies first, then source code
+- Combine RUN commands to reduce layers
+- Clean package manager caches in same layer
+- Use .dockerignore to exclude unnecessary files
+- Pin versions explicitly (never use :latest)"""
+        },
+        {
+            "role": "user",
+            "content": f"""Optimize this Dockerfile for {app_type} application with target: {target_size}
+
+Current Dockerfile:
+{current_dockerfile if current_dockerfile else "[Provide your current Dockerfile]"}
+
+Requirements:
+1. Implement multi-stage build if not present
+2. Reduce final image size using minimal base images
+3. Apply security best practices (non-root user)
+4. Optimize layer caching for faster rebuilds
+5. Add health check configuration
+6. Include proper metadata labels
+
+Provide:
+- Optimized Dockerfile with detailed comments
+- Size reduction estimates
+- Build time improvements
+- Security enhancements applied"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def design_compose_stack(
+    services: list[str] = [],
+    app_type: str = "python",
+    environment: str = "production",
+) -> list[dict[str, str]]:
+    """Generate guidance for designing multi-service Docker Compose stacks."""
+    services_list = ", ".join(services) if services else "web app, database"
+    return [
+        {
+            "role": "system",
+            "content": """You are a Docker Compose architect expert in modern Compose Specification.
+
+Your expertise includes:
+- Compose Specification (no version field needed)
+- Service orchestration and dependency management
+- Custom networks for service isolation
+- Named volumes for data persistence
+- Health checks with startup dependencies
+- Resource limits and logging configuration
+- Development and production profiles
+- Secrets and configs management
+
+Best practices:
+- Use depends_on with condition: service_healthy
+- Configure restart policies appropriately
+- Set resource limits for all services
+- Use profiles for environment-specific services
+- Implement proper logging with size limits"""
+        },
+        {
+            "role": "user",
+            "content": f"""Design a Docker Compose stack for {app_type} application.
+
+Services needed: {services_list}
+Target environment: {environment}
+
+Requirements:
+1. Follow modern Compose Specification (no version field)
+2. Include health checks for all services
+3. Configure proper networking and isolation
+4. Set up named volumes for persistence
+5. Add resource limits and logging
+6. Include development and production profiles
+
+Provide:
+- Complete docker-compose.yml
+- Environment variable templates (.env.example)
+- Network architecture explanation
+- Volume management strategy
+- Startup and shutdown procedures"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def implement_multi_stage(
+    app_type: str = "python",
+    build_requirements: list[str] = [],
+    runtime_only: bool = True,
+) -> list[dict[str, str]]:
+    """Generate guidance for implementing multi-stage Docker builds for size optimization."""
+    build_reqs = ", ".join(build_requirements) if build_requirements else "compilation tools"
+    return [
+        {
+            "role": "system",
+            "content": """You are a Docker multi-stage build expert optimizing for minimal image size.
+
+Multi-stage patterns by language:
+- Python: Build wheel in builder, copy to slim runtime with uv
+- Node.js: Build in full node, copy dist to alpine runtime
+- Rust: Compile in rust image, copy binary to distroless/scratch
+- Go: Build with CGO_ENABLED=0, copy binary to scratch
+
+Key techniques:
+- Named stages: FROM ... AS builder, FROM ... AS runtime
+- Copy only artifacts: COPY --from=builder /app/dist /app
+- Use --mount=type=cache for package managers
+- Separate build-time and runtime dependencies
+- Consider distroless images for minimal attack surface"""
+        },
+        {
+            "role": "user",
+            "content": f"""Implement multi-stage build for {app_type} application.
+
+Build-time requirements: {build_reqs}
+Copy only runtime artifacts: {runtime_only}
+
+Requirements:
+1. Design optimal stage structure
+2. Maximize layer caching efficiency
+3. Minimize final image size (target: <100MB for interpreted, <20MB for compiled)
+4. Exclude build tools from final image
+5. Include security hardening
+
+Provide:
+- Multi-stage Dockerfile with named stages
+- Build arguments for flexibility
+- Cache mount configurations
+- Estimated size comparisons (single vs multi-stage)
+- Build command examples with BuildKit"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def harden_security(
+    app_type: str = "python",
+    security_level: str = "high",
+    compliance_requirements: list[str] = [],
+) -> list[dict[str, str]]:
+    """Generate guidance for applying security hardening to Docker containers."""
+    compliance = ", ".join(compliance_requirements) if compliance_requirements else "general security best practices"
+    return [
+        {
+            "role": "system",
+            "content": """You are a container security expert specializing in Docker hardening.
+
+Security measures by priority:
+1. Non-root execution: USER directive with specific UID
+2. Minimal base images: distroless, alpine, slim variants
+3. No secrets in layers: use --mount=type=secret or runtime injection
+4. Read-only filesystem: --read-only flag where possible
+5. Drop capabilities: --cap-drop=ALL, then add only needed
+6. Security scanning: Trivy, Snyk, or Docker Scout integration
+
+Compliance considerations:
+- CIS Docker Benchmark requirements
+- OWASP Container Security guidelines
+- SOC2/HIPAA specific requirements
+- Supply chain security (SBOM generation)"""
+        },
+        {
+            "role": "user",
+            "content": f"""Apply security hardening to {app_type} container at {security_level} level.
+
+Compliance requirements: {compliance}
+
+Requirements:
+1. Implement non-root user execution
+2. Select appropriate minimal base image
+3. Configure secrets management (no hardcoded credentials)
+4. Set up read-only filesystem where possible
+5. Drop unnecessary Linux capabilities
+6. Add vulnerability scanning integration
+
+Provide:
+- Security-hardened Dockerfile
+- docker-compose.yml with security options
+- Runtime security flags
+- Vulnerability scanning CI/CD integration
+- Security checklist for verification"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def setup_production_ready(
+    app_type: str = "python",
+    features: list[str] = [],
+    scale_requirements: str = "medium",
+) -> list[dict[str, str]]:
+    """Generate guidance for setting up production-ready Docker configurations."""
+    features_list = ", ".join(features) if features else "logging, monitoring, health checks"
+    return [
+        {
+            "role": "system",
+            "content": """You are a production Docker deployment expert.
+
+Production requirements:
+- Health checks with proper intervals and retries
+- Graceful shutdown handling (SIGTERM)
+- Structured logging with size limits
+- Resource limits (CPU, memory)
+- Restart policies (unless-stopped, on-failure)
+- Environment-based configuration
+- Secrets management
+- Monitoring integration (Prometheus metrics)
+
+Orchestration considerations:
+- Docker Swarm mode deployment
+- Kubernetes compatibility
+- Rolling update strategies
+- Blue-green deployment support"""
+        },
+        {
+            "role": "user",
+            "content": f"""Set up production-ready Docker configuration for {app_type} application.
+
+Required features: {features_list}
+Scale requirements: {scale_requirements}
+
+Requirements:
+1. Complete Dockerfile with all production optimizations
+2. docker-compose.yml with production configuration
+3. Health check endpoints and Docker HEALTHCHECK
+4. Logging configuration with rotation
+5. Resource limits and monitoring
+6. Deployment scripts and procedures
+
+Provide:
+- Production Dockerfile
+- docker-compose.prod.yml
+- .env.production template
+- Deployment checklist
+- Monitoring and alerting setup
+- Backup and recovery procedures"""
+        }
+    ]
+
+
+# ================================
+# SERVER STARTUP
+# ================================
+
 if __name__ == "__main__":
-    logger.info("🚀 Docker Optimizer MCP Server starting...")
-    logger.info("🐳 Specialized in containerization best practices and security optimization (2025 Edition)")
-    logger.info(f"📋 Supported frameworks: {', '.join(APP_TEMPLATES.keys())}")
-    logger.info("🔧 Features: Dockerfile analysis, Compose validation, prompt enhancement, complete config generation")
-    logger.info("✨ New: Docker Compose Specification compliance, modern Dockerfile patterns")
+    logger.info("Docker Optimizer MCP Server starting...")
+    logger.info("Specialized in containerization best practices and security optimization (2025 Edition)")
+    logger.info(f"Supported frameworks: {', '.join(APP_TEMPLATES.keys())}")
+    logger.info("Features: Dockerfile analysis, Compose validation, prompt enhancement, complete config generation")
+    logger.info("New in 3.0: Context injection, MCP Prompts, Tags for discovery")
+    logger.info("")
+    logger.info("Available MCP Prompts:")
+    logger.info("  - optimize_dockerfile: Optimize existing Dockerfiles")
+    logger.info("  - design_compose_stack: Design multi-service Docker Compose stacks")
+    logger.info("  - implement_multi_stage: Implement multi-stage builds")
+    logger.info("  - harden_security: Apply security hardening")
+    logger.info("  - setup_production_ready: Configure for production deployment")
     mcp.run()

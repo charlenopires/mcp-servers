@@ -47,7 +47,7 @@ import logging
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Any, Tuple, Union
 from enum import Enum
-from fastmcp import FastMCP
+from fastmcp import FastMCP, Context
 from pydantic import BaseModel, Field
 
 # Configure logging
@@ -55,7 +55,20 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Initialize FastMCP server (following pattern of other servers)
-mcp = FastMCP("shadcn/ui Advanced Server")
+mcp = FastMCP(
+    name="shadcn/ui Advanced Server",
+    instructions="""Comprehensive MCP server for shadcn/ui component analysis, generation, and optimization.
+
+This server provides shadcn/ui expertise:
+- Component analysis with scoring and optimization suggestions
+- Code generation for buttons, cards, forms, dialogs, etc.
+- Framework-specific setup guides (Next.js, Vite, Remix, Astro)
+- Custom theme creation with CSS variables
+- Best practices for accessibility, performance, and composition
+
+Use these tools to build modern UIs with shadcn/ui components.""",
+    version="3.0.0"
+)
 
 # ================================
 # KNOWLEDGE BASE - SHADCN/UI CONTEXT
@@ -743,8 +756,8 @@ export function ContactForm() {
 # MCP TOOLS
 # ================================
 
-@mcp.tool()
-async def analyze_shadcn_component(code: str) -> Dict[str, Any]:
+@mcp.tool(tags=["analysis", "scoring", "components"])
+async def analyze_shadcn_component(code: str, ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Analyzes code that uses shadcn/ui components and provides detailed insights.
     
@@ -766,10 +779,11 @@ async def analyze_shadcn_component(code: str) -> Dict[str, Any]:
         logger.error(f"Error analyzing shadcn component: {str(e)}")
         raise
 
-@mcp.tool()
+@mcp.tool(tags=["optimization", "accessibility", "performance"])
 async def optimize_shadcn_component(
     code: str,
-    focus_areas: Optional[List[str]] = None
+    focus_areas: Optional[List[str]] = None,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Optimizes shadcn/ui code applying best practices and modern patterns.
@@ -793,13 +807,14 @@ async def optimize_shadcn_component(
         logger.error(f"Error optimizing shadcn component: {str(e)}")
         raise
 
-@mcp.tool()
+@mcp.tool(tags=["generation", "components", "code"])
 async def generate_shadcn_component(
     component_type: str,
     use_case: str = "",
     framework: str = "next",
     theme: str = "default",
-    include_examples: bool = True
+    include_examples: bool = True,
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Generates optimized and ready-to-use shadcn/ui component.
@@ -844,8 +859,8 @@ async def generate_shadcn_component(
         logger.error(f"Error generating shadcn component: {str(e)}")
         raise
 
-@mcp.tool()
-async def get_shadcn_component_info(component_name: str = "") -> Dict[str, Any]:
+@mcp.tool(tags=["documentation", "info", "reference"])
+async def get_shadcn_component_info(component_name: str = "", ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Gets detailed information about available shadcn/ui components.
     
@@ -899,8 +914,8 @@ async def get_shadcn_component_info(component_name: str = "") -> Dict[str, Any]:
         logger.error(f"Error getting component info: {str(e)}")
         raise
 
-@mcp.tool()
-async def get_shadcn_setup_guide(framework: str = "next") -> Dict[str, Any]:
+@mcp.tool(tags=["setup", "frameworks", "installation"])
+async def get_shadcn_setup_guide(framework: str = "next", ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Provides complete setup guide for shadcn/ui with different frameworks.
     
@@ -1048,12 +1063,13 @@ async def get_shadcn_setup_guide(framework: str = "next") -> Dict[str, Any]:
         logger.error(f"Error getting setup guide: {str(e)}")
         raise
 
-@mcp.tool()
+@mcp.tool(tags=["theming", "customization", "css-variables"])
 async def create_shadcn_theme(
     primary_color: str = "#000000",
     secondary_color: str = "#f1f5f9",
     accent_color: str = "#0ea5e9",
-    theme_name: str = "custom"
+    theme_name: str = "custom",
+    ctx: Optional[Context] = None
 ) -> Dict[str, Any]:
     """
     Creates custom theme for shadcn/ui with specified colors.
@@ -1213,8 +1229,8 @@ The theme automatically supports dark mode:
         logger.error(f"Error creating custom theme: {str(e)}")
         raise
 
-@mcp.tool()
-async def get_shadcn_best_practices() -> Dict[str, Any]:
+@mcp.tool(tags=["best-practices", "patterns", "guidelines"])
+async def get_shadcn_best_practices(ctx: Optional[Context] = None) -> Dict[str, Any]:
     """
     Returns best practices guide for using shadcn/ui.
     
@@ -1326,6 +1342,341 @@ src/
         raise
 
 # ================================
+# MCP PROMPTS
+# ================================
+
+
+@mcp.prompt()
+async def design_shadcn_ui(
+    page_type: str,
+    components_needed: List[str] = [],
+    features: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to design a complete UI with shadcn/ui components.
+
+    Args:
+        page_type: Type of page (dashboard, landing, settings, profile, etc.)
+        components_needed: Specific components to include
+        features: Required features (dark-mode, responsive, animations)
+    """
+    default_components = ["Button", "Card", "Input", "Badge", "Dialog"]
+    components = components_needed if components_needed else default_components
+
+    default_features = ["responsive design", "dark mode support", "accessibility"]
+    feature_list = features if features else default_features
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert UI developer specializing in shadcn/ui and React.
+
+Key principles for shadcn/ui development:
+- Use compound component patterns (Card.Header, Card.Content, etc.)
+- Leverage Radix UI primitives for accessibility
+- Apply CSS variables for consistent theming
+- Use class-variance-authority (cva) for variant management
+- Implement proper TypeScript interfaces for props
+- Follow composition over configuration pattern
+
+Component best practices:
+- Import from @/components/ui/ path alias
+- Use cn() utility for conditional classes
+- Implement proper loading and error states
+- Add aria attributes for accessibility
+- Support both controlled and uncontrolled modes"""
+        },
+        {
+            "role": "user",
+            "content": f"""Design a {page_type} page using shadcn/ui components.
+
+Components to use: {', '.join(components)}
+Required features: {', '.join(feature_list)}
+
+Requirements:
+1. Create a complete React component with TypeScript
+2. Import all shadcn/ui components correctly
+3. Implement responsive layout with Tailwind CSS
+4. Add dark mode support using CSS variables
+5. Include proper accessibility attributes
+6. Add loading states where appropriate
+7. Provide usage examples and prop documentation"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def create_form_schema(
+    form_purpose: str,
+    fields: List[Dict[str, str]] = [],
+    validation_level: str = "strict"
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to create a form with zod validation and shadcn/ui.
+
+    Args:
+        form_purpose: Purpose of the form (contact, registration, settings, etc.)
+        fields: List of field definitions [{name, type, required}]
+        validation_level: Validation strictness (basic, standard, strict)
+    """
+    default_fields = [
+        {"name": "email", "type": "email", "required": "true"},
+        {"name": "name", "type": "text", "required": "true"},
+        {"name": "message", "type": "textarea", "required": "false"}
+    ]
+
+    form_fields = fields if fields else default_fields
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in React forms with shadcn/ui, react-hook-form, and zod.
+
+Form implementation best practices:
+- Define zod schema with proper validation rules
+- Use zodResolver with react-hook-form
+- Implement FormField, FormItem, FormLabel, FormControl, FormMessage
+- Add proper error handling and display
+- Support both client and server-side validation
+- Implement proper loading states during submission
+
+Validation patterns:
+- Email: z.string().email()
+- Password: z.string().min(8).regex(/[A-Z]/).regex(/[0-9]/)
+- Phone: z.string().regex(/^\+?[0-9]{10,14}$/)
+- URL: z.string().url()
+- Date: z.coerce.date()
+- Enum: z.enum(['option1', 'option2'])
+- Optional with default: z.string().optional().default('')"""
+        },
+        {
+            "role": "user",
+            "content": f"""Create a {form_purpose} form using shadcn/ui with zod validation.
+
+Fields:
+{chr(10).join(f"- {f['name']}: {f['type']} (required: {f.get('required', 'true')})" for f in form_fields)}
+
+Validation level: {validation_level}
+
+Requirements:
+1. Define complete zod schema with all validations
+2. Create react-hook-form setup with zodResolver
+3. Implement all FormField components with proper structure
+4. Add real-time validation feedback
+5. Handle form submission with loading state
+6. Include error handling for API errors
+7. Add TypeScript types for form values
+8. Provide reset and default values handling"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def implement_dialog_form(
+    dialog_purpose: str,
+    form_fields: List[str] = [],
+    trigger_type: str = "button"
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to implement a Dialog with an embedded form.
+
+    Args:
+        dialog_purpose: Purpose of the dialog (create, edit, confirm, etc.)
+        form_fields: Fields to include in the form
+        trigger_type: What triggers the dialog (button, link, icon)
+    """
+    default_fields = ["title", "description", "category"]
+    fields = form_fields if form_fields else default_fields
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in shadcn/ui Dialog and form patterns.
+
+Dialog + Form patterns:
+- Use DialogTrigger for controlled opening
+- Implement DialogContent with proper sizing
+- Include DialogHeader with DialogTitle and DialogDescription
+- Place form inside DialogContent
+- Use DialogFooter for action buttons
+- Handle DialogClose properly with form submission
+- Manage open state for programmatic control
+
+Form in Dialog best practices:
+- Focus first input on open
+- Trap focus within dialog
+- Handle escape key and outside click
+- Reset form on close if not submitted
+- Show loading state on submit
+- Close dialog on successful submission
+- Keep dialog open on validation errors"""
+        },
+        {
+            "role": "user",
+            "content": f"""Create a Dialog with embedded form for {dialog_purpose}.
+
+Form fields: {', '.join(fields)}
+Trigger type: {trigger_type}
+
+Requirements:
+1. Implement Dialog with all subcomponents (Trigger, Content, Header, Footer)
+2. Create form with react-hook-form and zod
+3. Handle dialog state management (controlled vs uncontrolled)
+4. Implement proper focus management
+5. Add loading state during submission
+6. Close dialog on success, keep open on error
+7. Reset form when dialog closes
+8. Add proper accessibility attributes
+9. Include animations with tailwindcss-animate"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def create_data_table(
+    data_type: str,
+    columns: List[str] = [],
+    features: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to create a data table with sorting and filtering.
+
+    Args:
+        data_type: Type of data to display (users, products, orders, etc.)
+        columns: Column definitions
+        features: Table features (sorting, filtering, pagination, selection)
+    """
+    default_columns = ["id", "name", "email", "status", "createdAt"]
+    table_columns = columns if columns else default_columns
+
+    default_features = ["sorting", "filtering", "pagination"]
+    table_features = features if features else default_features
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in building data tables with shadcn/ui and TanStack Table.
+
+Data table architecture:
+- Use @tanstack/react-table for state management
+- Implement shadcn/ui Table components for rendering
+- Create reusable column definitions
+- Support multiple data types (string, number, date, enum)
+
+Table features implementation:
+- Sorting: useReactTable with getSortedRowModel
+- Filtering: Column filters and global search
+- Pagination: getPaginationRowModel with page controls
+- Selection: Row selection with checkbox column
+- Actions: Action menu with DropdownMenu
+
+Performance considerations:
+- Use virtual scrolling for large datasets
+- Implement server-side pagination for >1000 rows
+- Memoize column definitions
+- Optimize re-renders with proper dependencies"""
+        },
+        {
+            "role": "user",
+            "content": f"""Create a data table for {data_type} using shadcn/ui and TanStack Table.
+
+Columns: {', '.join(table_columns)}
+Features: {', '.join(table_features)}
+
+Requirements:
+1. Define column configurations with proper types
+2. Implement table with all shadcn/ui Table subcomponents
+3. Add sorting functionality with visual indicators
+4. Implement column filtering with Input/Select
+5. Add pagination with page size selector
+6. Include row selection if needed
+7. Add action column with DropdownMenu
+8. Implement loading and empty states
+9. Support TypeScript with proper generic types
+10. Make table responsive for mobile views"""
+        }
+    ]
+
+
+@mcp.prompt()
+async def customize_theme(
+    brand_identity: str,
+    color_scheme: Dict[str, str] = {},
+    style_preferences: List[str] = []
+) -> List[Dict[str, str]]:
+    """
+    Generate a prompt to customize shadcn/ui theme with CSS variables.
+
+    Args:
+        brand_identity: Brand description or style guide
+        color_scheme: Primary colors (primary, secondary, accent)
+        style_preferences: Style preferences (rounded, sharp, minimal, bold)
+    """
+    default_colors = {
+        "primary": "#000000",
+        "secondary": "#f4f4f5",
+        "accent": "#3b82f6"
+    }
+    colors = color_scheme if color_scheme else default_colors
+
+    default_prefs = ["modern", "clean", "accessible"]
+    preferences = style_preferences if style_preferences else default_prefs
+
+    return [
+        {
+            "role": "system",
+            "content": """You are an expert in shadcn/ui theming and CSS custom properties.
+
+shadcn/ui theming system:
+- Uses CSS variables for all colors
+- Supports light and dark mode via .dark class
+- Variables defined in :root and .dark selectors
+- Uses HSL color values for flexibility
+- Border radius controlled via --radius variable
+
+Theme customization areas:
+- Colors: background, foreground, primary, secondary, accent, destructive, muted
+- Typography: Font families and sizes
+- Spacing: Border radius, padding scales
+- Effects: Shadows, animations
+- Components: Button variants, card styles
+
+Best practices:
+- Maintain WCAG 2.1 AA contrast ratios
+- Test all color combinations in both modes
+- Use semantic color naming
+- Document color usage guidelines
+- Create component variants for edge cases"""
+        },
+        {
+            "role": "user",
+            "content": f"""Customize shadcn/ui theme for this brand:
+
+Brand identity: {brand_identity}
+
+Colors:
+- Primary: {colors.get('primary', '#000000')}
+- Secondary: {colors.get('secondary', '#f4f4f5')}
+- Accent: {colors.get('accent', '#3b82f6')}
+
+Style preferences: {', '.join(preferences)}
+
+Requirements:
+1. Generate complete CSS variables for :root and .dark
+2. Convert hex colors to HSL format
+3. Create color scales (50-950) for primary color
+4. Define all semantic colors (background, foreground, etc.)
+5. Customize border radius based on style preferences
+6. Add shadow definitions matching the style
+7. Include font family recommendations
+8. Provide component customization examples
+9. Ensure WCAG AA compliance for all combinations
+10. Document the theme with usage guidelines"""
+        }
+    ]
+
+
+# ================================
 # MCP RESOURCES
 # ================================
 
@@ -1365,6 +1716,12 @@ async def get_shadcn_themes_resource() -> str:
 if __name__ == "__main__":
     logger.info("🚀 shadcn/ui Advanced MCP Server starting...")
     logger.info("🎨 Component analysis, generation, and optimization")
-    logger.info("🔧 Theme customization and framework integration") 
+    logger.info("🔧 Theme customization and framework integration")
     logger.info("📚 Complete shadcn/ui knowledge base and best practices")
+    logger.info("\n📝 Available prompts:")
+    logger.info("  - design_shadcn_ui: Design complete UI with shadcn/ui")
+    logger.info("  - create_form_schema: Create forms with zod validation")
+    logger.info("  - implement_dialog_form: Implement Dialog with embedded form")
+    logger.info("  - create_data_table: Create data tables with sorting/filtering")
+    logger.info("  - customize_theme: Customize theme with CSS variables")
     mcp.run()
