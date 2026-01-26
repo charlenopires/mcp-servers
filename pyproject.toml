@@ -1,18 +1,20 @@
 [project]
 name = "mcp-servers"
-version = "0.1.0"
-description = "Coleção de servidores MCP especializados para análise de prompts, engenharia de prompts e suporte ao Tailwind CSS v4.1"
+version = "2.2.0"
+description = "Collection of specialized MCP servers for prompt analysis, prompt engineering, and modern web development (React, Tailwind, shadcn/ui, Rust, Axum, Docker, Python, TypeScript)"
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [
     { name = "MCP Servers Team" }
 ]
-keywords = ["mcp", "model-context-protocol", "prompts", "tailwind", "analysis"]
+keywords = ["mcp", "model-context-protocol", "prompts", "tailwind", "analysis", "react", "rust", "typescript", "docker", "python"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
     "fastmcp>=2.14.0",

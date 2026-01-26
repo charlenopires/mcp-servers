@@ -1,34 +1,38 @@
 #!/usr/bin/env python3
 """
-MCP Servers - Main Launcher
-===========================
+MCP Servers - Main Launcher v2.2
+================================
 
-Launcher for specialized MCP servers:
-- MCP Server: MCP prompt analysis
-- Prompt Server: Prompt engineering
-- Tailwind Server: Tailwind CSS v4.1 support
-- FastMCP Server: High-performance server
-- React Server: React components
-- TypeScript Server: TypeScript analysis
-- Docker Server: Docker optimization and best practices
+Unified launcher for 11 specialized MCP servers covering prompt engineering,
+frontend development, backend systems, and DevOps tooling.
+
+Available Servers (11/11 Functional):
+-------------------------------------
+  Analysis:
+    - mcp: MCP prompt analysis with 1-10 scoring
+    - prompt: Prompt engineering with CRISPE/RACE frameworks
+    - fastmcp: High-performance meta-server for MCP development
+
+  Frontend:
+    - tailwind: Tailwind CSS v4.1 support and migration
+    - react: React 19 features (Server Components, Actions)
+    - shadcn: Advanced shadcn/ui component development
+
+  Backend:
+    - typescript: TypeScript analysis with Clean Architecture
+    - rust: Idiomatic Rust patterns (mre/idiomatic-rust)
+    - axum: Axum web framework with tokio-rs
+    - python: Python code analysis and modern paradigms
+
+  DevOps:
+    - docker: Docker optimization with security best practices
 
 Usage:
     python main.py [server] [options]
-    
-    Available servers:
-    - mcp: MCP prompt analysis server
-    - prompt: Prompt engineering server  
-    - tailwind: Tailwind CSS server
-    - fastmcp: FastMCP server
-    - react: React server
-    - typescript: TypeScript server
-    - shadcn: Advanced shadcn/ui server
-    - rust: Advanced Rust server
-    - axum: Axum web framework server
-    - docker: Docker optimization server
-    - python: Python development optimizer server
-    - all: Run all servers (development mode)
-    
+    python main.py list                    # List available servers
+    python main.py mcp                     # Start MCP server
+    python main.py all --dev               # Start all servers
+
 Examples:
     python main.py mcp
     python main.py prompt --port 3001
@@ -130,7 +134,7 @@ SERVERS_CONFIG = {
         "name": "Python Development Optimizer",
         "description": "MCP server for Python code analysis, optimization, and modern paradigms following best practices",
         "module": "servers.python_optimizer_server",
-        "port": 3011,
+        "port": 3010,
         "protocol": "stdio"
     }
 }
@@ -380,7 +384,7 @@ Usage examples:
     parser.add_argument(
         "--version", "-v",
         action="version",
-        version="MCP Servers v0.1.0"
+        version="MCP Servers v2.2.0"
     )
 
     return parser

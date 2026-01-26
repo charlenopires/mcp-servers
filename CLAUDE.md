@@ -33,10 +33,10 @@ uv run python launcher_cli.py
 uv run python main.py mcp                    # MCP prompt analyzer
 uv run python main.py prompt                 # Prompt engineering
 uv run python main.py tailwind              # Tailwind CSS v4.1
-uv run python main.py react_optimizer       # React code analysis/optimization  
+uv run python main.py fastmcp               # FastMCP high-performance server
+uv run python main.py react                  # React 19 features + code analysis
 uv run python main.py shadcn                 # shadcn/ui components
 uv run python main.py rust                   # Rust idiomatic patterns
-uv run python main.py react                  # React 19 features
 uv run python main.py axum                   # Axum web framework patterns
 uv run python main.py docker                 # Docker optimization and best practices
 uv run python main.py python                 # Python development optimizer
@@ -76,7 +76,7 @@ uv run ruff check servers/mcp_server.py
 
 ## Architecture Overview
 
-This is a **Model Context Protocol (MCP) servers collection** written in Python that provides specialized tools for prompt analysis, engineering, and modern web development. The project follows a modular architecture with 12 functional servers (12/12 complete, all servers functional).
+This is a **Model Context Protocol (MCP) servers collection** written in Python that provides specialized tools for prompt analysis, engineering, and modern web development. The project follows a modular architecture with 11 functional servers (11/11 complete, all servers functional).
 
 ### Core Architecture Components
 
@@ -103,8 +103,7 @@ All servers extend FastMCP framework and follow consistent patterns:
 - **Python Server** (`python_optimizer_server.py`): Python code analysis, optimization, and modern paradigms (OOP, Functional, Async, Hybrid) following Clean Code principles
 - **TypeScript Server** (`typescript_server.py`): Modern TypeScript 5.x development with Clean Architecture, SOLID principles, and AI tool integration
 - **Rust Server** (`rust_server.py`): Idiomatic Rust patterns based on mre/idiomatic-rust repository with scoring system for code analysis
-- **React Server** (`react_server.py`): React 19 features (Server Components, Actions, `use` hook)
-- **React Optimizer** (`react_optimizer_server.py`): Unified React code analysis + prompt optimization for AI tools (v0.dev, Cursor)
+- **React Server** (`react_server.py`): Unified React 19 features (Server Components, Actions, `use` hook) + code analysis/optimization for AI tools (v0.dev, Cursor)
 - **shadcn/ui Server** (`shadcn_server.py`): shadcn/ui component analysis, generation, and theming
 - **Axum Server** (`axum_server.py`): Axum web framework patterns and magic patterns from rust ecosystem
 

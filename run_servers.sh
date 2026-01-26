@@ -37,7 +37,7 @@ show_banner() {
     echo -e "${CYAN}"
     echo "╔══════════════════════════════════════════════════════════════╗"
     echo "║                    🚀 MCP SERVERS LAUNCHER                   ║"
-    echo "║                MCP Servers Manager v2.0                      ║"
+    echo "║                MCP Servers Manager v2.2                      ║"
     echo "║                    Powered by main.py                        ║"
     echo "║                  11/11 Functional Servers                    ║"
     echo "╚══════════════════════════════════════════════════════════════╝"
@@ -176,6 +176,7 @@ show_server_status() {
             "axum") echo "3008" ;;
             "docker") echo "3009" ;;
             "python") echo "3010" ;;
+            "typescript") echo "3005" ;;
             *) echo "????" ;;
         esac
     }
@@ -193,14 +194,14 @@ show_server_status() {
     echo -e "  • Framework: ${BLUE}FastMCP 2.0 + Python 3.12+${NC}"
     echo -e "  • Manager: ${PURPLE}uv (ultrafast package manager)${NC}"
     echo ""
-    echo -e "${CYAN}🆕 Latest Updates:${NC}"
-    echo -e "  • Tailwind CSS v4.1 (Oxide/Rust engine)"
-    echo -e "  • FastMCP 2.0 (MCP Inspector + deployment tools)"
+    echo -e "${CYAN}🆕 Latest Updates (v2.2):${NC}"
+    echo -e "  • TypeScript Server (Clean Architecture + SOLID principles)"
+    echo -e "  • Python Optimizer (modern paradigms: OOP/Functional/Async)"
+    echo -e "  • Docker Optimizer (security best practices + multi-stage)"
+    echo -e "  • Axum Web Framework (tokio-rs + magic patterns)"
+    echo -e "  • Rust Idiomatic (mre/idiomatic-rust patterns)"
     echo -e "  • React 19 (Server Components + stable Actions)"
     echo -e "  • shadcn/ui Advanced (intelligent analysis)"
-    echo -e "  • Rust Idiomatic (mre/idiomatic-rust patterns)"
-    echo -e "  • Axum Web Framework (tokio-rs + magic patterns)"
-    echo -e "  • Docker Optimizer (security best practices + multi-stage)"
 }
 
 # Função de ajuda

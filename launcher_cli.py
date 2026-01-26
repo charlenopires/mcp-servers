@@ -151,8 +151,8 @@ SERVERS_CONFIG = {
         "description": "Python code analysis and modern paradigms",
         "emoji": "🐍",
         "category": "Backend",
-        "port": 3011,
-        "module": "servers.python_optimizer_server", 
+        "port": 3010,
+        "module": "servers.python_optimizer_server",
         "status": "functional"
     }
 }
