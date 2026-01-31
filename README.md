@@ -49,50 +49,50 @@ MCP Servers is a collection of 19 specialized servers based on the MCP (Model Co
 
 | Server | Port | Description |
 |--------|------|-------------|
-| `mcp` | 3000 | MCP prompt analysis with 1-10 scoring |
-| `prompt` | 3001 | Prompt engineering with CRISPE/RACE frameworks |
-| `fastmcp` | 3003 | High-performance meta-server for MCP development |
+| `mcp` | 3050 | MCP prompt analysis with 1-10 scoring |
+| `prompt` | 3051 | Prompt engineering with CRISPE/RACE frameworks |
+| `fastmcp` | 3053 | High-performance meta-server for MCP development |
 
 ### Frontend Servers
 
 | Server | Port | Description |
 |--------|------|-------------|
-| `tailwind` | 3002 | Tailwind CSS v4.1 support and migration |
-| `react` | 3004 | React 19 features (Server Components, Actions) |
-| `shadcn` | 3006 | Advanced shadcn/ui component development |
-| `htmx` | 3018 | HTMX with Axum (Rust) backend integration |
+| `tailwind` | 3052 | Tailwind CSS v4.1 support and migration |
+| `react` | 3054 | React 19 features (Server Components, Actions) |
+| `shadcn` | 3056 | Advanced shadcn/ui component development |
+| `htmx` | 3068 | HTMX with Axum (Rust) backend integration |
 
 ### Backend Servers
 
 | Server | Port | Description |
 |--------|------|-------------|
-| `typescript` | 3005 | TypeScript analysis with Clean Architecture |
-| `rust` | 3007 | Idiomatic Rust patterns (mre/idiomatic-rust) |
-| `axum` | 3008 | Axum web framework with tokio-rs |
-| `python` | 3010 | Python code analysis and modern paradigms |
+| `typescript` | 3055 | TypeScript analysis with Clean Architecture |
+| `rust` | 3057 | Idiomatic Rust patterns (mre/idiomatic-rust) |
+| `axum` | 3058 | Axum web framework with tokio-rs |
+| `python` | 3060 | Python code analysis and modern paradigms |
 
 ### Elixir/Erlang Ecosystem
 
 | Server | Port | Description |
 |--------|------|-------------|
-| `erlang` | 3011 | Erlang/OTP patterns, GenServer, Supervisor |
-| `elixir` | 3012 | Elixir functional programming and concurrency |
-| `phoenix` | 3013 | Phoenix web framework (controllers, contexts) |
-| `phoenix_channels` | 3014 | Phoenix Channels (WebSocket, PubSub, Presence) |
-| `phoenix_liveview` | 3015 | Phoenix LiveView real-time UI (hooks, HEEx) |
+| `erlang` | 3061 | Erlang/OTP patterns, GenServer, Supervisor |
+| `elixir` | 3062 | Elixir functional programming and concurrency |
+| `phoenix` | 3063 | Phoenix web framework (controllers, contexts) |
+| `phoenix_channels` | 3064 | Phoenix Channels (WebSocket, PubSub, Presence) |
+| `phoenix_liveview` | 3065 | Phoenix LiveView real-time UI (hooks, HEEx) |
 
 ### Database Servers
 
 | Server | Port | Description |
 |--------|------|-------------|
-| `neo4j` | 3016 | Neo4j Cypher queries and graph modeling |
-| `qdrant` | 3017 | Qdrant vector search and RAG patterns |
+| `neo4j` | 3066 | Neo4j Cypher queries and graph modeling |
+| `qdrant` | 3067 | Qdrant vector search and RAG patterns |
 
 ### DevOps Servers
 
 | Server | Port | Description |
 |--------|------|-------------|
-| `docker` | 3009 | Docker optimization with security best practices |
+| `docker` | 3059 | Docker optimization with security best practices |
 
 ## Installation
 
@@ -313,6 +313,45 @@ mcp-servers/
 └── docs/                         # Documentation
 ```
 
+## MCP Server Configuration Format
+
+When configuring servers manually, use this **correct format**:
+
+```json
+{
+  "mcpServers": {
+    "server-name": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "/path/to/mcp-servers",
+        "python",
+        "-m",
+        "servers.server_module"
+      ],
+      "env": {
+        "MCP_SERVER_PORT": "3050",
+        "MCP_SERVER_PROTOCOL": "stdio"
+      }
+    }
+  }
+}
+```
+
+**Important notes:**
+- `--directory` must point to the **project root**, not the `servers/` subdirectory
+- Use `python -m servers.module_name` syntax (module), not `server.py` (file)
+- The `env` block is optional but recommended for explicit port configuration
+
+### Common Configuration Mistakes
+
+| Wrong | Correct |
+|-------|---------|
+| `"--directory", "/path/servers"` | `"--directory", "/path/mcp-servers"` |
+| `"run", "mcp_server.py"` | `"python", "-m", "servers.mcp_server"` |
+| `--directory` before `run` | `run`, `--directory`, ... |
+
 ## Configuration Paths
 
 The configuration installer supports:
@@ -335,6 +374,53 @@ All analysis servers use a 0-100 scoring system:
 | 75-89 | Good | Minor improvements possible |
 | 50-74 | Needs Improvement | Significant patterns missing |
 | 0-49 | Poor | Major refactoring needed |
+
+## Troubleshooting
+
+### Server Disconnects Unexpectedly
+
+If you see errors like:
+```
+Server transport closed unexpectedly, this is likely due to the process exiting early
+```
+
+**Solutions:**
+1. Check that `--directory` points to the project root (not `servers/`)
+2. Verify you're using module syntax: `python -m servers.module_name`
+3. Run `uv run python install_mcp_configs.py --claude-code` to fix configurations
+4. Restart Claude Code/Desktop after configuration changes
+
+### Server Not Found / Import Errors
+
+```bash
+# Test if a server can be imported
+uv run python -c "from servers.mcp_server import mcp; print('OK')"
+
+# Test MCP protocol initialization
+echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}' | \
+  uv run python -m servers.mcp_server 2>/dev/null
+```
+
+### View Server Logs
+
+- **Claude Desktop (macOS)**: `~/Library/Logs/Claude/mcp*.log`
+- **Claude Desktop (Windows)**: `%APPDATA%\Claude\logs\mcp*.log`
+
+```bash
+# macOS/Linux - follow logs
+tail -f ~/Library/Logs/Claude/mcp*.log
+```
+
+### Reset Configuration
+
+```bash
+# Reinstall all configurations
+uv run python install_mcp_configs.py --all
+
+# Or specific tool
+uv run python install_mcp_configs.py --claude-desktop
+uv run python install_mcp_configs.py --claude-code
+```
 
 ## Contributing
 

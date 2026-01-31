@@ -54,7 +54,7 @@ uv run python main.py htmx                   # HTMX + Axum integration
 uv run python main.py all --dev
 
 # Custom port
-uv run python main.py mcp --port 3001
+uv run python main.py mcp --port 3051
 ```
 
 ### Configuration Installation
@@ -109,7 +109,7 @@ This is a **Model Context Protocol (MCP) servers collection** written in Python 
 - `main.py` - Unified server launcher with async support and process management
 - `run_servers.sh` - Interactive shell interface with colored menu system
 - `install_mcp_configs.py` - Configuration installer for AI tools
-- Each server runs as independent MCP protocol-compliant process on different ports (3000-3018)
+- Each server runs as independent MCP protocol-compliant process on different ports (3050-3068)
 
 **2. Server Modules (`servers/` directory)**
 All servers extend FastMCP framework and follow consistent patterns:
@@ -125,35 +125,35 @@ All servers extend FastMCP framework and follow consistent patterns:
 
 ### Server Specializations
 
-**Analysis Servers (Ports 3000-3003):**
+**Analysis Servers (Ports 3050-3053):**
 - **MCP Server** (`mcp_server.py`): Analyzes prompts for MCP server creation (1-10 scoring)
 - **Prompt Server** (`prompt_server.py`): General prompt optimization using CRISPE/RACE frameworks
 - **FastMCP Server** (`fastmcp_server.py`): Meta-server for generating other MCP servers
 
-**Frontend Servers (Ports 3002, 3004, 3006, 3018):**
+**Frontend Servers (Ports 3052, 3054, 3056, 3068):**
 - **Tailwind Server** (`tailwind_server.py`): Tailwind CSS v4.1 migration and optimization
 - **React Server** (`react_server.py`): React 19 features + code analysis/optimization
 - **shadcn/ui Server** (`shadcn_server.py`): Component analysis, generation, and theming
 - **HTMX Server** (`htmx_server.py`): HTMX patterns with Axum (Rust) backend
 
-**Backend Servers (Ports 3005, 3007-3008, 3010):**
+**Backend Servers (Ports 3055, 3057-3058, 3060):**
 - **TypeScript Server** (`typescript_server.py`): Modern TypeScript with Clean Architecture
 - **Rust Server** (`rust_server.py`): Idiomatic Rust patterns (mre/idiomatic-rust)
 - **Axum Server** (`axum_server.py`): Axum web framework patterns
 - **Python Server** (`python_optimizer_server.py`): Python analysis and modern paradigms
 
-**Elixir/Erlang Servers (Ports 3011-3015):**
+**Elixir/Erlang Servers (Ports 3061-3065):**
 - **Erlang Server** (`erlang_server.py`): OTP patterns, GenServer, Supervisor
 - **Elixir Server** (`elixir_server.py`): Functional programming, concurrency
 - **Phoenix Server** (`phoenix_server.py`): Controllers, routing, contexts
 - **Phoenix Channels Server** (`phoenix_channels_server.py`): WebSocket, PubSub, Presence
 - **Phoenix LiveView Server** (`phoenix_liveview_server.py`): Real-time UI, hooks, HEEx
 
-**Database Servers (Ports 3016-3017):**
+**Database Servers (Ports 3066-3067):**
 - **Neo4j Server** (`neo4j_server.py`): Cypher queries, graph modeling
 - **Qdrant Server** (`qdrant_server.py`): Vector search, RAG patterns
 
-**DevOps Servers (Port 3009):**
+**DevOps Servers (Port 3059):**
 - **Docker Server** (`docker_optimizer_server.py`): Docker containerization with security best practices
 
 ### Key Design Patterns
@@ -212,5 +212,53 @@ The `install_mcp_configs.py` script manages configurations for:
 - **Gemini CLI**: `~/.gemini/settings.json`
 - **Antigravity**: `~/.gemini/antigravity/mcp_config.json`
 - **VSCode Insiders**: `~/Library/Application Support/Code - Insiders/User/mcp.json`
+
+### MCP Server Configuration Format
+
+**Correct configuration format for all AI tools:**
+
+```json
+{
+  "command": "uv",
+  "args": [
+    "run",
+    "--directory",
+    "/path/to/mcp-servers",
+    "python",
+    "-m",
+    "servers.module_name"
+  ],
+  "env": {
+    "MCP_SERVER_PORT": "3050",
+    "MCP_SERVER_PROTOCOL": "stdio"
+  }
+}
+```
+
+**Common mistakes to avoid:**
+- `--directory` pointing to `servers/` instead of project root
+- Running `file.py` directly instead of `python -m servers.module`
+- Missing `env` block with port configuration
+
+### Troubleshooting MCP Connections
+
+**Server disconnects unexpectedly:**
+```bash
+# Test server import
+uv run python -c "from servers.mcp_server import mcp; print('OK')"
+
+# Test MCP protocol
+echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}' | \
+  uv run python -m servers.mcp_server 2>/dev/null
+```
+
+**Reset configurations:**
+```bash
+uv run python install_mcp_configs.py --all
+```
+
+**View logs:**
+- macOS: `tail -f ~/Library/Logs/Claude/mcp*.log`
+- Windows: `type "%APPDATA%\Claude\logs\mcp*.log"`
 
 The project emphasizes Brazilian Portuguese documentation and comments while maintaining English code interfaces for international compatibility.
