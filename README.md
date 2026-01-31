@@ -1,340 +1,100 @@
-# 🚀 MCP Servers v2.2 - Modern Interactive CLI Collection
+# MCP Servers v2.3 - Modern Interactive CLI Collection
 
 [![Python](https://img.shields.io/badge/Python-3.12%2B-blue)](https://www.python.org/)
-[![FastMCP](https://img.shields.io/badge/FastMCP-2.4.0%2B-green)](https://github.com/fastmcp/fastmcp)
+[![FastMCP](https://img.shields.io/badge/FastMCP-3.0.0%2B-green)](https://github.com/fastmcp/fastmcp)
 [![uv](https://img.shields.io/badge/uv-Package%20Manager-purple)](https://github.com/astral-sh/uv)
 [![License](https://img.shields.io/badge/License-MIT-orange)](LICENSE)
 [![CLI](https://img.shields.io/badge/Interactive%20CLI-Vue%20Style-cyan)](https://questionary.readthedocs.io/)
-[![Servers](https://img.shields.io/badge/Servers-11%2F11%20Functional-success)](https://github.com/)
+[![Servers](https://img.shields.io/badge/Servers-19%2F19%20Functional-success)](https://github.com/)
 
 **Modern interactive platform** of MCP (Model Context Protocol) servers with **Vue CLI-style multi-select interface** for specialized prompt processing, containerization, and modern web development.
 
-## 🌟 Version 2.2 Features
+## Version 2.3 Features
 
-### 🎯 **NEW: Interactive CLI Experience**
+### **NEW: 8 Additional Specialized Servers**
 
-- **Vue CLI-style Interface**: Multi-select checkboxes for server selection
-- **Rich Formatted Output**: Colorized tables, progress bars, and status indicators  
-- **Smart Categorization**: Servers grouped by function (Analysis, Frontend, Backend, DevOps)
-- **Real-time Monitoring**: Live server status and graceful shutdown handling
+- **Erlang OTP**: GenServer, Supervisor, fault tolerance patterns
+- **Elixir**: Functional programming, concurrency, OTP behaviors
+- **Phoenix Framework**: Controllers, routing, contexts, plugs
+- **Phoenix Channels**: WebSocket, PubSub, Presence tracking
+- **Phoenix LiveView**: Real-time UI, hooks, HEEx templates, streams
+- **Neo4j**: Cypher queries, graph modeling, path patterns
+- **Qdrant**: Vector search, RAG patterns, similarity queries
+- **HTMX + Axum**: Hypermedia-driven UI with Rust backend
 
-### 🚀 Centralized Management
+### **Configuration Installer**
 
-- **Multiple Launchers**: Choose between CLI (`launcher_cli.py`), main (`main.py`), or shell (`run_servers.sh`)
-- **Execution Modes**: Development, Production, and Silent modes with parallel/sequential options
-- **Asynchronous Architecture**: Native async/await support with concurrent server management
+New `install_mcp_configs.py` script automatically installs all servers to:
+- Claude Desktop
+- Claude Code
+- Gemini CLI
+- Antigravity
+- VSCode Insiders
 
-### 🛠️ Modern Build System
+## Overview
 
-- **uv Package Manager**: Ultra-fast dependency management
-- **Rich Dependencies**: questionary, rich, colorama for enhanced UX
-- **pyproject.toml**: Centralized project configuration
-- **Build System**: Hatchling with optimized packaging
+MCP Servers is a collection of 19 specialized servers based on the MCP (Model Context Protocol) that provide tools for prompt analysis, code optimization, and modern development workflows.
 
-## 🌟 Overview
+### Key Features
 
-MCP Servers is a collection of specialized servers based on the MCP (Model Context Protocol) that provide tools for prompt analysis and optimization. This project presents a modular approach to working with different aspects of prompt engineering and MCP server development.
+- 19 functional MCP servers covering frontend, backend, databases, and DevOps
+- Interactive multi-select CLI with Vue CLI-style interface
+- Automatic configuration installer for major AI tools
+- 0-100 scoring systems for code analysis
+- Knowledge bases with patterns and best practices
 
-### ✨ Key Features
+## Available Servers (19/19 Functional)
 
-- 🎯 **Interactive Multi-Select CLI**: Vue CLI-style checkbox interface for server selection
-- 📊 **Rich Status Dashboard**: Real-time server monitoring with colorized output
-- 🔍 **MCP Prompt Analysis**: Advanced prompts evaluation with scoring systems
-- 📝 **Prompt Engineering**: Multi-framework optimization (CRISPE, RACE, TRACE)
-- 🐳 **Docker Optimization**: Container security best practices and multi-stage builds
-- 🎨 **Modern Frontend Tools**: Tailwind v4.1, React 19, shadcn/ui support
-- 🦀 **Backend Excellence**: Rust idiomatic patterns and Axum web framework
-- ⚡ **Parallel Execution**: Concurrent server management with graceful shutdown
-- 🔧 **Multiple Interfaces**: CLI, terminal menu, or programmatic access
+### Analysis Servers
 
-## 📦 Available Servers
+| Server | Port | Description |
+|--------|------|-------------|
+| `mcp` | 3000 | MCP prompt analysis with 1-10 scoring |
+| `prompt` | 3001 | Prompt engineering with CRISPE/RACE frameworks |
+| `fastmcp` | 3003 | High-performance meta-server for MCP development |
 
-### 1. ✅ MCP Prompt Analyzer (`mcp_server.py`) - **FUNCTIONAL**
+### Frontend Servers
 
-Analyzes prompts for MCP server creation, scoring them (1-10) and providing specific recommendations based on MCP documentation best practices.
+| Server | Port | Description |
+|--------|------|-------------|
+| `tailwind` | 3002 | Tailwind CSS v4.1 support and migration |
+| `react` | 3004 | React 19 features (Server Components, Actions) |
+| `shadcn` | 3006 | Advanced shadcn/ui component development |
+| `htmx` | 3018 | HTMX with Axum (Rust) backend integration |
 
-**Tools:**
+### Backend Servers
 
-- `mcp_analyze_server_prompt` - Complete prompt analysis
-- `mcp_get_best_practices` - Information about best practices
-- `mcp_suggest_prompt_improvements` - Specific suggestions
-- `mcp_validate_requirements` - Validation against MCP requirements
+| Server | Port | Description |
+|--------|------|-------------|
+| `typescript` | 3005 | TypeScript analysis with Clean Architecture |
+| `rust` | 3007 | Idiomatic Rust patterns (mre/idiomatic-rust) |
+| `axum` | 3008 | Axum web framework with tokio-rs |
+| `python` | 3010 | Python code analysis and modern paradigms |
 
-### 2. ✅ Prompt Engineering Server (`prompt_server.py`) - **FUNCTIONAL**
+### Elixir/Erlang Ecosystem
 
-Optimizes prompts for different tasks using advanced prompt engineering strategies.
+| Server | Port | Description |
+|--------|------|-------------|
+| `erlang` | 3011 | Erlang/OTP patterns, GenServer, Supervisor |
+| `elixir` | 3012 | Elixir functional programming and concurrency |
+| `phoenix` | 3013 | Phoenix web framework (controllers, contexts) |
+| `phoenix_channels` | 3014 | Phoenix Channels (WebSocket, PubSub, Presence) |
+| `phoenix_liveview` | 3015 | Phoenix LiveView real-time UI (hooks, HEEx) |
 
-**Tools:**
+### Database Servers
 
-- `prompt_optimize_generic` - Applies optimization techniques
-- `prompt_analyze_generic` - Evaluates prompt structure
-- `prompt_suggest_framework` - Applies different strategies
-- `prompt_apply_technique` - Creates templates for different scenarios
-- `prompt_check_bias` - Checks for potential biases in prompts
+| Server | Port | Description |
+|--------|------|-------------|
+| `neo4j` | 3016 | Neo4j Cypher queries and graph modeling |
+| `qdrant` | 3017 | Qdrant vector search and RAG patterns |
 
-### 3. ✅ Tailwind CSS v4.1 Server (`tailwind_server.py`) - **FUNCTIONAL**
+### DevOps Servers
 
-Provides context and support for development with Tailwind CSS v4.1.
+| Server | Port | Description |
+|--------|------|-------------|
+| `docker` | 3009 | Docker optimization with security best practices |
 
-**Tools:**
-
-- `tailwind_contextualize_prompt` - Summary of v4.1 features
-- `tailwind_get_v4_info` - Helps with migration between versions
-- `tailwind_generate_v4_code` - Optimizes class usage
-- `tailwind_get_v4_docs` - Creates components following best practices
-- `tailwind_get_v4_examples` - Provides code examples for v4.1 features
-
-### 4. ✅ shadcn/ui Advanced Server (`shadcn_server.py`) - **FUNCTIONAL**
-
-Advanced MCP server for complete shadcn/ui integration, offering intelligent analysis, optimized generation, and component customization following library best practices.
-
-**Main Features:**
-
-- 🔍 **Intelligent Analysis**: Detects shadcn/ui components in code with dependency analysis
-- ⚡ **Automatic Optimization**: Applies best practices (React.memo, cn() utility, ARIA roles)
-- 🎨 **Component Generation**: Optimized TypeScript templates for 10+ components
-- 🌙 **Theme Creation**: Custom theme generator with dark mode support
-- 📋 **Setup Guides**: Framework-specific configuration for Next.js, Vite, Remix, Astro
-
-**Tools:**
-
-- `shadcn_analyze_component` - Code analysis with shadcn/ui components
-- `shadcn_optimize_component` - Automatic optimization with best practices
-- `shadcn_generate_component` - Custom component generation
-- `shadcn_get_component_info` - Detailed component information
-- `shadcn_get_setup_guide` - Configuration guides by framework
-- `shadcn_create_theme` - Custom theme creator
-- `shadcn_get_best_practices` - Recommended patterns and practices
-
-**Supported Components:**
-
-- 🧩 Layout: Accordion, Card, Dialog
-- 📝 Forms: Button, Input, Select, Form (React Hook Form + Zod)
-- 📊 Data Display: Table, Badge
-- 🔔 Feedback: Toast, Alert Dialog
-- 🎨 Advanced: Compound Components, Custom Hooks, TypeScript interfaces
-
-**Supported Frameworks:**
-
-- Next.js, Vite, Remix, Astro, React Router
-
-### 5. ✅ FastMCP Server (`fastmcp_server.py`) - **FUNCTIONAL**
-
-Optimized server using FastMCP for MCP prompt analysis with advanced analysis and template generation features.
-
-**Tools:**
-
-- `fastmcp_analyze_mcp_prompt` - Advanced MCP prompt analysis with scoring
-- `fastmcp_suggest_prompt_improvements` - Specific improvement suggestions
-- `fastmcp_validate_requirements` - Complete MCP requirements validation
-- `fastmcp_generate_server_template` - Server template generation
-
-**Resources:**
-
-- `mcp://best-practices` - Updated MCP best practices
-- `mcp://prompt-examples/{level}` - Prompt examples by level
-- `mcp://prompt-frameworks` - Prompt analysis frameworks
-
-### 6. ✅ React Unified Server (`react_server.py`) - **FUNCTIONAL**
-
-Complete unified MCP server for modern React development combining code analysis, optimization, React 19 features, and AI tool prompt optimization.
-
-**Main Features:**
-
-- ⚛️ **React 19 Features**: Stable Server Components, Actions, `use` hook
-- 🔍 **Code Analysis**: Evaluates existing React components with 0-100 scoring
-- ⚡ **Automatic Optimization**: Applies 2025 trends (glassmorphism, dark mode, micro-animations)
-- 🎯 **AI Prompt Optimization**: Transforms basic prompts for v0.dev, Cursor, Visual Copilot
-- 🏗️ **Modern Templates**: Optimized templates for components and applications
-- 📊 **Best Practices**: Conformance with React 2025 standards
-
-**Tools:**
-
-- `analyze_react_code` - Comprehensive React code analysis with scoring
-- `optimize_react_code` - Apply React 19 features and UI/UX 2025 trends
-- `analyze_react_prompt` - Prompt quality analysis for React development
-- `optimize_react_prompt` - AI-optimized prompt generation
-- `generate_component_template` - Component template generation
-- `get_react_trends_2025` - Latest React and UI/UX trends
-- `validate_react_requirements` - Project requirements validation
-
-**Supported UI/UX 2025 Trends:**
-
-- 🪟 Glassmorphism and glass effects
-- 🌙 Dark mode as primary default
-- ✨ Micro-animations and interactions
-- 🎨 Bold and maximalist typography
-- ♿ WCAG 2.1 AA accessibility
-
-**AI Tools Integration:**
-
-- v0.dev (Vercel), Cursor AI, GitHub Copilot, Visual Copilot
-
-**Supported Frameworks:**
-
-- Next.js 15+, Vite 6+, Remix 2.0+, Create React App
-
-### 7. ✅ Rust Idiomatic Server (`rust_server.py`) - **FUNCTIONAL**
-
-MCP server refactored to follow idiomatic Rust patterns based on the `mre/idiomatic-rust` repository and official `rust-lang/api-guidelines`.
-
-**Main Features:**
-
-- 🦀 **Idiomatic Analysis**: Detects idiomatic patterns and anti-patterns
-- 🔧 **Immutability by Default**: Analysis of correct `mut` usage
-- 🛡️ **Ergonomic Error Handling**: Result/Option with thiserror/anyhow
-- 🔄 **Type Conversions**: From/Into traits for elegant conversions
-- 🎯 **Enums over Booleans**: Detection of problematic boolean flags
-- ⚡ **Async Patterns**: Idiomatic Tokio and async/await
-- 🏗️ **API Design**: Conformance with rust-lang/api-guidelines
-
-**Idiomatic Tools:**
-
-- `rust_analyze_idiomatic_code` - Idiomatic analysis with scoring by category
-- `rust_generate_idiomatic_project` - Project generation following idiomatic patterns
-- `rust_get_idiomatic_patterns` - Complete pattern library with examples
-- `rust_refactor_to_idiomatic` - Automatic refactoring to idiomatic code
-- `rust_get_api_guidelines` - Official guidelines organized by category
-
-**Analysis Categories:**
-
-- 🔧 **Immutability**: "Aim for immutability by default" with mut analysis
-- 🛡️ **Error Handling**: Result over panic, context preservation
-- 🔄 **Type Conversions**: Ergonomic From/Into/TryFrom patterns
-- 🎯 **Enums over Bools**: Expressiveness through enums
-- ⚡ **Async Patterns**: Idiomatic async/await with Tokio
-- 🏗️ **API Design**: snake_case, PascalCase, documentation
-- 🚀 **Performance**: Zero-cost abstractions, iterator chains
-- 📚 **Documentation**: Doc comments with testable examples
-
-### 8. ✅ Axum Web Framework Server (`axum_server.py`) - **FUNCTIONAL**
-
-Advanced MCP server for Axum web framework development following official best practices and magic patterns from the Rust ecosystem.
-
-**Main Features:**
-
-- 🕸️ **Axum Analysis**: Detects Axum patterns and analyzes handler quality
-- 🔧 **Magic Patterns**: Implements advanced patterns from rust-magic-patterns
-- 🛡️ **Security Best Practices**: CORS, authentication, input validation
-- ⚡ **Performance Optimization**: Async handlers, connection pooling
-- 🏗️ **Project Generation**: Complete project structures with different architectures
-
-**Tools:**
-
-- `axum_analyze_code` - Axum code analysis with pattern detection
-- `axum_generate_project` - Complete project generation
-- `axum_get_patterns` - Pattern library with practical examples
-- `axum_optimize_handler` - Handler optimization with best practices
-- `axum_get_magic_patterns` - Magic patterns from rust ecosystem
-- `axum_create_middleware` - Custom middleware creation
-
-### 9. ✅ Docker Optimizer Server (`docker_optimizer_server.py`) - **FUNCTIONAL**
-
-Advanced MCP server for Docker containerization with focus on prompt optimization and best practices implementation following 2025 container security standards.
-
-**Main Features:**
-
-- 🐳 **Docker Prompt Analysis**: Evaluates Docker prompts with 0-100 scoring system
-- 🔧 **Automatic Enhancement**: Transforms basic prompts into production-ready specifications
-- 🛡️ **Security Best Practices**: Non-root users, minimal images, vulnerability scanning
-- ⚡ **Multi-stage Optimization**: Intelligent layer caching and size reduction
-- 🏗️ **Complete Configuration**: Dockerfile + docker-compose + .dockerignore generation
-
-**Tools:**
-
-- `docker_analyze_prompt` - Docker prompt analysis with detailed feedback
-- `docker_enhance_prompt` - Automatic prompt enhancement with best practices
-- `docker_validate_dockerfile` - Dockerfile validation against security standards
-- `docker_generate_config` - Complete Docker configuration generation
-
-**Supported Technologies:**
-
-- 🐍 Python (FastAPI, Django, Flask)
-- 🟢 Node.js (Express, Next.js, React)
-- 🦀 Rust (Axum, Actix)
-- 🐹 Go (Gin, Echo)
-
-**2025 Best Practices:**
-
-- 🛡️ Security-first approach with non-root execution
-- 🚀 Multi-stage builds for optimal image sizes
-- 🔍 Health checks and monitoring integration
-- 📋 Production-ready docker-compose configurations
-- 🎯 Framework-specific optimizations
-
-### 10. ✅ Python Development Optimizer (`python_optimizer_server.py`) - **FUNCTIONAL**
-
-Advanced MCP server for Python code analysis, optimization, and modern development paradigms following 2025 best practices and Clean Code principles.
-
-**Main Features:**
-
-- 🐍 **Prompt Analysis**: Evaluates Python prompts with 0-100 scoring system and paradigm detection
-- 🔧 **Code Enhancement**: Transforms basic prompts into comprehensive specifications with best practices
-- 🏗️ **Template Generation**: Creates paradigm-specific code templates (OOP, Functional, Async, Hybrid)
-- 🧪 **Code Validation**: Validates Python code against modern standards, PEP 8, and type hints
-- ⚡ **Refactoring Suggestions**: Provides intelligent code improvement recommendations
-
-**Tools:**
-
-- `analyze_python_prompt` - Python prompt analysis with paradigm detection and scoring
-- `enhance_python_prompt` - Automatic prompt enhancement with modern Python patterns
-- `validate_python_code` - Code validation against PEP 8, type hints, and best practices
-- `generate_python_template` - Paradigm-specific template generation with testing setup
-- `suggest_refactoring` - Intelligent refactoring suggestions for code improvement
-- `get_best_practices` - Comprehensive Python best practices guide for 2025
-- `get_paradigm_guide` - Paradigm-specific development guides and patterns
-- `get_solid_principles` - SOLID principles implementation in Python
-
-**Supported Paradigms:**
-
-- 🏛️ **Object-Oriented**: Classes, inheritance, polymorphism, SOLID principles
-- 🔄 **Functional**: Pure functions, immutability, higher-order functions, monads
-- ⚡ **Asynchronous**: async/await, asyncio, concurrent programming patterns
-- 🔀 **Hybrid**: Combining multiple paradigms for optimal solutions
-
-**2025 Best Practices:**
-
-- 🎯 Modern Python 3.12+ features and syntax
-- 📝 Comprehensive type hints with Pydantic validation
-- 🧪 Testing strategies with pytest and property-based testing
-- 🔒 Security best practices and input validation
-- ⚡ Performance optimization and profiling techniques
-
-### 11. ✅ TypeScript Analysis Server (`typescript_server.py`) - **FUNCTIONAL**
-
-Advanced MCP server for modern TypeScript development with Clean Architecture and 2025 best practices, featuring comprehensive code analysis and project generation capabilities.
-
-**Main Features:**
-
-- 🔍 **Advanced Code Analysis**: Multi-dimensional scoring system covering type safety, modern features, and architecture
-- 🏗️ **Clean Architecture**: Dependency inversion, SOLID principles, and layered design patterns
-- ⚡ **Modern TypeScript 5.x**: Template literal types, utility types, conditional types, and advanced patterns
-- 🎯 **AI Tool Integration**: Optimized for GitHub Copilot, Cursor AI, and Visual Copilot development workflows
-- 🧪 **Project Generation**: Complete Clean Architecture project structures with testing and documentation
-
-**Tools:**
-
-- `typescript_analyze_code_advanced` - Comprehensive code analysis with pattern detection and scoring
-- `typescript_analyze_prompt` - TypeScript prompt quality assessment and improvement suggestions
-- `typescript_generate_clean_architecture` - Complete Clean Architecture project generation
-- `typescript_refactor_to_modern` - Legacy code modernization to TypeScript 5.x standards
-- `typescript_get_best_practices` - Modern TypeScript development guidelines and examples
-
-**Supported Features:**
-
-- 🎯 **Type Safety**: Strict mode configuration, discriminated unions, type guards
-- 🔄 **Modern Features**: Template literals, utility types, conditional types, mapped types
-- 🏗️ **Clean Architecture**: Domain/Application/Infrastructure layers with proper boundaries
-- 🛡️ **SOLID Principles**: Single responsibility, dependency inversion, interface segregation
-- ⚡ **Performance**: Zero-cost abstractions, efficient type checking, optimized patterns
-
-**AI Development Integration:**
-
-- GitHub Copilot optimization with descriptive comments and type examples
-- Cursor AI workflow integration with structured code patterns
-- Visual Copilot compatibility with component-based architectures
-
-## 🛠️ Installation
+## Installation
 
 ### Prerequisites
 
@@ -354,383 +114,251 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # Install dependencies and create virtual environment
 uv sync
 
-# 🎯 Try the modern interactive CLI (recommended)
+# Modern interactive CLI (recommended)
 uv run mcp_servers
 
-# 📊 Check server status with rich formatting  
+# Show server status
 uv run mcp_servers --status
 
-# Alternative ways to launch
-python launcher_cli.py
-uv run python launcher_cli.py
-
-# 🔧 Traditional command-line interface
+# Traditional command-line
 uv run python main.py --help
 ```
 
-## 🚀 Quick Usage
-
-### 🎯 **Modern Interactive CLI (Recommended)**
-
-Experience the Vue CLI-style interface with multi-select checkboxes:
+### Install to AI Tools
 
 ```bash
-# Launch interactive CLI with multi-select (recommended)
+# Install all servers to Claude Desktop, Claude Code, Gemini CLI, etc.
+uv run python install_mcp_configs.py --all
+
+# Install to specific tool
+uv run python install_mcp_configs.py --claude-desktop
+uv run python install_mcp_configs.py --gemini-cli
+
+# List configuration paths
+uv run python install_mcp_configs.py --paths
+```
+
+## Quick Usage
+
+### Interactive CLI
+
+```bash
+# Launch interactive multi-select menu
 uv run mcp_servers
 
-# Show rich server status dashboard
-uv run mcp_servers --status
-
-# Alternative direct calls
-python launcher_cli.py
-uv run python launcher_cli.py
-
-# Quick demo of all features
-uv run python demo_cli.py
-```
-
-**Interactive Features:**
-- 🚀 **Quick Start All**: One-click option to launch all functional servers
-- ✅ **Multi-select servers** with checkboxes (↑↓ navigate, SPACE select)
-- ⚙️ **Execution modes**: Development, Production, Silent
-- 🔄 **Parallel options**: Run servers simultaneously or sequentially  
-- 📊 **Real-time monitoring** with colored progress indicators
-- 🛑 **Graceful shutdown** with Ctrl+C handling
-
-### 🔧 **Traditional Command-Line**
-
-Direct server execution for automation and scripting:
-
-```bash
-# Run specific servers
-uv run python main.py mcp docker rust    # Multiple servers
-uv run python main.py react              # React unified server
-uv run python main.py all --dev         # All servers in development mode
-
-# Custom port and options
-uv run python main.py mcp --port 3001   # Custom port
-uv run python main.py tailwind --quiet  # Quiet mode
-
-# Complete help and server list
-uv run python main.py --help
-uv run python main.py list
-```
-
-### 🎨 **Interactive Menu Interface**
-
-Traditional terminal menu with numbered options:
-
-```bash
-# Colored interactive menu
+# Or use the shell script
 ./run_servers.sh
+```
 
-# Direct commands
-bash run_servers.sh docker
-bash run_servers.sh status
+### Direct Commands
+
+```bash
+# Run specific server
+uv run python main.py phoenix_liveview
+uv run python main.py neo4j
+uv run python main.py htmx
+
+# Run multiple servers
+uv run python main.py react tailwind shadcn
+
+# Run all servers
+uv run python main.py all --dev
+
+# List all servers
+uv run python main.py list
 ```
 
 ### Run Tests
 
 ```bash
-# All tests (using modernized runner)
-uv run python run_tests.py
+# All tests
+uv run pytest tests/ -v
 
-# Specific test by module
-uv run python run_tests.py mcp_server
-uv run python run_tests.py prompt_server
-uv run python run_tests.py tailwind_server
-
-# Using pytest directly
-uv run python -m pytest tests/ -v
-
-# With detailed report
-uv run python run_tests.py --verbose
+# Specific server tests
+uv run pytest tests/test_phoenix_liveview_server.py -v
+uv run pytest tests/test_neo4j_server.py -v
 ```
 
-## ⚡ Quick Start Examples
+## Server Details
 
-### 🎯 **Scenario 1: Frontend Development**
+### Erlang OTP Server (`erlang_server.py`)
 
-Select React, Tailwind, and shadcn/ui servers for modern frontend development:
+Provides Erlang/OTP patterns for fault-tolerant systems.
 
-```bash
-# Interactive multi-select (recommended)
-uv run mcp_servers
-# Select: React + Tailwind CSS + shadcn/ui + Development Mode
+**Tools:**
+- `analyze_erlang_code` - Analyze Erlang code with scoring
+- `generate_otp_project` - Generate OTP project structure
+- `generate_genserver` - Generate GenServer module
+- `get_otp_patterns` - Get patterns by category
 
-# Direct command
-uv run python main.py react tailwind shadcn --dev
-```
+### Elixir Server (`elixir_server.py`)
 
-### 🐳 **Scenario 2: Full-Stack Development Environment**
+Functional programming and concurrency patterns for Elixir.
 
-Complete development environment setup:
+**Tools:**
+- `analyze_elixir_code` - Analyze Elixir code
+- `generate_elixir_project` - Generate Mix project
+- `generate_genserver_elixir` - Generate GenServer module
+- `get_elixir_patterns` - Get functional/OTP patterns
 
-```bash
-# Quick Start All - Launch all functional servers at once
-uv run mcp_servers
-# Select: 🚀 START ALL SERVERS (first option)
+### Phoenix Framework Server (`phoenix_server.py`)
 
-# Custom selection with rich interface
-uv run mcp_servers --status  # Check all servers first
-uv run mcp_servers           # Then select: Docker + React + Rust + Axum
+Web development with Phoenix controllers, routing, and contexts.
 
-# Command-line approach  
-uv run python main.py docker rust axum react --dev
-```
+**Tools:**
+- `analyze_phoenix_code` - Analyze Phoenix code
+- `generate_phoenix_resource` - Generate CRUD resource
+- `generate_context` - Generate Phoenix context
+- `get_phoenix_patterns` - Get controller/router patterns
 
-### 🔍 **Scenario 3: Prompt Engineering Workflow**
+### Phoenix Channels Server (`phoenix_channels_server.py`)
 
-MCP server development and prompt optimization:
+Real-time communication with WebSocket and PubSub.
 
-```bash
-# Quick demo of interactive features
-uv run python demo_cli.py
+**Tools:**
+- `analyze_channel_code` - Analyze channel code
+- `generate_channel` - Generate channel module
+- `generate_socket` - Generate socket module
+- `generate_presence` - Generate Presence module
+- `get_channel_patterns` - Get PubSub/Presence patterns
 
-# Full prompt engineering stack
-uv run mcp_servers
-# Select: MCP Analysis + Prompt Engineering + FastMCP + Production Mode
-```
+### Phoenix LiveView Server (`phoenix_liveview_server.py`)
 
-## 📋 Advanced Usage
+Real-time UI with server-rendered HTML.
 
-### 🎛️ **CLI Interface Comparison**
+**Tools:**
+- `analyze_liveview_code` - Analyze LiveView code
+- `generate_liveview` - Generate LiveView module
+- `generate_live_component` - Generate LiveComponent
+- `generate_js_hook` - Generate JavaScript hook
+- `generate_liveview_form` - Generate form with validation
+- `get_liveview_patterns` - Get lifecycle/event patterns
 
-| Interface | Command | Best For | Features |
-|-----------|---------|----------|----------|
-| **Interactive CLI** | `uv run mcp_servers` | **Interactive Development** | Vue CLI-style, multi-select, rich output |
-| **Direct CLI** | `uv run python launcher_cli.py` | **Development & Testing** | Same features, direct Python call |
-| **Main Launcher** | `uv run python main.py` | **Automation & Scripts** | Direct commands, programmatic access |
-| **Shell Menu** | `./run_servers.sh` | **Traditional Terminal** | Numbered menu, bash compatibility |
+### Neo4j Server (`neo4j_server.py`)
 
-### 🔧 **Integration Examples**
+Graph database development with Cypher queries.
 
-```bash
-# Development workflow with multiple interfaces
-uv run mcp_servers --status           # Check server health  
-uv run python main.py mcp --port 3001 # Start specific server
-./run_servers.sh docker               # Traditional menu approach
+**Tools:**
+- `analyze_cypher_query` - Analyze Cypher query
+- `generate_cypher_query` - Generate Cypher query
+- `optimize_cypher` - Optimize query performance
+- `generate_graph_model` - Generate graph model
+- `get_cypher_patterns` - Get MATCH/CREATE patterns
 
-# Automation and CI/CD
-uv run python main.py all --quiet             # Silent bulk execution
-uv run python main.py list | grep FUNCTIONAL  # Server validation
-uv run python demo_cli.py > server_report.txt # Generate reports
-```
+### Qdrant Server (`qdrant_server.py`)
 
-### 📊 **Monitoring and Status**
+Vector search and RAG (Retrieval-Augmented Generation) patterns.
 
-```bash
-# Rich formatted status dashboard
-uv run mcp_servers --status
+**Tools:**
+- `analyze_qdrant_query` - Analyze vector query
+- `generate_collection_config` - Generate collection config
+- `generate_qdrant_query` - Generate search query
+- `optimize_vector_search` - Optimize search performance
+- `get_qdrant_patterns` - Get search/filter patterns
 
-# Server health check for automation  
-uv run python main.py list
+### HTMX + Axum Server (`htmx_server.py`)
 
-# Traditional status with colors
-./run_servers.sh status
-```
+Hypermedia-driven development with Rust backend.
 
-## 🧪 Testing System v2.2
+**Tools:**
+- `analyze_htmx_code` - Analyze HTMX code
+- `generate_htmx_component` - Generate HTMX component
+- `generate_axum_handler` - Generate Axum handler
+- `optimize_htmx_requests` - Optimize request patterns
+- `get_htmx_patterns` - Get hx-* attribute patterns
 
-The v2.0 project includes a modernized testing system with pytest:
-
-```bash
-# Current test status
-✅ 11/15 tests passing
-⏭️ 4 tests skipped (servers in development)
-⚠️ 1 warning (pytest-asyncio not installed)
-
-# Run all tests
-uv run python run_tests.py
-
-# Specific tests by module
-uv run python run_tests.py mcp_server      # ✅ 10/10 tests passing
-uv run python run_tests.py prompt_server   # ✅ 1/1 test passing, 4 skipped
-uv run python run_tests.py tailwind_server # 🚧 In development
-
-# Using pytest directly
-uv run python -m pytest tests/ -v
-
-# With coverage (requires pytest-cov)
-uv run python -m pytest tests/ --cov=servers --cov-report=term-missing
-```
-
-## 📁 Project Structure v2.2
+## Project Structure
 
 ```text
 mcp-servers/
-├── 🚀 main.py                  # Unified main launcher
-├── 🎯 launcher_cli.py          # Modern interactive CLI (Vue CLI-style)
-├── 🔧 pyproject.toml           # Project configuration (uv)
-├── 🧪 run_tests.py             # Modernized test runner
-├── 📜 run_servers.sh           # Interactive execution script
-├── 📖 README.md                # This file
+├── main.py                       # Unified launcher (v2.3)
+├── launcher_cli.py               # Interactive CLI
+├── install_mcp_configs.py        # Configuration installer
+├── run_servers.sh                # Shell menu interface
+├── pyproject.toml                # Project configuration
 │
-├── 🖥️ servers/                 # MCP servers
-│   ├── ✅ mcp_server.py        # MCP prompt analyzer (functional)
-│   ├── ✅ prompt_server.py     # Prompt engineering (functional)
-│   ├── ✅ tailwind_server.py   # Tailwind CSS v4.1 support (functional)
-│   ├── ✅ shadcn_server.py     # shadcn/ui Advanced (functional)
-│   ├── ✅ fastmcp_server.py    # FastMCP server (functional)
-│   ├── ✅ react_server.py      # React Unified server (functional)
-│   ├── ✅ rust_server.py       # Rust Idiomatic server (functional)
-│   ├── ✅ axum_server.py       # Axum Web Framework server (functional)
-│   ├── ✅ docker_optimizer_server.py # Docker Optimizer server (functional)
-│   ├── ✅ python_optimizer_server.py # Python Development Optimizer (functional)
-│   └── ✅ typescript_server.py # TypeScript server (functional)
+├── servers/                      # MCP servers (19 total)
+│   ├── mcp_server.py            # MCP prompt analyzer
+│   ├── prompt_server.py         # Prompt engineering
+│   ├── tailwind_server.py       # Tailwind CSS v4.1
+│   ├── fastmcp_server.py        # FastMCP meta-server
+│   ├── react_server.py          # React 19 unified
+│   ├── typescript_server.py     # TypeScript analysis
+│   ├── shadcn_server.py         # shadcn/ui components
+│   ├── rust_server.py           # Rust idiomatic
+│   ├── axum_server.py           # Axum web framework
+│   ├── docker_optimizer_server.py # Docker optimization
+│   ├── python_optimizer_server.py # Python optimizer
+│   ├── erlang_server.py         # Erlang/OTP (NEW)
+│   ├── elixir_server.py         # Elixir (NEW)
+│   ├── phoenix_server.py        # Phoenix Framework (NEW)
+│   ├── phoenix_channels_server.py # Phoenix Channels (NEW)
+│   ├── phoenix_liveview_server.py # Phoenix LiveView (NEW)
+│   ├── neo4j_server.py          # Neo4j Cypher (NEW)
+│   ├── qdrant_server.py         # Qdrant Vector (NEW)
+│   └── htmx_server.py           # HTMX + Axum (NEW)
 │
-├── 🧪 tests/                   # Tests with pytest (11/15 passing)
-│   ├── ✅ test_mcp_server.py   # 10/10 MCP analyzer tests
-│   ├── ✅ test_prompt_server.py # 1/1 prompt server test
-│   └── 🚧 test_tailwind_server.py # Tailwind server tests
+├── tests/                        # Test files (20 test files)
+│   ├── test_mcp_server.py
+│   ├── test_erlang_server.py    # NEW
+│   ├── test_elixir_server.py    # NEW
+│   ├── test_phoenix_server.py   # NEW
+│   ├── test_phoenix_channels_server.py # NEW
+│   ├── test_phoenix_liveview_server.py # NEW
+│   ├── test_neo4j_server.py     # NEW
+│   ├── test_qdrant_server.py    # NEW
+│   ├── test_htmx_server.py      # NEW
+│   └── ...
 │
-└── 📚 docs/                    # Complete documentation
-    └── servers/                # Individual server documentation
-        ├── mcp-analysis-server.md
-        ├── prompt-engineering-server.md
-        ├── tailwind-css-server.md
-        ├── fastmcp-server.md
-        ├── react-components-server.md
-        ├── react-optimizer-server.md
-        ├── shadcn-ui-server.md
-        ├── rust-idiomatic-server.md
-        └── axum-web-framework-server.md
+└── docs/                         # Documentation
 ```
 
-## 📚 Server Documentation
+## Configuration Paths
 
-Comprehensive documentation is available for each server:
+The configuration installer supports:
 
-### Core Analysis Servers
-- 🔍 **[MCP Analysis Server](docs/servers/mcp-analysis-server.md)** - MCP prompt analysis and validation
-- 📝 **[Prompt Engineering Server](docs/servers/prompt-engineering-server.md)** - Advanced prompt optimization techniques
-- 🚀 **[FastMCP Server](docs/servers/fastmcp-server.md)** - Meta-server for MCP development
+| Tool | Configuration Path |
+|------|-------------------|
+| Claude Desktop (macOS) | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Claude Code | `~/.claude.json` |
+| Gemini CLI | `~/.gemini/settings.json` |
+| Antigravity | `~/.gemini/antigravity/mcp_config.json` |
+| VSCode Insiders | `~/Library/Application Support/Code - Insiders/User/mcp.json` |
 
-### Frontend & Design Servers
-- 🎨 **[Tailwind CSS Server](docs/servers/tailwind-css-server.md)** - Tailwind CSS v4.1 support and migration
-- ⚛️ **[React Unified Server](docs/servers/react-components-server.md)** - React 19 development + code analysis + AI prompt optimization
-- 🎯 **[shadcn/ui Server](docs/servers/shadcn-ui-server.md)** - Advanced shadcn/ui component development
+## Scoring System
 
-### Backend & Systems Servers
-- 🦀 **[Rust Idiomatic Server](docs/servers/rust-idiomatic-server.md)** - Idiomatic Rust development patterns
-- 🕸️ **[Axum Web Framework Server](docs/servers/axum-web-framework-server.md)** - Axum web development with tokio
-- 🐍 **[Python Development Optimizer](docs/servers/python-development-optimizer.md)** - Python code analysis and modern paradigms
-- 📘 **[TypeScript Analysis Server](docs/servers/typescript-analysis-server.md)** - Modern TypeScript development with Clean Architecture
+All analysis servers use a 0-100 scoring system:
 
-Each documentation includes:
-- **Feature Overview** - Core capabilities and use cases
-- **Available Tools** - Complete API reference with examples
-- **Usage Examples** - Practical implementation patterns
-- **Best Practices** - Framework-specific recommendations
-- **Configuration** - Setup and customization options
+| Score | Grade | Description |
+|-------|-------|-------------|
+| 90-100 | Excellent | Follows all best practices |
+| 75-89 | Good | Minor improvements possible |
+| 50-74 | Needs Improvement | Significant patterns missing |
+| 0-49 | Poor | Major refactoring needed |
 
-## 🌐 MCP Protocol (Model Context Protocol)
+## Contributing
 
-MCP is a protocol that allows extending language models with custom tools. Each server in this project implements specific MCP tools for different prompt processing domains.
+1. Fork the project
+2. Create a feature branch (`git checkout -b feature/new-server`)
+3. Add tests for new features
+4. Commit changes (`git commit -m 'Add new server'`)
+5. Push to branch (`git push origin feature/new-server`)
+6. Open a Pull Request
 
-### MCP v2.2 Design Principles
-
-1. **Focused Design**: Each tool performs a specific and well-defined function
-2. **Asynchronous Architecture**: Native support for asynchronous operations
-3. **Robust Error Handling**: Robust validation of inputs and outputs
-4. **Clear Documentation**: Each tool has detailed documentation
-5. **Structured Inputs/Outputs**: Use of Pydantic for schema validation
-
-## 📊 Scoring System
-
-The MCP Prompt Analyzer evaluates prompts on specific criteria (1-10 scoring):
-
-| Criterion                   | Description                          | Importance |
-| -------------------------- | ---------------------------------- | ----------- |
-| 🎯 Clear Purpose         | Specific and well-defined objective | High        |
-| 🛠️ Tool Design   | Focused and well-named tools | High        |
-| ⚠️ Error Handling     | Validation and exception handling | High        |
-| 📝 Documentation            | Clear tool descriptions    | Medium       |
-| 🔒 Security               | Recommended security practices | Medium       |
-| 📋 Data Schema        | Well-defined data structures  | Medium       |
-| ⚡ Performance             | Optimization considerations        | Low       |
-| 🔧 Transport Protocol | Clear protocol specification   | Low       |
-
-## 🧰 Development Tools v2.2
-
-### Modern Build System
-
-- **uv**: Ultra-fast Python package manager
-- **pyproject.toml**: Centralized project configuration
-- **Hatchling**: Modern and efficient build backend
-
-### Interface Scripts
-
-- 🎯 **uv run mcp_servers** - **Primary interactive CLI** with Vue-style multi-select checkboxes
-- 🎯 **launcher_cli.py** - **Direct interactive CLI** (same features, direct Python call)
-- 🚀 **main.py** - **Direct command launcher** for automation and scripting  
-- 🔧 **run_servers.sh** - **Traditional terminal menu** with numbered options
-- 🧪 **run_tests.py** - **Modernized test runner** with coverage reports
-- 🎬 **demo_cli.py** - **Feature demonstration** and capability showcase
-
-### Advanced Features
-
-- 🎯 **Vue CLI-style Interface**: Checkbox selection with rich formatting and real-time feedback
-- ⚡ **Asynchronous Execution**: Parallel server management with async/await patterns
-- 📊 **Rich Status Dashboard**: Colorized tables, progress bars, and live monitoring
-- 🔄 **Execution Modes**: Development (verbose), Production (optimized), Silent (minimal)
-- 🛡️ **Graceful Shutdown**: Clean Ctrl+C handling with process termination
-- 📋 **Smart Validation**: Real-time server file checking and dependency verification
-
-## 📈 Project Status
-
-### ✅ Implemented Features
-
-- **Core Servers**: 11/11 functional servers (mcp, prompt, tailwind, shadcn, fastmcp, react, rust, axum, docker, python, typescript)
-- **Testing System**: 11/15 tests passing (73% success rate)
-- **Build System**: Complete migration to uv + pyproject.toml
-- **Documentation**: README v2.0 and updated docs/
-- **Scripts**: Unified launcher and interactive interface
-
-### 🚧 In Development
-
-- **Additional Servers**: All servers completed (11/11 functional)
-- **Enhanced Testing**: Improving test coverage for all servers
-- **Dependencies**: Optional pytest-asyncio and pytest-cov
-
-### 🎯 Roadmap Next Versions
-
-- [ ] **v2.3**: Add support for English prompt analysis
-- [ ] **v2.4**: Create REST API for remote access to servers
-- [ ] **v2.5**: Develop web interface for result visualization
-- [ ] **v2.6**: Integrate new prompt evaluation models
-- [ ] **v3.0**: Multi-language support and cloud deployment
-
-## 🤝 How to Contribute
-
-Contributions are welcome! To contribute:
-
-1. Fork the project on GitHub
-2. Create a branch for your feature (`git checkout -b feature/new-tool`)
-3. Commit your changes (`git commit -m 'Add new analysis tool'`)
-4. Push to the branch (`git push origin feature/new-tool`)
-5. Open a Pull Request
-
-### Contribution Guidelines
-
-- Add tests for new features
-- Follow existing naming conventions
-- Update documentation as needed
-- Ensure code quality with linting tools
-
-## 📜 License
+## License
 
 This project is licensed under the MIT License - see the `LICENSE` file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- [FastMCP](https://github.com/fastmcp/fastmcp) - Framework for MCP server development
-- [Pydantic](https://docs.pydantic.dev/) - Data validation and schemas
-- [uv](https://github.com/astral-sh/uv) - Ultra-fast Python package manager
-- [Pytest](https://docs.pytest.org/) - Modern testing framework
+- [FastMCP](https://github.com/fastmcp/fastmcp) - MCP server framework
+- [Pydantic](https://docs.pydantic.dev/) - Data validation
+- [uv](https://github.com/astral-sh/uv) - Python package manager
+- [mre/idiomatic-rust](https://github.com/mre/idiomatic-rust) - Rust patterns
+- [Phoenix Framework](https://www.phoenixframework.org/) - Elixir web framework
 
 ---
 
-**🚀 MCP Servers v2.2** | **Version**: 2.2.0 | **Python**: 3.12+ | **Status**: Production
+**MCP Servers v2.3** | **19 Servers** | **Python 3.12+** | **Status: Production**
 
-_Developed with ❤️ by Charleno Pires_
+_Developed with love by Charleno Pires_

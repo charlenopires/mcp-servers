@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-MCP Servers - Main Launcher v2.2
+MCP Servers - Main Launcher v2.3
 ================================
 
-Unified launcher for 11 specialized MCP servers covering prompt engineering,
-frontend development, backend systems, and DevOps tooling.
+Unified launcher for 19 specialized MCP servers covering prompt engineering,
+frontend development, backend systems, databases, and DevOps tooling.
 
-Available Servers (11/11 Functional):
+Available Servers (19/19 Functional):
 -------------------------------------
   Analysis:
     - mcp: MCP prompt analysis with 1-10 scoring
@@ -17,12 +17,22 @@ Available Servers (11/11 Functional):
     - tailwind: Tailwind CSS v4.1 support and migration
     - react: React 19 features (Server Components, Actions)
     - shadcn: Advanced shadcn/ui component development
+    - htmx: HTMX with Axum integration patterns
 
   Backend:
     - typescript: TypeScript analysis with Clean Architecture
     - rust: Idiomatic Rust patterns (mre/idiomatic-rust)
     - axum: Axum web framework with tokio-rs
     - python: Python code analysis and modern paradigms
+    - erlang: Erlang/OTP patterns and fault tolerance
+    - elixir: Elixir functional programming and concurrency
+    - phoenix: Phoenix web framework patterns
+    - phoenix_channels: Phoenix Channels WebSocket/PubSub
+    - phoenix_liveview: Phoenix LiveView real-time UI
+
+  Databases:
+    - neo4j: Neo4j Cypher queries and graph patterns
+    - qdrant: Qdrant vector search and RAG patterns
 
   DevOps:
     - docker: Docker optimization with security best practices
@@ -135,6 +145,62 @@ SERVERS_CONFIG = {
         "description": "MCP server for Python code analysis, optimization, and modern paradigms following best practices",
         "module": "servers.python_optimizer_server",
         "port": 3010,
+        "protocol": "stdio"
+    },
+    "erlang": {
+        "name": "Erlang OTP Server",
+        "description": "MCP server for Erlang/OTP patterns, GenServer, Supervisor, and fault tolerance",
+        "module": "servers.erlang_server",
+        "port": 3011,
+        "protocol": "stdio"
+    },
+    "elixir": {
+        "name": "Elixir Development Server",
+        "description": "MCP server for Elixir functional programming, OTP behaviors, and concurrency patterns",
+        "module": "servers.elixir_server",
+        "port": 3012,
+        "protocol": "stdio"
+    },
+    "phoenix": {
+        "name": "Phoenix Framework Server",
+        "description": "MCP server for Phoenix web framework with controllers, routing, and contexts",
+        "module": "servers.phoenix_server",
+        "port": 3013,
+        "protocol": "stdio"
+    },
+    "phoenix_channels": {
+        "name": "Phoenix Channels Server",
+        "description": "MCP server for Phoenix Channels, WebSocket, PubSub, and Presence patterns",
+        "module": "servers.phoenix_channels_server",
+        "port": 3014,
+        "protocol": "stdio"
+    },
+    "phoenix_liveview": {
+        "name": "Phoenix LiveView Server",
+        "description": "MCP server for Phoenix LiveView real-time UI, hooks, and HEEx templates",
+        "module": "servers.phoenix_liveview_server",
+        "port": 3015,
+        "protocol": "stdio"
+    },
+    "neo4j": {
+        "name": "Neo4j Cypher Server",
+        "description": "MCP server for Neo4j graph database, Cypher queries, and graph modeling patterns",
+        "module": "servers.neo4j_server",
+        "port": 3016,
+        "protocol": "stdio"
+    },
+    "qdrant": {
+        "name": "Qdrant Vector Server",
+        "description": "MCP server for Qdrant vector search, similarity queries, and RAG patterns",
+        "module": "servers.qdrant_server",
+        "port": 3017,
+        "protocol": "stdio"
+    },
+    "htmx": {
+        "name": "HTMX + Axum Server",
+        "description": "MCP server for HTMX patterns with Axum (Rust) backend integration",
+        "module": "servers.htmx_server",
+        "port": 3018,
         "protocol": "stdio"
     }
 }
@@ -384,7 +450,7 @@ Usage examples:
     parser.add_argument(
         "--version", "-v",
         action="version",
-        version="MCP Servers v2.2.0"
+        version="MCP Servers v2.3.0"
     )
 
     return parser
